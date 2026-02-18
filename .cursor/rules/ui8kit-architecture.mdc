@@ -1,0 +1,242 @@
+---
+description: ui8kit, design system, buildy, @ui8kit, ui, design, component, block, styling, layout, theme
+alwaysApply: false
+---
+# UI8Kit Architecture — LLM Quick Reference
+
+When mentioned: "design", "UI", "ui8kit", "component", "block", "styling", "layout", "theme", "@ui8kit" — use this guide.
+
+## Project Type
+
+**Single app** (`@ui8kit/resta-app`) — restaurant web app. No monorepo. Components live in `src/`.
+
+## Core Principles
+
+1. **Props = Tailwind Classes**: `gap="6"` → `gap-6`, `bg="primary"` → `bg-primary`
+2. **Semantic Components**: Use `Block`, `Stack`, `Group`, `Grid` for layout
+3. **data-class Required**: Every element needs `data-class` for CSS generation
+4. **No Inline Styles**: Use semantic props only (no `className`, `style={}`)
+5. **Semantic Colors**: Use tokens like `primary`, `secondary`, `muted`, `destructive`, not hex values
+6. **Valid HTML5**: Target W3C-valid HTML5 + CSS3; use semantic tags throughout
+
+## Imports
+
+| Package | Source | Use |
+|---------|--------|-----|
+| `@ui8kit/core` | `src/components/index.ts` (Vite alias) | Block, Stack, Group, Grid, Title, Text, Button, Card, etc. |
+| `@ui8kit/dsl` | `@ui8kit/sdk` (re-exports) | If, Var, Loop, Slot — template DSL for conditional/loop rendering |
+| `@ui8kit/sdk` | npm package | createContext, data types, validation |
+
+## Semantic HTML5 (W3C Valid Output)
+
+Target: valid W3C HTML5 + CSS3 after generation.
+
+| Role | Use | Component |
+|------|-----|-----------|
+| Page section | `<section>` | `<Block component="section">` |
+| Self-contained content (card, quote, plan) | `<article>` | `<Block component="article">` or `<Stack component="article">` |
+| Complementary content (sidebar) | `<aside>` | `<Block component="aside">` |
+| Primary content | `<main>` | `<Block component="main">` |
+| Site header | `<header>` | `<Block component="header">` |
+| Site footer | `<footer>` | `<Block component="footer">` |
+| Navigation | `<nav>` | `<Block component="nav">` |
+| Headings | `<h1>`–`<h6>` | `<Title order={1-6}>` |
+| Paragraphs | `<p>` | `<Text>` (default) |
+
+**Layout structure**: `header` → `main` → `footer`. `main` must not wrap `aside`; use a wrapper `div` for layout.
+
+## Components (Import from `@ui8kit/core`)
+
+### Layout
+- **Block** — Semantic section (`component="section|article|aside|header|footer|nav|main"`)
+- **Stack** — Vertical flex (default: `flex="col" gap="4"`)
+- **Group** — Horizontal flex (default: `flex="row" gap="4" items="center"`)
+- **Grid** — CSS Grid (`grid="cols-1|2|3|4|6|12"`)
+- **Container** — Centered max-width (`max="w-6xl" mx="auto"`)
+- **Box** — Generic container
+
+### Content
+- **Title** — Headings (`fontSize`, `fontWeight`, `textColor`, `textAlign`)
+- **Text** — Paragraphs (same props as Title)
+- **Image** — Pictures (`aspect="video|square"`, `fit="cover"`)
+- **Icon** — Icons (`lucideIcon`, `size="sm|md|lg"`)
+- **Badge** — Labels (`variant="default|secondary|destructive|outline"`)
+- **Button** — Actions (`variant="default|primary|destructive|outline|secondary|ghost|link"`, `size="xs|sm|default|md|lg|xl|icon"`)
+
+### Composite
+- **Card**, **CardHeader**, **CardTitle**, **CardDescription**, **CardContent**, **CardFooter**
+- **Accordion**, **AccordionItem**, **AccordionTrigger**, **AccordionContent**
+- **Sheet**
+- **Field** — Form field
+
+## DSL Components (Import from `@ui8kit/dsl`)
+
+Use for template-friendly, LLM-generatable output:
+
+- **If** — Conditional: `<If test="subtitle" value={!!subtitle}>...</If>`
+- **Var** — Variable output: `<Var name="title" value={title} />`
+- **Loop** — Iteration: `<Loop each="items" as="item" data={items}>...</Loop>`
+- **Slot** — Content slot: `<Slot name="extra">{children}</Slot>`
+
+**Rule**: Wrap `<Var>` in `<If>` when value is optional. Use semantic wrapper (Text, etc.) between If and Var.
+
+## Common Props Reference
+
+### Spacing
+```
+p="0|1|2|4|6|8|12"        padding
+px="0|1|2|4|6|8|12"       padding-x (left+right)
+py="0|2|4|8|16|32|48"     padding-y (top+bottom)
+m="0|1|2|4|6|8|12|auto"   margin
+gap="0|1|2|4|6|8|10|12"   gap between children
+```
+
+### Layout
+```
+flex=""               display: flex
+flex="col|row|wrap"   flex-direction / flex-wrap
+items="start|center|end|stretch"    align-items
+justify="start|center|end|between|around"  justify-content
+grid=""               display: grid
+grid="cols-1|2|3|4|6|12"           grid-template-columns
+col="span-1..12|span-full"         grid-column
+```
+
+### Sizing
+```
+w="full|auto|fit|screen|3|4|5|6|8"
+h="full|auto|fit|screen|3|4|5|6|8|10|11|12"
+max="w-sm|w-md|w-lg|w-xl|w-2xl|w-4xl|w-6xl|w-7xl"
+```
+
+### Typography (Title & Text ONLY)
+```
+fontSize="xs|sm|base|lg|xl|2xl|3xl|4xl|5xl"
+textColor="foreground|muted-foreground|primary|secondary|destructive|accent-foreground"
+textAlign="left|center|right|justify"
+fontWeight="normal|medium|semibold|bold"
+lineHeight="tight|normal|relaxed"
+letterSpacing="tighter|tight|normal|wide|wider|widest"
+```
+
+### Visual
+```
+bg="primary|secondary|muted|card|background|transparent"
+rounded="none|sm|md|lg|xl|2xl|3xl|full"
+shadow="none|sm|md|lg|xl|2xl"
+border=""             border-1px
+border="0|2|4"        border-width
+```
+
+### Position
+```
+relative="" / absolute="" / fixed="" / sticky=""
+top="0|auto"  right="0|auto"  bottom="0|auto"  left="0|auto"
+z="0|10|20|30|40|50|auto"
+```
+
+## File Structure
+
+```
+src/
+├── components/           ← UI components (@ui8kit/core alias)
+│   ├── ui/              ← Primitives: Block, Stack, Group, Box, Title, Text, Button, Badge, Field, Image, Icon, Container
+│   ├── Accordion.tsx
+│   ├── Card.tsx
+│   ├── Grid.tsx
+│   ├── Sheet.tsx
+│   └── index.ts
+├── variants/            ← CVA configs (button, badge, typography, card, field, grid, image)
+├── lib/                 ← utility-props.ts, utility-props.map.ts, utils.ts
+├── blocks/              ← Page sections & page views
+│   ├── HeroBlock.tsx
+│   ├── SidebarContent.tsx
+│   ├── DashSidebar.tsx
+│   ├── LandingPageView.tsx
+│   ├── MenuPageView.tsx, MenuDetailPageView.tsx
+│   ├── RecipesPageView.tsx, RecipeDetailPageView.tsx
+│   ├── BlogPageView.tsx, BlogDetailPageView.tsx
+│   ├── PromotionsPageView.tsx, PromotionDetailPageView.tsx
+│   ├── AdminLoginPageView.tsx, AdminDashboardPageView.tsx
+│   └── index.ts
+├── layouts/             ← MainLayout, AdminLayout
+├── partials/            ← Header, Footer, Sidebar, ThemeToggle, DomainNavButton
+├── routes/              ← Page route components (LandingPage, MenuPage, etc.)
+├── providers/           ← theme, AdminAuthContext
+├── data/                ← context.ts (app context, fixtures)
+├── css/
+├── App.tsx
+└── main.tsx
+
+fixtures/                ← JSON data (landing, menu, recipes, blog, promotions, admin, shared)
+```
+
+## Block Patterns
+
+### Hero Block
+```tsx
+<Block component="section" py="16" bg="background" data-class="hero-section">
+  <Container max="w-7xl" flex="col" gap="8" items="center">
+    <Stack gap="4" items="center" max="w-2xl">
+      <Title fontSize="5xl" fontWeight="bold" textAlign="center" data-class="hero-title">
+        <Var name="title" value={title} />
+      </Title>
+      <If test="subtitle" value={!!subtitle}>
+        <Text fontSize="xl" textColor="muted-foreground" textAlign="center" data-class="hero-subtitle">
+          <Var name="subtitle" value={subtitle} />
+        </Text>
+      </If>
+    </Stack>
+    <Group gap="4" justify="center" items="center" data-class="hero-actions">
+      <Button size="lg" href={ctaUrl} data-class="hero-cta-primary">
+        <Var name="ctaText" value={ctaText} />
+      </Button>
+    </Group>
+  </Container>
+</Block>
+```
+
+### Card Grid (List Page)
+```tsx
+<Block component="section" data-class="items-section">
+  <Grid grid="cols-1" gap="6" data-class="items-grid">
+    <Loop each="items" as="item" data={items}>
+      <Card data-class="item-card">
+        <CardHeader>
+          <CardTitle order={4}><Var name="item.title" value={item.title} /></CardTitle>
+          <CardDescription><Var name="item.description" value={item.description} /></CardDescription>
+        </CardHeader>
+        <CardContent>...</CardContent>
+      </Card>
+    </Loop>
+  </Grid>
+</Block>
+```
+
+## When to Create a New Block
+
+1. **Is it a reusable page section?** → Create Block (e.g. `HeroBlock.tsx`)
+2. **Is it a full page view?** → Create PageView (e.g. `MenuPageView.tsx`)
+3. **Location**: `src/blocks/[NameBlock].tsx` or `src/blocks/[Name]PageView.tsx`
+4. **Export**: Add to `src/blocks/index.ts`
+5. **Use**: Import in routes, pass data from `context`
+
+## Anti-Patterns ❌
+
+| ❌ Don't | ✅ Do Instead |
+|----------|---------------|
+| `className="bg-red-500"` | `bg="destructive"` |
+| `gap="4 md:gap-6"` | Use `<Grid>` with responsive grid |
+| `<Box>` without `data-class` | Always add `data-class="name"` |
+| Hardcoded colors | Use semantic tokens only |
+| `style={{ ... }}` | Use semantic props |
+| `<div>`, `<span>` | Use `<Box>`, `<Stack>`, `<Group>` |
+| `<h1>`, `<p>` | Use `<Title>`, `<Text>` |
+| JS conditionals/loops in JSX | Use `<If>`, `<Loop>` from `@ui8kit/dsl` |
+
+## Validation
+
+```bash
+bun run validate    # ui8kit-validate — props + DSL rules
+bun run generate    # ui8kit-generate — static generation
+```

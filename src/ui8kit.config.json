@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.buildy.tw/schema.json",
+  "framework": "vite-react",
+  "typescript": true,
+  "aliases": {
+    "@": "./src",
+    "@/components": "./src/components",
+    "@/ui": "./src/components/ui",
+    "@/layouts": "./src/layouts",
+    "@/blocks": "./src/blocks",
+    "@/lib": "./src/lib",
+    "@/variants": "./src/variants"
+  },
+  "registry": "@ui8kit",
+  "componentsDir": "./src/components",
+  "libDir": "./src/lib"
+}

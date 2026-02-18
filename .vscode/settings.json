@@ -1,0 +1,45 @@
+{
+  "highlight.regexes": {
+    "(//TODO)": [
+      {
+        "backgroundColor": "theme.notifications.foreground",
+        "color": "theme.notifications.foreground"
+      }
+    ],
+    "(<)(Loop|If|Else|ElseIf|Var|Slot|Include|DefineBlock|Extends|Raw)(?:\\s[^>/]*)?(\\s*)(\\/?>)": {
+      "filterFileRegex": ".*\\.(tsx|jsx)$",
+      "decorations": [
+        {
+          "color": "theme.notifications.foreground",
+          "fontStyle": "italic"
+        },
+        {
+          "color": "theme.notifications.foreground",
+          "fontStyle": "italic"
+        },
+        {},
+        {
+          "color": "theme.notifications.foreground",
+          "fontStyle": "italic"
+        }
+      ]
+    },
+    "(<\\/)(Loop|If|Else|ElseIf|Var|Slot|Include|DefineBlock|Extends|Raw)(>)": {
+      "filterFileRegex": ".*\\.(tsx|jsx)$",
+      "decorations": [
+        {
+          "color": "theme.notifications.foreground",
+          "fontStyle": "italic"
+        },
+        {
+          "color": "theme.notifications.foreground",
+          "fontStyle": "italic"
+        },
+        {
+          "color": "theme.notifications.foreground",
+          "fontStyle": "italic"
+        }
+      ]
+    }
+  }
+}

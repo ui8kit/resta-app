@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@import "./resta.css";
+
+@source "../**/*.{ts,tsx}";
+@source "../ui8kit.map.json";
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  button {
+    cursor: pointer;
+  }
+  [class*="border-"] {
+    border-color: var(--color-border);
+  }
+}

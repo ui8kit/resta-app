@@ -1,0 +1,33 @@
+{
+  "name": "@ui8kit/resta-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "ui8kit-lint-dsl": "bun run node_modules/@ui8kit/lint/src/cli/validate-dsl.ts src"
+  },
+  "dependencies": {
+    "@ui8kit/sdk": "^0.1.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.460.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.0.1",
+    "tailwind-merge": "^3.4.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/node": "^22.13.10",
+    "@vitejs/plugin-react-swc": "^3.11.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.8.0",
+    "vite": "^6.3.5"
+  }
+}

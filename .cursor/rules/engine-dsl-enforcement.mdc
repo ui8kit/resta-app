@@ -1,0 +1,22 @@
+---
+description: apps/engine — DSL only, no hardcode, mandatory lint
+globs: apps/engine/**
+alwaysApply: false
+---
+
+# Engine Rules
+
+## Constraints
+
+- No hardcode: data from `context` (@ui8kit/data) or props only
+- DSL only: use `<If>`, `<Loop>`, `<Var>` from @ui8kit/template (no `.map`, `?:`, `&&` in JSX)
+- ui8kit semantics: semantic props, no `className`/`style`/raw HTML
+- Comments in English
+
+## Mandatory checklist (before final answer)
+
+1. `bun run lint` (from apps/engine)
+2. `bun run lint:dsl` (from apps/engine)
+3. If templates changed: `bun run generate` + `bun run scripts/copy-templates-to-dev.ts`
+
+Report pass/fail. If skipped, state why.

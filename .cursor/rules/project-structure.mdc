@@ -1,0 +1,172 @@
+---
+description: project structure, architecture, codebase, folder structure, src, blocks, layouts
+alwaysApply: false
+---
+# Project Structure Overview
+
+## Project Type
+
+**Single application** — `@ui8kit/resta-app` (restaurant web app). Vite + React. No monorepo.
+
+## Root Layout
+
+```
+@ui8kit-resta/
+├── src/                          # Application source
+│   ├── components/               # UI components (@ui8kit/core alias)
+│   ├── variants/                 # CVA variant configs
+│   ├── lib/                      # Utility props, utils
+│   ├── blocks/                   # Page sections & page views
+│   ├── layouts/                  # Page layouts
+│   ├── partials/                 # Reusable fragments
+│   ├── routes/                   # Route components
+│   ├── providers/                # Context providers
+│   ├── data/                     # App context & data
+│   ├── css/
+│   ├── App.tsx
+│   └── main.tsx
+│
+├── fixtures/                     # JSON data (landing, menu, recipes, blog, promotions, admin)
+│   ├── shared/                   # site.json, page.json, navigation.json
+│   ├── landing.json
+│   ├── menu.json
+│   ├── recipes.json
+│   ├── blog.json
+│   ├── promotions.json
+│   └── admin.json
+│
+├── .cursor/rules/                # AI rules
+│   ├── ui8kit-architecture.mdc
+│   ├── project-structure.mdc
+│   └── best-practices.mdc
+│
+├── package.json
+├── vite.config.ts
+├── tsconfig.json
+├── tailwind.config.ts
+└── postcss.config.js
+```
+
+## Key Directories
+
+### `src/components/` — UI Components
+
+| Path | Purpose |
+|------|---------|
+| `ui/` | Primitives: Block, Stack, Group, Box, Container, Title, Text, Button, Badge, Field, Image, Icon |
+| `Card.tsx`, `Accordion.tsx`, `Sheet.tsx`, `Grid.tsx` | Composite components |
+| `index.ts` | Re-exports — imported as `@ui8kit/core` (Vite alias) |
+
+### `src/blocks/` — Page Sections & Views
+
+| Type | Pattern | Examples |
+|------|---------|----------|
+| Block | Reusable section | `HeroBlock`, `SidebarContent`, `DashSidebar` |
+| PageView | Full page composition | `LandingPageView`, `MenuPageView`, `RecipesPageView`, `BlogPageView`, `PromotionsPageView`, `AdminDashboardPageView`, `AdminLoginPageView` |
+
+### `src/layouts/` — Page Layouts
+
+| Layout | Use |
+|--------|-----|
+| `MainLayout` | Website pages (header, sidebar, main content) |
+| `AdminLayout` | Admin/dashboard pages |
+
+### `src/partials/` — Reusable Fragments
+
+| Partial | Purpose |
+|---------|---------|
+| `Header` | Site header with nav |
+| `Footer` | Site footer |
+| `Sidebar` | Sidebar container |
+| `SidebarContent` | Sidebar links (in blocks) |
+| `ThemeToggle` | Dark/light mode |
+| `DomainNavButton` | Nav button with domain styling |
+
+### `src/routes/` — Route Components
+
+Each route imports a PageView and passes data from `context`:
+
+- `LandingPage` → `LandingPageView`
+- `MenuPage`, `MenuDetailPage` → `MenuPageView`, `MenuDetailPageView`
+- `RecipesPage`, `RecipeDetailPage` → `RecipesPageView`, `RecipeDetailPageView`
+- `BlogPage`, `BlogDetailPage` → `BlogPageView`, `BlogDetailPageView`
+- `PromotionsPage`, `PromotionDetailPage` → `PromotionsPageView`, `PromotionDetailPageView`
+- `AdminLoginPage`, `AdminDashboardPage` → `AdminLoginPageView`, `AdminDashboardPageView`
+
+### `src/data/` — Context & Data
+
+| File | Purpose |
+|------|---------|
+| `context.ts` | `createContext` from `@ui8kit/sdk`, loads fixtures, exposes `domains.website`, `domains.admin` |
+
+### `src/providers/` — React Context
+
+| Provider | Purpose |
+|----------|---------|
+| `theme.tsx` | Theme (light/dark) |
+| `AdminAuthContext.tsx` | Admin auth state |
+
+### `src/variants/` — CVA Configs
+
+| File | Components |
+|------|------------|
+| `button.ts` | Button |
+| `badge.ts` | Badge |
+| `typography.ts` | Title, Text |
+| `card.ts` | Card |
+| `field.ts` | Field |
+| `grid.ts` | Grid |
+| `image.ts` | Image |
+
+### `src/lib/` — Utilities
+
+| File | Purpose |
+|------|---------|
+| `utility-props.ts` | `ux()` — props → Tailwind classes |
+| `utility-props.map.ts` | Whitelist of allowed prop values |
+| `utils.ts` | `cn()` (clsx + tailwind-merge) |
+
+## Import Aliases
+
+| Alias | Resolves To |
+|-------|-------------|
+| `@/*` | `src/*` |
+| `@ui8kit/core` | `src/components/index.ts` |
+
+## Data Flow
+
+```
+fixtures/*.json
+    → src/data/context.ts (createContext)
+    → src/routes/*.tsx (pass to PageView)
+    → src/blocks/*PageView.tsx (render with Var, Loop, If)
+```
+
+## Development Workflow
+
+1. **Add UI component** → `src/components/ui/` or `src/components/`
+2. **Add variant** → `src/variants/`
+3. **Add block** → `src/blocks/`, export in `index.ts`
+4. **Add page** → `src/blocks/*PageView.tsx` + `src/routes/*Page.tsx` + route in `App.tsx`
+5. **Add fixture** → `fixtures/`, wire in `context.ts`
+
+## Scripts
+
+```bash
+bun run dev        # Vite dev server (port 3020)
+bun run build      # Production build
+bun run preview    # Preview build
+bun run validate   # ui8kit-validate (props + DSL)
+bun run generate   # ui8kit-generate (static output)
+```
+
+## Dependencies
+
+| Package | Purpose |
+|---------|---------|
+| `@ui8kit/sdk` | Context, validation, DSL re-exports |
+| `@ui8kit/dsl` | (via sdk) If, Var, Loop, Slot |
+| `class-variance-authority` | Component variants |
+| `lucide-react` | Icons |
+| `react-router-dom` | Routing |
+| `tailwindcss` | Styling |
