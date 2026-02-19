@@ -1,0 +1,40 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "noEmit": false,
+    "declaration": false,
+    "declarationMap": false,
+    "composite": false,
+    "paths": {
+      "@/*": ["src/*"],
+      "@ui8kit/sdk": ["../sdk/src/index.ts"],
+      "@ui8kit/sdk/config": ["../sdk/src/config.ts"],
+      "@ui8kit/core": ["src/stub/core.ts"],
+      "@ui8kit/dsl": ["../dsl/src/index.ts"],
+      "@ui8kit/lint": ["../lint/src/index.ts"],
+      "@ui8kit/contracts": ["../contracts/src/index.ts"]
+    }
+  },
+  "include": [
+    "src/cli/**/*.ts",
+    "src/build-project.ts",
+    "src/core/**/*.ts",
+    "src/plugins/**/*.ts",
+    "src/scripts/**/*.ts",
+    "src/services/**/*.ts",
+    "src/stages/**/*.ts",
+    "src/transformer/**/*.ts",
+    "src/hast/**/*.ts",
+    "src/generate.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "templates",
+    "test",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
+}

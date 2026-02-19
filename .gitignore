@@ -3,6 +3,8 @@
 .vite/
 .turbo/
 node_modules/
+_packages/generator/dist/
+_packages/generator/node_modules/
 dist/
 *.log
 .env

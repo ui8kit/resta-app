@@ -1,0 +1,79 @@
+{
+  "name": "@ui8kit/generator",
+  "version": "0.1.1",
+  "description": "Static site generator for UI8Kit - converts React to Liquid templates",
+  "type": "module",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./plugins": {
+      "import": "./src/plugins/template/index.ts",
+      "types": "./src/plugins/template/index.ts"
+    },
+    "./react": {
+      "import": "./src/plugins/template/built-in/ReactPlugin.ts",
+      "types": "./src/plugins/template/built-in/ReactPlugin.ts"
+    },
+    "./source": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "templates",
+    "README.md",
+    "GUIDE.md"
+  ],
+  "bin": {
+    "generate-templates": "./src/cli/generate-templates.ts",
+    "ui8kit-generate": "./src/cli/generate.ts"
+  },
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "vite build && tsc --emitDeclarationOnly --declaration --outDir dist",
+    "dev": "vite build --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist coverage",
+    "generate:templates": "bun run src/cli/generate-templates.ts"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "@ui8kit/sdk": "^0.1.0",
+    "@babel/parser": "^7.24.0",
+    "@babel/traverse": "^7.24.0",
+    "@babel/types": "^7.24.0",
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "glob": "^13.0.0",
+    "liquidjs": "^10.10.0",
+    "uncss": "^0.17.3",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/babel__traverse": "^7.20.0",
+    "@types/bun": "^1.2.16",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@vitest/coverage-v8": "^3.2.3",
+    "@vitest/ui": "^3.2.3",
+    "typescript": "^5.8.0",
+    "vite": "^6.3.5",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^3.2.3"
+  }
+}
