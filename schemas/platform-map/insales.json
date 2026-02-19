@@ -1,0 +1,45 @@
+{
+  "platform": "insales",
+  "version": "liquid-v2",
+  "domains": {
+    "catalog": {
+      "resource": "product",
+      "collection": "collection.products",
+      "itemVariable": "product",
+      "collectionVariable": "collection.products",
+      "fields": {
+        "id": { "to": "id" },
+        "slug": { "to": "handle" },
+        "title": { "to": "title" },
+        "description": { "to": "description" },
+        "details": { "to": "description" },
+        "price.display": { "to": "price", "filter": "money" },
+        "price.amount": { "to": "price", "transform": "to_minor_units" },
+        "compareAtPrice.display": { "to": "old_price", "filter": "money" },
+        "category.id": { "to": "collection.handle" },
+        "image.src": { "to": "first_image.original_url" },
+        "image.alt": { "to": "title" },
+        "variants": { "to": "variants" },
+        "modifiers": { "to": "properties" },
+        "promotionIds": { "to": "properties.promotion_ids" }
+      }
+    },
+    "promo": {
+      "resource": "collection",
+      "collection": "collections.promotions.products",
+      "itemVariable": "promotion",
+      "collectionVariable": "collections.promotions.products",
+      "fields": {
+        "id": { "to": "id" },
+        "slug": { "to": "handle" },
+        "title": { "to": "title" },
+        "description": { "to": "short_description" },
+        "badge": { "to": "properties.badge" },
+        "validUntil": { "to": "properties.valid_until" },
+        "discount.type": { "to": "properties.discount_type" },
+        "discount.value": { "to": "properties.discount_value" },
+        "discount.couponCode": { "to": "properties.coupon_code" }
+      }
+    }
+  }
+}

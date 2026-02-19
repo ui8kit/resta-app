@@ -427,6 +427,64 @@ export abstract class BasePlugin implements ITemplatePlugin {
   }
 
   /**
+   * Resolve current platform domain mapping from plugin config.
+   */
+  protected getPlatformDomainMapping() {
+    const platformMap = this.config.platformMap;
+    const platformDomain = this.config.platformDomain;
+    if (!platformMap || !platformDomain) return undefined;
+    return platformMap.domains?.[platformDomain];
+  }
+
+  /**
+   * Resolve canonical variable path to platform-specific field path.
+   */
+  protected resolvePlatformVariable(variableName: string): {
+    expression: string;
+    filter?: string;
+    skip?: boolean;
+  } {
+    const domain = this.getPlatformDomainMapping();
+    if (!domain) {
+      return { expression: variableName };
+    }
+
+    const firstDot = variableName.indexOf('.');
+    if (firstDot < 0) {
+      return { expression: variableName };
+    }
+
+    const loopVar = variableName.slice(0, firstDot);
+    const fieldPath = variableName.slice(firstDot + 1);
+    const mapping = domain.fields[fieldPath];
+
+    if (!mapping) {
+      return { expression: variableName };
+    }
+
+    const mappedLoopVar = domain.itemVariable ?? loopVar;
+    return {
+      expression: `${mappedLoopVar}.${mapping.to}`,
+      filter: mapping.filter,
+      skip: mapping.skip,
+    };
+  }
+
+  /**
+   * Resolve loop aliases/collection for target platform.
+   */
+  protected resolvePlatformLoop(loop: GenLoop): GenLoop {
+    const domain = this.getPlatformDomainMapping();
+    if (!domain) return loop;
+
+    return {
+      ...loop,
+      item: domain.itemVariable ?? loop.item,
+      collection: domain.collectionVariable ?? domain.collection ?? loop.collection,
+    };
+  }
+
+  /**
    * Format expression for template engine
    */
   protected formatExpression(expr: string): string {

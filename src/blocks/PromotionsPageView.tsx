@@ -1,15 +1,27 @@
 import { MainLayout } from '@/layouts';
-import { SidebarContent } from '@/blocks';
-import { Block, Grid, Card, CardHeader, CardTitle, CardDescription, CardContent, Text } from '@ui8kit/core';
+import { Block, Grid, Card, CardHeader, CardTitle, CardDescription, CardContent, Text, Badge } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
 
+type PromotionDiscount = {
+  type: 'percentage' | 'fixed' | 'combo';
+  value: number;
+  appliesTo?: {
+    categoryIds?: string[];
+    productIds?: string[];
+  };
+  couponCode?: string;
+};
+
 export type PromotionItem = {
   id: string;
+  slug: string;
   title: string;
   description: string;
   validUntil?: string;
-  image?: string;
+  badge?: string;
+  discount?: PromotionDiscount;
+  image?: { src: string; alt?: string };
   details?: string;
 };
 
@@ -67,10 +79,25 @@ export function PromotionsPageView({
                       <Var name="item.title" value={item.title} />
                     </CardTitle>
                   </If>
+                  <If test="item.badge" value={!!item.badge}>
+                    <Badge variant="secondary" data-class="promotions-item-badge">
+                      <Var name="item.badge" value={item.badge} />
+                    </Badge>
+                  </If>
                   <If test="item.description" value={!!item.description}>
                     <CardDescription data-class="promotions-item-description">
                       <Var name="item.description" value={item.description} />
                     </CardDescription>
+                  </If>
+                  <If test="item.discount.type" value={!!item.discount?.type}>
+                    <Text fontSize="sm" textColor="muted-foreground" data-class="promotions-item-discount-type">
+                      Discount type: <Var name="item.discount.type" value={item.discount?.type} />
+                    </Text>
+                  </If>
+                  <If test="item.discount.couponCode" value={!!item.discount?.couponCode}>
+                    <Text fontSize="sm" textColor="muted-foreground" data-class="promotions-item-coupon">
+                      Coupon: <Var name="item.discount.couponCode" value={item.discount?.couponCode} />
+                    </Text>
                   </If>
                   <If test="item.validUntil" value={!!item.validUntil}>
                     <Text fontSize="sm" textColor="muted-foreground" data-class="promotions-item-valid">

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui8kit.local/schemas/canonical/site.schema.json",
+  "title": "Canonical Site",
+  "type": "object",
+  "required": ["title", "subtitle", "description"],
+  "properties": {
+    "title": { "type": "string" },
+    "subtitle": { "type": "string" },
+    "description": { "type": "string" }
+  },
+  "additionalProperties": false
+}

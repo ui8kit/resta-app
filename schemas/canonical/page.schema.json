@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui8kit.local/schemas/canonical/page.schema.json",
+  "title": "Canonical Page Registry",
+  "type": "object",
+  "required": ["page"],
+  "properties": {
+    "seo": { "$ref": "./shared-types.schema.json#/$defs/Seo" },
+    "page": {
+      "type": "object",
+      "required": ["website", "admin"],
+      "properties": {
+        "website": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/PageEntry" }
+        },
+        "admin": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/PageEntry" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "PageEntry": {
+      "type": "object",
+      "required": ["id", "domain", "title", "path", "component"],
+      "properties": {
+        "id": { "type": "string" },
+        "domain": { "type": "string" },
+        "title": { "type": "string" },
+        "path": { "type": "string" },
+        "component": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

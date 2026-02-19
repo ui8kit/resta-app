@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui8kit.local/schemas/canonical/guide-item.schema.json",
+  "title": "Canonical Guide Item",
+  "type": "object",
+  "required": ["id", "slug", "title", "excerpt", "body", "image", "date"],
+  "properties": {
+    "id": { "type": "string" },
+    "slug": { "type": "string" },
+    "title": { "type": "string" },
+    "excerpt": { "type": "string" },
+    "body": { "type": "string" },
+    "image": { "$ref": "./shared-types.schema.json#/$defs/Image" },
+    "date": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}

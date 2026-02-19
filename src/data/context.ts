@@ -1,50 +1,54 @@
 import { createContext, EMPTY_ARRAY } from '@ui8kit/sdk/source/data';
-import siteData from '../../fixtures/shared/site.json';
-import navigationData from '../../fixtures/shared/navigation.json';
-import pageData from '../../fixtures/shared/page.json';
-import landingData from '../../fixtures/landing.json';
-import menuData from '../../fixtures/menu.json';
-import recipesData from '../../fixtures/recipes.json';
-import blogData from '../../fixtures/blog.json';
-import promotionsData from '../../fixtures/promotions.json';
-import adminData from '../../fixtures/admin.json';
 import type {
   DashboardSidebarLink,
   NavItem,
-  PageFixture,
   SidebarLink,
-  SiteInfo,
 } from '@ui8kit/sdk/source/data';
+import { loadFixturesContextInput } from './adapters/fixtures.adapter';
+import { loadWpGraphqlContextInput } from './adapters/wpgraphql.adapter';
+import { loadShopifyContextInput } from './adapters/shopify.adapter';
+import type { CanonicalContextInput } from './adapters/types';
 
-const site = siteData as SiteInfo;
-const page = (pageData as PageFixture).page;
-const navItems = navigationData.navItems as NavItem[];
-const sidebarLinks = (navigationData.sidebarLinks ?? EMPTY_ARRAY) as SidebarLink[];
-const adminSidebarLinks = (navigationData.adminSidebarLinks ?? EMPTY_ARRAY) as DashboardSidebarLink[];
-const adminSidebarLabel = navigationData.labels?.adminSidebarLabel ?? 'Admin';
+function resolveContextInput(): CanonicalContextInput {
+  const source = (import.meta.env.VITE_DATA_SOURCE ?? 'fixtures') as 'fixtures' | 'wpgraphql' | 'shopify';
+  if (source === 'wpgraphql') {
+    return loadWpGraphqlContextInput();
+  }
+  if (source === 'shopify') {
+    return loadShopifyContextInput();
+  }
+  return loadFixturesContextInput();
+}
+
+const input = resolveContextInput();
+const page = input.page;
+const navItems = input.navigation.navItems as NavItem[];
+const sidebarLinks = (input.navigation.sidebarLinks ?? EMPTY_ARRAY) as SidebarLink[];
+const adminSidebarLinks = (input.navigation.adminSidebarLinks ?? EMPTY_ARRAY) as DashboardSidebarLink[];
+const adminSidebarLabel = input.navigation.labels?.adminSidebarLabel ?? 'Admin';
 
 const baseContext = createContext<{
-  landing: typeof landingData;
-  menu: typeof menuData;
-  recipes: typeof recipesData;
-  blog: typeof blogData;
-  promotions: typeof promotionsData;
-  admin: typeof adminData;
+  landing: CanonicalContextInput['fixtures']['landing'];
+  menu: CanonicalContextInput['fixtures']['menu'];
+  recipes: CanonicalContextInput['fixtures']['recipes'];
+  blog: CanonicalContextInput['fixtures']['blog'];
+  promotions: CanonicalContextInput['fixtures']['promotions'];
+  admin: CanonicalContextInput['fixtures']['admin'];
 }>({
-  site,
-  page,
+  site: input.site,
+  page: input.page,
   navItems,
   sidebarLinks,
   adminSidebarLinks,
   adminSidebarLabel,
   dynamicRoutePatterns: ['/menu/:id', '/recipes/:slug', '/blog/:slug', '/promotions/:id'],
   fixtures: {
-    landing: landingData,
-    menu: menuData,
-    recipes: recipesData,
-    blog: blogData,
-    promotions: promotionsData,
-    admin: adminData,
+    landing: input.fixtures.landing,
+    menu: input.fixtures.menu,
+    recipes: input.fixtures.recipes,
+    blog: input.fixtures.blog,
+    promotions: input.fixtures.promotions,
+    admin: input.fixtures.admin,
   },
 });
 

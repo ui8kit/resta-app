@@ -31,6 +31,9 @@ export type {
   TransformResult,
   FilterDefinition,
   StandardFilter,
+  PlatformFieldMapping,
+  PlatformDomainMapping,
+  PlatformMap,
   TemplatePluginFactory,
   TemplatePluginMetadata,
 } from './ITemplatePlugin';

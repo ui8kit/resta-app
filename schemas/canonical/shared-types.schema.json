@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui8kit.local/schemas/canonical/shared-types.schema.json",
+  "title": "Canonical Shared Types",
+  "type": "object",
+  "$defs": {
+    "Price": {
+      "type": "object",
+      "required": ["amount", "currency", "display"],
+      "properties": {
+        "amount": { "type": "number" },
+        "currency": { "type": "string", "minLength": 3, "maxLength": 3 },
+        "display": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "Image": {
+      "type": "object",
+      "required": ["src", "alt"],
+      "properties": {
+        "src": { "type": "string" },
+        "alt": { "type": "string" },
+        "width": { "type": "number" },
+        "height": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "Category": {
+      "type": "object",
+      "required": ["id", "title"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "Seo": {
+      "type": "object",
+      "required": ["title", "description"],
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "ogImage": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

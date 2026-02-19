@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui8kit.local/schemas/canonical/catalog-item.schema.json",
+  "title": "Canonical Catalog Item",
+  "type": "object",
+  "required": [
+    "id",
+    "slug",
+    "title",
+    "description",
+    "price",
+    "category",
+    "image",
+    "availability",
+    "variants",
+    "modifiers",
+    "promotionIds"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "slug": { "type": "string" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "price": { "$ref": "./shared-types.schema.json#/$defs/Price" },
+    "compareAtPrice": { "$ref": "./shared-types.schema.json#/$defs/Price" },
+    "category": { "$ref": "./shared-types.schema.json#/$defs/Category" },
+    "image": { "$ref": "./shared-types.schema.json#/$defs/Image" },
+    "details": { "type": "string" },
+    "availability": {
+      "type": "string",
+      "enum": ["available", "unavailable", "limited"]
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "priceModifier"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "priceModifier": { "$ref": "./shared-types.schema.json#/$defs/Price" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "modifiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "price", "type"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "price": { "$ref": "./shared-types.schema.json#/$defs/Price" },
+          "type": { "type": "string", "enum": ["checkbox", "radio"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "promotionIds": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

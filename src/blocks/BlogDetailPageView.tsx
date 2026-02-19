@@ -1,5 +1,4 @@
 import { MainLayout } from '@/layouts';
-import { SidebarContent } from '@/blocks';
 import { Block, Container, Title, Text } from '@ui8kit/core';
 import { If, Var } from '@ui8kit/dsl';
 
@@ -9,11 +8,12 @@ export interface BlogDetailPageViewProps {
   headerTitle?: string;
   headerSubtitle?: string;
   post?: {
+    id: string;
     slug: string;
     title: string;
     excerpt: string;
     body?: string;
-    image?: string;
+    image?: { src: string; alt?: string };
     date?: string;
     author?: string;
   };

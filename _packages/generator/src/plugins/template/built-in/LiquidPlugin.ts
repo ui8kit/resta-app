@@ -98,7 +98,8 @@ export class LiquidPlugin extends BasePlugin {
    * {% endfor %}
    */
   renderLoop(loop: GenLoop, content: string): string {
-    const { item, collection, key } = loop;
+    const resolvedLoop = this.resolvePlatformLoop(loop);
+    const { item, collection, key } = resolvedLoop;
 
     let forTag = `{% for ${item} in ${collection} %}`;
 
@@ -151,12 +152,21 @@ export class LiquidPlugin extends BasePlugin {
    */
   renderVariable(variable: GenVariable): string {
     const { name, default: defaultValue, filter, filterArgs } = variable;
+    const mapped = this.resolvePlatformVariable(name);
+    if (mapped.skip) {
+      return '';
+    }
 
-    let expr = name;
+    let expr = mapped.expression;
 
     // Apply default
     if (defaultValue !== undefined) {
       expr = `${expr} | default: ${this.formatValue(defaultValue)}`;
+    }
+
+    if (mapped.filter) {
+      const [mappedFilter, ...mappedArgs] = mapped.filter.split(':').map((part) => part.trim());
+      expr = this.applyFilter(expr, mappedFilter, mappedArgs.length > 0 ? mappedArgs : undefined);
     }
 
     // Apply filter

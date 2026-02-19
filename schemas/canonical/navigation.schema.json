@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui8kit.local/schemas/canonical/navigation.schema.json",
+  "title": "Canonical Navigation",
+  "type": "object",
+  "required": ["navItems", "sidebarLinks", "adminSidebarLinks", "labels"],
+  "properties": {
+    "navItems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "url"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "url": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "sidebarLinks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "href"],
+        "properties": {
+          "label": { "type": "string" },
+          "href": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "adminSidebarLinks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "href", "active"],
+        "properties": {
+          "label": { "type": "string" },
+          "href": { "type": "string" },
+          "active": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "labels": {
+      "type": "object",
+      "required": ["adminSidebarLabel"],
+      "properties": {
+        "adminSidebarLabel": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

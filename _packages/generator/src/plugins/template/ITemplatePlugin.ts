@@ -65,8 +65,33 @@ export interface TemplatePluginConfig {
   prettyPrint?: boolean;
   /** Custom filter mappings */
   filterMappings?: Record<string, string>;
+  /** Platform map for variable and loop remapping */
+  platformMap?: PlatformMap;
+  /** Active domain in platformMap (e.g. catalog, promo) */
+  platformDomain?: string;
   /** Custom options for specific plugin */
   [key: string]: unknown;
+}
+
+export interface PlatformFieldMapping {
+  to: string;
+  filter?: string;
+  transform?: string;
+  skip?: boolean;
+}
+
+export interface PlatformDomainMapping {
+  resource: string;
+  collection?: string;
+  itemVariable?: string;
+  collectionVariable?: string;
+  fields: Record<string, PlatformFieldMapping>;
+}
+
+export interface PlatformMap {
+  platform: string;
+  version: string;
+  domains: Record<string, PlatformDomainMapping>;
 }
 
 // =============================================================================

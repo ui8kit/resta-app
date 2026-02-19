@@ -1,17 +1,51 @@
 import { MainLayout } from '@/layouts';
-import { SidebarContent } from '@/blocks';
-import { Block, Grid, Card, CardHeader, CardTitle, CardDescription, CardContent, Text } from '@ui8kit/core';
+import { Block, Grid, Card, CardHeader, CardTitle, CardDescription, CardContent, Text, Badge, Group, Button } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
 
-export type MenuItem = {
+type MenuPrice = {
+  amount: number;
+  currency: string;
+  display: string;
+};
+
+type MenuCategory = {
   id: string;
   title: string;
+};
+
+type MenuVariant = {
+  id: string;
+  title: string;
+  priceModifier: MenuPrice;
+};
+
+type MenuModifier = {
+  id: string;
+  title: string;
+  price: MenuPrice;
+  type: 'checkbox' | 'radio';
+};
+
+export type MenuItem = {
+  id: string;
+  slug: string;
+  title: string;
   description: string;
-  price: string;
-  category: string;
-  image?: string;
+  price: MenuPrice;
+  compareAtPrice?: MenuPrice;
+  category: MenuCategory;
+  image?: { src: string; alt?: string };
   details?: string;
+  availability?: 'available' | 'unavailable' | 'limited';
+  variants?: MenuVariant[];
+  modifiers?: MenuModifier[];
+  promotionIds?: string[];
+};
+
+type PromotionItem = {
+  id: string;
+  badge?: string;
 };
 
 export interface MenuPageViewProps {
@@ -19,7 +53,8 @@ export interface MenuPageViewProps {
   sidebar: React.ReactNode;
   headerTitle?: string;
   headerSubtitle?: string;
-  menu: { title?: string; subtitle?: string; items?: MenuItem[] };
+  menu: { title?: string; subtitle?: string; categories?: MenuCategory[]; items?: MenuItem[] };
+  promotions?: { items?: PromotionItem[] };
 }
 
 export function MenuPageView({
@@ -28,8 +63,24 @@ export function MenuPageView({
   headerTitle,
   headerSubtitle,
   menu,
+  promotions,
 }: MenuPageViewProps) {
   const items = menu.items ?? [];
+  const categories = menu.categories ?? [];
+  const promotionsById = Object.fromEntries((promotions?.items ?? []).map((item) => [item.id, item]));
+
+  const withComputed = items.map((item) => {
+    const firstPromotionId = item.promotionIds?.[0];
+    const promo = firstPromotionId ? promotionsById[firstPromotionId] : undefined;
+    const hasCompareAt = !!item.compareAtPrice?.display;
+    return {
+      ...item,
+      promotionBadge: promo?.badge ?? '',
+      hasPromotion: !!promo?.badge,
+      hasCompareAt,
+    };
+  });
+
   return (
     <MainLayout
       mode="full"
@@ -58,15 +109,36 @@ export function MenuPageView({
             </Text>
           </If>
         </Block>
+        <If test="categories.length > 0" value={categories.length > 0}>
+          <Group justify="center" gap="3" wrap="" data-class="menu-category-tabs" mb="6">
+            <Loop each="categories" as="category" data={categories}>
+              {(category: MenuCategory) => (
+                <DomainNavButton href={`#${category.id}`} size="sm" variant="ghost" data-class="menu-category-tab">
+                  <Var name="category.title" value={category.title} />
+                </DomainNavButton>
+              )}
+            </Loop>
+          </Group>
+        </If>
         <Grid cols="1-2-3" gap="6" data-class="menu-grid">
-          <Loop each="items" as="item" data={items}>
-            {(item: MenuItem) => (
+          <Loop each="withComputed" as="item" data={withComputed}>
+            {(item: MenuItem & { promotionBadge: string; hasPromotion: boolean; hasCompareAt: boolean }) => (
               <Card data-class="menu-item-card">
                 <CardHeader>
+                  <If test="item.hasPromotion" value={item.hasPromotion}>
+                    <Badge variant="secondary" data-class="menu-item-promo-badge" mb="2">
+                      <Var name="item.promotionBadge" value={item.promotionBadge} />
+                    </Badge>
+                  </If>
                   <If test="item.title" value={!!item.title}>
                     <CardTitle order={4} data-class="menu-item-title">
                       <Var name="item.title" value={item.title} />
                     </CardTitle>
+                  </If>
+                  <If test="item.category.title" value={!!item.category?.title}>
+                    <Text fontSize="sm" textColor="muted-foreground" data-class="menu-item-category">
+                      <Var name="item.category.title" value={item.category.title} />
+                    </Text>
                   </If>
                   <If test="item.description" value={!!item.description}>
                     <CardDescription data-class="menu-item-description">
@@ -74,15 +146,37 @@ export function MenuPageView({
                     </CardDescription>
                   </If>
                 </CardHeader>
-                <CardContent flex="" justify="between" items="center" gap="4" data-class="menu-item-footer">
-                  <If test="item.price" value={!!item.price}>
-                    <Text fontSize="lg" fontWeight="semibold" textColor="primary" data-class="menu-item-price">
-                      <Var name="item.price" value={item.price} />
+                <CardContent data-class="menu-item-footer">
+                  <Group justify="between" items="center" gap="4" mb="4">
+                    <If test="item.price.display" value={!!item.price?.display}>
+                      <Text fontSize="lg" fontWeight="semibold" textColor="primary" data-class="menu-item-price">
+                        <Var name="item.price.display" value={item.price.display} />
+                      </Text>
+                    </If>
+                    <If test="item.hasCompareAt" value={item.hasCompareAt}>
+                      <Text
+                        fontSize="sm"
+                        textColor="muted-foreground"
+                        textDecoration="line-through"
+                        data-class="menu-item-compare-price"
+                      >
+                        <Var name="item.compareAtPrice.display" value={item.compareAtPrice?.display} />
+                      </Text>
+                    </If>
+                  </Group>
+                  <Group justify="between" items="center" gap="3">
+                    <DomainNavButton href={`/menu/${item.id}`} size="sm" data-class="menu-item-link">
+                      View / Order
+                    </DomainNavButton>
+                    <Button variant="outline" size="sm" data-class="menu-item-add-intent">
+                      Add to cart
+                    </Button>
+                  </Group>
+                  <If test="item.availability" value={!!item.availability}>
+                    <Text fontSize="xs" textColor="muted-foreground" data-class="menu-item-availability" mt="2">
+                      Availability: <Var name="item.availability" value={item.availability} />
                     </Text>
                   </If>
-                  <DomainNavButton href={`/menu/${item.id}`} size="sm" data-class="menu-item-link">
-                    View Details
-                  </DomainNavButton>
                 </CardContent>
               </Card>
             )}

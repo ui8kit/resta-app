@@ -5,6 +5,9 @@
   "framework": "vite-react",
   "typescript": true,
   "target": "react",
+  "platform": "shopify",
+  "platformDomain": "catalog",
+  "platformMapPath": "./schemas/platform-map/shopify.json",
   "outDir": "./dist/react",
   "aliases": {
     "@": "./src",

@@ -1,0 +1,45 @@
+{
+  "platform": "wordpress",
+  "version": "wpgraphql-1",
+  "domains": {
+    "catalog": {
+      "resource": "product",
+      "collection": "products.nodes",
+      "itemVariable": "product",
+      "collectionVariable": "products.nodes",
+      "fields": {
+        "id": { "to": "databaseId" },
+        "slug": { "to": "slug" },
+        "title": { "to": "name" },
+        "description": { "to": "description" },
+        "details": { "to": "shortDescription" },
+        "price.display": { "to": "price" },
+        "price.amount": { "to": "priceRaw", "transform": "to_float" },
+        "compareAtPrice.display": { "to": "regularPrice" },
+        "category.id": { "to": "productCategories.nodes[0].slug" },
+        "image.src": { "to": "image.sourceUrl" },
+        "image.alt": { "to": "image.altText" },
+        "variants": { "to": "variations.nodes" },
+        "promotionIds": { "to": "metaData.promotion_ids" }
+      }
+    },
+    "promo": {
+      "resource": "post",
+      "collection": "promotions.nodes",
+      "itemVariable": "promotion",
+      "collectionVariable": "promotions.nodes",
+      "fields": {
+        "id": { "to": "databaseId" },
+        "slug": { "to": "slug" },
+        "title": { "to": "title" },
+        "description": { "to": "excerpt" },
+        "details": { "to": "content" },
+        "badge": { "to": "promotionMeta.badge" },
+        "validUntil": { "to": "promotionMeta.validUntil" },
+        "discount.type": { "to": "promotionMeta.discountType" },
+        "discount.value": { "to": "promotionMeta.discountValue" },
+        "discount.couponCode": { "to": "promotionMeta.couponCode" }
+      }
+    }
+  }
+}

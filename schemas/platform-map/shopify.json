@@ -1,0 +1,45 @@
+{
+  "platform": "shopify",
+  "version": "2024-01",
+  "domains": {
+    "catalog": {
+      "resource": "product",
+      "collection": "collection.products",
+      "itemVariable": "product",
+      "collectionVariable": "collection.products",
+      "fields": {
+        "id": { "to": "id" },
+        "slug": { "to": "handle" },
+        "title": { "to": "title" },
+        "description": { "to": "description" },
+        "details": { "to": "description" },
+        "price.display": { "to": "price", "filter": "money" },
+        "price.amount": { "to": "price", "transform": "to_cents" },
+        "compareAtPrice.display": { "to": "compare_at_price", "filter": "money" },
+        "category.id": { "to": "product_type" },
+        "image.src": { "to": "featured_image", "filter": "img_url: '600x'" },
+        "image.alt": { "to": "featured_image.alt" },
+        "variants": { "to": "variants" },
+        "modifiers": { "to": "properties" },
+        "promotionIds": { "to": "metafields.custom.promotion_ids" }
+      }
+    },
+    "promo": {
+      "resource": "metaobject",
+      "collection": "shop.metaobjects.promotions.values",
+      "itemVariable": "promotion",
+      "collectionVariable": "shop.metaobjects.promotions.values",
+      "fields": {
+        "id": { "to": "id" },
+        "slug": { "to": "handle" },
+        "title": { "to": "title.value" },
+        "description": { "to": "description.value" },
+        "badge": { "to": "badge.value" },
+        "validUntil": { "to": "valid_until.value" },
+        "discount.type": { "to": "discount_type.value" },
+        "discount.value": { "to": "discount_value.value" },
+        "discount.couponCode": { "to": "coupon_code.value" }
+      }
+    }
+  }
+}

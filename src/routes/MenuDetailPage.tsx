@@ -13,6 +13,7 @@ export function MenuDetailPage() {
       headerTitle={context.site.title}
       headerSubtitle={context.site.subtitle}
       item={item}
+      promotions={context.promotions}
     />
   );
 }

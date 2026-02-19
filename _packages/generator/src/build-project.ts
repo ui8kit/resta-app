@@ -3,7 +3,7 @@
  * Lives in generator: app build/generation is the generator's responsibility.
  */
 
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { Logger } from './core';
 import { TemplateService } from './services/template';
@@ -13,6 +13,13 @@ import {
   type RegistrySourceDir,
 } from './scripts';
 import type { AppConfig, BuildResult } from '@ui8kit/sdk';
+import type { PlatformMap } from './plugins/template';
+
+type PlatformAppConfig = AppConfig & {
+  platform?: string;
+  platformMapPath?: string;
+  platformDomain?: string;
+};
 
 function getRegistrySources(config: AppConfig, cwd: string): RegistrySourceDir[] {
   const entries: RegistrySourceDir[] = [];
@@ -42,7 +49,8 @@ function getRegistrySources(config: AppConfig, cwd: string): RegistrySourceDir[]
   return entries;
 }
 
-export async function buildProject(config: AppConfig, cwd = process.cwd()): Promise<BuildResult> {
+export async function buildProject(rawConfig: AppConfig, cwd = process.cwd()): Promise<BuildResult> {
+  const config = rawConfig as PlatformAppConfig;
   const outDir = resolve(cwd, config.outDir ?? `dist/${config.target}`);
   const registryPath = resolve(outDir, '_temp', 'registry.json');
   const sources = getRegistrySources(config, cwd);
@@ -88,11 +96,22 @@ export async function buildProject(config: AppConfig, cwd = process.cwd()): Prom
   await mkdir(resolve(outDir, '_temp'), { recursive: true });
   await writeFile(registryPath, JSON.stringify(registry, null, 2) + '\n', 'utf-8');
 
+  let platformMap: PlatformMap | undefined;
+  if (config.platformMapPath) {
+    const platformMapRaw = await readFile(resolve(cwd, config.platformMapPath), 'utf-8');
+    platformMap = JSON.parse(platformMapRaw) as PlatformMap;
+  }
+
   const result = await service.execute({
     registryPath,
     outputDir: outDir,
     engine: config.target,
     verbose: false,
+    pluginConfig: {
+      platformMap,
+      platformDomain: config.platformDomain ?? 'catalog',
+      platform: config.platform,
+    },
     passthroughComponents: [],
     excludeDependencies: ['@ui8kit/dsl'],
   });

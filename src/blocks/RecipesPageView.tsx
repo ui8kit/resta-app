@@ -1,15 +1,15 @@
 import { MainLayout } from '@/layouts';
-import { SidebarContent } from '@/blocks';
 import { Block, Grid, Card, CardHeader, CardTitle, CardDescription, CardContent, Text } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
 
 export type RecipeItem = {
+  id: string;
   slug: string;
   title: string;
   excerpt: string;
   body?: string;
-  image?: string;
+  image?: { src: string; alt?: string };
   date?: string;
 };
 

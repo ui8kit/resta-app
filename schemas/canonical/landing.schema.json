@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui8kit.local/schemas/canonical/landing.schema.json",
+  "title": "Canonical Landing",
+  "type": "object",
+  "required": ["title", "subtitle", "ctaText", "ctaUrl", "secondaryCtaText", "secondaryCtaUrl"],
+  "properties": {
+    "title": { "type": "string" },
+    "subtitle": { "type": "string" },
+    "ctaText": { "type": "string" },
+    "ctaUrl": { "type": "string" },
+    "secondaryCtaText": { "type": "string" },
+    "secondaryCtaUrl": { "type": "string" }
+  },
+  "additionalProperties": false
+}

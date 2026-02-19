@@ -9,6 +9,7 @@ export function MenuPage() {
       headerTitle={context.site.title}
       headerSubtitle={context.site.subtitle}
       menu={context.menu}
+      promotions={context.promotions}
     />
   );
 }

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui8kit.local/schemas/canonical/promo-item.schema.json",
+  "title": "Canonical Promotion Item",
+  "type": "object",
+  "required": ["id", "slug", "title", "description", "validUntil", "discount", "badge", "image"],
+  "properties": {
+    "id": { "type": "string" },
+    "slug": { "type": "string" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "validUntil": { "type": "string", "format": "date-time" },
+    "discount": {
+      "type": "object",
+      "required": ["type", "value", "appliesTo", "couponCode"],
+      "properties": {
+        "type": { "type": "string", "enum": ["percentage", "fixed", "combo"] },
+        "value": { "type": "number" },
+        "appliesTo": {
+          "type": "object",
+          "required": ["categoryIds", "productIds"],
+          "properties": {
+            "categoryIds": { "type": "array", "items": { "type": "string" } },
+            "productIds": { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        },
+        "couponCode": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "badge": { "type": "string" },
+    "image": { "$ref": "./shared-types.schema.json#/$defs/Image" },
+    "details": { "type": "string" }
+  },
+  "additionalProperties": false
+}

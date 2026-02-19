@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui8kit.local/schemas/canonical/blog-post.schema.json",
+  "title": "Canonical Blog Post",
+  "type": "object",
+  "required": ["id", "slug", "title", "excerpt", "body", "image", "date", "author"],
+  "properties": {
+    "id": { "type": "string" },
+    "slug": { "type": "string" },
+    "title": { "type": "string" },
+    "excerpt": { "type": "string" },
+    "body": { "type": "string" },
+    "image": { "$ref": "./shared-types.schema.json#/$defs/Image" },
+    "date": { "type": "string", "format": "date-time" },
+    "author": { "type": "string" }
+  },
+  "additionalProperties": false
+}
