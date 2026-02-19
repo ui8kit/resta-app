@@ -1,0 +1,257 @@
+{
+  "version": "2.0.0",
+  "description": "Brand entity mapping for @ui8kit/resta-app. After cloning and refactoring to a new brand, run `bun run audit:refactor` — all `from` terms must have zero residual matches. Fill in REFACTOR.md first.",
+  "groups": [
+    "identity",
+    "domain:catalog",
+    "domain:guide",
+    "domain:promo",
+    "dev",
+    "legal"
+  ],
+  "entries": [
+    {
+      "group": "identity",
+      "from": "RestA",
+      "to": "{BRAND_NAME}",
+      "severity": "error",
+      "note": "Brand display name — site.json title, Header title, index.html, copyright"
+    },
+    {
+      "group": "identity",
+      "from": "resta-",
+      "to": "{brand_slug}-",
+      "severity": "error",
+      "note": "Brand slug prefix — localStorage keys: resta-theme, resta-admin-auth"
+    },
+    {
+      "group": "identity",
+      "from": "resta-app",
+      "to": "{brand_slug}-app",
+      "severity": "error",
+      "note": "Package name suffix — package.json `name` field"
+    },
+    {
+      "group": "identity",
+      "from": "Restaurant & Bar",
+      "to": "{BRAND_TAGLINE}",
+      "severity": "error",
+      "note": "Brand tagline — site.json subtitle, Header subtitle, layout defaults in MainLayoutView/AdminLayout"
+    },
+    {
+      "group": "identity",
+      "from": "fine dining",
+      "to": "{brand_pitch}",
+      "severity": "warn",
+      "note": "Brand experience descriptor — site.json description, landing content"
+    },
+    {
+      "group": "identity",
+      "from": "craft cocktail",
+      "to": "{brand_specialty}",
+      "severity": "warn",
+      "note": "Specialty product mention — fixture content (menu.json, landing.json)"
+    },
+    {
+      "group": "identity",
+      "from": "seasonal menu",
+      "to": "{brand_offering}",
+      "severity": "warn",
+      "note": "Core offering mention — landing.json, fixture content"
+    },
+    {
+      "group": "identity",
+      "from": "Reserve your table",
+      "to": "{BRAND_CTA}",
+      "severity": "warn",
+      "note": "Primary CTA text — landing.json subtitle"
+    },
+
+    {
+      "group": "domain:catalog",
+      "from": "MenuPage",
+      "to": "{ProductDomain}Page",
+      "severity": "error",
+      "note": "Route component — src/routes/MenuPage.tsx"
+    },
+    {
+      "group": "domain:catalog",
+      "from": "MenuDetailPage",
+      "to": "{ProductDomain}DetailPage",
+      "severity": "error",
+      "note": "Route component — src/routes/MenuDetailPage.tsx"
+    },
+    {
+      "group": "domain:catalog",
+      "from": "MenuPageView",
+      "to": "{ProductDomain}PageView",
+      "severity": "error",
+      "note": "Block view component — src/blocks/MenuPageView.tsx"
+    },
+    {
+      "group": "domain:catalog",
+      "from": "MenuDetailPageView",
+      "to": "{ProductDomain}DetailPageView",
+      "severity": "error",
+      "note": "Block view component — src/blocks/MenuDetailPageView.tsx"
+    },
+    {
+      "group": "domain:catalog",
+      "from": "context.menu",
+      "to": "context.{productDomain}",
+      "severity": "error",
+      "note": "Context key — src/routes/*.tsx, src/data/context.ts"
+    },
+    {
+      "group": "domain:catalog",
+      "from": "menu.json",
+      "to": "{productDomain}.json",
+      "severity": "error",
+      "note": "Fixture file name — fixtures/menu.json, src/data/context.ts import"
+    },
+    {
+      "group": "domain:catalog",
+      "from": "/menu",
+      "to": "/{product-domain}",
+      "severity": "error",
+      "note": "Route path — App.tsx, page.json, navigation.json"
+    },
+    {
+      "group": "domain:catalog",
+      "from": "menu-detail",
+      "to": "{productDomain}-detail",
+      "severity": "error",
+      "note": "Page ID in fixtures/shared/page.json"
+    },
+
+    {
+      "group": "domain:guide",
+      "from": "RecipesPage",
+      "to": "{GuideDomain}Page",
+      "severity": "error",
+      "note": "Route component — src/routes/RecipesPage.tsx"
+    },
+    {
+      "group": "domain:guide",
+      "from": "RecipeDetailPage",
+      "to": "{GuideDomain}DetailPage",
+      "severity": "error",
+      "note": "Route component — src/routes/RecipeDetailPage.tsx"
+    },
+    {
+      "group": "domain:guide",
+      "from": "RecipesPageView",
+      "to": "{GuideDomain}PageView",
+      "severity": "error",
+      "note": "Block view component — src/blocks/RecipesPageView.tsx"
+    },
+    {
+      "group": "domain:guide",
+      "from": "RecipeDetailPageView",
+      "to": "{GuideDomain}DetailPageView",
+      "severity": "error",
+      "note": "Block view component — src/blocks/RecipeDetailPageView.tsx"
+    },
+    {
+      "group": "domain:guide",
+      "from": "context.recipes",
+      "to": "context.{guideDomain}",
+      "severity": "error",
+      "note": "Context key — src/routes/*.tsx, src/data/context.ts"
+    },
+    {
+      "group": "domain:guide",
+      "from": "recipes.json",
+      "to": "{guideDomain}.json",
+      "severity": "error",
+      "note": "Fixture file name — fixtures/recipes.json, src/data/context.ts import"
+    },
+    {
+      "group": "domain:guide",
+      "from": "/recipes",
+      "to": "/{guide-domain}",
+      "severity": "error",
+      "note": "Route path — App.tsx, page.json, navigation.json"
+    },
+    {
+      "group": "domain:guide",
+      "from": "recipes-detail",
+      "to": "{guideDomain}-detail",
+      "severity": "error",
+      "note": "Page ID in fixtures/shared/page.json"
+    },
+
+    {
+      "group": "domain:promo",
+      "from": "PromotionsPage",
+      "to": "{PromoDomain}Page",
+      "severity": "error",
+      "note": "Route component — src/routes/PromotionsPage.tsx"
+    },
+    {
+      "group": "domain:promo",
+      "from": "PromotionDetailPage",
+      "to": "{PromoDomain}DetailPage",
+      "severity": "error",
+      "note": "Route component — src/routes/PromotionDetailPage.tsx"
+    },
+    {
+      "group": "domain:promo",
+      "from": "PromotionsPageView",
+      "to": "{PromoDomain}PageView",
+      "severity": "error",
+      "note": "Block view component — src/blocks/PromotionsPageView.tsx"
+    },
+    {
+      "group": "domain:promo",
+      "from": "PromotionDetailPageView",
+      "to": "{PromoDomain}DetailPageView",
+      "severity": "error",
+      "note": "Block view component — src/blocks/PromotionDetailPageView.tsx"
+    },
+    {
+      "group": "domain:promo",
+      "from": "context.promotions",
+      "to": "context.{promoDomain}",
+      "severity": "error",
+      "note": "Context key — src/routes/*.tsx, src/data/context.ts"
+    },
+    {
+      "group": "domain:promo",
+      "from": "promotions.json",
+      "to": "{promoDomain}.json",
+      "severity": "error",
+      "note": "Fixture file name — fixtures/promotions.json, src/data/context.ts import"
+    },
+    {
+      "group": "domain:promo",
+      "from": "/promotions",
+      "to": "/{promo-domain}",
+      "severity": "error",
+      "note": "Route path — App.tsx, page.json, navigation.json"
+    },
+    {
+      "group": "domain:promo",
+      "from": "promotions-detail",
+      "to": "{promoDomain}-detail",
+      "severity": "error",
+      "note": "Page ID in fixtures/shared/page.json"
+    },
+
+    {
+      "group": "dev",
+      "from": "port: 3020",
+      "to": "port: {DEV_PORT}",
+      "severity": "warn",
+      "note": "Vite dev server port — vite.config.ts"
+    },
+
+    {
+      "group": "legal",
+      "from": "2025 RestA",
+      "to": "2025 {BRAND_NAME}",
+      "severity": "warn",
+      "note": "Copyright year + brand — layout fallback in MainLayoutView footerCopyright default"
+    }
+  ]
+}
