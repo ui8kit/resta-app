@@ -1,7 +1,16 @@
-import { Block, Container, Group, Text } from '@ui8kit/core';
+import { Block, Container, Group, Text, Sheet, Stack, Icon } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from './DomainNavButton';
 import { ThemeToggle } from './ThemeToggle';
+import { UtensilsCrossed, ChefHat, FileText, Percent, Palette, LogIn, Menu } from 'lucide-react';
+
+const NAV_ICONS: Record<string, (typeof UtensilsCrossed)> = {
+  menu: UtensilsCrossed,
+  recipes: ChefHat,
+  blog: FileText,
+  promotions: Percent,
+  design: Palette,
+};
 
 export type NavItem = {
   id: string;
@@ -69,24 +78,87 @@ export function Header({
 
         <Group gap="2" items="center" data-class="header-nav-group">
           <If test="navItems" value={(navItems ?? []).length > 0}>
-            <Block component="nav" flex="" gap="2" items="center" data-class="header-nav">
-              <Loop each="navItems" as="item" data={navItems ?? []}>
-                {(item: NavItem) => (
-                  <DomainNavButton
-                    variant="ghost"
-                    size="sm"
-                    href={item.url}
-                    data-class="header-nav-item"
-                  >
-                    <Text component="span">
-                      <Var name="item.title" value={item.title} />
-                    </Text>
-                  </DomainNavButton>
-                )}
-              </Loop>
+            <Block flex="" gap="2" items="center" data-class="header-nav-wrapper">
+              <Block
+                component="nav"
+                flex=""
+                gap="2"
+                items="center"
+                data-class="header-nav"
+                className="hidden md:flex"
+              >
+                <Loop each="navItems" as="item" data={navItems ?? []}>
+                  {(item: NavItem) => (
+                    <DomainNavButton
+                      variant="ghost"
+                      size="sm"
+                      href={item.url}
+                      data-class="header-nav-item"
+                    >
+                      <Text component="span">
+                        <Var name="item.title" value={item.title} />
+                      </Text>
+                    </DomainNavButton>
+                  )}
+                </Loop>
+              </Block>
+              <Block className="flex md:hidden" data-class="header-mobile-menu">
+            <Sheet
+              id="header-mobile-menu"
+              side="left"
+              size="sm"
+              title="Menu"
+              openLabel="Open menu"
+              closeLabel="Close menu"
+              triggerVariant="ghost"
+              triggerSize="sm"
+              data-class="header-mobile-sheet"
+            >
+              <Stack gap="1" w="full" data-class="header-mobile-nav">
+                <Loop each="navItems" as="item" data={navItems ?? []}>
+                  {(item: NavItem) => (
+                    <DomainNavButton
+                      variant="ghost"
+                      size="xs"
+                      href={item.url}
+                      justify="start"
+                      w="full"
+                      data-class="header-mobile-nav-link"
+                      className="h-9 justify-start text-left"
+                      onClick={() => {
+                        const cb = document.getElementById('header-mobile-menu') as HTMLInputElement | null;
+                        if (cb) cb.checked = false;
+                      }}
+                    >
+                      <Group component="span" gap="2" items="center" data-class="header-mobile-nav-link-content">
+                        <Icon
+                          lucideIcon={NAV_ICONS[item.id] ?? Menu}
+                          size="sm"
+                          data-class="header-mobile-nav-icon"
+                        />
+                        <Text component="span" fontSize="sm">
+                          <Var name="item.title" value={item.title} />
+                        </Text>
+                      </Group>
+                    </DomainNavButton>
+                  )}
+                </Loop>
+              </Stack>
+            </Sheet>
+              </Block>
             </Block>
           </If>
           <ThemeToggle />
+          <DomainNavButton
+            variant="link"
+            size="icon"
+            href="/admin"
+            title="Admin / Login"
+            aria-label="Admin / Login"
+            data-class="header-admin-link"
+          >
+            <Icon lucideIcon={LogIn} size="sm" data-class="header-admin-icon" />
+          </DomainNavButton>
         </Group>
       </Container>
     </Block>
