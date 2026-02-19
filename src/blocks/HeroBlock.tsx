@@ -30,14 +30,16 @@ export function HeroBlock({
     >
       <Container max="w-7xl" flex="col" gap="8" items="center">
         <Stack gap="4" items="center" max="w-2xl">
-            <Title
-              fontSize="5xl"
-              fontWeight="bold"
-              textAlign="center"
-              data-class="hero-title"
-            >
-              <Var name="title" value={title} />
-            </Title>
+            <If test="title" value={!!title}>
+              <Title
+                fontSize="5xl"
+                fontWeight="bold"
+                textAlign="center"
+                data-class="hero-title"
+              >
+                <Var name="title" value={title} />
+              </Title>
+            </If>
 
             <If test="subtitle" value={!!subtitle}>
               <Text

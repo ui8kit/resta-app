@@ -62,12 +62,16 @@ export function PromotionsPageView({
             {(item: PromotionItem) => (
               <Card data-class="promotions-item-card">
                 <CardHeader>
-                  <CardTitle order={4} data-class="promotions-item-title">
-                    <Var name="item.title" value={item.title} />
-                  </CardTitle>
-                  <CardDescription data-class="promotions-item-description">
-                    <Var name="item.description" value={item.description} />
-                  </CardDescription>
+                  <If test="item.title" value={!!item.title}>
+                    <CardTitle order={4} data-class="promotions-item-title">
+                      <Var name="item.title" value={item.title} />
+                    </CardTitle>
+                  </If>
+                  <If test="item.description" value={!!item.description}>
+                    <CardDescription data-class="promotions-item-description">
+                      <Var name="item.description" value={item.description} />
+                    </CardDescription>
+                  </If>
                   <If test="item.validUntil" value={!!item.validUntil}>
                     <Text fontSize="sm" textColor="muted-foreground" data-class="promotions-item-valid">
                       Valid until: <Var name="item.validUntil" value={item.validUntil} />

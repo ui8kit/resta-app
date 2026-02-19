@@ -63,17 +63,23 @@ export function MenuPageView({
             {(item: MenuItem) => (
               <Card data-class="menu-item-card">
                 <CardHeader>
-                  <CardTitle order={4} data-class="menu-item-title">
-                    <Var name="item.title" value={item.title} />
-                  </CardTitle>
-                  <CardDescription data-class="menu-item-description">
-                    <Var name="item.description" value={item.description} />
-                  </CardDescription>
+                  <If test="item.title" value={!!item.title}>
+                    <CardTitle order={4} data-class="menu-item-title">
+                      <Var name="item.title" value={item.title} />
+                    </CardTitle>
+                  </If>
+                  <If test="item.description" value={!!item.description}>
+                    <CardDescription data-class="menu-item-description">
+                      <Var name="item.description" value={item.description} />
+                    </CardDescription>
+                  </If>
                 </CardHeader>
                 <CardContent flex="" justify="between" items="center" gap="4" data-class="menu-item-footer">
-                  <Text fontSize="lg" fontWeight="semibold" textColor="primary" data-class="menu-item-price">
-                    <Var name="item.price" value={item.price} />
-                  </Text>
+                  <If test="item.price" value={!!item.price}>
+                    <Text fontSize="lg" fontWeight="semibold" textColor="primary" data-class="menu-item-price">
+                      <Var name="item.price" value={item.price} />
+                    </Text>
+                  </If>
                   <DomainNavButton href={`/menu/${item.id}`} size="sm" data-class="menu-item-link">
                     View Details
                   </DomainNavButton>

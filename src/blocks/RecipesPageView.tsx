@@ -62,12 +62,16 @@ export function RecipesPageView({
             {(item: RecipeItem) => (
               <Card data-class="recipes-item-card">
                 <CardHeader>
-                  <CardTitle order={4} data-class="recipes-item-title">
-                    <Var name="item.title" value={item.title} />
-                  </CardTitle>
-                  <CardDescription data-class="recipes-item-excerpt">
-                    <Var name="item.excerpt" value={item.excerpt} />
-                  </CardDescription>
+                  <If test="item.title" value={!!item.title}>
+                    <CardTitle order={4} data-class="recipes-item-title">
+                      <Var name="item.title" value={item.title} />
+                    </CardTitle>
+                  </If>
+                  <If test="item.excerpt" value={!!item.excerpt}>
+                    <CardDescription data-class="recipes-item-excerpt">
+                      <Var name="item.excerpt" value={item.excerpt} />
+                    </CardDescription>
+                  </If>
                   <If test="item.date" value={!!item.date}>
                     <Text fontSize="sm" textColor="muted-foreground" data-class="recipes-item-date">
                       <Var name="item.date" value={item.date} />
