@@ -63,6 +63,7 @@ const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
     }, [value, onValueChange, isMultiple, collapsible, controlledValue]);
 
     const { utilityClassName, rest } = resolveUtilityClassName(props);
+    const defaultUtilities = ux({ flex: "col", gap: "2" });
 
     return (
       <AccordionContext.Provider value={{ value, onItemClick, type, collapsible }}>
@@ -70,7 +71,7 @@ const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
           ref={ref}
           data-accordion
           data-class="accordion"
-          className={cn(utilityClassName, className)}
+          className={cn(defaultUtilities, utilityClassName, className)}
           {...rest}
         />
       </AccordionContext.Provider>
@@ -116,7 +117,7 @@ const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps>(
           data-type={type}
           data-class="accordion-item"
           className={cn(
-            "flex",
+            "flex flex-col",
             utilityClassName,
             className
           )}
@@ -149,6 +150,7 @@ const AccordionTrigger = React.forwardRef<HTMLButtonElement, AccordionTriggerPro
     const passedProps = {
       ref,
       variant: "ghost" as const,
+      size: "sm" as const,
       onClick: () => onItemClick(value),
       "data-class": "accordion-trigger",
       className: cn(defaultUtilities, utilityClassName, className),
@@ -190,7 +192,7 @@ const AccordionContent = React.forwardRef<HTMLDivElement, AccordionContentProps>
         )}
         {...rest}
       >
-        <div className="pb-4 pt-0">{props.children}</div>
+        <div className="pt-2 pb-4">{props.children}</div>
       </div>
     );
   }

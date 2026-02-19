@@ -80,7 +80,7 @@ export function PromotionsPageView({
                     </CardTitle>
                   </If>
                   <If test="item.badge" value={!!item.badge}>
-                    <Badge variant="secondary" data-class="promotions-item-badge">
+                    <Badge variant="outline" data-class="promotions-item-badge">
                       <Var name="item.badge" value={item.badge} />
                     </Badge>
                   </If>

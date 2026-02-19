@@ -19,3 +19,4 @@ export { DesignColorsPageView } from './DesignColorsPageView';
 export { DesignTypographyPageView } from './DesignTypographyPageView';
 export { DesignComponentsPageView } from './DesignComponentsPageView';
 export { DesignWidgetsPageView } from './DesignWidgetsPageView';
+export { DesignPagesPageView } from './DesignPagesPageView';

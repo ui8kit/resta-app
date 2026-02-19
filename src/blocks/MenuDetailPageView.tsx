@@ -94,7 +94,7 @@ export function MenuDetailPageView({
                   </Text>
                 </If>
                 <If test="promotion.badge" value={!!promotion?.badge}>
-                  <Badge variant="secondary" data-class="menu-detail-promo-badge">
+                  <Badge variant="outline" data-class="menu-detail-promo-badge">
                     <Var name="promotion.badge" value={promotion?.badge} />
                   </Badge>
                 </If>

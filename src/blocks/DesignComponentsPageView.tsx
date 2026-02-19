@@ -36,7 +36,7 @@ const BADGE_SIZES = ['xs', 'sm', 'default', 'lg'] as const;
 export function DesignComponentsPageView() {
   return (
     <Block component="section" py="8" data-class="design-components-section">
-      <Stack gap="8" max="w-4xl" mx="auto" px="4">
+      <Stack gap="8" max="w-4xl" mx="auto" px="4" items="stretch">
         <Title fontSize="2xl" fontWeight="bold" data-class="design-components-title">
           Components
         </Title>

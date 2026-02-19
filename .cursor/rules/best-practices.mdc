@@ -150,7 +150,7 @@ Examples:
 // ✅ Correct - semantic tokens
 <Block bg="primary" data-class="hero">
 <Button variant="primary">
-<Badge variant="secondary">
+<Badge variant="outline">
 <Text textColor="muted-foreground">
 
 // ❌ Wrong - hardcoded colors
@@ -240,7 +240,7 @@ export function HeroBlock() {
   <CardContent>
     <Group gap="2" data-class="card-actions">
       <Button size="sm">Action</Button>
-      <Badge variant="secondary">Tag</Badge>
+      <Badge variant="outline">Tag</Badge>
     </Group>
   </CardContent>
 </Card>

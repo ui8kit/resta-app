@@ -24,6 +24,8 @@ export type HeaderProps = {
   navItems?: NavItem[];
   dataClass?: string;
   'data-class'?: string;
+  /** Renders before ThemeToggle in the nav group (e.g. mobile menu burger) */
+  beforeThemeToggle?: React.ReactNode;
 };
 
 export function Header({
@@ -32,6 +34,7 @@ export function Header({
   navItems,
   dataClass,
   'data-class': dataClassAttr,
+  beforeThemeToggle,
 }: HeaderProps) {
   return (
     <Block
@@ -94,12 +97,12 @@ export function Header({
                 <Loop each="navItems" as="item" data={navItems ?? []}>
                   {(item: NavItem) => (
                     <DomainNavButton
-                      variant="ghost"
-                      size="sm"
+                      variant="link"
+                      size="xs"
                       href={item.url}
                       data-class="header-nav-item"
                     >
-                      <Text component="span">
+                      <Text fontWeight="bold" fontSize="sm" component="span">
                         <Var name="item.title" value={item.title} />
                       </Text>
                     </DomainNavButton>
@@ -152,6 +155,7 @@ export function Header({
               </Block>
             </Block>
           </If>
+          {beforeThemeToggle}
           <ThemeToggle />
           <DomainNavButton
             variant="link"

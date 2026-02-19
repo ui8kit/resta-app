@@ -69,7 +69,7 @@ export function RecipesPageView({
                 <CardHeader>
                   <Group items="center" gap="2" mb="1">
                     <If test="item.difficulty" value={!!item.difficulty}>
-                      <Badge variant="secondary" data-class="recipes-item-difficulty">
+                      <Badge variant="outline" data-class="recipes-item-difficulty">
                         <Var name="item.difficulty" value={item.difficulty} />
                       </Badge>
                     </If>

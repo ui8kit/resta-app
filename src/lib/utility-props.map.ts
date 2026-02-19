@@ -349,6 +349,7 @@ export const utilityPropsMap = {
     "auto"
   ],
   "min": [
+    "h-20",
     "h-full",
     "h-screen",
     "w-0",

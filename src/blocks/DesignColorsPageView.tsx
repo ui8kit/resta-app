@@ -32,7 +32,7 @@ function ColorSwatch({ id, label }: { id: string; label: string }) {
       <Block
         bg={id as any}
         rounded="md"
-        h="min-20"
+        min="h-20"
         border=""
         data-class="design-colors-swatch-block"
         className="border border-border"
@@ -47,7 +47,7 @@ function ColorSwatch({ id, label }: { id: string; label: string }) {
 export function DesignColorsPageView() {
   return (
     <Block component="section" py="8" data-class="design-colors-section">
-      <Stack gap="8" max="w-4xl" mx="auto" px="4">
+      <Stack gap="8" max="w-4xl" mx="auto" px="4" items="stretch">
         <Title fontSize="2xl" fontWeight="bold" data-class="design-colors-title">
           Color Tokens
         </Title>

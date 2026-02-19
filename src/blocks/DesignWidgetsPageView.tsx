@@ -8,6 +8,7 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
+  Grid,
   Badge,
   Group,
   Button,
@@ -19,11 +20,12 @@ import {
 } from '@ui8kit/core';
 import { HeroBlock } from './HeroBlock';
 import { DomainNavButton } from '@/partials';
+import { context } from '@/data/context';
 
 export function DesignWidgetsPageView() {
   return (
     <Block component="section" py="8" data-class="design-widgets-section">
-      <Stack gap="8" max="w-4xl" mx="auto" px="4">
+      <Stack gap="8" max="w-4xl" mx="auto" px="4" items="stretch">
         <Title fontSize="2xl" fontWeight="bold" data-class="design-widgets-title">
           Widgets
         </Title>
@@ -42,14 +44,61 @@ export function DesignWidgetsPageView() {
           />
         </Block>
 
+        <Block data-class="design-widgets-menu-cards">
+          <Text fontSize="sm" fontWeight="semibold" mb="2" textColor="muted-foreground">
+            Menu cards
+          </Text>
+          <Grid cols="1-2-3" gap="4">
+            {(context.menu.items?.slice(0, 3) ?? []).map((item) => (
+              <Card key={item.id} data-class="design-widget-menu-card" max="w-sm">
+                <CardHeader>
+                  {item.promotionIds?.length ? (
+                    <Badge variant="outline" mb="2">
+                      -15%
+                    </Badge>
+                  ) : null}
+                  <Text fontSize="xs" textColor="muted-foreground">
+                    {item.category?.title}
+                  </Text>
+                  <CardTitle order={4}>{item.title}</CardTitle>
+                  <CardDescription>{item.description}</CardDescription>
+                  <Group items="baseline" gap="2" mt="2">
+                    <Text fontSize="lg" fontWeight="semibold" textColor="primary">
+                      {item.price?.display}
+                    </Text>
+                    {item.compareAtPrice?.display && (
+                      <Text fontSize="sm" textColor="muted-foreground" textDecoration="line-through">
+                        {item.compareAtPrice.display}
+                      </Text>
+                    )}
+                  </Group>
+                </CardHeader>
+                <CardContent>
+                  <Group gap="2" wrap="">
+                    {item.variants?.slice(0, 2).map((v) => (
+                      <Button key={v.id} variant="outline" size="sm">
+                        {v.title}
+                        {v.priceModifier?.display ? ` ${v.priceModifier.display}` : ''}
+                      </Button>
+                    ))}
+                  </Group>
+                  <DomainNavButton href="#" size="sm" mt="2">
+                    View / Order
+                  </DomainNavButton>
+                </CardContent>
+              </Card>
+            ))}
+          </Grid>
+        </Block>
+
         <Block data-class="design-widgets-menu-card">
           <Text fontSize="sm" fontWeight="semibold" mb="2" textColor="muted-foreground">
-            Menu item card
+            Menu item card (single)
           </Text>
           <Card data-class="design-widget-menu-card" max="w-sm">
             <CardHeader>
               <Group items="center" gap="2" mb="1">
-                <Badge variant="secondary" data-class="design-widget-menu-badge">
+                <Badge variant="outline" data-class="design-widget-menu-badge">
                   -15%
                 </Badge>
                 <Text fontSize="xs" textColor="muted-foreground">
@@ -76,7 +125,7 @@ export function DesignWidgetsPageView() {
                   300g +200 ₽
                 </Button>
               </Group>
-              <DomainNavButton href="/menu/grill-salmon-steak" size="sm" mt="2">
+              <DomainNavButton href="#" size="sm" mt="2">
                 View / Order
               </DomainNavButton>
             </CardContent>
@@ -90,7 +139,7 @@ export function DesignWidgetsPageView() {
           <Card data-class="design-widget-recipe-card" max="w-sm">
             <CardHeader>
               <Group items="center" gap="2" mb="1">
-                <Badge variant="secondary">medium</Badge>
+                <Badge variant="outline">medium</Badge>
                 <Text fontSize="xs" textColor="muted-foreground">
                   Grill
                 </Text>
@@ -102,7 +151,7 @@ export function DesignWidgetsPageView() {
               </Text>
             </CardHeader>
             <CardContent>
-              <DomainNavButton href="/recipes/grilled-salmon" size="sm">
+              <DomainNavButton href="#" size="sm">
                 View Recipe
               </DomainNavButton>
             </CardContent>
@@ -115,7 +164,7 @@ export function DesignWidgetsPageView() {
           </Text>
           <Card data-class="design-widget-promo-card" max="w-sm">
             <CardHeader>
-              <Badge variant="secondary" mb="2">
+              <Badge variant="outline" mb="2">
                 -15%
               </Badge>
               <CardTitle order={4}>Happy Hour Grill</CardTitle>
@@ -125,7 +174,7 @@ export function DesignWidgetsPageView() {
               </Text>
             </CardHeader>
             <CardContent>
-              <DomainNavButton href="/promotions/happy-hour" size="sm">
+              <DomainNavButton href="#" size="sm">
                 View Promotion
               </DomainNavButton>
             </CardContent>
@@ -145,7 +194,7 @@ export function DesignWidgetsPageView() {
               </Text>
             </CardHeader>
             <CardContent>
-              <DomainNavButton href="/blog/tiramisu" size="sm">
+              <DomainNavButton href="#" size="sm">
                 Read More
               </DomainNavButton>
             </CardContent>

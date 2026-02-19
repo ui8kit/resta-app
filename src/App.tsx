@@ -15,6 +15,7 @@ import { DesignColorsPage } from '@/routes/DesignColorsPage';
 import { DesignTypographyPage } from '@/routes/DesignTypographyPage';
 import { DesignComponentsPage } from '@/routes/DesignComponentsPage';
 import { DesignWidgetsPage } from '@/routes/DesignWidgetsPage';
+import { DesignPagesPage } from '@/routes/DesignPagesPage';
 
 export function App() {
   return (
@@ -33,6 +34,7 @@ export function App() {
       <Route path="/design/typography" element={<DesignTypographyPage />} />
       <Route path="/design/components" element={<DesignComponentsPage />} />
       <Route path="/design/widgets" element={<DesignWidgetsPage />} />
+      <Route path="/design/pages" element={<DesignPagesPage />} />
       <Route path="/admin" element={<AdminLoginPage />} />
       <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
     </Routes>

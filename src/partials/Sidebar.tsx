@@ -12,7 +12,7 @@ export function Sidebar({ children, position = 'right' }: SidebarProps) {
       component="aside"
       data-class={`sidebar sidebar-${position}`}
     >
-      <Stack gap="6" data-class="sidebar-content">
+      <Stack gap="6" w="full" items="stretch" data-class="sidebar-content">
         {children}
       </Stack>
     </Block>

@@ -52,7 +52,7 @@ export function PromotionDetailPageView({
                 <Var name="item.title" value={item?.title} />
               </Title>
               <If test="item.badge" value={!!item?.badge}>
-                <Badge variant="secondary" data-class="promotion-detail-badge">
+                <Badge variant="outline" data-class="promotion-detail-badge">
                   <Var name="item.badge" value={item?.badge} />
                 </Badge>
               </If>

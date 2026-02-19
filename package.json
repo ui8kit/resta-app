@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "download-fonts": "bun run scripts/download-fonts.ts",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",

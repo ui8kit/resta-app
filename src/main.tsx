@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@/providers/theme';
 import { AdminAuthProvider } from '@/providers/AdminAuthContext';
 import { App } from './App';
-import '@/css/index.css';
+import '@/assets/css/index.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

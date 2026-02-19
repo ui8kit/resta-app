@@ -10,7 +10,7 @@ const SAMPLE_TEXT = 'The quick brown fox jumps over the lazy dog.';
 export function DesignTypographyPageView() {
   return (
     <Block component="section" py="8" data-class="design-typography-section">
-      <Stack gap="8" max="w-4xl" mx="auto" px="4">
+      <Stack gap="8" max="w-4xl" mx="auto" px="4" items="stretch">
         <Title fontSize="2xl" fontWeight="bold" data-class="design-typography-title">
           Typography
         </Title>

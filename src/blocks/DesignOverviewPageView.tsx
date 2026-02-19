@@ -5,13 +5,14 @@ const SECTIONS = [
   { id: 'colors', title: 'Colors', description: 'Semantic color tokens and swatches.', href: '/design/colors' },
   { id: 'typography', title: 'Typography', description: 'Font sizes, weights, line heights, and Title scale.', href: '/design/typography' },
   { id: 'components', title: 'Components', description: 'Button, Badge, Field, Icon, and Card variants.', href: '/design/components' },
-  { id: 'widgets', title: 'Widgets', description: 'Hero, menu card, recipe card, promo, blog, Accordion, Sheet.', href: '/design/widgets' },
+  { id: 'widgets', title: 'Widgets', description: 'Hero, menu cards grid, recipe card, promo, blog, Accordion, Sheet.', href: '/design/widgets' },
+  { id: 'pages', title: 'Pages', description: 'Full page previews: menu, recipe, promotion detail.', href: '/design/pages' },
 ];
 
 export function DesignOverviewPageView() {
   return (
     <Block component="section" py="8" data-class="design-overview-section">
-      <Stack gap="8" max="w-4xl" mx="auto" px="4">
+      <Stack gap="8" max="w-4xl" mx="auto" px="4" items="stretch">
         <Stack gap="2" data-class="design-overview-header">
           <Title fontSize="2xl" fontWeight="bold" data-class="design-overview-title">
             Design System
@@ -32,7 +33,7 @@ export function DesignOverviewPageView() {
                 </CardDescription>
               </CardHeader>
               <CardContent data-class="design-overview-card-actions">
-                <DomainNavButton href={s.href} size="sm" data-class="design-overview-card-link">
+                <DomainNavButton href="#" size="sm" data-class="design-overview-card-link">
                   View
                 </DomainNavButton>
               </CardContent>

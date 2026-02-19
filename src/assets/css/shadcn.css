@@ -33,10 +33,11 @@
   --sidebar-accent-foreground: hsl(0 0% 0%);
   --sidebar-border: hsl(0 0% 92.1569%);
   --sidebar-ring: hsl(0 0% 0%);
-  --font-sans: var(--font-montserrat), Montserrat, sans-serif;
+  --font-nunito: "Nunito", sans-serif;
+  --font-sans: var(--font-nunito);
   --font-serif: Lora, serif;
   --font-mono: IBM Plex Mono, monospace;
-  --radius: 1.4rem;
+  --radius: 1.25rem;
   --shadow-x: 0;
   --shadow-y: 1px;
   --shadow-blur: 3px;
@@ -88,10 +89,11 @@
   --sidebar-accent-foreground: hsl(346 100% 72%);
   --sidebar-border: hsl(222.8571 6.4220% 21.3725%);
   --sidebar-ring: hsl(346 100% 72%);
-  --font-sans: var(--font-montserrat), Montserrat, sans-serif;
+  --font-nunito: "Nunito", sans-serif;
+  --font-sans: var(--font-nunito);
   --font-serif: Lora, serif;
   --font-mono: IBM Plex Mono, monospace;
-  --radius: 1.4rem;
+  --radius: 1.25rem;
   --shadow-x: 0;
   --shadow-y: 1px;
   --shadow-blur: 3px;

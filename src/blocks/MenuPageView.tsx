@@ -110,7 +110,7 @@ export function MenuPageView({
           </If>
         </Block>
         <If test="categories.length > 0" value={categories.length > 0}>
-          <Group justify="center" gap="3" wrap="" data-class="menu-category-tabs" mb="6">
+          <Group justify="center" gap="4" flex="wrap" data-class="menu-category-tabs" mb="6">
             <Loop each="categories" as="category" data={categories}>
               {(category: MenuCategory) => (
                 <DomainNavButton href={`#${category.id}`} size="sm" variant="ghost" data-class="menu-category-tab">
@@ -126,7 +126,7 @@ export function MenuPageView({
               <Card data-class="menu-item-card">
                 <CardHeader>
                   <If test="item.hasPromotion" value={item.hasPromotion}>
-                    <Badge variant="secondary" data-class="menu-item-promo-badge" mb="2">
+                    <Badge variant="outline" data-class="menu-item-promo-badge" mb="2">
                       <Var name="item.promotionBadge" value={item.promotionBadge} />
                     </Badge>
                   </If>
@@ -157,14 +157,14 @@ export function MenuPageView({
                       <Text
                         fontSize="sm"
                         textColor="muted-foreground"
-                        textDecoration="line-through"
+                        style={{ textDecoration: 'line-through' }}
                         data-class="menu-item-compare-price"
                       >
                         <Var name="item.compareAtPrice.display" value={item.compareAtPrice?.display} />
                       </Text>
                     </If>
                   </Group>
-                  <Group justify="between" items="center" gap="3">
+                  <Group justify="between" items="center" gap="4">
                     <DomainNavButton href={`/menu/${item.id}`} size="sm" data-class="menu-item-link">
                       View / Order
                     </DomainNavButton>

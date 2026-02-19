@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Block, Box } from '@ui8kit/core';
+import { Block, Box, Sheet } from '@ui8kit/core';
 import { If } from '@ui8kit/dsl';
 import { Sidebar } from '@/partials/Sidebar';
 import { Header } from '@/partials/Header';
@@ -9,10 +9,47 @@ export interface AdminLayoutProps {
   sidebar?: ReactNode;
 }
 
+const closeMobileSheet = () => {
+  const cb = document.getElementById('admin-mobile-sheet') as HTMLInputElement | null;
+  if (cb) cb.checked = false;
+};
+
 export function AdminLayout({ children, sidebar }: AdminLayoutProps) {
+  const mobileMenu = sidebar ? (
+    <Block className="flex md:hidden shrink-0" data-class="admin-mobile-menu-trigger">
+      <Sheet
+        id="admin-mobile-sheet"
+        side="left"
+        size="sm"
+        title="Menu"
+        openLabel="Open menu"
+        closeLabel="Close menu"
+        triggerVariant="ghost"
+        triggerSize="sm"
+        showTrigger
+      >
+        <Block
+          data-class="admin-mobile-sheet-content"
+          className="mt-4"
+          onClick={(e) => {
+            if ((e.target as HTMLElement).closest('a')) closeMobileSheet();
+          }}
+        >
+          <Sidebar>{sidebar}</Sidebar>
+        </Block>
+      </Sheet>
+    </Block>
+  ) : undefined;
+
   return (
     <Block flex="col" min-h="screen" data-class="admin-layout">
-      <Header title="RestA" subtitle="Admin" navItems={[]} dataClass="admin-layout-header" />
+      <Header
+        title="RestA"
+        subtitle="Admin"
+        navItems={[]}
+        dataClass="admin-layout-header"
+        beforeThemeToggle={mobileMenu}
+      />
       <Block flex="" data-class="admin-layout-body" className="flex-1">
         <If test="sidebar" value={!!sidebar}>
           <Block

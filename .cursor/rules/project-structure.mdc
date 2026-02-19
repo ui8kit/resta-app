@@ -15,6 +15,10 @@ alwaysApply: false
 │   ├── components/               # UI components (@ui8kit/core alias)
 │   ├── variants/                 # CVA variant configs
 │   ├── lib/                      # Utility props, utils
+│   ├── domain/                   # Domain separation
+│   │   └── design/               # Design system (independent, future docs)
+│   │       ├── previews/         # Page preview components
+│   │       └── fixtures/        # Sample data for previews
 │   ├── blocks/                   # Page sections & page views
 │   ├── layouts/                  # Page layouts
 │   ├── partials/                 # Reusable fragments

@@ -8,6 +8,7 @@ const DESIGN_LINKS = [
   { label: 'Typography', href: '/design/typography' },
   { label: 'Components', href: '/design/components' },
   { label: 'Widgets', href: '/design/widgets' },
+  { label: 'Pages', href: '/design/pages' },
 ];
 
 export interface DashLayoutProps {

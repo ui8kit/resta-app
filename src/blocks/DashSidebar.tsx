@@ -20,7 +20,7 @@ export function DashSidebar({
   'data-class': dataClass,
 }: DashSidebarProps) {
   return (
-    <Stack gap="2" p="4" data-class={dataClass ?? 'dash-sidebar-nav'}>
+    <Stack gap="2" p="4" w="full" items="stretch" data-class={dataClass ?? 'dash-sidebar-nav'}>
       <If test="label" value={!!(label ?? '')}>
         <Text
           fontSize="xs"
@@ -41,6 +41,7 @@ export function DashSidebar({
                   size="sm"
                   variant="secondary"
                   justify="start"
+                  w="full"
                   data-class="dash-sidebar-link"
                 >
                   <Var name="link.label" value={link.label} />
@@ -52,6 +53,7 @@ export function DashSidebar({
                   size="sm"
                   variant="ghost"
                   justify="start"
+                  w="full"
                   data-class="dash-sidebar-link"
                 >
                   <Var name="link.label" value={link.label} />

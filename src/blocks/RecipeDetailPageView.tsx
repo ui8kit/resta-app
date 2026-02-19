@@ -49,6 +49,7 @@ export function RecipeDetailPageView({
   headerTitle,
   headerSubtitle,
   recipe,
+  preview,
 }: RecipeDetailPageViewProps) {
   const ingredients = recipe?.ingredients ?? [];
   const steps = recipe?.steps ?? [];
@@ -67,7 +68,7 @@ export function RecipeDetailPageView({
             <Block data-class="recipe-detail-content">
               <Group items="center" gap="2" mb="2">
                 <If test="recipe.difficulty" value={!!recipe?.difficulty}>
-                  <Badge variant="secondary" data-class="recipe-detail-difficulty">
+                  <Badge variant="outline" data-class="recipe-detail-difficulty">
                     <Var name="recipe.difficulty" value={recipe?.difficulty} />
                   </Badge>
                 </If>
