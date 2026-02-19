@@ -1,5 +1,5 @@
 import { MainLayout } from '@/layouts';
-import { Block, Grid, Card, CardHeader, CardTitle, CardDescription, CardContent, Text } from '@ui8kit/core';
+import { Block, Grid, Card, CardHeader, CardTitle, CardDescription, CardContent, Text, Badge, Group } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
 
@@ -11,6 +11,11 @@ export type RecipeItem = {
   body?: string;
   image?: { src: string; alt?: string };
   date?: string;
+  category?: { id: string; title: string };
+  difficulty?: 'easy' | 'medium' | 'hard';
+  cookTime?: { prep: number; cook: number; total: number };
+  servings?: number;
+  tags?: string[];
 };
 
 export interface RecipesPageViewProps {
@@ -62,6 +67,18 @@ export function RecipesPageView({
             {(item: RecipeItem) => (
               <Card data-class="recipes-item-card">
                 <CardHeader>
+                  <Group items="center" gap="2" mb="1">
+                    <If test="item.difficulty" value={!!item.difficulty}>
+                      <Badge variant="secondary" data-class="recipes-item-difficulty">
+                        <Var name="item.difficulty" value={item.difficulty} />
+                      </Badge>
+                    </If>
+                    <If test="item.category.title" value={!!item.category?.title}>
+                      <Text fontSize="sm" textColor="muted-foreground" data-class="recipes-item-category">
+                        <Var name="item.category.title" value={item.category?.title} />
+                      </Text>
+                    </If>
+                  </Group>
                   <If test="item.title" value={!!item.title}>
                     <CardTitle order={4} data-class="recipes-item-title">
                       <Var name="item.title" value={item.title} />
@@ -71,6 +88,19 @@ export function RecipesPageView({
                     <CardDescription data-class="recipes-item-excerpt">
                       <Var name="item.excerpt" value={item.excerpt} />
                     </CardDescription>
+                  </If>
+                  <If test="item.cookTime.total || item.servings" value={!!item.cookTime?.total || !!item.servings}>
+                    <Text fontSize="sm" textColor="muted-foreground" data-class="recipes-item-meta">
+                      <If test="item.cookTime.total" value={!!item.cookTime?.total}>
+                        <Var name="item.cookTime.total" value={`${item.cookTime?.total} min`} />
+                      </If>
+                      <If test="item.cookTime.total && item.servings" value={!!item.cookTime?.total && !!item.servings}>
+                        {' · '}
+                      </If>
+                      <If test="item.servings" value={!!item.servings}>
+                        <Var name="item.servings" value={`${item.servings} servings`} />
+                      </If>
+                    </Text>
                   </If>
                   <If test="item.date" value={!!item.date}>
                     <Text fontSize="sm" textColor="muted-foreground" data-class="recipes-item-date">

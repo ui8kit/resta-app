@@ -69,6 +69,34 @@ export type PromotionItem = {
   details?: string;
 };
 
+export type RecipeIngredient = {
+  id: string;
+  amount: number;
+  unit: string;
+  name: string;
+  note?: string;
+};
+
+export type RecipeStep = {
+  id: string;
+  step: number;
+  title?: string;
+  body: string;
+};
+
+export type RecipeCookTime = {
+  prep: number;
+  cook: number;
+  total: number;
+};
+
+export type RecipeNutrition = {
+  calories: number;
+  protein: number;
+  fat: number;
+  carbs: number;
+};
+
 export type GuideItem = {
   id: string;
   slug: string;
@@ -77,6 +105,15 @@ export type GuideItem = {
   body: string;
   image: Image;
   date?: string;
+  category?: Category;
+  linkedMenuItemId?: string;
+  difficulty?: 'easy' | 'medium' | 'hard';
+  cookTime?: RecipeCookTime;
+  servings?: number;
+  ingredients?: RecipeIngredient[];
+  steps?: RecipeStep[];
+  tags?: string[];
+  nutrition?: RecipeNutrition;
 };
 
 export type BlogPost = {
