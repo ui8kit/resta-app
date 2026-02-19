@@ -520,6 +520,7 @@
   "text-right": "text-align: right;",
   "text-secondary": "color: var(--secondary);",
   "text-secondary-foreground": "color: var(--secondary-foreground);",
+  "text-chart-3": "color: var(--chart-3);",
   "text-sm": "font-size: var(--text-sm); /* 0.875rem (14px) */ \nline-height: var(--text-sm--line-height); /* calc(1.25 / 0.875) */",
   "text-xl": "font-size: var(--text-xl); /* 1.25rem (20px) */ \nline-height: var(--text-xl--line-height); /* calc(1.75 / 1.25) */",
   "text-xs": "font-size: var(--text-xs); /* 0.75rem (12px) */ \nline-height: var(--text-xs--line-height); /* calc(1 / 0.75) */",

@@ -36,7 +36,7 @@ export function Header({
   return (
     <Block
       component="header"
-      py="4"
+      py="2"
       bg="background"
       border="b"
       shadow="sm"
@@ -54,29 +54,33 @@ export function Header({
       >
         <a href="/" data-class="header-brand">
           <Group component="span" gap="2" items="center" data-class="header-brand-content">
-            <If test="title" value={!!(title ?? '')}>
-              <Text
-                fontSize="xl"
-                fontWeight="bold"
-                textColor="primary"
-                data-class="header-brand-title"
-              >
-                <Var name="title" value={title ?? 'RestA'} />
-              </Text>
-            </If>
-            <If test="subtitle" value={!!(subtitle ?? 'Restaurant & Bar')}>
-              <Text
-                fontSize="sm"
-                textColor="muted-foreground"
-                data-class="header-brand-subtitle"
-              >
-                <Var name="subtitle" value={subtitle ?? 'Restaurant & Bar'} />
-              </Text>
-            </If>
+            <Icon lucideIcon={ChefHat} strokeWidth={1.5} text="chart-3" size="xl" data-class="header-brand-icon" />
+            <Stack component="span" gap="0" items="start" data-class="header-brand-text">
+              <If test="title" value={!!(title ?? '')}>
+                <Text
+                  fontSize="base"
+                  fontWeight="bold"
+                  textColor="primary"
+                  data-class="header-brand-title"
+                >
+                  <Var name="title" value={title ?? 'RestA'} />
+                </Text>
+              </If>
+              <If test="subtitle" value={!!(subtitle ?? 'Restaurant & Bar')}>
+                <Text
+                  fontSize="xs"
+                  textColor="muted-foreground"
+                  data-class="header-brand-subtitle"
+                  style={{ marginTop: '-0.5em' }}
+                >
+                  <Var name="subtitle" value={subtitle ?? 'Restaurant & Bar'} />
+                </Text>
+              </If>
+            </Stack>
           </Group>
         </a>
 
-        <Group gap="2" items="center" data-class="header-nav-group">
+        <Group gap="1" items="center" data-class="header-nav-group">
           <If test="navItems" value={(navItems ?? []).length > 0}>
             <Block flex="" gap="2" items="center" data-class="header-nav-wrapper">
               <Block
@@ -110,7 +114,7 @@ export function Header({
               title="Menu"
               openLabel="Open menu"
               closeLabel="Close menu"
-              triggerVariant="ghost"
+              triggerVariant="link"
               triggerSize="sm"
               data-class="header-mobile-sheet"
             >
@@ -151,7 +155,7 @@ export function Header({
           <ThemeToggle />
           <DomainNavButton
             variant="link"
-            size="icon"
+            size="sm"
             href="/admin"
             title="Admin / Login"
             aria-label="Admin / Login"

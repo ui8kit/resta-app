@@ -12,9 +12,11 @@ export type IconProps
   component?: ElementType;
   lucideIcon?: any; // For Lucide React icons
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  strokeWidth?: number;
 };
 
 const defaultProps = ux({
+  text: 'accent-foreground',
   inline: '',      // display: inline (bare token)
   shrink: '0',     // flex-shrink: 0
   w: '4',          // width: 1rem (16px)
@@ -36,6 +38,8 @@ export const Icon = forwardRef<HTMLElement, IconProps>(
     component: Component = 'span',
     size = 'sm',
     lucideIcon: LucideIcon,
+
+    strokeWidth = 2.5,
     ...props
   }, ref) => {
     const { 'aria-hidden': ariaHidden, role, ...restProps } = props;
@@ -66,6 +70,7 @@ export const Icon = forwardRef<HTMLElement, IconProps>(
               sizeClasses,
               utilityClassName
             )}
+            strokeWidth={strokeWidth}
           />
         ) : (
           children

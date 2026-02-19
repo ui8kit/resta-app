@@ -10,7 +10,7 @@ export function ThemeToggle() {
     <>
       <If test="isDarkMode" value={isDarkMode}>
         <Button
-          variant="ghost"
+          variant="link"
           size="icon"
           onClick={toggleDarkMode}
           title="Switch to light mode"
@@ -22,8 +22,8 @@ export function ThemeToggle() {
       </If>
       <If test="!isDarkMode" value={!isDarkMode}>
         <Button
-          variant="ghost"
-          size="icon"
+          variant="link"
+          size="sm"
           onClick={toggleDarkMode}
           title="Switch to dark mode"
           aria-label="Switch to dark mode"

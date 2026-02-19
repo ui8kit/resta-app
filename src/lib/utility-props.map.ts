@@ -635,6 +635,7 @@ export const utilityPropsMap = {
     "destructive",
     "destructive-foreground",
     "foreground",
+    "chart-3",
     "justify",
     "left",
     "lg",
