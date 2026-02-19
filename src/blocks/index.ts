@@ -13,3 +13,9 @@ export { PromotionDetailPageView } from './PromotionDetailPageView';
 
 export { AdminDashboardPageView } from './AdminDashboardPageView';
 export { AdminLoginPageView } from './AdminLoginPageView';
+
+export { DesignOverviewPageView } from './DesignOverviewPageView';
+export { DesignColorsPageView } from './DesignColorsPageView';
+export { DesignTypographyPageView } from './DesignTypographyPageView';
+export { DesignComponentsPageView } from './DesignComponentsPageView';
+export { DesignWidgetsPageView } from './DesignWidgetsPageView';
