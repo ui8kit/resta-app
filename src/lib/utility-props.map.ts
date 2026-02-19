@@ -152,9 +152,7 @@ export const utilityPropsMap = {
     "span-11",
     "span-12",
     "auto",
-    "span-full",
-    "start-auto",
-    "end-auto"
+    "span-full"
   ],
   "collapse": [
     ""
@@ -199,11 +197,6 @@ export const utilityPropsMap = {
     "4",
     "6",
     "8",
-    "lg",
-    "md",
-    "sm",
-    "xl",
-    "xs",
     "x-0",
     "x-1",
     "x-2",

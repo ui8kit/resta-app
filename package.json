@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "generate": "bunx ui8kit-generate",
     "validate": "bunx ui8kit-validate",
-    "lint:dsl": "bunx ui8kit-lint-dsl src"
+    "inspect": "bunx ui8kit-inspect",
+    "lint:dsl": "bunx ui8kit-lint-dsl src",
+    "lint": "bunx ui8kit-lint"
   },
   "dependencies": {
     "@ui8kit/contracts": "^0.1.0",
