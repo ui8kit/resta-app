@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "ui8kit-lint-dsl": "bun run node_modules/@ui8kit/lint/src/cli/validate-dsl.ts src"
+    "ui8kit-linter": "bun run node_modules/@ui8kit/lint/src/cli/validate-dsl.ts src"
   },
   "dependencies": {
     "@ui8kit/sdk": "^0.1.0",
