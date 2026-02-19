@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui8kit.local/schemas/refactor-audit.schema.json",
+  "title": "RefactorAuditReport",
+  "type": "object",
+  "required": [
+    "runId",
+    "generatedAt",
+    "scope",
+    "mappingVersion",
+    "mappingFile",
+    "filesScanned",
+    "metrics",
+    "totals",
+    "residualMatches",
+    "severity",
+    "recommendations"
+  ],
+  "properties": {
+    "runId": { "type": "string" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "scope": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "mappingVersion": { "type": "string" },
+    "mappingFile": { "type": "string" },
+    "filesScanned": { "type": "integer", "minimum": 0 },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "from",
+          "to",
+          "severity",
+          "oldCount",
+          "newCount",
+          "residualCount",
+          "expectedCount"
+        ],
+        "properties": {
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "severity": { "type": "string", "enum": ["error", "warn", "info"] },
+          "oldCount": { "type": "integer", "minimum": 0 },
+          "newCount": { "type": "integer", "minimum": 0 },
+          "residualCount": { "type": "integer", "minimum": 0 },
+          "expectedCount": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "totals": {
+      "type": "object",
+      "required": ["residualCount", "replacedCount"],
+      "properties": {
+        "residualCount": { "type": "integer", "minimum": 0 },
+        "replacedCount": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "residualMatches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["term", "replacement", "severity", "file", "line", "excerpt"],
+        "properties": {
+          "term": { "type": "string" },
+          "replacement": { "type": "string" },
+          "severity": { "type": "string", "enum": ["error", "warn", "info"] },
+          "file": { "type": "string" },
+          "line": { "type": "integer", "minimum": 1 },
+          "excerpt": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "severity": { "type": "string", "enum": ["error", "warn", "info"] },
+    "recommendations": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

@@ -338,4 +338,4 @@ fixtures/             # JSON data
 
 ## License
 
-Private. See LICENSE.
+MIT License
