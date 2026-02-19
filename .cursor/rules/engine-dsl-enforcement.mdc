@@ -1,9 +1,7 @@
 ---
-description: apps/engine — DSL only, no hardcode, mandatory lint
-globs: apps/engine/**
+description: src — DSL only, no hardcode, mandatory lint
 alwaysApply: false
 ---
-
 # Engine Rules
 
 ## Constraints
@@ -15,8 +13,8 @@ alwaysApply: false
 
 ## Mandatory checklist (before final answer)
 
-1. `bun run lint` (from apps/engine)
-2. `bun run lint:dsl` (from apps/engine)
-3. If templates changed: `bun run generate` + `bun run scripts/copy-templates-to-dev.ts`
+1. `bun run lint` (from src)
+2. `bun run lint:dsl` (from src)
+3. If templates changed: `bun run generate`
 
 Report pass/fail. If skipped, state why.

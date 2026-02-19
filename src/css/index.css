@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@import "./resta.css";
+@import "./shadcn.css";
 
 @source "../**/*.{ts,tsx}";
 @source "../ui8kit.map.json";

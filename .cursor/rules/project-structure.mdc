@@ -11,7 +11,7 @@ alwaysApply: false
 ## Root Layout
 
 ```
-@ui8kit-resta/
+@ui8kit-resta-app/
 ├── src/                          # Application source
 │   ├── components/               # UI components (@ui8kit/core alias)
 │   ├── variants/                 # CVA variant configs

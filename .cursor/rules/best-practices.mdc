@@ -1,8 +1,8 @@
 ---
-description: best practices, code standards, patterns, conventions, domain blocks, package organization, core vs widgets
+description: best practices, code standards, patterns, conventions, blocks, layouts, partials, standalone app
 alwaysApply: false
 ---
-# UI8Kit Development Best Practices
+# UI8Kit Development Best Practices (Standalone App)
 
 ## Code Standards
 
@@ -176,9 +176,9 @@ Examples:
 
 ## Component Architecture
 
-### Prefer Existing Core Components
+### Prefer Existing Components
 
-Before building custom layouts with `Stack`, `Group`, or primitives, check `packages/core/src/components/` for existing composite components. Use them instead of reimplementing the same UI.
+Before building custom layouts with `Stack`, `Group`, or primitives, check `src/components/` for existing composite components. Use them instead of reimplementing the same UI.
 
 ```tsx
 // ✅ Correct — use Card when you need a card container
@@ -192,20 +192,20 @@ import { Card, CardHeader, CardTitle, CardContent } from '@ui8kit/core';
   </CardContent>
 </Card>
 
-// ❌ Wrong — Stack mimicking Card when Card already exists in core
+// ❌ Wrong — Stack mimicking Card when Card already exists
 <Stack gap="4" p="4" rounded="lg" bg="card" border="" data-class="examples-card">
   <Text fontSize="sm" fontWeight="semibold">...</Text>
   <Group gap="2" items="center">...</Group>
 </Stack>
 ```
 
-**Rule:** If a component exists in `@ui8kit/core` (e.g. `Card`, `Accordion`, `Sheet`), use it instead of composing `Stack`/`Group` with the same layout. Check `packages/core/src/components/` before building.
+**Rule:** If a component exists in `src/components/` (e.g. `Card`, `Accordion`, `Sheet`), use it instead of composing `Stack`/`Group` with the same layout. Import via `@ui8kit/core` alias.
 
-### Blocks (Location: `packages/blocks` or `apps/engine/src/blocks/{domain}`)
-- Represent full page sections
-- Wrap in `<Block component="section">`
+### Blocks (Location: `src/blocks/`)
+- Represent full page sections or full page views
+- Wrap sections in `<Block component="section">`
 - Single responsibility principle
-- Export from domain `index.ts`
+- Export from `src/blocks/index.ts`
 
 ```tsx
 // ✅ Correct
@@ -260,73 +260,54 @@ export function HeroBlock() {
 </Grid>
 ```
 
-## Domain & Package Organization
+## Standalone App Structure
 
-### Domain-Based Blocks
-
-Blocks live in domain folders. Each domain is self-contained and copy-paste friendly.
+### Directory Roles
 
 ```
-apps/engine/src/blocks/
-├── website/           ← Landing, marketing (Hero, CTA, etc.)
-│   ├── WebsitePageView.tsx
-│   └── index.ts
-├── docs/              ← Documentation (DashSidebar, SidebarContent)
-│   ├── DocsPageView.tsx
-│   ├── DashSidebar.tsx
-│   └── index.ts
-├── examples/          ← Demos, playground (ExamplesBlock)
-│   ├── ExamplesPageView.tsx
-│   └── index.ts
-├── dashboard/         ← SaaS, admin (DashboardBlock)
-│   ├── DashboardPageView.tsx
-│   └── index.ts
-└── index.ts           ← Re-exports all domains
+src/
+├── components/        ← UI primitives & composites (@ui8kit/core alias)
+├── variants/          ← CVA configs (button, badge, card, typography, etc.)
+├── lib/               ← utility-props, utils
+├── blocks/            ← Page sections (HeroBlock) & page views (*PageView)
+├── layouts/           ← MainLayout, AdminLayout
+├── partials/          ← Header, Footer, Sidebar, ThemeToggle, DomainNavButton
+├── routes/            ← Route components (LandingPage, MenuPage, etc.)
+├── providers/         ← theme, AdminAuthContext
+├── data/              ← context.ts (createContext, fixtures)
+└── css/
+
+fixtures/              ← JSON data (landing, menu, recipes, blog, promotions, admin, shared)
 ```
 
-**Rule:** A block imports only from `@ui8kit/core` and `@ui8kit/template`. No cross-domain imports inside blocks.
-
-### Where to Put New Components — Decision Tree
+### Where to Put New Code — Decision Tree
 
 | Question | Answer | Location |
 |----------|--------|----------|
-| Is it a simple layout/content primitive? (Button, Card, Stack, Accordion, Sheet, Modal) | Yes | `packages/core` |
-| Does it have heavy logic, multiple views, or domain-specific variants? (Calendar, RichTextEditor, Charts) | Yes | New package `@ui8kit/[name]` |
-| Is it a page section composed of primitives? | Yes | `packages/blocks` or `apps/engine/src/blocks/{domain}` |
+| Is it a layout/content primitive? (Button, Card, Stack, Accordion, Sheet) | Yes | `src/components/` |
+| Is it a CVA variant config? | Yes | `src/variants/` |
+| Is it a page section or full page view? | Yes | `src/blocks/` |
+| Is it a reusable fragment (header, footer, nav)? | Yes | `src/partials/` |
+| Is it a page layout wrapper? | Yes | `src/layouts/` |
+| Is it a route that loads a PageView? | Yes | `src/routes/` |
+| Is it app context or data loading? | Yes | `src/data/` |
+| Is it JSON fixture data? | Yes | `fixtures/` |
 
-### Core vs Separate Package
+### Block Types
 
-**Core (`packages/core`):**
-- Generic UI primitives
-- Single responsibility, minimal logic
-- Examples: Button, Card, Accordion, Sheet, Modal, Grid, Stack
+| Type | Pattern | Examples |
+|------|---------|----------|
+| Block | Reusable section | `HeroBlock`, `SidebarContent`, `DashSidebar` |
+| PageView | Full page composition | `LandingPageView`, `MenuPageView`, `RecipesPageView`, `AdminDashboardPageView` |
 
-**Separate package (`packages/calendar`, `packages/editor`, etc.):**
-- Complex components with multiple representation levels (e.g. Calendar: month, week, agenda)
-- Heavy internal logic or state
-- May evolve independently
-
-```tsx
-// ✅ Block uses core + optional widget package
-import { Block, Title, Button } from '@ui8kit/core';
-import { Calendar } from '@ui8kit/calendar';
-
-export function BookingBlock() {
-  return (
-    <Block component="section" data-class="booking-section">
-      <Title>Select date</Title>
-      <Calendar selected={...} onSelect={...} />
-    </Block>
-  );
-}
-```
+**Rule:** Blocks import from `@ui8kit/core` and `@ui8kit/dsl` (If, Var, Loop). No cross-block imports; use partials for shared fragments.
 
 ### Cognitive Load — Keep It Simple
 
-1. **Blocks = composition only.** No business logic. Use `Var`, `If`, `Loop` from `@ui8kit/template` for data binding.
-2. **One dependency per layer.** Block → core (required). Block → calendar/editor (optional, only when needed).
-3. **Copy-paste = block + its imports.** When copying a block, you get a self-contained file. No hidden shared components.
-4. **Don't extract "FeatureCard".** Use `Card` from core. Different block types (event, product, news) = same Card, different content.
+1. **Blocks = composition only.** No business logic. Use `Var`, `If`, `Loop` from `@ui8kit/dsl` for data binding.
+2. **Data flow:** `fixtures/*.json` → `context.ts` → routes → PageView.
+3. **Copy-paste = block + its imports.** When copying a block, you get a self-contained file.
+4. **Don't extract "FeatureCard".** Use `Card` from components. Different block types = same Card, different content.
 
 ## Common Props Defaults
 
@@ -400,9 +381,9 @@ export function BookingBlock() {
 <Stack data-class="hero-text">
 ```
 
-### ❌ Reimplementing Core Components
+### ❌ Reimplementing Existing Components
 ```tsx
-// Wrong — Stack with card-like props when Card exists in core
+// Wrong — Stack with card-like props when Card exists in src/components/
 <Stack gap="4" p="4" rounded="lg" bg="card" border="" data-class="examples-card">
   <Text fontSize="sm" fontWeight="semibold">Title</Text>
   <Group gap="2">...</Group>
@@ -417,14 +398,49 @@ export function BookingBlock() {
 </Card>
 ```
 
+## Partials & Layouts
+
+### Partials (`src/partials/`)
+
+Reusable fragments used across layouts and blocks. Must have `data-class` on semantic elements.
+
+```tsx
+// Header, Footer, Sidebar, ThemeToggle, DomainNavButton
+// Import in layouts or blocks; no cross-partial imports
+```
+
+### Layouts (`src/layouts/`)
+
+Page wrappers that compose partials and render `children` (route content). Use `MainLayout` for website pages, `AdminLayout` for admin/dashboard.
+
+```tsx
+// MainLayout: header + main + footer
+// AdminLayout: sidebar + main content area
+```
+
+### Fixtures (`fixtures/`)
+
+JSON data for pages. Wire in `src/data/context.ts`. Use `shared/` for site.json, page.json, navigation.json.
+
+```
+fixtures/
+├── shared/           # site.json, page.json, navigation.json
+├── landing.json
+├── menu.json
+├── recipes.json
+├── blog.json
+├── promotions.json
+└── admin.json
+```
+
 ## File Organization
 
-### Block File Structure
+### Block / PageView File Structure
 ```
-HeroBlock.tsx
-├── Imports
+HeroBlock.tsx  or  MenuPageView.tsx
+├── Imports (@ui8kit/core, @ui8kit/dsl)
 ├── Component definition
-├── Return JSX
+├── Return JSX (use Var, If, Loop for data)
 └── Export
 ```
 
@@ -446,9 +462,8 @@ export function HeroBlock() {
 
 ### Props Validation
 ```bash
-npm run lint
-# Validates all props against whitelist
-# Suggests closest match if prop invalid
+bun run validate    # ui8kit-validate — props + DSL rules
+bun run lint:dsl    # ui8kit-lint-dsl — DSL enforcement for src/
 ```
 
 ### Common Errors
@@ -474,10 +489,10 @@ Error: bg="red" invalid, closest: "destructive"
 
 ## When in Doubt
 
-1. **New component?** → Decision tree: Core (simple) vs new package (complex, multi-view)
-2. **New block?** → Put in `packages/blocks` or `apps/engine/src/blocks/{domain}`
-3. **Card-like UI?** → Use `Card` from core, don't create FeatureCard/EventCard
-4. Check `packages/core/src/components/` before building layouts
+1. **New component?** → `src/components/` (primitives) or `src/partials/` (reusable fragments)
+2. **New block/page?** → `src/blocks/`, export in `index.ts`, add route in `src/routes/`
+3. **Card-like UI?** → Use `Card` from `@ui8kit/core`, don't create FeatureCard/EventCard
+4. Check `src/components/` before building layouts
 5. Use `data-class` for ALL semantic elements
 6. Prefer semantic props over className/style
 7. Keep blocks focused: composition only, no business logic
