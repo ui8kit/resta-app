@@ -1,6 +1,6 @@
 /**
  * Sample data for design system page previews.
- * Independent from website fixtures — design system can be separated later.
+ * Used by DesignPagesPageView.
  */
 
 import type { MenuDetailPreviewItem } from '../previews/MenuDetailPreview';

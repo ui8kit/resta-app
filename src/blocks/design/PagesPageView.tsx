@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Block, Stack, Title, Text, Toast } from '@ui8kit/core';
-import { MenuDetailPreview, RecipeDetailPreview, PromotionDetailPreview } from '@/domain/design/previews';
-import { menuDetailSample, recipeDetailSample, promotionDetailSample } from '@/domain/design/fixtures/pages';
+import { MenuDetailPreview, RecipeDetailPreview, PromotionDetailPreview } from './previews';
+import { menuDetailSample, recipeDetailSample, promotionDetailSample } from './fixtures/pages';
 
 export function DesignPagesPageView() {
   const promotionBadge = '-15%';
