@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { MainLayout } from '@/layouts';
-import { Block, Container, Title, Text, Group, Badge, Button, Field } from '@ui8kit/core';
+import { Block, Container, Title, Text, Group, Badge, Button, Field, Toast } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 
 type MenuPrice = {
@@ -62,6 +63,7 @@ export function MenuDetailPageView({
   item,
   promotions,
 }: MenuDetailPageViewProps) {
+  const [showToast, setShowToast] = useState(false);
   const variants = item?.variants ?? [];
   const modifiers = item?.modifiers ?? [];
   const promotion = (promotions?.items ?? []).find((entry) => entry.id === item?.promotionIds?.[0]);
@@ -173,9 +175,15 @@ export function MenuDetailPageView({
                   </Text>
                 </Block>
               </If>
-              <Button size="lg" data-class="menu-detail-cta" mt="4">
+              <Button
+                size="lg"
+                data-class="menu-detail-cta"
+                mt="4"
+                onClick={() => setShowToast(true)}
+              >
                 Add to order
               </Button>
+              <Toast visible={showToast} onClose={() => setShowToast(false)} duration={9000} />
             </Block>
           </If>
         </Container>

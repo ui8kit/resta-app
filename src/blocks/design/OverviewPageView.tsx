@@ -33,7 +33,7 @@ export function DesignOverviewPageView() {
                 </CardDescription>
               </CardHeader>
               <CardContent data-class="design-overview-card-actions">
-                <DomainNavButton href="#" size="sm" data-class="design-overview-card-link">
+                <DomainNavButton href={s.href} size="sm" data-class="design-overview-card-link">
                   View
                 </DomainNavButton>
               </CardContent>

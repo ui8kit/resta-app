@@ -17,9 +17,10 @@ export type RecipeDetailPreviewRecipe = {
 
 export type RecipeDetailPreviewProps = {
   recipe?: RecipeDetailPreviewRecipe;
+  onOrderClick?: (e: React.MouseEvent) => void;
 };
 
-export function RecipeDetailPreview({ recipe }: RecipeDetailPreviewProps) {
+export function RecipeDetailPreview({ recipe, onOrderClick }: RecipeDetailPreviewProps) {
   const ingredients = recipe?.ingredients ?? [];
   const steps = recipe?.steps ?? [];
 
@@ -112,7 +113,7 @@ export function RecipeDetailPreview({ recipe }: RecipeDetailPreviewProps) {
                 </Text>
               </Block>
             )}
-            <Button size="lg" href="#">
+            <Button size="lg" href="#" onClick={onOrderClick}>
               Order in the restaurant
             </Button>
           </Block>

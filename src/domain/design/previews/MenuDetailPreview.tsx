@@ -17,9 +17,10 @@ export type MenuDetailPreviewItem = {
 export type MenuDetailPreviewProps = {
   item?: MenuDetailPreviewItem;
   promotionBadge?: string;
+  onOrderClick?: (e: React.MouseEvent) => void;
 };
 
-export function MenuDetailPreview({ item, promotionBadge }: MenuDetailPreviewProps) {
+export function MenuDetailPreview({ item, promotionBadge, onOrderClick }: MenuDetailPreviewProps) {
   const variants = item?.variants ?? [];
   const modifiers = item?.modifiers ?? [];
   const hasCompareAt = !!item?.compareAtPrice?.display;
@@ -102,7 +103,7 @@ export function MenuDetailPreview({ item, promotionBadge }: MenuDetailPreviewPro
                 </Text>
               </Block>
             )}
-            <Button size="lg" mt="4" href="#">
+            <Button size="lg" mt="4" href="#" onClick={onOrderClick}>
               Add to order
             </Button>
           </Block>

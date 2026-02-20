@@ -66,6 +66,8 @@
 | `components/Accordion.tsx` | `useState`, `useCallback`, `onClick` | Accordion expand/collapse |
 | `layouts/AdminLayout.tsx` | `onClick` | Sheet trigger / close |
 | `blocks/menu/MenuPageView.tsx` | `useState` (selectedCategory, cart), `onClick` | Menu category filter, cart (add/remove/quantity), cart Sheet |
+| `blocks/menu/DetailPageView.tsx` | `useState` (showToast), `onClick` | Toast on "Add to order" — UI design disclaimer |
+| `components/Toast.tsx` | `useEffect` (auto-dismiss) | Reusable toast, bottom-left, 9s |
 
 ### Routing
 

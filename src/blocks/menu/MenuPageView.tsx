@@ -146,7 +146,7 @@ export function MenuPageView({
       headerSubtitle={headerSubtitle}
     >
       <Block component="section" data-class="menu-section">
-        <Group w="full" justify="between" items="center" mb="6" data-class="menu-top-bar">
+        <Group w="full" justify="end" items="center" mb="6" data-class="menu-top-bar">
           <label
             htmlFor="menu-cart-sheet"
             className="inline-flex items-center justify-center gap-2 rounded bg-background px-3 py-2 text-sm font-medium cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors shrink-0"
@@ -171,7 +171,7 @@ export function MenuPageView({
           closeLabel="Close cart"
           data-class="menu-cart-sheet"
         >
-          <Stack gap="4" data-class="menu-cart-content">
+          <Stack gap="4" items="stretch" data-class="menu-cart-content">
             {cart.length === 0 ? (
               <Text fontSize="sm" textColor="muted-foreground" data-class="menu-cart-empty">
                 Cart is empty
@@ -179,8 +179,8 @@ export function MenuPageView({
             ) : (
               <Loop each="cart" as="entry" data={cart}>
                 {(entry: CartEntry) => (
-                  <Group key={entry.itemId} justify="between" items="center" gap="2" data-class="menu-cart-item">
-                    <Stack gap="0" data-class="menu-cart-item-info">
+                  <Group key={entry.itemId} w="full" justify="between" items="center" gap="2" data-class="menu-cart-item">
+                    <Stack gap="0" min="w-0" data-class="menu-cart-item-info">
                       <Text fontSize="sm" fontWeight="medium" data-class="menu-cart-item-title">
                         {entry.title}
                       </Text>
@@ -188,22 +188,24 @@ export function MenuPageView({
                         {entry.price.display} × {entry.quantity}
                       </Text>
                     </Stack>
-                    <Group gap="1" items="center" data-class="menu-cart-item-actions">
+                    <Group gap="1" items="center" justify="end" shrink="0" data-class="menu-cart-item-actions">
                       <Button
                         variant="ghost"
-                        size="icon"
+                        size="xs"
+                        rounded="xs"
                         onClick={() => updateCartQuantity(entry.itemId, -1)}
                         data-class="menu-cart-item-minus"
                         aria-label="Decrease quantity"
                       >
                         −
                       </Button>
-                      <Text fontSize="sm" data-class="menu-cart-item-qty">
+                      <Text fontSize="sm" data-class="menu-cart-item-qty" className="min-w-6 text-center">
                         {entry.quantity}
                       </Text>
                       <Button
                         variant="ghost"
-                        size="icon"
+                        size="xs"
+                        rounded="xs"
                         onClick={() => updateCartQuantity(entry.itemId, 1)}
                         data-class="menu-cart-item-plus"
                         aria-label="Increase quantity"
@@ -211,8 +213,9 @@ export function MenuPageView({
                         +
                       </Button>
                       <Button
-                        variant="ghost"
-                        size="sm"
+                        variant="link"
+                        size="xs"
+                        rounded="xs"
                         onClick={() => removeFromCart(entry.itemId)}
                         data-class="menu-cart-item-remove"
                       >

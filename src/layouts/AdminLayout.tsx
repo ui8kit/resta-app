@@ -24,7 +24,7 @@ export function AdminLayout({ children, sidebar }: AdminLayoutProps) {
         title="Menu"
         openLabel="Open menu"
         closeLabel="Close menu"
-        triggerVariant="ghost"
+        triggerVariant="link"
         triggerSize="sm"
         showTrigger
       >

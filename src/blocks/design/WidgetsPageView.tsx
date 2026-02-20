@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Block,
   Stack,
@@ -17,12 +18,20 @@ import {
   AccordionTrigger,
   AccordionContent,
   Sheet,
+  Toast,
 } from '@ui8kit/core';
 import { HeroBlock } from '@/blocks';
 import { DomainNavButton } from '@/partials';
 import { context } from '@/data/context';
 
 export function DesignWidgetsPageView() {
+  const [showToast, setShowToast] = useState(false);
+
+  const handleOrderClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowToast(true);
+  };
+
   return (
     <Block component="section" py="8" data-class="design-widgets-section">
       <Stack gap="8" max="w-4xl" mx="auto" px="4" items="stretch">
@@ -82,7 +91,7 @@ export function DesignWidgetsPageView() {
                       </Button>
                     ))}
                   </Group>
-                  <DomainNavButton href="#" size="sm" mt="2">
+                  <DomainNavButton href="#" size="sm" mt="2" onClick={handleOrderClick}>
                     View / Order
                   </DomainNavButton>
                 </CardContent>
@@ -125,7 +134,7 @@ export function DesignWidgetsPageView() {
                   300g +200 ₽
                 </Button>
               </Group>
-              <DomainNavButton href="#" size="sm" mt="2">
+              <DomainNavButton href="#" size="sm" mt="2" onClick={handleOrderClick}>
                 View / Order
               </DomainNavButton>
             </CardContent>
@@ -151,7 +160,7 @@ export function DesignWidgetsPageView() {
               </Text>
             </CardHeader>
             <CardContent>
-              <DomainNavButton href="#" size="sm">
+              <DomainNavButton href="#" size="sm" onClick={handleOrderClick}>
                 View Recipe
               </DomainNavButton>
             </CardContent>
@@ -174,7 +183,7 @@ export function DesignWidgetsPageView() {
               </Text>
             </CardHeader>
             <CardContent>
-              <DomainNavButton href="#" size="sm">
+              <DomainNavButton href="#" size="sm" onClick={handleOrderClick}>
                 View Promotion
               </DomainNavButton>
             </CardContent>
@@ -194,7 +203,7 @@ export function DesignWidgetsPageView() {
               </Text>
             </CardHeader>
             <CardContent>
-              <DomainNavButton href="#" size="sm">
+              <DomainNavButton href="#" size="sm" onClick={handleOrderClick}>
                 Read More
               </DomainNavButton>
             </CardContent>
@@ -232,6 +241,8 @@ export function DesignWidgetsPageView() {
             </AccordionItem>
           </Accordion>
         </Block>
+
+        <Toast visible={showToast} onClose={() => setShowToast(false)} duration={9000} />
 
         <Block data-class="design-widgets-sheet">
           <Text fontSize="sm" fontWeight="semibold" mb="2" textColor="muted-foreground">

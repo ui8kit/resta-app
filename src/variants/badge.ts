@@ -6,7 +6,7 @@ export const badgeSizeVariants = cva("", {
     size: {
       xs: "px-1.5 py-0.5 text-xs",
       sm: "px-2 py-0.5 text-xs",
-      default: "px-2.5 py-0.5 text-xs",
+      default: "px-2 py-0.5 text-xs",
       lg: "px-3 py-1 text-sm"
     }
   },
@@ -16,7 +16,7 @@ export const badgeSizeVariants = cva("", {
 });
 
 // Badge style variants
-export const badgeStyleVariants = cva("inline-flex items-center font-semibold transition-colors", {
+export const badgeStyleVariants = cva("inline-flex items-center font-semibold transition-colors rounded-full", {
   variants: {
     variant: {
       default: "bg-primary text-primary-foreground",

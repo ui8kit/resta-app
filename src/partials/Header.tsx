@@ -136,7 +136,7 @@ export function Header({
                 <Loop each="navItems" as="item" data={navItems ?? []}>
                   {(item: NavItem) => (
                     <DomainNavButton
-                      variant="ghost"
+                      variant="link"
                       size="xs"
                       href={item.url}
                       justify="start"

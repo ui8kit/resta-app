@@ -47,7 +47,7 @@ export function DesignComponentsPageView() {
             <CardDescription>default, primary, destructive, outline, secondary, ghost, link</CardDescription>
           </CardHeader>
           <CardContent>
-            <Group gap="2" wrap="" data-class="design-components-button-variants">
+            <Group gap="2" flex="wrap" data-class="design-components-button-variants">
               {BUTTON_VARIANTS.map((v) => (
                 <Button key={v} variant={v} size="sm" data-class="design-components-button">
                   {v}
@@ -63,7 +63,7 @@ export function DesignComponentsPageView() {
             <CardDescription>xs, sm, default, lg, xl, icon</CardDescription>
           </CardHeader>
           <CardContent>
-            <Group gap="2" items="center" wrap="" data-class="design-components-button-sizes">
+            <Group gap="2" items="center" flex="wrap" data-class="design-components-button-sizes">
               {BUTTON_SIZES.map((s) => (
                 <Button key={s} variant="outline" size={s} data-class="design-components-button">
                   {s === 'icon' ? <Icon lucideIcon={Settings} size="sm" /> : s}
@@ -79,7 +79,7 @@ export function DesignComponentsPageView() {
             <CardDescription>default, secondary, destructive, outline, success, warning, info</CardDescription>
           </CardHeader>
           <CardContent>
-            <Group gap="2" wrap="" data-class="design-components-badge-variants">
+            <Group gap="2" flex="wrap" data-class="design-components-badge-variants">
               {BADGE_VARIANTS.map((v) => (
                 <Badge key={v} variant={v} data-class="design-components-badge">
                   {v}
@@ -95,7 +95,7 @@ export function DesignComponentsPageView() {
             <CardDescription>xs, sm, default, lg</CardDescription>
           </CardHeader>
           <CardContent>
-            <Group gap="2" items="center" wrap="" data-class="design-components-badge-sizes">
+            <Group gap="2" items="center" flex="wrap" data-class="design-components-badge-sizes">
               {BADGE_SIZES.map((s) => (
                 <Badge key={s} variant="secondary" size={s} data-class="design-components-badge">
                   {s}

@@ -37,7 +37,7 @@
   --font-sans: var(--font-nunito);
   --font-serif: Lora, serif;
   --font-mono: IBM Plex Mono, monospace;
-  --radius: 1.25rem;
+  --radius: 1.4rem;
   --shadow-x: 0;
   --shadow-y: 1px;
   --shadow-blur: 3px;
@@ -93,7 +93,7 @@
   --font-sans: var(--font-nunito);
   --font-serif: Lora, serif;
   --font-mono: IBM Plex Mono, monospace;
-  --radius: 0.925rem;
+  --radius: 1.4rem;
   --shadow-x: 0;
   --shadow-y: 1px;
   --shadow-blur: 3px;

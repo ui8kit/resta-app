@@ -23,3 +23,4 @@ export { Grid, type GridProps } from "./Grid";
 export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, type CardProps, type CardHeaderProps, type CardTitleProps, type CardDescriptionProps, type CardContentProps, type CardFooterProps } from "./Card";
 export { Sheet, type SheetProps } from "./Sheet";
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent, type AccordionProps, type AccordionItemProps, type AccordionTriggerProps, type AccordionContentProps } from "./Accordion";
+export { Toast, UI_DESIGN_TOAST_MESSAGE, type ToastProps } from "./Toast";
