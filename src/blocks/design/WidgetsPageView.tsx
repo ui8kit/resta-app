@@ -18,7 +18,7 @@ import {
   AccordionContent,
   Sheet,
 } from '@ui8kit/core';
-import { HeroBlock } from './HeroBlock';
+import { HeroBlock } from '@/blocks';
 import { DomainNavButton } from '@/partials';
 import { context } from '@/data/context';
 

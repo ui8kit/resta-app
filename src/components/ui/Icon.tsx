@@ -68,7 +68,8 @@ export const Icon = forwardRef<HTMLElement, IconProps>(
           <LucideIcon
             className={cn(
               sizeClasses,
-              utilityClassName
+              utilityClassName,
+              className
             )}
             strokeWidth={strokeWidth}
           />

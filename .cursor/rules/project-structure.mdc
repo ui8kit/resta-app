@@ -19,10 +19,27 @@ alwaysApply: false
 │   │   └── design/               # Design system (independent, future docs)
 │   │       ├── previews/         # Page preview components
 │   │       └── fixtures/        # Sample data for previews
-│   ├── blocks/                   # Page sections & page views
+│   ├── blocks/                   # Page sections & page views (domain folders)
+│   │   ├── admin/                # Admin LoginPageView, DashboardPageView
+│   │   ├── design/               # Design system page views
+│   │   ├── menu/                 # MenuPageView, DetailPageView
+│   │   ├── recipes/              # RecipesPageView, DetailPageView
+│   │   ├── promotions/           # PromotionsPageView, DetailPageView
+│   │   ├── blog/                 # BlogPageView, DetailPageView
+│   │   ├── landing/              # LandingPageView
+│   │   ├── SidebarContent.tsx    # Shared blocks (root)
+│   │   ├── DashSidebar.tsx
+│   │   └── HeroBlock.tsx
 │   ├── layouts/                  # Page layouts
 │   ├── partials/                 # Reusable fragments
-│   ├── routes/                   # Route components
+│   ├── routes/                   # Route components (domain folders)
+│   │   ├── admin/                # LoginPage, DashboardPage
+│   │   ├── design/               # OverviewPage, ColorsPage, etc.
+│   │   ├── menu/                 # MenuPage, DetailPage
+│   │   ├── recipes/              # RecipesPage, DetailPage
+│   │   ├── promotions/           # PromotionsPage, PromotionDetailPage
+│   │   ├── blog/                 # BlogPage, BlogDetailPage
+│   │   └── landing/              # LandingPage (Page.tsx)
 │   ├── providers/                # Context providers
 │   ├── data/                     # App context & data
 │   ├── css/
@@ -60,12 +77,18 @@ alwaysApply: false
 | `Card.tsx`, `Accordion.tsx`, `Sheet.tsx`, `Grid.tsx` | Composite components |
 | `index.ts` | Re-exports — imported as `@ui8kit/core` (Vite alias) |
 
-### `src/blocks/` — Page Sections & Views
+### `src/blocks/` — Page Sections & Views (domain folders)
 
-| Type | Pattern | Examples |
-|------|---------|----------|
-| Block | Reusable section | `HeroBlock`, `SidebarContent`, `DashSidebar` |
-| PageView | Full page composition | `LandingPageView`, `MenuPageView`, `RecipesPageView`, `BlogPageView`, `PromotionsPageView`, `AdminDashboardPageView`, `AdminLoginPageView` |
+| Domain | Files | Purpose |
+|--------|-------|---------|
+| (root) | `SidebarContent`, `DashSidebar`, `HeroBlock` | Shared blocks |
+| `admin/` | `LoginPageView`, `DashboardPageView` | Admin pages |
+| `design/` | `OverviewPageView`, `ColorsPageView`, etc. | Design system |
+| `menu/` | `MenuPageView`, `DetailPageView` | Menu catalog |
+| `recipes/` | `RecipesPageView`, `DetailPageView` | Recipes |
+| `promotions/` | `PromotionsPageView`, `DetailPageView` | Promotions |
+| `blog/` | `BlogPageView`, `DetailPageView` | Blog |
+| `landing/` | `PageView` (LandingPageView) | Landing |
 
 ### `src/layouts/` — Page Layouts
 
@@ -85,16 +108,19 @@ alwaysApply: false
 | `ThemeToggle` | Dark/light mode |
 | `DomainNavButton` | Nav button with domain styling |
 
-### `src/routes/` — Route Components
+### `src/routes/` — Route Components (domain folders)
 
-Each route imports a PageView and passes data from `context`:
+Each domain folder contains route components. Pattern: `domain/FeaturePage.tsx` (e.g. `admin/LoginPage.tsx`).
 
-- `LandingPage` → `LandingPageView`
-- `MenuPage`, `MenuDetailPage` → `MenuPageView`, `MenuDetailPageView`
-- `RecipesPage`, `RecipeDetailPage` → `RecipesPageView`, `RecipeDetailPageView`
-- `BlogPage`, `BlogDetailPage` → `BlogPageView`, `BlogDetailPageView`
-- `PromotionsPage`, `PromotionDetailPage` → `PromotionsPageView`, `PromotionDetailPageView`
-- `AdminLoginPage`, `AdminDashboardPage` → `AdminLoginPageView`, `AdminDashboardPageView`
+| Domain | Files | Maps to |
+|--------|-------|---------|
+| `landing/` | `Page.tsx` (LandingPage) | LandingPageView |
+| `menu/` | `MenuPage`, `DetailPage` | MenuPageView, MenuDetailPageView |
+| `recipes/` | `RecipesPage`, `DetailPage` | RecipesPageView, RecipeDetailPageView |
+| `blog/` | `BlogPage`, `DetailPage` | BlogPageView, BlogDetailPageView |
+| `promotions/` | `PromotionsPage`, `DetailPage` | PromotionsPageView, PromotionDetailPageView |
+| `admin/` | `LoginPage`, `DashboardPage` | AdminLoginPageView, AdminDashboardPageView |
+| `design/` | `OverviewPage`, `ColorsPage`, etc. | Design*PageView |
 
 ### `src/data/` — Context & Data
 
@@ -150,7 +176,7 @@ fixtures/*.json
 1. **Add UI component** → `src/components/ui/` or `src/components/`
 2. **Add variant** → `src/variants/`
 3. **Add block** → `src/blocks/`, export in `index.ts`
-4. **Add page** → `src/blocks/*PageView.tsx` + `src/routes/*Page.tsx` + route in `App.tsx`
+4. **Add page** → `src/blocks/<domain>/*PageView.tsx` + `src/routes/<domain>/*Page.tsx` + route in `App.tsx`
 5. **Add fixture** → `fixtures/`, wire in `context.ts`
 
 ## Scripts

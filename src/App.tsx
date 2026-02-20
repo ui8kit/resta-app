@@ -1,21 +1,21 @@
 import { Routes, Route } from 'react-router-dom';
-import { LandingPage } from '@/routes/LandingPage';
-import { MenuPage } from '@/routes/MenuPage';
-import { MenuDetailPage } from '@/routes/MenuDetailPage';
-import { RecipesPage } from '@/routes/RecipesPage';
-import { RecipeDetailPage } from '@/routes/RecipeDetailPage';
-import { BlogPage } from '@/routes/BlogPage';
-import { BlogDetailPage } from '@/routes/BlogDetailPage';
-import { PromotionsPage } from '@/routes/PromotionsPage';
-import { PromotionDetailPage } from '@/routes/PromotionDetailPage';
-import { AdminLoginPage } from '@/routes/AdminLoginPage';
-import { AdminDashboardPage } from '@/routes/AdminDashboardPage';
-import { DesignPage } from '@/routes/DesignPage';
-import { DesignColorsPage } from '@/routes/DesignColorsPage';
-import { DesignTypographyPage } from '@/routes/DesignTypographyPage';
-import { DesignComponentsPage } from '@/routes/DesignComponentsPage';
-import { DesignWidgetsPage } from '@/routes/DesignWidgetsPage';
-import { DesignPagesPage } from '@/routes/DesignPagesPage';
+import { LandingPage } from '@/routes/landing/Page';
+import { MenuPage } from '@/routes/menu/MenuPage';
+import { DetailPage as MenuDetailPage } from '@/routes/menu/DetailPage';
+import { RecipesPage } from '@/routes/recipes/RecipesPage';
+import { RecipeDetailPage } from '@/routes/recipes/DetailPage';
+import { BlogPage } from '@/routes/blog/BlogPage';
+import { BlogDetailPage } from '@/routes/blog/DetailPage';
+import { PromotionsPage } from '@/routes/promotions/PromotionsPage';
+import { PromotionDetailPage } from '@/routes/promotions/DetailPage';
+import { LoginPage } from '@/routes/admin/LoginPage';
+import { DashboardPage } from '@/routes/admin/DashboardPage';
+import { OverviewPage } from '@/routes/design/OverviewPage';
+import { ColorsPage } from '@/routes/design/ColorsPage';
+import { TypographyPage } from '@/routes/design/TypographyPage';
+import { ComponentsPage } from '@/routes/design/ComponentsPage';
+import { WidgetsPage } from '@/routes/design/WidgetsPage';
+import { PagesPage } from '@/routes/design/PagesPage';
 
 export function App() {
   return (
@@ -29,14 +29,14 @@ export function App() {
       <Route path="/blog/:slug" element={<BlogDetailPage />} />
       <Route path="/promotions" element={<PromotionsPage />} />
       <Route path="/promotions/:id" element={<PromotionDetailPage />} />
-      <Route path="/design" element={<DesignPage />} />
-      <Route path="/design/colors" element={<DesignColorsPage />} />
-      <Route path="/design/typography" element={<DesignTypographyPage />} />
-      <Route path="/design/components" element={<DesignComponentsPage />} />
-      <Route path="/design/widgets" element={<DesignWidgetsPage />} />
-      <Route path="/design/pages" element={<DesignPagesPage />} />
-      <Route path="/admin" element={<AdminLoginPage />} />
-      <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+      <Route path="/design" element={<OverviewPage />} />
+      <Route path="/design/colors" element={<ColorsPage />} />
+      <Route path="/design/typography" element={<TypographyPage />} />
+      <Route path="/design/components" element={<ComponentsPage />} />
+      <Route path="/design/widgets" element={<WidgetsPage />} />
+      <Route path="/design/pages" element={<PagesPage />} />
+      <Route path="/admin" element={<LoginPage />} />
+      <Route path="/admin/dashboard" element={<DashboardPage />} />
     </Routes>
   );
 }

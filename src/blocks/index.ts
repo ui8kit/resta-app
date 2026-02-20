@@ -1,22 +1,27 @@
 export { SidebarContent } from './SidebarContent';
 export { DashSidebar } from './DashSidebar';
+export { HeroBlock } from './HeroBlock';
 
-export { LandingPageView } from './LandingPageView';
-export { MenuPageView } from './MenuPageView';
-export { MenuDetailPageView } from './MenuDetailPageView';
-export { RecipesPageView } from './RecipesPageView';
-export { RecipeDetailPageView } from './RecipeDetailPageView';
-export { BlogPageView } from './BlogPageView';
-export { BlogDetailPageView } from './BlogDetailPageView';
-export { PromotionsPageView } from './PromotionsPageView';
-export { PromotionDetailPageView } from './PromotionDetailPageView';
+export { AdminLoginPageView } from './admin/LoginPageView';
+export { AdminDashboardPageView } from './admin/DashboardPageView';
 
-export { AdminDashboardPageView } from './AdminDashboardPageView';
-export { AdminLoginPageView } from './AdminLoginPageView';
+export { DesignOverviewPageView } from './design/OverviewPageView';
+export { DesignColorsPageView } from './design/ColorsPageView';
+export { DesignTypographyPageView } from './design/TypographyPageView';
+export { DesignComponentsPageView } from './design/ComponentsPageView';
+export { DesignWidgetsPageView } from './design/WidgetsPageView';
+export { DesignPagesPageView } from './design/PagesPageView';
 
-export { DesignOverviewPageView } from './DesignOverviewPageView';
-export { DesignColorsPageView } from './DesignColorsPageView';
-export { DesignTypographyPageView } from './DesignTypographyPageView';
-export { DesignComponentsPageView } from './DesignComponentsPageView';
-export { DesignWidgetsPageView } from './DesignWidgetsPageView';
-export { DesignPagesPageView } from './DesignPagesPageView';
+export { LandingPageView } from './landing/PageView';
+
+export { MenuPageView } from './menu/MenuPageView';
+export { MenuDetailPageView } from './menu/DetailPageView';
+
+export { RecipesPageView } from './recipes/RecipesPageView';
+export { RecipeDetailPageView } from './recipes/DetailPageView';
+
+export { BlogPageView } from './blog/BlogPageView';
+export { BlogDetailPageView } from './blog/DetailPageView';
+
+export { PromotionsPageView } from './promotions/PromotionsPageView';
+export { PromotionDetailPageView } from './promotions/DetailPageView';

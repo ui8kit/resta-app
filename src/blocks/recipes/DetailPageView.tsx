@@ -49,7 +49,6 @@ export function RecipeDetailPageView({
   headerTitle,
   headerSubtitle,
   recipe,
-  preview,
 }: RecipeDetailPageViewProps) {
   const ingredients = recipe?.ingredients ?? [];
   const steps = recipe?.steps ?? [];

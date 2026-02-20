@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { SidebarContent, MenuDetailPageView } from '@/blocks';
 import { context } from '@/data/context';
 
-export function MenuDetailPage() {
+export function DetailPage() {
   const { id } = useParams<{ id: string }>();
   const item = context.menu.items?.find((i) => i.id === id);
 

@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { MainLayout } from '@/layouts';
-import { SidebarContent } from '@/blocks';
-import { HeroBlock } from './HeroBlock';
+import { SidebarContent, HeroBlock } from '@/blocks';
 
 export interface LandingPageViewProps {
   mode?: 'full' | 'with-sidebar' | 'sidebar-left';

@@ -1,8 +1,10 @@
-import { Block, Container, Group, Text, Sheet, Stack, Icon } from '@ui8kit/core';
+import { useNavigate } from 'react-router-dom';
+import { Block, Container, Group, Text, Sheet, Stack, Icon, Button } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from './DomainNavButton';
 import { ThemeToggle } from './ThemeToggle';
-import { UtensilsCrossed, ChefHat, FileText, Percent, Palette, LogIn, Menu } from 'lucide-react';
+import { useAdminAuth } from '@/providers/AdminAuthContext';
+import { UtensilsCrossed, ChefHat, FileText, Percent, Palette, LogIn, LogOut, Menu } from 'lucide-react';
 
 const NAV_ICONS: Record<string, (typeof UtensilsCrossed)> = {
   menu: UtensilsCrossed,
@@ -36,6 +38,14 @@ export function Header({
   'data-class': dataClassAttr,
   beforeThemeToggle,
 }: HeaderProps) {
+  const { isAuthenticated, logout } = useAdminAuth();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    navigate('/');
+  }
+
   return (
     <Block
       component="header"
@@ -56,8 +66,8 @@ export function Header({
         data-class="header-container"
       >
         <a href="/" data-class="header-brand">
-          <Group component="span" gap="2" items="center" data-class="header-brand-content">
-            <Icon lucideIcon={ChefHat} strokeWidth={1.5} text="chart-3" size="xl" data-class="header-brand-icon" />
+          <Group component="span" gap="1" items="center" data-class="header-brand-content">
+            <Icon lucideIcon={ChefHat} strokeWidth={1.5} text="chart-3" data-class="header-brand-icon" className="w-[38px] h-[38px]" />
             <Stack component="span" gap="0" items="start" data-class="header-brand-text">
               <If test="title" value={!!(title ?? '')}>
                 <Text
@@ -72,6 +82,7 @@ export function Header({
               <If test="subtitle" value={!!(subtitle ?? 'Restaurant & Bar')}>
                 <Text
                   fontSize="xs"
+                  fontWeight="bold"
                   textColor="muted-foreground"
                   data-class="header-brand-subtitle"
                   style={{ marginTop: '-0.5em' }}
@@ -83,7 +94,7 @@ export function Header({
           </Group>
         </a>
 
-        <Group gap="1" items="center" data-class="header-nav-group">
+        <Group gap="0" items="center" data-class="header-nav-group">
           <If test="navItems" value={(navItems ?? []).length > 0}>
             <Block flex="" gap="2" items="center" data-class="header-nav-wrapper">
               <Block
@@ -157,16 +168,29 @@ export function Header({
           </If>
           {beforeThemeToggle}
           <ThemeToggle />
-          <DomainNavButton
-            variant="link"
-            size="sm"
-            href="/admin"
-            title="Admin / Login"
-            aria-label="Admin / Login"
-            data-class="header-admin-link"
-          >
-            <Icon lucideIcon={LogIn} size="sm" data-class="header-admin-icon" />
-          </DomainNavButton>
+          {isAuthenticated ? (
+            <Button
+              variant="link"
+              size="sm"
+              onClick={handleLogout}
+              title="Logout"
+              aria-label="Logout"
+              data-class="header-admin-link"
+            >
+              <Icon lucideIcon={LogOut} size="sm" data-class="header-admin-icon" />
+            </Button>
+          ) : (
+            <DomainNavButton
+              variant="link"
+              size="sm"
+              href="/admin"
+              title="Admin / Login"
+              aria-label="Admin / Login"
+              data-class="header-admin-link"
+            >
+              <Icon lucideIcon={LogIn} size="sm" data-class="header-admin-icon" />
+            </DomainNavButton>
+          )}
         </Group>
       </Container>
     </Block>

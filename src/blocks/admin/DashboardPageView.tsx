@@ -5,6 +5,8 @@ import { DashSidebar } from '@/blocks';
 import {
   Block,
   Stack,
+  Group,
+  Grid,
   Title,
   Text,
   Button,
@@ -77,18 +79,18 @@ export function AdminDashboardPageView({ onExport, onImport }: AdminDashboardPag
     <AdminLayout sidebar={sidebar}>
       <Block component="main" py="8" data-class="admin-dashboard-section">
         <Stack gap="8" max="w-4xl" mx="auto" px="4">
-          <Stack flex="" justify="between" items="center" data-class="admin-dashboard-header">
+          <Group w="full" justify="between" items="center" data-class="admin-dashboard-header">
             <Title fontSize="2xl" fontWeight="bold" data-class="admin-dashboard-title">
               Admin Dashboard
             </Title>
             <Button variant="outline" size="sm" onClick={handleLogout} data-class="admin-dashboard-logout">
               Logout
             </Button>
-          </Stack>
+          </Group>
           <Text fontSize="sm" textColor="muted-foreground" data-class="admin-dashboard-description">
             Export or import site data as JSON. Import updates in-memory state only (no persistence without backend).
           </Text>
-          <Stack gap="4" data-class="admin-dashboard-actions">
+          <Grid cols="1-2" gap="4" w="full" data-class="admin-dashboard-actions">
             <Card data-class="admin-export-card">
               <CardHeader>
                 <CardTitle order={4} data-class="admin-export-title">
@@ -99,7 +101,7 @@ export function AdminDashboardPageView({ onExport, onImport }: AdminDashboardPag
                 </CardDescription>
               </CardHeader>
               <CardContent data-class="admin-export-actions">
-                <Button onClick={handleExport} data-class="admin-export-button">
+                <Button onClick={handleExport} rounded="sm" size="sm" data-class="admin-export-button">
                   Export JSON
                 </Button>
               </CardContent>
@@ -121,12 +123,12 @@ export function AdminDashboardPageView({ onExport, onImport }: AdminDashboardPag
                   onChange={handleFileChange}
                   style={{ display: 'none' }}
                 />
-                <Button variant="outline" onClick={handleImportClick} data-class="admin-import-button">
+                <Button variant="ghost" onClick={handleImportClick} rounded="sm" size="sm" data-class="admin-import-button">
                   Import JSON
                 </Button>
               </CardContent>
             </Card>
-          </Stack>
+          </Grid>
         </Stack>
       </Block>
     </AdminLayout>

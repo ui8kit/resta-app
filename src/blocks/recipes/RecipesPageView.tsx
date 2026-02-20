@@ -75,7 +75,7 @@ export function RecipesPageView({
                     </If>
                     <If test="item.category.title" value={!!item.category?.title}>
                       <Text fontSize="sm" textColor="muted-foreground" data-class="recipes-item-category">
-                        <Var name="item.category.title" value={item.category?.title} />
+                        <Var name="item.category.title" value={item.category.title} />
                       </Text>
                     </If>
                   </Group>

@@ -1,5 +1,5 @@
 import { AdminLoginPageView } from '@/blocks';
 
-export function AdminLoginPage() {
+export function LoginPage() {
   return <AdminLoginPageView />;
 }
