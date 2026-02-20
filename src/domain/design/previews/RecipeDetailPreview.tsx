@@ -1,4 +1,5 @@
 import { Block, Container, Title, Text, Group, Badge, Grid, Button } from '@ui8kit/core';
+import { If, Else, Loop } from '@ui8kit/dsl';
 
 export type RecipeDetailPreviewRecipe = {
   id: string;
@@ -27,101 +28,108 @@ export function RecipeDetailPreview({ recipe, onOrderClick }: RecipeDetailPrevie
   return (
     <Block component="article" data-class="recipe-detail-preview">
       <Container max="w-2xl" py="8">
-        {recipe ? (
+        <If test="recipe" value={!!recipe}>
           <Block data-class="recipe-detail-content">
             <Group items="center" gap="2" mb="2">
-              {recipe.difficulty && (
-                <Badge variant="outline">{recipe.difficulty}</Badge>
-              )}
-              {recipe.category?.title && (
+              <If test="recipe.difficulty" value={!!recipe?.difficulty}>
+                <Badge variant="outline">{recipe?.difficulty}</Badge>
+              </If>
+              <If test="recipe.category.title" value={!!recipe?.category?.title}>
                 <Text fontSize="sm" textColor="muted-foreground">
-                  {recipe.category.title}
+                  {recipe?.category?.title}
                 </Text>
-              )}
+              </If>
             </Group>
             <Title fontSize="4xl" fontWeight="bold">
-              {recipe.title}
+              {recipe?.title}
             </Title>
             <Group items="center" gap="2" mt="2">
-              {recipe.date && (
+              <If test="recipe.date" value={!!recipe?.date}>
                 <Text fontSize="sm" textColor="muted-foreground">
-                  {recipe.date}
+                  {recipe?.date}
                 </Text>
-              )}
-              {recipe.cookTime?.total && (
+              </If>
+              <If test="recipe.cookTime.total" value={!!recipe?.cookTime?.total}>
                 <Text fontSize="sm" textColor="muted-foreground">
-                  {recipe.cookTime.total} min
+                  {recipe?.cookTime?.total} min
                 </Text>
-              )}
-              {recipe.servings && (
+              </If>
+              <If test="recipe.servings" value={!!recipe?.servings}>
                 <Text fontSize="sm" textColor="muted-foreground">
-                  {recipe.servings} servings
+                  {recipe?.servings} servings
                 </Text>
-              )}
+              </If>
             </Group>
-            {recipe.excerpt && (
+            <If test="recipe.excerpt" value={!!recipe?.excerpt}>
               <Text fontSize="lg" mt="4" textColor="muted-foreground">
-                {recipe.excerpt}
+                {recipe?.excerpt}
               </Text>
-            )}
-            {recipe.body && (
+            </If>
+            <If test="recipe.body" value={!!recipe?.body}>
               <Block py="8">
                 <Text fontSize="base" lineHeight="relaxed">
-                  {recipe.body}
+                  {recipe?.body}
                 </Text>
               </Block>
-            )}
+            </If>
             <Grid cols="1-2" gap="6">
               <Block>
                 <Title order={3} fontSize="xl" fontWeight="semibold" mb="4">
                   Ingredients
                 </Title>
-                {ingredients.map((ing) => (
-                  <Group key={ing.id} items="baseline" gap="2" py="2">
-                    <Text fontWeight="semibold">
-                      {ing.amount}{ing.unit || ''}
-                    </Text>
-                    <Text>
-                      {ing.name}
-                      {ing.note ? ` (${ing.note})` : ''}
-                    </Text>
-                  </Group>
-                ))}
+                <Loop each="ingredients" as="ing" data={ingredients}>
+                  {(ing) => (
+                    <Group key={ing.id} items="baseline" gap="2" py="2">
+                      <Text fontWeight="semibold">
+                        {ing.amount}{ing.unit || ''}
+                      </Text>
+                      <Text>
+                        {ing.name}
+                        <If test="ing.note" value={!!ing.note}>
+                          {` (${ing.note})`}
+                        </If>
+                      </Text>
+                    </Group>
+                  )}
+                </Loop>
               </Block>
               <Block>
                 <Title order={3} fontSize="xl" fontWeight="semibold" mb="4">
                   Steps
                 </Title>
-                {steps.map((s) => (
-                  <Block key={s.id} py="2">
-                    <Text fontWeight="bold">Step {s.step}</Text>
-                    {s.title && (
-                      <Text fontWeight="semibold">{s.title}</Text>
-                    )}
-                    <Text>{s.body}</Text>
-                  </Block>
-                ))}
+                <Loop each="steps" as="s" data={steps}>
+                  {(s) => (
+                    <Block key={s.id} py="2">
+                      <Text fontWeight="bold">Step {s.step}</Text>
+                      <If test="s.title" value={!!s.title}>
+                        <Text fontWeight="semibold">{s.title}</Text>
+                      </If>
+                      <Text>{s.body}</Text>
+                    </Block>
+                  )}
+                </Loop>
               </Block>
             </Grid>
-            {recipe.nutrition && (
+            <If test="recipe.nutrition" value={!!recipe?.nutrition}>
               <Block py="8">
                 <Title order={4} fontSize="lg" fontWeight="semibold" mb="2">
                   Nutrition (per serving)
                 </Title>
                 <Text textColor="muted-foreground">
-                  {recipe.nutrition.calories} kcal · {recipe.nutrition.protein}g protein · {recipe.nutrition.fat}g fat · {recipe.nutrition.carbs}g carbs
+                  {recipe?.nutrition?.calories} kcal · {recipe?.nutrition?.protein}g protein · {recipe?.nutrition?.fat}g fat · {recipe?.nutrition?.carbs}g carbs
                 </Text>
               </Block>
-            )}
+            </If>
             <Button size="lg" href="#" onClick={onOrderClick}>
               Order in the restaurant
             </Button>
           </Block>
-        ) : (
+        </If>
+        <Else>
           <Text fontSize="sm" textColor="muted-foreground">
             No recipe data
           </Text>
-        )}
+        </Else>
       </Container>
     </Block>
   );

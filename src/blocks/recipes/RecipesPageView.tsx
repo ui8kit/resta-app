@@ -64,7 +64,9 @@ export function RecipesPageView({
         </Block>
         <Grid cols="1-2-3" gap="6" data-class="recipes-grid">
           <Loop each="items" as="item" data={items}>
-            {(item: RecipeItem) => (
+            {(item: RecipeItem) => {
+              const hasCookTimeAndServings = !!item.cookTime?.total && !!item.servings;
+              return (
               <Card data-class="recipes-item-card">
                 <CardHeader>
                   <Group items="center" gap="2" mb="1">
@@ -92,13 +94,17 @@ export function RecipesPageView({
                   <If test="item.cookTime.total || item.servings" value={!!item.cookTime?.total || !!item.servings}>
                     <Text fontSize="sm" textColor="muted-foreground" data-class="recipes-item-meta">
                       <If test="item.cookTime.total" value={!!item.cookTime?.total}>
-                        <Var name="item.cookTime.total" value={`${item.cookTime?.total} min`} />
+                        <Text component="span">
+                          <Var name="item.cookTime.total" value={`${item.cookTime?.total} min`} />
+                        </Text>
                       </If>
-                      <If test="item.cookTime.total && item.servings" value={!!item.cookTime?.total && !!item.servings}>
+                      <If test="item.cookTime.total && item.servings" value={hasCookTimeAndServings}>
                         {' · '}
                       </If>
                       <If test="item.servings" value={!!item.servings}>
-                        <Var name="item.servings" value={`${item.servings} servings`} />
+                        <Text component="span">
+                          <Var name="item.servings" value={`${item.servings} servings`} />
+                        </Text>
                       </If>
                     </Text>
                   </If>
@@ -114,7 +120,8 @@ export function RecipesPageView({
                   </DomainNavButton>
                 </CardContent>
               </Card>
-            )}
+              );
+            }}
           </Loop>
         </Grid>
       </Block>

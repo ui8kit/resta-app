@@ -126,9 +126,11 @@ export function RecipeDetailPageView({
                             <Text data-class="recipe-ingredient-name">
                               <Var name="ingredient.name" value={ingredient.name} />
                               <If test="ingredient.note" value={!!ingredient.note}>
-                                {' ('}
-                                <Var name="ingredient.note" value={ingredient.note} />
-                                {')'}
+                                <Text component="span">
+                                  {' ('}
+                                  <Var name="ingredient.note" value={ingredient.note} />
+                                  {')'}
+                                </Text>
                               </If>
                             </Text>
                           </Group>

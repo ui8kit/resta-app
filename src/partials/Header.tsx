@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Block, Container, Group, Text, Sheet, Stack, Icon, Button } from '@ui8kit/core';
-import { If, Var, Loop } from '@ui8kit/dsl';
+import { If, Else, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from './DomainNavButton';
 import { ThemeToggle } from './ThemeToggle';
 import { useAdminAuth } from '@/providers/AdminAuthContext';
@@ -168,7 +168,7 @@ export function Header({
           </If>
           {beforeThemeToggle}
           <ThemeToggle />
-          {isAuthenticated ? (
+          <If test="isAuthenticated" value={isAuthenticated}>
             <Button
               variant="link"
               size="sm"
@@ -179,7 +179,8 @@ export function Header({
             >
               <Icon lucideIcon={LogOut} size="sm" data-class="header-admin-icon" />
             </Button>
-          ) : (
+          </If>
+          <Else>
             <DomainNavButton
               variant="link"
               size="sm"
@@ -190,7 +191,7 @@ export function Header({
             >
               <Icon lucideIcon={LogIn} size="sm" data-class="header-admin-icon" />
             </DomainNavButton>
-          )}
+          </Else>
         </Group>
       </Container>
     </Block>

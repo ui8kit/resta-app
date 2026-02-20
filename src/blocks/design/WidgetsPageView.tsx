@@ -20,6 +20,7 @@ import {
   Sheet,
   Toast,
 } from '@ui8kit/core';
+import { If, Loop } from '@ui8kit/dsl';
 import { HeroBlock } from '@/blocks';
 import { DomainNavButton } from '@/partials';
 import { context } from '@/data/context';
@@ -58,45 +59,51 @@ export function DesignWidgetsPageView() {
             Menu cards
           </Text>
           <Grid cols="1-2-3" gap="4">
-            {(context.menu.items?.slice(0, 3) ?? []).map((item) => (
-              <Card key={item.id} data-class="design-widget-menu-card" max="w-sm">
-                <CardHeader>
-                  {item.promotionIds?.length ? (
-                    <Badge variant="outline" mb="2">
-                      -15%
-                    </Badge>
-                  ) : null}
-                  <Text fontSize="xs" textColor="muted-foreground">
-                    {item.category?.title}
-                  </Text>
-                  <CardTitle order={4}>{item.title}</CardTitle>
-                  <CardDescription>{item.description}</CardDescription>
-                  <Group items="baseline" gap="2" mt="2">
-                    <Text fontSize="lg" fontWeight="semibold" textColor="primary">
-                      {item.price?.display}
+            <Loop each="menuItems" as="item" data={context.menu.items?.slice(0, 3) ?? []}>
+              {(item) => (
+                <Card key={item.id} data-class="design-widget-menu-card" max="w-sm">
+                  <CardHeader>
+                    <If test="item.promotionIds.length" value={!!item.promotionIds?.length}>
+                      <Badge variant="outline" mb="2">
+                        -15%
+                      </Badge>
+                    </If>
+                    <Text fontSize="xs" textColor="muted-foreground">
+                      {item.category?.title}
                     </Text>
-                    {item.compareAtPrice?.display && (
-                      <Text fontSize="sm" textColor="muted-foreground" style={{ textDecoration: 'line-through' }}>
-                        {item.compareAtPrice.display}
+                    <CardTitle order={4}>{item.title}</CardTitle>
+                    <CardDescription>{item.description}</CardDescription>
+                    <Group items="baseline" gap="2" mt="2">
+                      <Text fontSize="lg" fontWeight="semibold" textColor="primary">
+                        {item.price?.display}
                       </Text>
-                    )}
-                  </Group>
-                </CardHeader>
-                <CardContent>
-                  <Group gap="2" flex="wrap">
-                    {item.variants?.slice(0, 2).map((v) => (
-                      <Button key={v.id} variant="outline" size="sm">
-                        {v.title}
-                        {v.priceModifier?.display ? ` ${v.priceModifier.display}` : ''}
-                      </Button>
-                    ))}
-                  </Group>
-                  <DomainNavButton href="#" size="sm" mt="2" onClick={handleOrderClick}>
-                    View / Order
-                  </DomainNavButton>
-                </CardContent>
-              </Card>
-            ))}
+                      <If test="item.compareAtPrice.display" value={!!item.compareAtPrice?.display}>
+                        <Text fontSize="sm" textColor="muted-foreground" style={{ textDecoration: 'line-through' }}>
+                          {item.compareAtPrice?.display}
+                        </Text>
+                      </If>
+                    </Group>
+                  </CardHeader>
+                  <CardContent>
+                    <Group gap="2" flex="wrap">
+                      <Loop each="item.variants" as="v" data={item.variants?.slice(0, 2) ?? []}>
+                        {(v) => (
+                          <Button key={v.id} variant="outline" size="sm">
+                            {v.title}
+                            <If test="v.priceModifier.display" value={!!v.priceModifier?.display}>
+                              {` ${v.priceModifier?.display}`}
+                            </If>
+                          </Button>
+                        )}
+                      </Loop>
+                    </Group>
+                    <DomainNavButton href="#" size="sm" mt="2" onClick={handleOrderClick}>
+                      View / Order
+                    </DomainNavButton>
+                  </CardContent>
+                </Card>
+              )}
+            </Loop>
           </Grid>
         </Block>
 

@@ -15,6 +15,7 @@ import {
   Group,
   Grid,
 } from '@ui8kit/core';
+import { Loop, If, Else } from '@ui8kit/dsl';
 import {
   Home,
   Menu,
@@ -33,6 +34,19 @@ const BUTTON_SIZES = ['xs', 'sm', 'default', 'lg', 'xl', 'icon'] as const;
 const BADGE_VARIANTS = ['default', 'secondary', 'destructive', 'outline', 'success', 'warning', 'info'] as const;
 const BADGE_SIZES = ['xs', 'sm', 'default', 'lg'] as const;
 
+const ICON_SAMPLES = [
+  { Icon: Home, label: 'Home' },
+  { Icon: Menu, label: 'Menu' },
+  { Icon: UtensilsCrossed, label: 'Utensils' },
+  { Icon: ShoppingCart, label: 'Cart' },
+  { Icon: User, label: 'User' },
+  { Icon: Settings, label: 'Settings' },
+  { Icon: Sun, label: 'Sun' },
+  { Icon: Moon, label: 'Moon' },
+  { Icon: ChevronRight, label: 'Chevron' },
+  { Icon: Heart, label: 'Heart' },
+];
+
 export function DesignComponentsPageView() {
   return (
     <Block component="section" py="8" data-class="design-components-section">
@@ -48,11 +62,13 @@ export function DesignComponentsPageView() {
           </CardHeader>
           <CardContent>
             <Group gap="2" flex="wrap" data-class="design-components-button-variants">
-              {BUTTON_VARIANTS.map((v) => (
-                <Button key={v} variant={v} size="sm" data-class="design-components-button">
-                  {v}
-                </Button>
-              ))}
+              <Loop each="buttonVariants" as="v" data={[...BUTTON_VARIANTS]}>
+                {(v) => (
+                  <Button key={v} variant={v} size="sm" data-class="design-components-button">
+                    {v}
+                  </Button>
+                )}
+              </Loop>
             </Group>
           </CardContent>
         </Card>
@@ -64,11 +80,18 @@ export function DesignComponentsPageView() {
           </CardHeader>
           <CardContent>
             <Group gap="2" items="center" flex="wrap" data-class="design-components-button-sizes">
-              {BUTTON_SIZES.map((s) => (
-                <Button key={s} variant="outline" size={s} data-class="design-components-button">
-                  {s === 'icon' ? <Icon lucideIcon={Settings} size="sm" /> : s}
-                </Button>
-              ))}
+              <Loop each="buttonSizes" as="s" data={[...BUTTON_SIZES]}>
+                {(s) => (
+                  <Button key={s} variant="outline" size={s} data-class="design-components-button">
+                    <If test="s === 'icon'" value={s === 'icon'}>
+                      <Icon lucideIcon={Settings} size="sm" />
+                    </If>
+                    <Else>
+                      {s}
+                    </Else>
+                  </Button>
+                )}
+              </Loop>
             </Group>
           </CardContent>
         </Card>
@@ -80,11 +103,13 @@ export function DesignComponentsPageView() {
           </CardHeader>
           <CardContent>
             <Group gap="2" flex="wrap" data-class="design-components-badge-variants">
-              {BADGE_VARIANTS.map((v) => (
-                <Badge key={v} variant={v} data-class="design-components-badge">
-                  {v}
-                </Badge>
-              ))}
+              <Loop each="badgeVariants" as="v" data={[...BADGE_VARIANTS]}>
+                {(v) => (
+                  <Badge key={v} variant={v} data-class="design-components-badge">
+                    {v}
+                  </Badge>
+                )}
+              </Loop>
             </Group>
           </CardContent>
         </Card>
@@ -96,11 +121,13 @@ export function DesignComponentsPageView() {
           </CardHeader>
           <CardContent>
             <Group gap="2" items="center" flex="wrap" data-class="design-components-badge-sizes">
-              {BADGE_SIZES.map((s) => (
-                <Badge key={s} variant="secondary" size={s} data-class="design-components-badge">
-                  {s}
-                </Badge>
-              ))}
+              <Loop each="badgeSizes" as="s" data={[...BADGE_SIZES]}>
+                {(s) => (
+                  <Badge key={s} variant="secondary" size={s} data-class="design-components-badge">
+                    {s}
+                  </Badge>
+                )}
+              </Loop>
             </Group>
           </CardContent>
         </Card>
@@ -183,31 +210,22 @@ export function DesignComponentsPageView() {
           </CardHeader>
           <CardContent>
             <Grid cols="1-2-3" gap="4" data-class="design-components-icons">
-              {[
-                { Icon: Home, label: 'Home' },
-                { Icon: Menu, label: 'Menu' },
-                { Icon: UtensilsCrossed, label: 'Utensils' },
-                { Icon: ShoppingCart, label: 'Cart' },
-                { Icon: User, label: 'User' },
-                { Icon: Settings, label: 'Settings' },
-                { Icon: Sun, label: 'Sun' },
-                { Icon: Moon, label: 'Moon' },
-                { Icon: ChevronRight, label: 'Chevron' },
-                { Icon: Heart, label: 'Heart' },
-              ].map(({ Icon: I, label }) => (
-                <Block key={label} data-class="design-components-icon-row">
-                  <Group gap="2" items="center" data-class="design-components-icon-group">
-                    <Icon lucideIcon={I} size="xs" />
-                    <Icon lucideIcon={I} size="sm" />
-                    <Icon lucideIcon={I} size="md" />
-                    <Icon lucideIcon={I} size="lg" />
-                    <Icon lucideIcon={I} size="xl" />
-                  </Group>
-                  <Text fontSize="xs" textColor="muted-foreground" mt="1">
-                    {label}
-                  </Text>
-                </Block>
-              ))}
+              <Loop each="iconSamples" as="sample" data={ICON_SAMPLES}>
+                {({ Icon: I, label }) => (
+                  <Block key={label} data-class="design-components-icon-row">
+                    <Group gap="2" items="center" data-class="design-components-icon-group">
+                      <Icon lucideIcon={I} size="xs" />
+                      <Icon lucideIcon={I} size="sm" />
+                      <Icon lucideIcon={I} size="md" />
+                      <Icon lucideIcon={I} size="lg" />
+                      <Icon lucideIcon={I} size="xl" />
+                    </Group>
+                    <Text fontSize="xs" textColor="muted-foreground" mt="1">
+                      {label}
+                    </Text>
+                  </Block>
+                )}
+              </Loop>
             </Grid>
           </CardContent>
         </Card>

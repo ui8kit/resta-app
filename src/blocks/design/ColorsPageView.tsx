@@ -1,4 +1,5 @@
 import { Block, Stack, Title, Text, Grid } from '@ui8kit/core';
+import { Loop } from '@ui8kit/dsl';
 
 const BACKGROUND_TOKENS = [
   { id: 'background', label: 'background' },
@@ -58,9 +59,9 @@ export function DesignColorsPageView() {
             Background
           </Text>
           <Grid cols="1-2-3" gap="4" data-class="design-colors-grid">
-            {BACKGROUND_TOKENS.map((t) => (
-              <ColorSwatch key={t.id} id={t.id} label={t.label} />
-            ))}
+            <Loop each="backgroundTokens" as="t" data={BACKGROUND_TOKENS}>
+              {(t) => <ColorSwatch key={t.id} id={t.id} label={t.label} />}
+            </Loop>
           </Grid>
         </Block>
         <Block data-class="design-colors-brand">
@@ -68,9 +69,9 @@ export function DesignColorsPageView() {
             Brand
           </Text>
           <Grid cols="1-2-3" gap="4" data-class="design-colors-grid">
-            {BRAND_TOKENS.map((t) => (
-              <ColorSwatch key={t.id} id={t.id} label={t.label} />
-            ))}
+            <Loop each="brandTokens" as="t" data={BRAND_TOKENS}>
+              {(t) => <ColorSwatch key={t.id} id={t.id} label={t.label} />}
+            </Loop>
           </Grid>
         </Block>
         <Block data-class="design-colors-foreground">
@@ -78,9 +79,9 @@ export function DesignColorsPageView() {
             Foreground
           </Text>
           <Grid cols="1-2-3" gap="4" data-class="design-colors-grid">
-            {FOREGROUND_TOKENS.map((t) => (
-              <ColorSwatch key={t.id} id={t.id} label={t.label} />
-            ))}
+            <Loop each="foregroundTokens" as="t" data={FOREGROUND_TOKENS}>
+              {(t) => <ColorSwatch key={t.id} id={t.id} label={t.label} />}
+            </Loop>
           </Grid>
         </Block>
       </Stack>

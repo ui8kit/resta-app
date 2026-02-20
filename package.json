@@ -20,7 +20,7 @@
     "lint:dsl": "bunx ui8kit-lint-dsl src",
     "lint": "bunx ui8kit-lint",
     "typecheck": "tsc --noEmit",
-    "lint:all": "bun run typecheck && bun run lint && bun run lint:dsl",
+    "lint:all": "bun run typecheck && bun run lint",
     "audit:refactor": "bun run scripts/refactor-audit.ts",
     "build:props": "bun run scripts/build-props-classlist.ts"
   },

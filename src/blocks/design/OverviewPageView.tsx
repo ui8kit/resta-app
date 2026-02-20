@@ -1,4 +1,5 @@
 import { Block, Stack, Title, Text, Card, CardHeader, CardTitle, CardDescription, CardContent, Grid } from '@ui8kit/core';
+import { Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
 
 const SECTIONS = [
@@ -22,23 +23,25 @@ export function DesignOverviewPageView() {
           </Text>
         </Stack>
         <Grid cols="1-2" gap="6" data-class="design-overview-grid">
-          {SECTIONS.map((s) => (
-            <Card key={s.id} data-class="design-overview-card">
-              <CardHeader>
-                <CardTitle order={4} data-class="design-overview-card-title">
-                  {s.title}
-                </CardTitle>
-                <CardDescription data-class="design-overview-card-description">
-                  {s.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent data-class="design-overview-card-actions">
-                <DomainNavButton href={s.href} size="sm" data-class="design-overview-card-link">
-                  View
-                </DomainNavButton>
-              </CardContent>
-            </Card>
-          ))}
+          <Loop each="sections" as="s" data={SECTIONS}>
+            {(s) => (
+              <Card key={s.id} data-class="design-overview-card">
+                <CardHeader>
+                  <CardTitle order={4} data-class="design-overview-card-title">
+                    {s.title}
+                  </CardTitle>
+                  <CardDescription data-class="design-overview-card-description">
+                    {s.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent data-class="design-overview-card-actions">
+                  <DomainNavButton href={s.href} size="sm" data-class="design-overview-card-link">
+                    View
+                  </DomainNavButton>
+                </CardContent>
+              </Card>
+            )}
+          </Loop>
         </Grid>
       </Stack>
     </Block>

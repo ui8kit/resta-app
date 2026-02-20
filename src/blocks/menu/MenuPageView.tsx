@@ -16,7 +16,7 @@ import {
   Stack,
   Icon,
 } from '@ui8kit/core';
-import { If, Var, Loop } from '@ui8kit/dsl';
+import { If, Else, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
 import { ShoppingCart } from 'lucide-react';
 
@@ -137,6 +137,9 @@ export function MenuPageView({
     );
   }
 
+  const allTabVariant = selectedCategory === null ? 'secondary' : 'ghost';
+  const getCategoryTabVariant = (id: string) => selectedCategory === id ? 'secondary' : 'ghost';
+
   return (
     <MainLayout
       mode="full"
@@ -154,11 +157,11 @@ export function MenuPageView({
             data-class="menu-cart-trigger"
           >
             <Icon lucideIcon={ShoppingCart} size="sm" />
-            {cartCount > 0 && (
+            <If test="cartCount > 0" value={cartCount > 0}>
               <Badge variant="secondary" data-class="menu-cart-badge">
                 {cartCount}
               </Badge>
-            )}
+            </If>
           </label>
         </Group>
         <Sheet
@@ -172,11 +175,12 @@ export function MenuPageView({
           data-class="menu-cart-sheet"
         >
           <Stack gap="4" items="stretch" data-class="menu-cart-content">
-            {cart.length === 0 ? (
+            <If test="cart.length === 0" value={cart.length === 0}>
               <Text fontSize="sm" textColor="muted-foreground" data-class="menu-cart-empty">
                 Cart is empty
               </Text>
-            ) : (
+            </If>
+            <Else>
               <Loop each="cart" as="entry" data={cart}>
                 {(entry: CartEntry) => (
                   <Group key={entry.itemId} w="full" justify="between" items="center" gap="2" data-class="menu-cart-item">
@@ -225,7 +229,7 @@ export function MenuPageView({
                   </Group>
                 )}
               </Loop>
-            )}
+            </Else>
           </Stack>
         </Sheet>
         <Block py="16" data-class="menu-header">
@@ -251,7 +255,7 @@ export function MenuPageView({
           <Group justify="center" gap="4" flex="wrap" data-class="menu-category-tabs" mb="6">
             <Button
               size="sm"
-              variant={selectedCategory === null ? 'secondary' : 'ghost'}
+              variant={allTabVariant}
               onClick={() => setSelectedCategory(null)}
               data-class="menu-category-tab"
             >
@@ -261,7 +265,7 @@ export function MenuPageView({
               {(category: MenuCategory) => (
                 <Button
                   size="sm"
-                  variant={selectedCategory === category.id ? 'secondary' : 'ghost'}
+                  variant={getCategoryTabVariant(category.id)}
                   onClick={() => setSelectedCategory(category.id)}
                   data-class="menu-category-tab"
                 >

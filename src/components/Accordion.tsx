@@ -108,12 +108,13 @@ const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps>(
       : contextValue === value;
 
     const { utilityClassName, rest } = resolveUtilityClassName(props);
+    const dataState = isOpen ? "open" : "closed";
 
     return (
       <AccordionItemContext.Provider value={{ value }}>
         <div
           ref={ref}
-          data-state={isOpen ? "open" : "closed"}
+          data-state={dataState}
           data-type={type}
           data-class="accordion-item"
           className={cn(
@@ -156,10 +157,11 @@ const AccordionTrigger = React.forwardRef<HTMLButtonElement, AccordionTriggerPro
       className: cn(defaultUtilities, utilityClassName, className),
       ...rest,
     };
+    const ChevronIcon = isOpen ? ChevronUp : ChevronDown;
     return (
       <Button {...(passedProps as ButtonProps)}>
         {props.children}
-        <Icon component="span" lucideIcon={isOpen ? ChevronUp : ChevronDown} />
+        <Icon component="span" lucideIcon={ChevronIcon} />
       </Button>
     );
   }
@@ -179,11 +181,12 @@ const AccordionContent = React.forwardRef<HTMLDivElement, AccordionContentProps>
       : contextValue === value;
 
     const { utilityClassName, rest } = resolveUtilityClassName(props);
+    const dataState = isOpen ? "open" : "closed";
 
     return (
       <div
         ref={ref}
-        data-state={isOpen ? "open" : "closed"}
+        data-state={dataState}
         data-class="accordion-content"
         className={cn(
           "overflow-hidden text-sm transition-all data-[state=closed]:h-0 data-[state=closed]:opacity-0 data-[state=open]:h-auto data-[state=open]:opacity-100 data-[state=closed]:ms-0 data-[state=open]:ms-4",
