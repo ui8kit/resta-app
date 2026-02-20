@@ -131,27 +131,26 @@ async function main(): Promise<void> {
       log(`moved: dist/react/${dir} → dist/react/src/${dir}`);
     }
   }
-
-  // Step 2: Fix MainLayout.tsx — generator emits `(props: any)` for spread props;
-  // replace with proper ComponentProps<typeof MainLayoutView> for full type safety.
+  // Step 2: Normalize generated layout typing (legacy fallback)
   console.log("\n  [2/7] Fixing generated layouts...\n");
 
   const mainLayoutPath = join(distSrc, "layouts", "MainLayout.tsx");
   if (existsSync(mainLayoutPath)) {
-    writeFile(
-      mainLayoutPath,
-      `import type { ComponentProps } from 'react';
-import { MainLayoutView } from './views/MainLayoutView';
-
-export type MainLayoutProps = ComponentProps<typeof MainLayoutView>;
-
-export function MainLayout(props: MainLayoutProps) {
-  return (
-    <MainLayoutView {...props} />
-  );
-}
-`
-    );
+    const content = readFileSync(mainLayoutPath, "utf-8");
+    if (content.includes("export function MainLayout(props: any)")) {
+      let fixed = content.replace(
+        "export function MainLayout(props: any)",
+        "export function MainLayout(props: ComponentProps<typeof MainLayoutView>)"
+      );
+      if (!fixed.includes("import type { ComponentProps } from 'react';")) {
+        fixed = fixed.replace(
+          "import { MainLayoutView } from './views/MainLayoutView';",
+          "import type { ComponentProps } from 'react';\nimport { MainLayoutView } from './views/MainLayoutView';"
+        );
+      }
+      writeFile(mainLayoutPath, fixed);
+      log("fixed: layouts/MainLayout.tsx (props any → ComponentProps<typeof MainLayoutView>)");
+    }
   }
 
   // Step 3: Generate index.ts for blocks, layouts, partials
@@ -177,6 +176,39 @@ export function MainLayout(props: MainLayoutProps) {
 
   for (const dir of ["components", "variants", "lib", "routes", "providers"]) {
     copyDir(join(SRC, dir), join(distSrc, dir));
+  }
+
+  // Some copied app-shell components still use DSL. Re-generate them to keep dist DSL-free.
+  const shellDslCandidates = [
+    { src: join(SRC, "components", "Sheet.tsx"), dest: join(distSrc, "components", "Sheet.tsx") },
+    { src: join(SRC, "components", "ui", "Icon.tsx"), dest: join(distSrc, "components", "ui", "Icon.tsx") },
+  ];
+  const shellPassthrough = getFallbackCoreComponents();
+  const shellPlugin = new ReactPlugin();
+  for (const file of shellDslCandidates) {
+    if (!existsSync(file.src)) continue;
+    const componentName = file.src.split(/[/\\]/).pop()!.replace(/\.tsx$/, "");
+    const transformed = await transformJsxFile(file.src, { passthroughComponents: shellPassthrough, componentName });
+    if (transformed.errors.length > 0 || transformed.tree.children.length === 0) continue;
+    if (transformed.tree.meta?.imports) {
+      transformed.tree.meta.imports = transformed.tree.meta.imports.filter((imp) => imp.source !== "@ui8kit/dsl");
+    }
+    const output = await shellPlugin.transform(transformed.tree);
+    writeFile(file.dest, output.content);
+    log(`transformed: ${relative(distSrc, file.dest).replace(/\\/g, "/")} (removed DSL)`);
+  }
+  // Fallback cleanup: copied files may still keep an unused `@ui8kit/dsl` import.
+  for (const file of shellDslCandidates) {
+    if (!existsSync(file.dest)) continue;
+    const content = readFileSync(file.dest, "utf-8");
+    const cleaned = content.replace(
+      /^\s*import\s+\{[^}]*\}\s+from\s+["']@ui8kit\/dsl["'];?\s*\n/m,
+      ""
+    );
+    if (cleaned !== content) {
+      writeFile(file.dest, cleaned);
+      log(`cleaned: ${relative(distSrc, file.dest).replace(/\\/g, "/")} (@ui8kit/dsl import removed)`);
+    }
   }
 
   // Assets (CSS, fonts) — @/assets/css/index.css etc.

@@ -6,13 +6,13 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { Logger } from './core';
+import { getCoreComponentNames } from './core/scanner/core-component-scanner';
 import { TemplateService } from './services/template';
 import {
   generateRegistry,
   type RegistryConfig,
   type RegistrySourceDir,
 } from './scripts';
-import { getCoreComponentNames, getFallbackCoreComponents } from './core/scanner/core-component-scanner';
 import type { AppConfig, BuildResult } from '@ui8kit/sdk';
 import type { PlatformMap } from './plugins/template';
 
@@ -102,17 +102,14 @@ export async function buildProject(rawConfig: AppConfig, cwd = process.cwd()): P
     const platformMapRaw = await readFile(resolve(cwd, config.platformMapPath), 'utf-8');
     platformMap = JSON.parse(platformMapRaw) as PlatformMap;
   }
-
-  // Get @ui8kit/core component names to preserve as JSX elements (not converted to includes).
-  // Prefer dynamic import; fall back to static list when core exports no functions at build time.
-  const dynamicComponents = await getCoreComponentNames();
-  const passthroughComponents = dynamicComponents.length > 0 ? dynamicComponents : getFallbackCoreComponents();
+  const passthroughComponents = await getCoreComponentNames();
+  const verbose = process.env.UI8KIT_GENERATE_VERBOSE === '1' || process.env.UI8KIT_GENERATE_VERBOSE === 'true';
 
   const result = await service.execute({
     registryPath,
     outputDir: outDir,
     engine: config.target,
-    verbose: true,
+    verbose,
     pluginConfig: {
       platformMap,
       platformDomain: config.platformDomain ?? 'catalog',

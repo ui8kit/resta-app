@@ -27,6 +27,37 @@ Backlog of improvements for the source app and generator to make `dist/react` a 
 1. **Generator: MainLayout type precision** — Currently emits `(props: any)`; finalize overrides with proper type. Could enhance `hast-builder.ts` to resolve local type aliases for better out-of-the-box output.
 2. **Post-finalize validation** — Add a step to run `tsc --noEmit` inside dist/react to catch type errors before `bun run build`.
 3. **Generator: verbose flag** — Add `--verbose` CLI option to `ui8kit-generate` to show skip logs only when requested (currently always on).
+1. **Produce all registry items** — Generator produces 16 files but registry has 27+ items. Some blocks (LandingPageView, admin/*, design/*, Detail pages) are skipped. Investigate:
+   - `transformJsxFile` errors for certain components
+   - `tree.children.length === 0` skip condition
+   - Add `--verbose` to ui8kit-generate for debugging
+
+2. **ReactPlugin: sibling If/Else output** — When multiple `<If>` siblings are transformed, output is invalid JSX:
+   ```jsx
+   return (
+     {cond1 ? (...) : null}
+     {cond2 ? (...) : null}
+   );
+   ```
+   Should wrap in fragment:
+   ```jsx
+   return (
+     <>
+       {cond1 ? (...) : null}
+       {cond2 ? (...) : null}
+     </>
+   );
+   ```
+   Affects: ThemeToggle, any component with multiple sibling If blocks.
+
+3. **MainLayout props** — Generator produces MainLayout without props; finalize has a hardcoded fix. Consider fixing in ReactPlugin so MainLayout gets proper `ComponentProps<typeof MainLayoutView>`.
+
+## Finalize script improvements
+
+1. **Post-finalize validation** — Add a step to verify all route imports resolve (e.g. run `tsc --noEmit` or vite build in dry-run).
+
+2. **Exclude design from copy** — If design blocks always use DSL, consider excluding them from copy and documenting that design pages are dev-only (or require generator fix first).
+
 
 ## Verification
 

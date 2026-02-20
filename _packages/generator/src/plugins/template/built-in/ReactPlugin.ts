@@ -103,17 +103,12 @@ export class ReactPlugin extends BasePlugin {
     const formattedJsx = this.formatOutput(content);
     const componentName = tree.meta?.componentName ?? 'Template';
     const imports = tree.meta?.imports;
+    // When root has multiple children (e.g. sibling <If> blocks), JSX requires a single root element.
+    const needsRootFragment = tree.children.length > 1;
 
     if (imports && imports.length > 0) {
-      // When root has multiple children (e.g. sibling <If> blocks), JSX requires a single root element.
-      // Wrap in a fragment so "return (...)" stays valid.
-      const needsRootFragment = tree.children.length > 1;
-      const rootJsx = needsRootFragment ? `<>\n${formattedJsx}\n</>` : formattedJsx;
-
-      const needsFragment =
-        needsRootFragment ||
-        formattedJsx.includes('<Fragment') ||
-        formattedJsx.includes('</Fragment>');
+      const rootJsx = needsRootFragment ? `<Fragment>\n${formattedJsx}\n</Fragment>` : formattedJsx;
+      const needsFragment = rootJsx.includes('<Fragment') || rootJsx.includes('</Fragment>');
       const importsWithFragment = needsFragment ? this.ensureFragmentImport(imports) : imports;
       let importBlock = this.emitImportBlock(importsWithFragment);
       const bodyIndented = rootJsx
@@ -180,7 +175,7 @@ export class ReactPlugin extends BasePlugin {
 
     return {
       filename: this.getOutputFilename(tree),
-      content: formattedJsx,
+      content: needsRootFragment ? `<>${formattedJsx}</>` : formattedJsx,
       variables: collectVariables(tree),
       dependencies: collectDependencies(tree),
       warnings: this.warnings.length > 0 ? this.warnings : undefined,

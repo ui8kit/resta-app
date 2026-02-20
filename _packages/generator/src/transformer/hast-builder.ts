@@ -251,9 +251,16 @@ class HastBuilder {
     // Store it as a single prop named "props" so ReactPlugin can emit (props: Type) without destructuring.
     if (firstParam.type === 'Identifier') {
       const typeAnnotation = (firstParam as t.Identifier).typeAnnotation;
-      const typeName = typeAnnotation
-        ? getNodeSource(this.source, (typeAnnotation as t.TSTypeAnnotation).typeAnnotation)
-        : 'any';
+      let typeName = 'any';
+      if (typeAnnotation) {
+        const rawType = (typeAnnotation as t.TSTypeAnnotation).typeAnnotation;
+        if (rawType.type === 'TSTypeReference' && rawType.typeName.type === 'Identifier') {
+          const resolved = this.resolveLocalTypeReference(rawType.typeName.name);
+          typeName = resolved ?? getNodeSource(this.source, rawType);
+        } else {
+          typeName = getNodeSource(this.source, rawType);
+        }
+      }
       props.push({ name: '__spread_props', type: typeName, required: true });
       return props;
     }
@@ -342,6 +349,27 @@ class HastBuilder {
     });
 
     return map;
+  }
+
+  /**
+   * Resolve local type aliases/interfaces by name and return their source type string.
+   * Used for non-destructured props signatures like `props: MainLayoutProps`.
+   */
+  private resolveLocalTypeReference(typeName: string): string | null {
+    let resolved: string | null = null;
+    traverse(this.ast, {
+      TSTypeAliasDeclaration: (path) => {
+        if (path.node.id.name !== typeName) return;
+        resolved = getNodeSource(this.source, path.node.typeAnnotation);
+        path.stop();
+      },
+      TSInterfaceDeclaration: (path) => {
+        if (resolved || path.node.id.name !== typeName) return;
+        resolved = getNodeSource(this.source, path.node.body);
+        path.stop();
+      },
+    });
+    return resolved;
   }
   
   // ===========================================================================

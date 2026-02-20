@@ -211,20 +211,23 @@ export class TemplateService implements IService<TemplateServiceInput, TemplateS
       for (const item of registry.items as RegistryItem[]) {
         const sourcePath = item.sourcePath;
         const outRelPath = item.files?.[0]?.path;
-        if (!sourcePath || !outRelPath) continue;
+        if (!sourcePath || !outRelPath) {
+          if (verbose) this.context.logger.warn(`SKIP [invalid registry item] ${item.name}: missing sourcePath or output path`);
+          continue;
+        }
         try {
           if (verbose) this.context.logger.info(`Processing: ${item.name} → ${outRelPath}`);
           // Pass registry item.name as componentName so hast-builder finds the right export
           // (file may be named differently than the exported function, e.g. PageView.tsx → LandingPageView)
           const transformResult = await transformJsxFile(sourcePath, { passthroughComponents, componentName: item.name });
           if (transformResult.errors.length > 0) {
-            this.context.logger.warn(`SKIP [errors] ${item.name}: ${transformResult.errors.join('; ')}`);
+            if (verbose) this.context.logger.warn(`SKIP [errors] ${item.name}: ${transformResult.errors.join('; ')}`);
             errors.push(...transformResult.errors.map((e) => `${sourcePath}: ${e}`));
             continue;
           }
           warnings.push(...transformResult.warnings.map((w) => `${sourcePath}: ${w}`));
           if (transformResult.tree.children.length === 0) {
-            this.context.logger.warn(`SKIP [empty tree] ${item.name} (${sourcePath})`);
+            if (verbose) this.context.logger.warn(`SKIP [empty tree] ${item.name} (${sourcePath})`);
             continue;
           }
           if (excludeDependencies?.length && transformResult.tree.meta?.imports?.length) {
@@ -245,6 +248,11 @@ export class TemplateService implements IService<TemplateServiceInput, TemplateS
           componentsProcessed++;
           if (verbose) this.context.logger.info(`Generated: ${outputPath}`);
         } catch (error) {
+          if (verbose) {
+            this.context.logger.warn(
+              `SKIP [exception] ${item.name} (${sourcePath}): ${error instanceof Error ? error.message : String(error)}`
+            );
+          }
           errors.push(`${sourcePath}: ${error instanceof Error ? error.message : String(error)}`);
         }
       }
