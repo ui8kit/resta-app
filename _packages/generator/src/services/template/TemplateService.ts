@@ -214,14 +214,17 @@ export class TemplateService implements IService<TemplateServiceInput, TemplateS
         if (!sourcePath || !outRelPath) continue;
         try {
           if (verbose) this.context.logger.info(`Processing: ${item.name} → ${outRelPath}`);
-          const transformResult = await transformJsxFile(sourcePath, { passthroughComponents });
+          // Pass registry item.name as componentName so hast-builder finds the right export
+          // (file may be named differently than the exported function, e.g. PageView.tsx → LandingPageView)
+          const transformResult = await transformJsxFile(sourcePath, { passthroughComponents, componentName: item.name });
           if (transformResult.errors.length > 0) {
+            this.context.logger.warn(`SKIP [errors] ${item.name}: ${transformResult.errors.join('; ')}`);
             errors.push(...transformResult.errors.map((e) => `${sourcePath}: ${e}`));
             continue;
           }
           warnings.push(...transformResult.warnings.map((w) => `${sourcePath}: ${w}`));
           if (transformResult.tree.children.length === 0) {
-            if (verbose) this.context.logger.debug(`Skipping empty: ${item.name}`);
+            this.context.logger.warn(`SKIP [empty tree] ${item.name} (${sourcePath})`);
             continue;
           }
           if (excludeDependencies?.length && transformResult.tree.meta?.imports?.length) {

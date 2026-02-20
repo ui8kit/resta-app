@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "generate": "bunx ui8kit-generate",
+    "generate": "bun run --cwd _packages/generator build && bun run scripts/sync-generator-dist.ts && bunx ui8kit-generate",
     "finalize": "bun run scripts/finalize-dist.ts",
     "dist:app": "bun run generate && bun run finalize",
     "clean": "bash scripts/clean-workspace.sh",

@@ -12,6 +12,7 @@ import {
   type RegistryConfig,
   type RegistrySourceDir,
 } from './scripts';
+import { getCoreComponentNames, getFallbackCoreComponents } from './core/scanner/core-component-scanner';
 import type { AppConfig, BuildResult } from '@ui8kit/sdk';
 import type { PlatformMap } from './plugins/template';
 
@@ -102,17 +103,22 @@ export async function buildProject(rawConfig: AppConfig, cwd = process.cwd()): P
     platformMap = JSON.parse(platformMapRaw) as PlatformMap;
   }
 
+  // Get @ui8kit/core component names to preserve as JSX elements (not converted to includes).
+  // Prefer dynamic import; fall back to static list when core exports no functions at build time.
+  const dynamicComponents = await getCoreComponentNames();
+  const passthroughComponents = dynamicComponents.length > 0 ? dynamicComponents : getFallbackCoreComponents();
+
   const result = await service.execute({
     registryPath,
     outputDir: outDir,
     engine: config.target,
-    verbose: false,
+    verbose: true,
     pluginConfig: {
       platformMap,
       platformDomain: config.platformDomain ?? 'catalog',
       platform: config.platform,
     },
-    passthroughComponents: [],
+    passthroughComponents,
     excludeDependencies: ['@ui8kit/dsl'],
   });
 

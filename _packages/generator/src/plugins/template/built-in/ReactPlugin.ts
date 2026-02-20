@@ -105,21 +105,58 @@ export class ReactPlugin extends BasePlugin {
     const imports = tree.meta?.imports;
 
     if (imports && imports.length > 0) {
-      const needsFragment = formattedJsx.includes('<Fragment') || formattedJsx.includes('</Fragment>');
+      // When root has multiple children (e.g. sibling <If> blocks), JSX requires a single root element.
+      // Wrap in a fragment so "return (...)" stays valid.
+      const needsRootFragment = tree.children.length > 1;
+      const rootJsx = needsRootFragment ? `<>\n${formattedJsx}\n</>` : formattedJsx;
+
+      const needsFragment =
+        needsRootFragment ||
+        formattedJsx.includes('<Fragment') ||
+        formattedJsx.includes('</Fragment>');
       const importsWithFragment = needsFragment ? this.ensureFragmentImport(imports) : imports;
       let importBlock = this.emitImportBlock(importsWithFragment);
-      const bodyIndented = formattedJsx
+      const bodyIndented = rootJsx
         .split('\n')
         .map((line) => (line.trim() ? '    ' + line : ''))
         .join('\n')
         .trimEnd();
       const propNames = this.getEmittedPropNames(tree);
 
-      // Build typed signature when prop types are available from source
-      const propsInterface = this.buildPropsInterface(componentName, tree.meta?.props ?? [], propNames);
+      // Build typed signature when prop types are available from source.
+      // Skip for __spread_props: the type is imported, no local interface needed.
+      const isSpreadPropsCheck = propNames.length === 1 && propNames[0] === '__spread_props';
+      const propsInterface = isSpreadPropsCheck
+        ? ''
+        : this.buildPropsInterface(componentName, tree.meta?.props ?? [], propNames);
       const preamble = tree.meta?.preamble ?? [];
       const preambleBlock = preamble.length > 0 ? preamble.map((s) => '  ' + s).join('\n') + '\n\n' : '';
-      const sig = propNames.length > 0
+
+      // __spread_props signals a non-destructured param (e.g. function Comp(props: Type)).
+      // Use the original type directly in the signature without destructuring.
+      const spreadPropDef = tree.meta?.props?.find((p) => p.name === '__spread_props');
+      const isSpreadProps = propNames.length === 1 && propNames[0] === '__spread_props';
+      const spreadType = isSpreadProps && spreadPropDef ? spreadPropDef.type : null;
+
+      // Check whether spreadType is resolvable in the generated file's imports.
+      // If the type is locally defined in the source (not imported), it won't be present
+      // in the generated output — fall back to 'any' to keep the output compilable.
+      const allImportedNames = new Set(
+        importsWithFragment.flatMap((imp) => [
+          ...(imp.namedImports ?? []),
+          ...(imp.defaultImport ? [imp.defaultImport] : []),
+        ])
+      );
+      const resolvedSpreadType =
+        spreadType && (allImportedNames.has(spreadType) || /[<{|&]/.test(spreadType))
+          ? spreadType
+          : spreadType
+          ? 'any'
+          : null;
+
+      const sig = isSpreadProps
+        ? `(props: ${resolvedSpreadType ?? 'any'}) {\n${preambleBlock}`
+        : propNames.length > 0
         ? `(props: ${componentName}Props) {\n  const { ${propNames.join(', ')} } = props;\n\n${preambleBlock}`
         : `() {\n${preambleBlock}`;
 

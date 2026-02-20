@@ -37,7 +37,7 @@
   },
   "scripts": {
     "prepublishOnly": "npm run build",
-    "build": "vite build && tsc --emitDeclarationOnly --declaration --outDir dist",
+    "build": "vite build && tsc -p tsconfig.build.json",
     "dev": "vite build --watch",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -73,7 +73,6 @@
     "@vitest/ui": "^3.2.3",
     "typescript": "^5.8.0",
     "vite": "^6.3.5",
-    "vite-plugin-dts": "^4.5.4",
     "vitest": "^3.2.3"
   }
 }

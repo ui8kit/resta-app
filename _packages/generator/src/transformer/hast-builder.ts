@@ -247,6 +247,17 @@ class HastBuilder {
 
     const firstParam = params[0];
 
+    // Handle non-destructured param: function Comp(props: PropsType)
+    // Store it as a single prop named "props" so ReactPlugin can emit (props: Type) without destructuring.
+    if (firstParam.type === 'Identifier') {
+      const typeAnnotation = (firstParam as t.Identifier).typeAnnotation;
+      const typeName = typeAnnotation
+        ? getNodeSource(this.source, (typeAnnotation as t.TSTypeAnnotation).typeAnnotation)
+        : 'any';
+      props.push({ name: '__spread_props', type: typeName, required: true });
+      return props;
+    }
+
     if (firstParam.type !== 'ObjectPattern') return props;
 
     // Try to resolve the TS type annotation to an interface/type in the file

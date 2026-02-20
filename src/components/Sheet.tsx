@@ -1,6 +1,5 @@
 import type { ReactNode, HTMLAttributes } from "react";
 import { forwardRef } from "react";
-import { If, Else } from "@ui8kit/dsl";
 import { cn } from "../lib/utils";
 import { resolveUtilityClassName, type UtilityPropBag, type UtilityPropPrefix } from "../lib/utility-props";
 import { buttonSizeVariants, buttonStyleVariants } from "../variants";
@@ -106,11 +105,11 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(
       <div ref={ref} className={cn("relative", utilityClassName, className)} data-class="sheet" {...rest}>
         <input id={id} type="checkbox" className="peer hidden" />
 
-        <If test="showTrigger" value={!!showTrigger}>
+        {showTrigger && (
           <SheetTrigger htmlFor={id} variant={triggerVariant} size={triggerSize} aria-label={openLabel}>
             <Icon component="span" lucideIcon={triggerIcon || Menu} />
           </SheetTrigger>
-        </If>
+        )}
 
         <div className="fixed inset-0 z-50 hidden peer-checked:block" data-class="sheet-portal">
           <label
@@ -133,14 +132,13 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(
             )}
           >
             <div className="flex items-center justify-between" data-class="sheet-header">
-              <If test="title" value={!!title}>
+              {title ? (
                 <span className="text-sm text-muted-foreground" data-class="sheet-title">
                   {title}
                 </span>
-              </If>
-              <Else>
+              ) : (
                 <span />
-              </Else>
+              )}
               <label
                 htmlFor={id}
                 aria-label={closeLabel}
