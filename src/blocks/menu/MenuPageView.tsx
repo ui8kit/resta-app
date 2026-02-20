@@ -1,7 +1,24 @@
+import { useState } from 'react';
 import { MainLayout } from '@/layouts';
-import { Block, Grid, Card, CardHeader, CardTitle, CardDescription, CardContent, Text, Badge, Group, Button } from '@ui8kit/core';
+import {
+  Block,
+  Grid,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  Text,
+  Badge,
+  Group,
+  Button,
+  Sheet,
+  Stack,
+  Icon,
+} from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
+import { ShoppingCart } from 'lucide-react';
 
 type MenuPrice = {
   amount: number;
@@ -48,6 +65,13 @@ type PromotionItem = {
   badge?: string;
 };
 
+type CartEntry = {
+  itemId: string;
+  title: string;
+  price: MenuPrice;
+  quantity: number;
+};
+
 export interface MenuPageViewProps {
   navItems?: { id: string; title: string; url: string }[];
   sidebar: React.ReactNode;
@@ -65,6 +89,8 @@ export function MenuPageView({
   menu,
   promotions,
 }: MenuPageViewProps) {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [cart, setCart] = useState<CartEntry[]>([]);
   const items = menu.items ?? [];
   const categories = menu.categories ?? [];
   const promotionsById = Object.fromEntries((promotions?.items ?? []).map((item) => [item.id, item]));
@@ -81,6 +107,36 @@ export function MenuPageView({
     };
   });
 
+  const filteredItems = selectedCategory
+    ? withComputed.filter((item) => item.category?.id === selectedCategory)
+    : withComputed;
+
+  const cartCount = cart.reduce((sum, e) => sum + e.quantity, 0);
+
+  function addToCart(item: MenuItem & { promotionBadge: string; hasPromotion: boolean; hasCompareAt: boolean }) {
+    setCart((prev) => {
+      const existing = prev.find((e) => e.itemId === item.id);
+      if (existing) {
+        return prev.map((e) =>
+          e.itemId === item.id ? { ...e, quantity: e.quantity + 1 } : e
+        );
+      }
+      return [...prev, { itemId: item.id, title: item.title, price: item.price, quantity: 1 }];
+    });
+  }
+
+  function removeFromCart(itemId: string) {
+    setCart((prev) => prev.filter((e) => e.itemId !== itemId));
+  }
+
+  function updateCartQuantity(itemId: string, delta: number) {
+    setCart((prev) =>
+      prev
+        .map((e) => (e.itemId === itemId ? { ...e, quantity: e.quantity + delta } : e))
+        .filter((e) => e.quantity > 0)
+    );
+  }
+
   return (
     <MainLayout
       mode="full"
@@ -90,6 +146,85 @@ export function MenuPageView({
       headerSubtitle={headerSubtitle}
     >
       <Block component="section" data-class="menu-section">
+        <Group w="full" justify="between" items="center" mb="6" data-class="menu-top-bar">
+          <label
+            htmlFor="menu-cart-sheet"
+            className="inline-flex items-center justify-center gap-2 rounded bg-background px-3 py-2 text-sm font-medium cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors shrink-0"
+            aria-label="Open cart"
+            data-class="menu-cart-trigger"
+          >
+            <Icon lucideIcon={ShoppingCart} size="sm" />
+            {cartCount > 0 && (
+              <Badge variant="secondary" data-class="menu-cart-badge">
+                {cartCount}
+              </Badge>
+            )}
+          </label>
+        </Group>
+        <Sheet
+          id="menu-cart-sheet"
+          side="right"
+          size="lg"
+          title="Cart"
+          showTrigger={false}
+          openLabel="Open cart"
+          closeLabel="Close cart"
+          data-class="menu-cart-sheet"
+        >
+          <Stack gap="4" data-class="menu-cart-content">
+            {cart.length === 0 ? (
+              <Text fontSize="sm" textColor="muted-foreground" data-class="menu-cart-empty">
+                Cart is empty
+              </Text>
+            ) : (
+              <Loop each="cart" as="entry" data={cart}>
+                {(entry: CartEntry) => (
+                  <Group key={entry.itemId} justify="between" items="center" gap="2" data-class="menu-cart-item">
+                    <Stack gap="0" data-class="menu-cart-item-info">
+                      <Text fontSize="sm" fontWeight="medium" data-class="menu-cart-item-title">
+                        {entry.title}
+                      </Text>
+                      <Text fontSize="xs" textColor="muted-foreground" data-class="menu-cart-item-price">
+                        {entry.price.display} × {entry.quantity}
+                      </Text>
+                    </Stack>
+                    <Group gap="1" items="center" data-class="menu-cart-item-actions">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => updateCartQuantity(entry.itemId, -1)}
+                        data-class="menu-cart-item-minus"
+                        aria-label="Decrease quantity"
+                      >
+                        −
+                      </Button>
+                      <Text fontSize="sm" data-class="menu-cart-item-qty">
+                        {entry.quantity}
+                      </Text>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => updateCartQuantity(entry.itemId, 1)}
+                        data-class="menu-cart-item-plus"
+                        aria-label="Increase quantity"
+                      >
+                        +
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeFromCart(entry.itemId)}
+                        data-class="menu-cart-item-remove"
+                      >
+                        Remove
+                      </Button>
+                    </Group>
+                  </Group>
+                )}
+              </Loop>
+            )}
+          </Stack>
+        </Sheet>
         <Block py="16" data-class="menu-header">
           <If test="menu.title" value={!!menu.title}>
             <Text component="h2" fontSize="3xl" fontWeight="bold" textAlign="center" data-class="menu-title">
@@ -111,17 +246,30 @@ export function MenuPageView({
         </Block>
         <If test="categories.length > 0" value={categories.length > 0}>
           <Group justify="center" gap="4" flex="wrap" data-class="menu-category-tabs" mb="6">
+            <Button
+              size="sm"
+              variant={selectedCategory === null ? 'secondary' : 'ghost'}
+              onClick={() => setSelectedCategory(null)}
+              data-class="menu-category-tab"
+            >
+              All
+            </Button>
             <Loop each="categories" as="category" data={categories}>
               {(category: MenuCategory) => (
-                <DomainNavButton href={`#${category.id}`} size="sm" variant="ghost" data-class="menu-category-tab">
+                <Button
+                  size="sm"
+                  variant={selectedCategory === category.id ? 'secondary' : 'ghost'}
+                  onClick={() => setSelectedCategory(category.id)}
+                  data-class="menu-category-tab"
+                >
                   <Var name="category.title" value={category.title} />
-                </DomainNavButton>
+                </Button>
               )}
             </Loop>
           </Group>
         </If>
         <Grid cols="1-2-3" gap="6" data-class="menu-grid">
-          <Loop each="withComputed" as="item" data={withComputed}>
+          <Loop each="filteredItems" as="item" data={filteredItems}>
             {(item: MenuItem & { promotionBadge: string; hasPromotion: boolean; hasCompareAt: boolean }) => (
               <Card data-class="menu-item-card">
                 <CardHeader>
@@ -168,7 +316,12 @@ export function MenuPageView({
                     <DomainNavButton href={`/menu/${item.id}`} size="sm" data-class="menu-item-link">
                       View / Order
                     </DomainNavButton>
-                    <Button variant="outline" size="sm" data-class="menu-item-add-intent">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => addToCart(item)}
+                      data-class="menu-item-add-intent"
+                    >
                       Add to cart
                     </Button>
                   </Group>

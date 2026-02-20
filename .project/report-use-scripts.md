@@ -65,6 +65,7 @@
 | `partials/Header.tsx` | `onClick` (mobile sheet) | Close sheet after nav click |
 | `components/Accordion.tsx` | `useState`, `useCallback`, `onClick` | Accordion expand/collapse |
 | `layouts/AdminLayout.tsx` | `onClick` | Sheet trigger / close |
+| `blocks/menu/MenuPageView.tsx` | `useState` (selectedCategory, cart), `onClick` | Menu category filter, cart (add/remove/quantity), cart Sheet |
 
 ### Routing
 
@@ -82,11 +83,15 @@ To produce a static HTML + CSS site with minimal JS:
    - Theme toggle → CSS-only (prefers-color-scheme) or static class
    - Accordion → CSS `details/summary` or static expanded
    - Sheet (mobile menu) → CSS-only hamburger or static nav
+   - Menu category filter → static category sections or server-side filtering
+   - Menu cart (add to cart, Sheet) → server-side cart or static
    - React Router → static pages, no SPA
 
 2. **Keep** (if needed):
    - Theme toggle (localStorage + class) — ~50 lines
    - Accordion (expand/collapse) — ~30 lines
    - Mobile sheet (open/close) — ~20 lines
+   - Menu category filter (useState + filter) — ~15 lines
+   - Menu cart (useState + add/remove/Sheet) — ~40 lines
 
 3. **Build-time scripts** stay as-is (run during build, not in browser).
