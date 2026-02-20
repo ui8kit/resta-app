@@ -20,7 +20,7 @@ export type FooterProps = {
 
 export function Footer({
   copyright = '© 2025 RestA. All rights reserved.',
-  sections = [],
+  sections: _sections = [],
   dataClass,
   'data-class': dataClassAttr,
 }: FooterProps) {

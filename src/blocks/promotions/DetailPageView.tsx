@@ -77,7 +77,7 @@ export function PromotionDetailPageView({
                 </Text>
               </If>
               <If test="item.details" value={!!item?.details}>
-                <Block py="6" data-class="promotion-detail-body">
+                <Block py="8" data-class="promotion-detail-body">
                   <Text fontSize="base" lineHeight="relaxed" data-class="promotion-detail-text">
                     <Var name="item.details" value={item?.details} />
                   </Text>

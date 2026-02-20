@@ -9,7 +9,7 @@ export interface AdminLoginPageViewProps {
   headerTitle?: string;
 }
 
-export function AdminLoginPageView({ headerTitle }: AdminLoginPageViewProps) {
+export function AdminLoginPageView({ headerTitle: _headerTitle }: AdminLoginPageViewProps) {
   const { login } = useAdminAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');

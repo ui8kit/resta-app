@@ -36,7 +36,9 @@ function ColorSwatch({ id, label }: { id: string; label: string }) {
         border=""
         data-class="design-colors-swatch-block"
         className="border border-border"
-      />
+      >
+        {' '}
+      </Block>
       <Text fontSize="xs" textColor="muted-foreground" mt="2" data-class="design-colors-swatch-label">
         {label}
       </Text>

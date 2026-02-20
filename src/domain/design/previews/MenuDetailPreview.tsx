@@ -6,7 +6,7 @@ export type MenuDetailPreviewItem = {
   description?: string;
   price?: { display: string };
   compareAtPrice?: { display: string };
-  category?: { title: string };
+  category?: { id?: string; title: string };
   details?: string;
   availability?: string;
   variants?: { id: string; title: string; priceModifier?: { display: string } }[];
@@ -33,7 +33,7 @@ export function MenuDetailPreview({ item, promotionBadge, onOrderClick }: MenuDe
             <Title fontSize="4xl" fontWeight="bold" data-class="menu-detail-title">
               {item.title}
             </Title>
-            <Group gap="3" items="center" mt="2" mb="2">
+            <Group gap="4" items="center" mt="2" mb="2">
               {item.category?.title && (
                 <Text fontSize="sm" textColor="muted-foreground">
                   {item.category.title}
@@ -48,14 +48,14 @@ export function MenuDetailPreview({ item, promotionBadge, onOrderClick }: MenuDe
                 <Badge variant="outline">{promotionBadge}</Badge>
               )}
             </Group>
-            <Group gap="3" items="baseline">
+            <Group gap="4" items="baseline">
               {item.price?.display && (
                 <Text fontSize="xl" fontWeight="semibold" textColor="primary">
                   {item.price.display}
                 </Text>
               )}
               {hasCompareAt && (
-                <Text fontSize="sm" textColor="muted-foreground" textDecoration="line-through">
+                <Text fontSize="sm" textColor="muted-foreground" style={{ textDecoration: 'line-through' }}>
                   {item.compareAtPrice?.display}
                 </Text>
               )}
@@ -70,7 +70,7 @@ export function MenuDetailPreview({ item, promotionBadge, onOrderClick }: MenuDe
                 <Text fontSize="sm" fontWeight="semibold" mb="2">
                   Portion / Option
                 </Text>
-                <Group gap="2" wrap="">
+                <Group gap="2" flex="wrap">
                   {variants.map((v) => (
                     <Button key={v.id} variant="outline" size="sm">
                       {v.title}
@@ -86,7 +86,7 @@ export function MenuDetailPreview({ item, promotionBadge, onOrderClick }: MenuDe
                   Add-ons
                 </Text>
                 {modifiers.map((m) => (
-                  <Group key={m.id} items="center" justify="between" gap="3" py="1">
+                  <Group key={m.id} items="center" justify="between" gap="4" py="2">
                     <Group items="center" gap="2">
                       <Field type="checkbox" />
                       <Text>{m.title}</Text>
@@ -97,7 +97,7 @@ export function MenuDetailPreview({ item, promotionBadge, onOrderClick }: MenuDe
               </Block>
             )}
             {item.details && (
-              <Block py="6">
+              <Block py="8">
                 <Text fontSize="base" lineHeight="relaxed">
                   {item.details}
                 </Text>

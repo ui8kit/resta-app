@@ -47,7 +47,7 @@ export function PromotionDetailPreview({ item }: PromotionDetailPreviewProps) {
               </Text>
             )}
             {item.details && (
-              <Block py="6">
+              <Block py="8">
                 <Text fontSize="base" lineHeight="relaxed">
                   {item.details}
                 </Text>

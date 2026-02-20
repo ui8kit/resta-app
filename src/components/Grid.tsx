@@ -3,6 +3,8 @@ import { forwardRef } from "react";
 import { cn } from "../lib/utils";
 import { gridVariants, type GridVariantProps } from "../variants";
 
+type ColsRuleValue = NonNullable<GridVariantProps["cols"]>;
+
 import { resolveUtilityClassName, type UtilityPropBag, type UtilityPropPrefix } from "../lib/utility-props";
 
 type GridDomProps = Omit<React.HTMLAttributes<HTMLDivElement>, UtilityPropPrefix>;
@@ -40,7 +42,7 @@ function resolveColsClassName(cols: ColsInput): string {
     return parts.join(" ");
   }
   if (typeof cols === "string") {
-    return gridVariants({ cols }) ?? "";
+    return gridVariants({ cols: cols as ColsRuleValue }) ?? "";
   }
   return "";
 }
@@ -61,7 +63,7 @@ const Grid = forwardRef<HTMLDivElement, GridProps>(
   ) => {
     const { utilityClassName, rest } = resolveUtilityClassName(props);
     const colsClass =
-      typeof cols === "string" ? gridVariants({ cols }) : resolveColsClassName(cols);
+      typeof cols === "string" ? gridVariants({ cols: cols as ColsRuleValue }) : resolveColsClassName(cols);
 
     return (
       <div

@@ -84,7 +84,7 @@ export function MenuDetailPageView({
               <Title fontSize="4xl" fontWeight="bold" data-class="menu-detail-title">
                 <Var name="item.title" value={item?.title} />
               </Title>
-              <Group gap="3" items="center" mt="2" mb="2">
+              <Group gap="4" items="center" mt="2" mb="2">
                 <If test="item.category.title" value={!!item?.category?.title}>
                   <Text fontSize="sm" textColor="muted-foreground" data-class="menu-detail-category">
                     <Var name="item.category.title" value={item?.category?.title} />
@@ -101,7 +101,7 @@ export function MenuDetailPageView({
                   </Badge>
                 </If>
               </Group>
-              <Group gap="3" items="baseline" data-class="menu-detail-price-row">
+              <Group gap="4" items="baseline" data-class="menu-detail-price-row">
                 <If test="item.price.display" value={!!item?.price?.display}>
                   <Text fontSize="xl" fontWeight="semibold" textColor="primary" data-class="menu-detail-price">
                     <Var name="item.price.display" value={item?.price?.display} />
@@ -111,7 +111,7 @@ export function MenuDetailPageView({
                   <Text
                     fontSize="sm"
                     textColor="muted-foreground"
-                    textDecoration="line-through"
+                    style={{ textDecoration: 'line-through' }}
                     data-class="menu-detail-compare-price"
                   >
                     <Var name="item.compareAtPrice.display" value={item?.compareAtPrice?.display} />
@@ -128,7 +128,7 @@ export function MenuDetailPageView({
                   <Text fontSize="sm" fontWeight="semibold" mb="2" data-class="menu-detail-variants-title">
                     Portion / Option
                   </Text>
-                  <Group gap="2" wrap="" data-class="menu-detail-variant-list">
+                  <Group gap="2" flex="wrap" data-class="menu-detail-variant-list">
                     <Loop each="variants" as="variant" data={variants}>
                       {(variant: CatalogItemVariant) => (
                         <Button variant="outline" size="sm" data-class="menu-detail-variant-btn">
@@ -152,7 +152,7 @@ export function MenuDetailPageView({
                   <Block data-class="menu-detail-modifier-list">
                     <Loop each="modifiers" as="modifier" data={modifiers}>
                       {(modifier: CatalogItemModifier) => (
-                        <Group items="center" justify="between" gap="3" py="1" data-class="menu-detail-modifier-row">
+                        <Group items="center" justify="between" gap="4" py="2" data-class="menu-detail-modifier-row">
                           <Group items="center" gap="2">
                             <Field type="checkbox" data-class="menu-detail-modifier-check" />
                             <Text data-class="menu-detail-modifier-label">
@@ -169,7 +169,7 @@ export function MenuDetailPageView({
                 </Block>
               </If>
               <If test="item.details" value={!!item?.details}>
-                <Block py="6" data-class="menu-detail-body">
+                <Block py="8" data-class="menu-detail-body">
                   <Text fontSize="base" lineHeight="relaxed" data-class="menu-detail-text">
                     <Var name="item.details" value={item?.details} />
                   </Text>

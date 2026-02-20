@@ -11,6 +11,7 @@ export type TextProps = TextDomProps &
   TypographyVariantProps & {
     children: ReactNode;
     component?: ElementType;
+    htmlFor?: string;
   };
 
 export const Text = forwardRef<HTMLElement, TextProps>(

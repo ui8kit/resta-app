@@ -67,7 +67,7 @@ export function ux(props: UtilityPropBag): string {
     }
 
     // Bare-token alias: italic="italic" → "italic" (when map allows "")
-    const allowed = (utilityPropsMap as Record<string, string[] | undefined>)[k];
+    const allowed = (utilityPropsMap as unknown as Record<string, string[] | undefined>)[k];
     if (allowed?.includes("") && value === k) {
       tokens.push(k);
       continue;

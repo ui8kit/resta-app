@@ -76,14 +76,14 @@ export function DesignWidgetsPageView() {
                       {item.price?.display}
                     </Text>
                     {item.compareAtPrice?.display && (
-                      <Text fontSize="sm" textColor="muted-foreground" textDecoration="line-through">
+                      <Text fontSize="sm" textColor="muted-foreground" style={{ textDecoration: 'line-through' }}>
                         {item.compareAtPrice.display}
                       </Text>
                     )}
                   </Group>
                 </CardHeader>
                 <CardContent>
-                  <Group gap="2" wrap="">
+                  <Group gap="2" flex="wrap">
                     {item.variants?.slice(0, 2).map((v) => (
                       <Button key={v.id} variant="outline" size="sm">
                         {v.title}
@@ -120,13 +120,13 @@ export function DesignWidgetsPageView() {
                 <Text fontSize="lg" fontWeight="semibold" textColor="primary">
                   890 ₽
                 </Text>
-                <Text fontSize="sm" textColor="muted-foreground" textDecoration="line-through">
+                <Text fontSize="sm" textColor="muted-foreground" style={{ textDecoration: 'line-through' }}>
                   990 ₽
                 </Text>
               </Group>
             </CardHeader>
             <CardContent>
-              <Group gap="2" wrap="">
+              <Group gap="2" flex="wrap">
                 <Button variant="outline" size="sm">
                   200g
                 </Button>

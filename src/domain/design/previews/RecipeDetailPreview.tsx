@@ -7,8 +7,8 @@ export type RecipeDetailPreviewRecipe = {
   body?: string;
   date?: string;
   difficulty?: string;
-  category?: { title: string };
-  cookTime?: { total: number };
+  category?: { id?: string; title: string };
+  cookTime?: { prep?: number; cook?: number; total: number };
   servings?: number;
   ingredients?: { id: string; amount: number; unit: string; name: string; note?: string }[];
   steps?: { id: string; step: number; title?: string; body: string }[];
@@ -65,7 +65,7 @@ export function RecipeDetailPreview({ recipe, onOrderClick }: RecipeDetailPrevie
               </Text>
             )}
             {recipe.body && (
-              <Block py="6">
+              <Block py="8">
                 <Text fontSize="base" lineHeight="relaxed">
                   {recipe.body}
                 </Text>
@@ -73,11 +73,11 @@ export function RecipeDetailPreview({ recipe, onOrderClick }: RecipeDetailPrevie
             )}
             <Grid cols="1-2" gap="6">
               <Block>
-                <Title order={3} fontSize="xl" fontWeight="semibold" mb="3">
+                <Title order={3} fontSize="xl" fontWeight="semibold" mb="4">
                   Ingredients
                 </Title>
                 {ingredients.map((ing) => (
-                  <Group key={ing.id} items="baseline" gap="2" py="1">
+                  <Group key={ing.id} items="baseline" gap="2" py="2">
                     <Text fontWeight="semibold">
                       {ing.amount}{ing.unit || ''}
                     </Text>
@@ -89,7 +89,7 @@ export function RecipeDetailPreview({ recipe, onOrderClick }: RecipeDetailPrevie
                 ))}
               </Block>
               <Block>
-                <Title order={3} fontSize="xl" fontWeight="semibold" mb="3">
+                <Title order={3} fontSize="xl" fontWeight="semibold" mb="4">
                   Steps
                 </Title>
                 {steps.map((s) => (
@@ -104,7 +104,7 @@ export function RecipeDetailPreview({ recipe, onOrderClick }: RecipeDetailPrevie
               </Block>
             </Grid>
             {recipe.nutrition && (
-              <Block py="6">
+              <Block py="8">
                 <Title order={4} fontSize="lg" fontWeight="semibold" mb="2">
                   Nutrition (per serving)
                 </Title>

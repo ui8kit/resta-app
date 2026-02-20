@@ -102,21 +102,21 @@ export function RecipeDetailPageView({
                   <Var name="recipe.excerpt" value={recipe?.excerpt} />
                 </Text>
               </If>
-              <Block py="6" data-class="recipe-detail-body">
+              <Block py="8" data-class="recipe-detail-body">
                 <Text fontSize="base" lineHeight="relaxed" data-class="recipe-detail-text">
                   <Var name="recipe.body" value={recipe?.body} />
                 </Text>
               </Block>
               <Grid cols="1-2" gap="6" data-class="recipe-detail-grid">
                 <Block data-class="recipe-detail-ingredients">
-                  <Title order={3} fontSize="xl" fontWeight="semibold" mb="3">
+                  <Title order={3} fontSize="xl" fontWeight="semibold" mb="4">
                     Ingredients
                   </Title>
                   <If test="ingredients.length > 0" value={ingredients.length > 0}>
                     <Block data-class="recipe-ingredients-list">
                       <Loop each="recipe.ingredients" as="ingredient" data={ingredients}>
                         {(ingredient: RecipeIngredient) => (
-                          <Group items="baseline" gap="2" py="1" data-class="recipe-ingredient-row">
+                          <Group items="baseline" gap="2" py="2" data-class="recipe-ingredient-row">
                             <Text fontWeight="semibold" data-class="recipe-ingredient-amount">
                               <Var
                                 name="ingredient.amountWithUnit"
@@ -138,7 +138,7 @@ export function RecipeDetailPageView({
                   </If>
                 </Block>
                 <Block data-class="recipe-detail-steps">
-                  <Title order={3} fontSize="xl" fontWeight="semibold" mb="3">
+                  <Title order={3} fontSize="xl" fontWeight="semibold" mb="4">
                     Steps
                   </Title>
                   <If test="steps.length > 0" value={steps.length > 0}>
@@ -165,7 +165,7 @@ export function RecipeDetailPageView({
                 </Block>
               </Grid>
               <If test="recipe.nutrition" value={!!recipe?.nutrition}>
-                <Block py="6" data-class="recipe-detail-nutrition">
+                <Block py="8" data-class="recipe-detail-nutrition">
                   <Title order={4} fontSize="lg" fontWeight="semibold" mb="2">
                     Nutrition (per serving)
                   </Title>
