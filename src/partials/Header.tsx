@@ -4,14 +4,13 @@ import { If, Else, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from './DomainNavButton';
 import { ThemeToggle } from './ThemeToggle';
 import { useAdminAuth } from '@/providers/AdminAuthContext';
-import { UtensilsCrossed, ChefHat, FileText, Percent, Palette, LogIn, LogOut, Menu } from 'lucide-react';
+import { UtensilsCrossed, ChefHat, FileText, Percent, LogIn, LogOut, Menu } from 'lucide-react';
 
 const NAV_ICONS: Record<string, (typeof UtensilsCrossed)> = {
   menu: UtensilsCrossed,
   recipes: ChefHat,
   blog: FileText,
   promotions: Percent,
-  design: Palette,
 };
 
 export type NavItem = {
