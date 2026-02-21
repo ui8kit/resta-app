@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { AdminLayout } from '@/layouts';
 import { DashSidebar } from '@/blocks';
 import {
@@ -16,8 +14,8 @@ import {
   CardDescription,
   CardContent,
 } from '@ui8kit/core';
-import { useAdminAuth } from '@/providers/AdminAuthContext';
 import { context } from '@/data/context';
+import { useAdminActions } from '@/hooks';
 
 export interface AdminDashboardPageViewProps {
   onExport?: () => void;
@@ -25,51 +23,13 @@ export interface AdminDashboardPageViewProps {
 }
 
 export function AdminDashboardPageView({ onExport, onImport }: AdminDashboardPageViewProps) {
-  const { logout } = useAdminAuth();
-  const navigate = useNavigate();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  function handleLogout() {
-    logout();
-    navigate('/admin');
-  }
-
-  function handleExport() {
-    const data = {
-      menu: context.menu,
-      recipes: context.recipes,
-      blog: context.blog,
-      promotions: context.promotions,
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'resta-data.json';
-    a.click();
-    URL.revokeObjectURL(url);
-    onExport?.();
-  }
-
-  function handleImportClick() {
-    fileInputRef.current?.click();
-  }
-
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const data = JSON.parse(reader.result as string);
-        onImport?.(data);
-      } catch {
-        console.error('Invalid JSON');
-      }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
-  }
+  const {
+    fileInputRef,
+    handleLogout,
+    handleExport,
+    handleImportClick,
+    handleFileChange,
+  } = useAdminActions(onExport, onImport);
 
   const sidebar = (
     <DashSidebar label={context.adminSidebarLabel} links={context.getAdminSidebarLinks('/admin/dashboard')} />

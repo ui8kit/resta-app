@@ -2,24 +2,10 @@ import { MainLayout } from '@/layouts';
 import { Block, Grid, Card, CardHeader, CardTitle, CardDescription, CardContent, Text, Badge, Group } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
-
-export type RecipeItem = {
-  id: string;
-  slug: string;
-  title: string;
-  excerpt: string;
-  body?: string;
-  image?: { src: string; alt?: string };
-  date?: string;
-  category?: { id: string; title: string };
-  difficulty?: 'easy' | 'medium' | 'hard';
-  cookTime?: { prep: number; cook: number; total: number };
-  servings?: number;
-  tags?: string[];
-};
+import type { NavItem, RecipeItem } from '@/types';
 
 export interface RecipesPageViewProps {
-  navItems?: { id: string; title: string; url: string }[];
+  navItems?: NavItem[];
   sidebar: React.ReactNode;
   headerTitle?: string;
   headerSubtitle?: string;

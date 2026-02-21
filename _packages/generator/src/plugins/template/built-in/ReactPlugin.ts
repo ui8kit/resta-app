@@ -116,14 +116,22 @@ export class ReactPlugin extends BasePlugin {
         .map((line) => (line.trim() ? '    ' + line : ''))
         .join('\n')
         .trimEnd();
+      const allImportedNames = new Set(
+        importsWithFragment.flatMap((imp) => [
+          ...(imp.namedImports ?? []),
+          ...(imp.defaultImport ? [imp.defaultImport] : []),
+        ])
+      );
       const propNames = this.getEmittedPropNames(tree);
+      const restPropName = this.getRestPropName(tree);
+      const hasObjectDestructure = propNames.length > 0 || !!restPropName;
 
       // Build typed signature when prop types are available from source.
       // Skip for __spread_props: the type is imported, no local interface needed.
       const isSpreadPropsCheck = propNames.length === 1 && propNames[0] === '__spread_props';
       const propsInterface = isSpreadPropsCheck
         ? ''
-        : this.buildPropsInterface(componentName, tree.meta?.props ?? [], propNames);
+        : this.buildPropsInterface(componentName, tree.meta?.props ?? [], propNames, allImportedNames);
       const preamble = tree.meta?.preamble ?? [];
       const preambleBlock = preamble.length > 0 ? preamble.map((s) => '  ' + s).join('\n') + '\n\n' : '';
 
@@ -136,12 +144,6 @@ export class ReactPlugin extends BasePlugin {
       // Check whether spreadType is resolvable in the generated file's imports.
       // If the type is locally defined in the source (not imported), it won't be present
       // in the generated output — fall back to 'any' to keep the output compilable.
-      const allImportedNames = new Set(
-        importsWithFragment.flatMap((imp) => [
-          ...(imp.namedImports ?? []),
-          ...(imp.defaultImport ? [imp.defaultImport] : []),
-        ])
-      );
       const resolvedSpreadType =
         spreadType && (allImportedNames.has(spreadType) || /[<{|&]/.test(spreadType))
           ? spreadType
@@ -149,10 +151,11 @@ export class ReactPlugin extends BasePlugin {
           ? 'any'
           : null;
 
+      const destructureParts = [...propNames, ...(restPropName ? [`...${restPropName}`] : [])];
       const sig = isSpreadProps
         ? `(props: ${resolvedSpreadType ?? 'any'}) {\n${preambleBlock}`
-        : propNames.length > 0
-        ? `(props: ${componentName}Props) {\n  const { ${propNames.join(', ')} } = props;\n\n${preambleBlock}`
+        : hasObjectDestructure
+        ? `(props: ${componentName}Props) {\n  const { ${destructureParts.join(', ')} } = props;\n\n${preambleBlock}`
         : `() {\n${preambleBlock}`;
 
       const fullContent =
@@ -191,8 +194,18 @@ export class ReactPlugin extends BasePlugin {
    * Only emits valid JavaScript identifiers so "copy-paste" output never has invalid destructuring.
    */
   private getEmittedPropNames(tree: import('../../../hast').GenRoot): string[] {
-    const fromMeta = tree.meta?.props?.map((p) => p.name).filter((n) => ReactPlugin.VALID_PROP_NAME.test(n));
+    const fromMeta = tree.meta?.props
+      ?.filter((p) => !p.rest)
+      .map((p) => p.name)
+      .filter((n) => ReactPlugin.VALID_PROP_NAME.test(n));
     return fromMeta ?? [];
+  }
+
+  /** Rest binding name from props metadata (e.g. ...buttonProps). */
+  private getRestPropName(tree: import('../../../hast').GenRoot): string | undefined {
+    const rest = tree.meta?.props?.find((p) => p.rest);
+    if (!rest) return undefined;
+    return ReactPlugin.VALID_PROP_NAME.test(rest.name) ? rest.name : undefined;
   }
 
   /**
@@ -232,6 +245,7 @@ export class ReactPlugin extends BasePlugin {
     componentName: string,
     propDefs: import('../../../hast').GenPropDefinition[],
     emittedNames: string[],
+    importedNames: Set<string>,
   ): string {
     if (emittedNames.length === 0) return '';
 
@@ -243,7 +257,7 @@ export class ReactPlugin extends BasePlugin {
     for (const name of emittedNames) {
       const def = defMap.get(name);
       let tsType = def && def.type !== 'unknown' ? def.type : 'any';
-      tsType = this.sanitizePropType(tsType);
+      tsType = this.sanitizePropType(tsType, importedNames);
       const optional = def ? !def.required : true;
       lines.push(`  ${name}${optional ? '?' : ''}: ${tsType};`);
     }
@@ -256,7 +270,7 @@ export class ReactPlugin extends BasePlugin {
    * Replaces unknown type references (NavItem[], LayoutMode, etc.) with `any`.
    * Keeps primitives, ReactNode, generic wrappers, and inline object/union types.
    */
-  private sanitizePropType(tsType: string): string {
+  private sanitizePropType(tsType: string, importedNames: Set<string>): string {
     // Remove trailing [] to check the base type, then re-add
     const isArray = tsType.endsWith('[]');
     const base = isArray ? tsType.slice(0, -2) : tsType;
@@ -266,6 +280,9 @@ export class ReactPlugin extends BasePlugin {
 
     // Primitives and well-known types
     if (ReactPlugin.SAFE_TYPES.has(base)) return tsType;
+
+    // Keep imported types (including '@/types' shared model aliases)
+    if (importedNames.has(base)) return tsType;
 
     // String literal types like 'full' | 'sidebar-left'
     if (/^['"]/.test(base.trim())) return tsType;

@@ -19,7 +19,7 @@
     "@/variants": "./src/variants"
   },
   "fixtures": "./fixtures",
-  "tokens": "./src/css/shadcn.css",
+  "tokens": "./src/assets/css/shadcn.css",
   "componentsDir": "./src/components",
   "blocksDir": "./src/blocks",
   "layoutsDir": "./src/layouts",

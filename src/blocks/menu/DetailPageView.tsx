@@ -2,39 +2,17 @@ import { useState } from 'react';
 import { MainLayout } from '@/layouts';
 import { Block, Container, Title, Text, Group, Badge, Button, Field, Toast } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
-
-type MenuPrice = {
-  amount: number;
-  currency: string;
-  display: string;
-};
-
-type MenuCategory = {
-  id: string;
-  title: string;
-};
-
-type CatalogItemVariant = {
-  id: string;
-  title: string;
-  priceModifier: MenuPrice;
-};
-
-type CatalogItemModifier = {
-  id: string;
-  title: string;
-  price: MenuPrice;
-  type: 'checkbox' | 'radio';
-};
-
-type PromotionItem = {
-  id: string;
-  title: string;
-  badge?: string;
-};
+import type {
+  CatalogItemModifier,
+  CatalogItemVariant,
+  MenuCategory,
+  MenuPrice,
+  NavItem,
+  PromotionItem,
+} from '@/types';
 
 export interface MenuDetailPageViewProps {
-  navItems?: { id: string; title: string; url: string }[];
+  navItems?: NavItem[];
   sidebar: React.ReactNode;
   headerTitle?: string;
   headerSubtitle?: string;

@@ -1,5 +1,5 @@
 import { Block, Stack, Container, Title, Text, Button, Group } from '@ui8kit/core';
-import { If, Var, Slot } from '@ui8kit/dsl';
+import { If, Var } from '@ui8kit/dsl';
 
 export interface HeroBlockProps {
   title?: string;
@@ -76,9 +76,7 @@ export function HeroBlock({
             </If>
         </Group>
 
-        <Slot name="extra">
-          {children}
-        </Slot>
+        {children}
       </Container>
     </Block>
   );

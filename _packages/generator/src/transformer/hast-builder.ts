@@ -271,6 +271,15 @@ class HastBuilder {
     const typeMap = this.resolvePropsTypeAnnotation(firstParam);
 
     for (const prop of firstParam.properties) {
+      if (prop.type === 'RestElement' && prop.argument.type === 'Identifier') {
+        props.push({
+          name: prop.argument.name,
+          type: 'unknown',
+          required: false,
+          rest: true,
+        });
+        continue;
+      }
       if (prop.type !== 'ObjectProperty') continue;
       let name: string | undefined;
       if (prop.key.type === 'Identifier') {
@@ -398,6 +407,15 @@ class HastBuilder {
     for (const stmt of body) {
       if (stmt.type === 'ReturnStatement') break;
       if (stmt.type === 'VariableDeclaration') {
+        const hasUnsafeInit = stmt.declarations.some((decl) => {
+          const init = decl.init;
+          return !!init && (
+            init.type === 'ArrowFunctionExpression' ||
+            init.type === 'FunctionExpression' ||
+            init.type === 'ClassExpression'
+          );
+        });
+        if (hasUnsafeInit) continue;
         for (const decl of stmt.declarations) {
           if (decl.id.type === 'Identifier') {
             preambleVars.push(decl.id.name);
@@ -1067,6 +1085,7 @@ class HastBuilder {
         type: p.type,
         required: p.required,
         defaultValue: p.defaultValue,
+        rest: p.rest,
       })),
       ...(preamble && preamble.length > 0 ? { preamble, preambleVars: preambleVars ?? [] } : {}),
     };

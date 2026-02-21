@@ -4,11 +4,9 @@ import { If } from '@ui8kit/dsl';
 import { Header } from '../../partials/Header';
 import { Footer } from '../../partials/Footer';
 import { Sidebar } from '../../partials/Sidebar';
-import type { NavItem, FooterSection } from '../../partials';
+import type { FooterSection, LayoutMode, NavItem } from '@/types';
 
-export type LayoutMode = 'full' | 'with-sidebar' | 'sidebar-left';
-
-export type MainLayoutProps = {
+export interface MainLayoutProps {
   children: ReactNode;
   mode?: LayoutMode;
   sidebar?: ReactNode;
@@ -19,7 +17,7 @@ export type MainLayoutProps = {
   footerCopyright?: string;
   showHeader?: boolean;
   showFooter?: boolean;
-};
+}
 
 export function MainLayoutView({
   children,

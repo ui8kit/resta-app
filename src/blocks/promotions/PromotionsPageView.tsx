@@ -2,31 +2,10 @@ import { MainLayout } from '@/layouts';
 import { Block, Grid, Card, CardHeader, CardTitle, CardDescription, CardContent, Text, Badge } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
-
-type PromotionDiscount = {
-  type: 'percentage' | 'fixed' | 'combo';
-  value: number;
-  appliesTo?: {
-    categoryIds?: string[];
-    productIds?: string[];
-  };
-  couponCode?: string;
-};
-
-export type PromotionItem = {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  validUntil?: string;
-  badge?: string;
-  discount?: PromotionDiscount;
-  image?: { src: string; alt?: string };
-  details?: string;
-};
+import type { NavItem, PromotionItem } from '@/types';
 
 export interface PromotionsPageViewProps {
-  navItems?: { id: string; title: string; url: string }[];
+  navItems?: NavItem[];
   sidebar: React.ReactNode;
   headerTitle?: string;
   headerSubtitle?: string;

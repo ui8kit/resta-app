@@ -135,8 +135,35 @@ export abstract class BasePlugin implements ITemplatePlugin {
   protected async transformChildren(children: GenChild[]): Promise<string> {
     const results: string[] = [];
 
-    for (const child of children) {
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
       if (isElement(child)) {
+        const annotations = getAnnotations(child);
+        const isIfBranch = !!annotations?.condition && !annotations.condition.isElse && !annotations.condition.isElseIf;
+
+        if (isIfBranch) {
+          let j = i + 1;
+          const branchSiblings: GenElement[] = [];
+
+          while (j < children.length && isElement(children[j])) {
+            const sibling = children[j] as GenElement;
+            const siblingCondition = getAnnotations(sibling)?.condition;
+            if (!siblingCondition || (!siblingCondition.isElse && !siblingCondition.isElseIf)) break;
+            branchSiblings.push(sibling);
+            j++;
+          }
+
+          if (branchSiblings.length > 0) {
+            const merged: GenElement = {
+              ...child,
+              children: [...child.children, ...branchSiblings],
+            };
+            results.push(await this.processElement(merged));
+            i = j - 1;
+            continue;
+          }
+        }
+
         results.push(await this.processElement(child));
       } else if (isText(child)) {
         results.push(child.value);

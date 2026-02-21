@@ -9,11 +9,6 @@ export interface AdminLayoutProps {
   sidebar?: ReactNode;
 }
 
-const closeMobileSheet = () => {
-  const cb = document.getElementById('admin-mobile-sheet') as HTMLInputElement | null;
-  if (cb) cb.checked = false;
-};
-
 export function AdminLayout({ children, sidebar }: AdminLayoutProps) {
   const mobileMenu = sidebar ? (
     <Block className="flex md:hidden shrink-0" data-class="admin-mobile-menu-trigger">
@@ -32,7 +27,10 @@ export function AdminLayout({ children, sidebar }: AdminLayoutProps) {
           data-class="admin-mobile-sheet-content"
           className="mt-4"
           onClick={(e) => {
-            if ((e.target as HTMLElement).closest('a')) closeMobileSheet();
+            if ((e.target as HTMLElement).closest('a')) {
+              const cb = document.getElementById('admin-mobile-sheet') as HTMLInputElement | null;
+              if (cb) cb.checked = false;
+            }
           }}
         >
           <Sidebar>{sidebar}</Sidebar>

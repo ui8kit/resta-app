@@ -65,7 +65,7 @@ export const Icon = forwardRef<HTMLElement, IconProps>(
         role={role}
         {...rest}
       >
-        {LucideIcon ? (
+        <If test="LucideIcon" value={!!LucideIcon}>
           <LucideIcon
             className={cn(
               sizeClasses,
@@ -74,7 +74,10 @@ export const Icon = forwardRef<HTMLElement, IconProps>(
             )}
             strokeWidth={strokeWidth}
           />
-        ) : children}
+          <Else>
+            {children}
+          </Else>
+        </If>
       </ComponentWithRef>
     );
   }

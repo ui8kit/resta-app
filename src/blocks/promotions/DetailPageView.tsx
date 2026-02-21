@@ -1,19 +1,10 @@
 import { MainLayout } from '@/layouts';
 import { Block, Container, Title, Text, Badge } from '@ui8kit/core';
 import { If, Var } from '@ui8kit/dsl';
-
-type PromotionDiscount = {
-  type: 'percentage' | 'fixed' | 'combo';
-  value: number;
-  appliesTo?: {
-    categoryIds?: string[];
-    productIds?: string[];
-  };
-  couponCode?: string;
-};
+import type { NavItem, PromotionDiscount } from '@/types';
 
 export interface PromotionDetailPageViewProps {
-  navItems?: { id: string; title: string; url: string }[];
+  navItems?: NavItem[];
   sidebar: React.ReactNode;
   headerTitle?: string;
   headerSubtitle?: string;

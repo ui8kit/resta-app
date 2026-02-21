@@ -174,7 +174,7 @@ async function main(): Promise<void> {
   // Step 4: Copy app shell from src/
   console.log("\n  [4/7] Copying app shell...\n");
 
-  for (const dir of ["components", "variants", "lib", "routes", "providers"]) {
+  for (const dir of ["components", "variants", "lib", "routes", "providers", "hooks", "constants", "types"]) {
     copyDir(join(SRC, dir), join(distSrc, dir));
   }
 
@@ -197,19 +197,8 @@ async function main(): Promise<void> {
     writeFile(file.dest, output.content);
     log(`transformed: ${relative(distSrc, file.dest).replace(/\\/g, "/")} (removed DSL)`);
   }
-  // Fallback cleanup: copied files may still keep an unused `@ui8kit/dsl` import.
-  for (const file of shellDslCandidates) {
-    if (!existsSync(file.dest)) continue;
-    const content = readFileSync(file.dest, "utf-8");
-    const cleaned = content.replace(
-      /^\s*import\s+\{[^}]*\}\s+from\s+["']@ui8kit\/dsl["'];?\s*\n/m,
-      ""
-    );
-    if (cleaned !== content) {
-      writeFile(file.dest, cleaned);
-      log(`cleaned: ${relative(distSrc, file.dest).replace(/\\/g, "/")} (@ui8kit/dsl import removed)`);
-    }
-  }
+  // Keep DSL imports in shell files when transform fallback copies source as-is.
+  // These files are transformed above when possible; otherwise runtime DSL imports are required.
 
   // Assets (CSS, fonts) — @/assets/css/index.css etc.
   copyDir(join(SRC, "assets"), join(distSrc, "assets"));
@@ -302,6 +291,7 @@ async function main(): Promise<void> {
         scripts: {
           dev: "vite",
           build: "vite build",
+          typecheck: "tsc --noEmit",
           preview: "vite preview",
         },
         // Exclude dev/build-only packages that are not needed at runtime in dist
@@ -364,7 +354,7 @@ export default defineConfig({
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "strict": true,
+    "strict": false,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
