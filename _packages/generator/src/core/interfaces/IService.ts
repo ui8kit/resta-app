@@ -1,5 +1,6 @@
 import type { IEventBus } from './IEventBus';
 import type { ILogger } from './ILogger';
+import type { GeneratorConfig } from './IConfig';
 
 /**
  * Service interface for generator services.
@@ -58,7 +59,7 @@ export interface IServiceContext {
   /**
    * Generator configuration
    */
-  readonly config: unknown;
+  readonly config: GeneratorConfig;
   
   /**
    * Logger instance

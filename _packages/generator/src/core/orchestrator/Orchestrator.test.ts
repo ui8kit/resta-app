@@ -42,7 +42,6 @@ function createMockPlugin(
 const minimalConfig: GeneratorConfig = {
   app: { name: 'Test App', lang: 'en' },
   css: {
-    entryPath: './src/main.tsx',
     routes: ['/'],
     outputDir: './dist/css',
   },

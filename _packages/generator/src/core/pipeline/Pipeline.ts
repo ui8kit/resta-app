@@ -37,7 +37,7 @@ export function createPipelineContext(
 export class PipelineContext implements IPipelineContext {
   readonly data = new Map<string, unknown>();
   readonly results = new Map<string, StageResult>();
-  readonly config: unknown;
+  readonly config: IServiceContext['config'];
   readonly logger: IServiceContext['logger'];
   readonly eventBus: IServiceContext['eventBus'];
   readonly registry: IServiceContext['registry'];

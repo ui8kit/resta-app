@@ -1,6 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ServiceRegistry, CircularDependencyError, ServiceNotFoundError } from './ServiceRegistry';
-import type { IService, IServiceContext } from '../interfaces';
+import type { IService, IServiceContext, GeneratorConfig } from '../interfaces';
+
+const TEST_CONFIG: GeneratorConfig = {
+  app: { name: 'test-app', lang: 'en' },
+  css: {
+    routes: ['/'],
+    outputDir: './dist/css',
+  },
+  html: {
+    viewsDir: './views',
+    routes: { '/': { title: 'Home' } },
+    outputDir: './dist/html',
+  },
+};
 
 // Mock service factory
 function createMockService(
@@ -21,7 +34,7 @@ function createMockService(
 // Mock context factory
 function createMockContext(): Omit<IServiceContext, 'registry'> {
   return {
-    config: {},
+    config: TEST_CONFIG,
     logger: {
       debug: vi.fn(),
       info: vi.fn(),

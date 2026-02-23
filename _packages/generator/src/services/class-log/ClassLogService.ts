@@ -1,11 +1,12 @@
 import type { IService, IServiceContext } from '../../core/interfaces';
 import { join } from 'node:path';
+import { createNodeFileSystem } from '../../core/filesystem';
 
 /**
  * Input for ClassLogService.execute()
  */
 export interface ClassLogServiceInput {
-  /** Directory containing Liquid view files */
+  /** Directory containing generated view files */
   viewsDir: string;
   /** Output directory for class log files */
   outputDir: string;
@@ -62,7 +63,7 @@ export interface ClassLogServiceOptions {
 }
 
 /**
- * ClassLogService - Logs all classes used in Liquid views.
+ * ClassLogService - Logs all classes used in generated views.
  * 
  * Outputs two JSON files:
  * - ui8kit.log.json          - All classes found in views
@@ -80,13 +81,13 @@ export interface ClassLogServiceOptions {
 export class ClassLogService implements IService<ClassLogServiceInput, ClassLogServiceOutput> {
   readonly name = 'class-log';
   readonly version = '3.0.0';
-  readonly dependencies: readonly string[] = ['view'];
+  readonly dependencies: readonly string[] = [];
   
   private context!: IServiceContext;
   private fs: ClassLogFileSystem;
   
   constructor(options: ClassLogServiceOptions = {}) {
-    this.fs = options.fileSystem ?? this.createDefaultFileSystem();
+    this.fs = options.fileSystem ?? createNodeFileSystem();
   }
   
   async initialize(context: IServiceContext): Promise<void> {
@@ -193,7 +194,7 @@ export class ClassLogService implements IService<ClassLogServiceInput, ClassLogS
   // ===========================================================================
   
   /**
-   * Scan directory for Liquid files and extract classes
+   * Scan directory for template files and extract classes
    */
   private async scanDirectory(
     dirPath: string,
@@ -223,7 +224,7 @@ export class ClassLogService implements IService<ClassLogServiceInput, ClassLogS
   }
   
   /**
-   * Extract classes from HTML/Liquid content
+   * Extract classes from template content
    */
   private extractClassesFromHtml(
     html: string,
@@ -279,31 +280,4 @@ export class ClassLogService implements IService<ClassLogServiceInput, ClassLogS
     return /^(hover|focus|active|visited|disabled|group-hover|peer-hover):/.test(className);
   }
   
-  /**
-   * Create default file system using Node.js fs
-   */
-  private createDefaultFileSystem(): ClassLogFileSystem {
-    return {
-      readFile: async (path: string) => {
-        const { readFile } = await import('node:fs/promises');
-        return readFile(path, 'utf-8');
-      },
-      writeFile: async (path: string, content: string) => {
-        const { writeFile } = await import('node:fs/promises');
-        await writeFile(path, content, 'utf-8');
-      },
-      mkdir: async (path: string) => {
-        const { mkdir } = await import('node:fs/promises');
-        await mkdir(path, { recursive: true });
-      },
-      readdir: async (path: string) => {
-        const { readdir } = await import('node:fs/promises');
-        const entries = await readdir(path, { withFileTypes: true });
-        return entries.map(e => ({
-          name: e.name,
-          isFile: () => e.isFile(),
-        }));
-      },
-    };
-  }
 }

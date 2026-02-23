@@ -5,8 +5,9 @@ export async function runGenerateHtml(
   context: IPipelineContext,
   service: HtmlService
 ): Promise<HtmlServiceOutput> {
-  const cfg = context.config as any;
+  const cfg = context.config;
   const viewsDir = cfg.html?.viewsDir ?? './views';
+  const viewsPagesSubdir = cfg.html?.viewsPagesSubdir ?? 'pages';
   const outputDir = cfg.html?.outputDir ?? './dist/html';
   const routes = cfg.html?.routes ?? {};
   const mode = cfg.html?.mode ?? 'tailwind';
@@ -16,11 +17,13 @@ export async function runGenerateHtml(
 
   const result = await service.execute({
     viewsDir,
+    viewsPagesSubdir,
     outputDir,
     routes,
     mode,
     stripDataClassInTailwind: cfg.html?.stripDataClassInTailwind ?? false,
     cssOutputDir,
+    cssHref: cfg.html?.cssHref,
     appConfig: cfg.app,
   });
 

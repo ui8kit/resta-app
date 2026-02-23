@@ -1,11 +1,12 @@
 import type { IPipelineStage, IPipelineContext } from '../core/interfaces';
 import { HtmlService, type HtmlServiceOutput } from '../services/html';
 import { runGenerateHtml } from '../steps/generate-html';
+import { formatSize } from '../core/utils/format';
 
 /**
  * HtmlStage - Pipeline stage for HTML generation
  * 
- * Renders Liquid views through layout to final HTML.
+ * Renders prepared views to final HTML.
  */
 export class HtmlStage implements IPipelineStage<unknown, HtmlServiceOutput> {
   readonly name = 'html';
@@ -42,10 +43,4 @@ export class HtmlStage implements IPipelineStage<unknown, HtmlServiceOutput> {
     
     return result;
   }
-}
-
-function formatSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }

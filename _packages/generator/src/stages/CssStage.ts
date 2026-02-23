@@ -1,11 +1,12 @@
 import type { IPipelineStage, IPipelineContext } from '../core/interfaces';
 import { CssService, type CssServiceOutput } from '../services/css';
 import { runGenerateCss } from '../steps/generate-css';
+import { formatSize } from '../core/utils/format';
 
 /**
  * CssStage - Pipeline stage for CSS generation
  * 
- * Extracts and generates CSS from Liquid views.
+ * Extracts and generates CSS from prepared views.
  */
 export class CssStage implements IPipelineStage<unknown, CssServiceOutput> {
   readonly name = 'css';
@@ -42,10 +43,4 @@ export class CssStage implements IPipelineStage<unknown, CssServiceOutput> {
     
     return result;
   }
-}
-
-function formatSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }

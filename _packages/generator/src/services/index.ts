@@ -24,14 +24,6 @@ export type {
   HtmlConverterFileSystem,
 } from './html-converter';
 
-export { ViteBundleService } from './vite-bundle';
-export type {
-  ViteBundleInput,
-  ViteBundleOutput,
-  ViteBundleServiceOptions,
-  ViteBundleFileSystem,
-} from './vite-bundle';
-
 export { ClassLogService } from './class-log';
 export type {
   ClassLogServiceInput,

@@ -1,16 +1,20 @@
 import type { IService, IServiceContext, RouteConfig } from '../../core/interfaces';
 import { join, dirname } from 'node:path';
+import { createNodeFileSystem } from '../../core/filesystem';
+import { routeToViewFileName } from '../../core/utils/routes';
 
 /**
  * Input for HtmlService.execute()
  */
 export interface HtmlServiceInput {
   viewsDir: string;
+  viewsPagesSubdir?: string;
   outputDir: string;
   routes: Record<string, RouteConfig>;
   mode?: 'tailwind' | 'semantic' | 'inline';
   stripDataClassInTailwind?: boolean;
   cssOutputDir?: string;
+  cssHref?: string;
   appConfig: {
     name: string;
     lang?: string;
@@ -61,7 +65,7 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
   private fs: HtmlFileSystem;
 
   constructor(options: HtmlServiceOptions = {}) {
-    this.fs = options.fileSystem ?? this.createDefaultFileSystem();
+    this.fs = options.fileSystem ?? createNodeFileSystem();
   }
 
   async initialize(context: IServiceContext): Promise<void> {
@@ -71,18 +75,20 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
   async execute(input: HtmlServiceInput): Promise<HtmlServiceOutput> {
     const {
       viewsDir,
+      viewsPagesSubdir = 'pages',
       outputDir,
       routes,
       mode = 'tailwind',
       stripDataClassInTailwind = false,
       cssOutputDir,
+      cssHref,
       appConfig,
     } = input;
 
     let cssContent: string | undefined;
     if (mode === 'inline' && cssOutputDir) {
       try {
-        const pureCssFileName = (this.context.config as any)?.css?.outputFiles?.pureCss ?? 'ui8kit.local.css';
+        const pureCssFileName = this.context.config.css.outputFiles?.pureCss ?? 'ui8kit.local.css';
         cssContent = await this.fs.readFile(join(cssOutputDir, pureCssFileName));
       } catch {
         this.context.logger.warn('Could not load CSS for inline mode');
@@ -92,12 +98,12 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
     const generatedPages: HtmlServiceOutput['pages'] = [];
 
     for (const [routePath, routeConfig] of Object.entries(routes)) {
-      const viewFileName = this.routeToViewFileName(routePath);
-      const viewPath = join(viewsDir, 'pages', viewFileName);
+      const viewFileName = routeToViewFileName(routePath);
+      const viewPath = join(viewsDir, viewsPagesSubdir, viewFileName);
 
       try {
         const viewContent = await this.fs.readFile(viewPath);
-        let html = this.buildSimpleHtmlDocument(routeConfig, appConfig, viewContent);
+        let html = this.buildSimpleHtmlDocument(routeConfig, appConfig, viewContent, cssHref);
         html = this.processHtmlContent(html, mode, cssContent, stripDataClassInTailwind);
 
         const htmlFileName = this.routeToHtmlFileName(routePath);
@@ -132,11 +138,6 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
     // No cleanup required
   }
 
-  private routeToViewFileName(routePath: string): string {
-    if (routePath === '/') return 'index.html';
-    return `${routePath.slice(1)}.html`;
-  }
-
   private routeToHtmlFileName(routePath: string): string {
     if (routePath === '/') return 'index.html';
     return `${routePath.slice(1)}/index.html`;
@@ -145,7 +146,8 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
   private buildSimpleHtmlDocument(
     route: RouteConfig,
     appConfig: { name: string; lang?: string },
-    content: string
+    content: string,
+    cssHref?: string
   ): string {
     const meta = this.buildMetaTags(route, appConfig);
     const lang = appConfig.lang ?? 'en';
@@ -160,7 +162,7 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
       `<meta property="og:title" content="${this.escapeHtml(title)}">`,
       meta['og:description'] ? `<meta property="og:description" content="${this.escapeHtml(meta['og:description'])}">` : '',
       meta['og:image'] ? `<meta property="og:image" content="${this.escapeHtml(meta['og:image'])}">` : '',
-      `<link rel="stylesheet" href="/css/styles.css">`,
+      `<link rel="stylesheet" href="${this.escapeHtml(cssHref ?? '/css/styles.css')}">`,
     ]
       .filter(Boolean)
       .join('\n    ');
@@ -240,21 +242,5 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
       .replace(/'/g, '&#39;');
   }
 
-  private createDefaultFileSystem(): HtmlFileSystem {
-    return {
-      readFile: async (path: string) => {
-        const { readFile } = await import('node:fs/promises');
-        return readFile(path, 'utf-8');
-      },
-      writeFile: async (path: string, content: string) => {
-        const { writeFile } = await import('node:fs/promises');
-        await writeFile(path, content, 'utf-8');
-      },
-      mkdir: async (path: string) => {
-        const { mkdir } = await import('node:fs/promises');
-        await mkdir(path, { recursive: true });
-      },
-    };
-  }
 }
 

@@ -5,8 +5,9 @@ export async function runGenerateCss(
   context: IPipelineContext,
   service: CssService
 ): Promise<CssServiceOutput> {
-  const cfg = context.config as any;
+  const cfg = context.config;
   const viewsDir = cfg.html?.viewsDir ?? './views';
+  const viewsPagesSubdir = cfg.html?.viewsPagesSubdir ?? 'pages';
   const outputDir = cfg.css?.outputDir ?? './dist/css';
   const routes = cfg.html?.routes ?? {};
   const pureCss = cfg.css?.pureCss ?? false;
@@ -15,6 +16,7 @@ export async function runGenerateCss(
 
   const result = await service.execute({
     viewsDir,
+    viewsPagesSubdir,
     outputDir,
     routes,
     pureCss,

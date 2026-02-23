@@ -1,173 +1,75 @@
-# @ui8kit/generator — CLI Guide for Standalone Apps
+# @ui8kit/generator — Runtime Guide
 
-This guide explains how to use the generator CLI tools in a **standalone application** when developing UI8Kit DSL templates. These commands convert your React components into target templates (React, Liquid, Handlebars, Twig, Latte) for use in CMS, e-commerce, or static sites.
+This guide reflects the current generator runtime after the orchestrator-only refactor.
 
-## Prerequisites
+## Scope
 
-- Node.js `>=18` or Bun
-- A project with `ui8kit.config.ts` or `ui8kit.config.json`
-- DSL components in `blocks`, `layouts`, `partials` (paths from config)
+`@ui8kit/generator` now targets static page generation only:
 
-## Installation
+- input: prepared React-rendered HTML views
+- output: static HTML + CSS
+- pipeline: `CssStage -> HtmlStage` with optional `ClassLogStage`
 
-```bash
-bun add @ui8kit/generator
-# or
-npm install @ui8kit/generator
-```
-
-The generator depends on `@ui8kit/sdk` for config loading. It is installed automatically.
-
-## CLI Commands
-
-### `ui8kit-generate` — Generate Templates from Config
-
-Reads your `ui8kit.config` and generates templates from your blocks, layouts, and partials. Output format depends on the `target` engine.
-
-**What it does:**
-- Loads config (`blocksDir`, `layoutsDir`, `partialsDir`)
-- Scans components, builds a registry
-- Transforms React/DSL to the target engine
-- Writes output to `outDir` (default: `dist/<target>`)
-
-**Supported engines:** `react` | `liquid` | `handlebars` | `twig` | `latte`
-
-**Examples:**
-
-```bash
-# Generate React templates (default from config)
-bunx ui8kit-generate
-
-# Generate for a specific engine
-bunx ui8kit-generate --target react
-bunx ui8kit-generate --target liquid
-bunx ui8kit-generate --target handlebars
-
-# Custom output directory
-bunx ui8kit-generate --target liquid --out-dir ./dist/shopify
-
-# From another directory
-bunx ui8kit-generate --cwd ./my-app --target react
-```
-
-**Typical output:**
-```
-Generation completed.
-Engine: react
-Output: /path/to/my-app/dist/react
-Files: 24
-```
-
-**When to use each engine:**
-- **react** — Keep components as React/JSX for a JS runtime
-- **liquid** — Shopify, Jekyll, Eleventy
-- **handlebars** — Express.js, static sites
-- **twig** — Symfony, PHP
-- **latte** — Nette Framework
-
----
-
-### `generate-templates` — Generate from Custom Paths
-
-A lower-level command that lets you specify source and output directories directly, without relying on `ui8kit.config`. Useful for one-off conversions or custom project layouts.
-
-**What it does:**
-- Scans `--source` directories for `.tsx` files
-- Transforms to the chosen engine
-- Writes to `--output`
-
-**Examples:**
-
-```bash
-# Default: ./src/components → ./dist/templates (liquid)
-bunx generate-templates
-
-# Custom source and output
-bunx generate-templates --source ./src/blocks,./src/layouts --output ./dist/tpl
-
-# Handlebars engine
-bunx generate-templates --engine handlebars -s ./src/components -o ./dist/hbs
-
-# Verbose logging
-bunx generate-templates --verbose
-```
-
-**Options:**
-| Option | Short | Default | Description |
-|--------|-------|---------|-------------|
-| `--engine` | `-e` | liquid | Target engine |
-| `--source` | `-s` | ./src/components | Comma-separated source dirs |
-| `--output` | `-o` | ./dist/templates | Output directory |
-| `--verbose` | `-v` | false | Enable verbose logging |
-
----
-
-## Typical Workflow for DSL Development
-
-1. **Validate config and DSL** (SDK):
-   ```bash
-   bunx ui8kit-validate
-   ```
-
-2. **Lint DSL** (optional, from `@ui8kit/lint`):
-   ```bash
-   bunx ui8kit-lint-dsl src
-   ```
-
-3. **Generate templates**:
-   ```bash
-   bunx ui8kit-generate --target react
-   ```
-
-4. **Use output** — Generated files go to `dist/<target>/` (or your `outDir`). For React, you can import them directly. For Liquid/Handlebars, copy into your CMS or static site.
-
----
-
-## How DSL Translates to Templates
-
-| DSL Component | React | Liquid | Handlebars |
-|---------------|-------|--------|------------|
-| `<If condition={x}>` | `{x ? <>...</> : null}` | `{% if x %}...{% endif %}` | `{{#if x}}...{{/if}}` |
-| `<Loop collection={items}>` | `{items.map(...)}` | `{% for item in items %}...{% endfor %}` | `{{#each items}}...{{/each}}` |
-| `<Var name="title" value={x} />` | `{x ?? "default"}` | `{{ x \| default: "default" }}` | `{{ x }}` |
-| `<Include name="Header" />` | `<Header />` | `{% render 'Header' %}` | `{{> Header }}` |
-
-Using DSL ensures your components generate clean, engine-specific output.
-
----
+Template conversion engines (Liquid/Twig/Handlebars/Latte runtime flow) are not part of this runtime path.
 
 ## Programmatic Usage
 
-```typescript
-import { buildProject } from "@ui8kit/generator";
-import { loadAppConfig } from "@ui8kit/sdk/config";
+```ts
+import { generate } from '@ui8kit/generator';
 
-const config = await loadAppConfig(process.cwd());
-const result = await buildProject(config, process.cwd());
+const result = await generate({
+  app: { name: 'Site', lang: 'en' },
+  mappings: {
+    ui8kitMap: './src/lib/ui8kit.map.json',
+    shadcnMap: './src/lib/shadcn.map.json',
+  },
+  css: {
+    routes: ['/', '/blog'],
+    outputDir: './dist/html/css',
+    pureCss: true,
+    outputFiles: {
+      applyCss: 'tailwind.apply.css',
+      pureCss: 'ui8kit.local.css',
+      variantsCss: 'variants.apply.css',
+    },
+  },
+  html: {
+    viewsDir: './dist/react/views',
+    viewsPagesSubdir: 'pages',
+    routes: {
+      '/': { title: 'Home' },
+      '/blog': { title: 'Blog' },
+    },
+    outputDir: './dist/html',
+    mode: 'tailwind',
+    cssHref: '/css/styles.css',
+  },
+  classLog: {
+    enabled: true,
+    outputDir: './dist/maps',
+    baseName: 'ui8kit',
+  },
+});
 
-if (!result.ok) {
-  console.error(result.errors);
-} else {
-  console.log(`Generated ${result.generated} files to ${result.outputDir}`);
-}
+console.log(result.success, result.generated);
 ```
 
----
+## HTML Modes
 
-## Troubleshooting
+### `tailwind`
+- keeps existing `class` attributes
+- optional `stripDataClassInTailwind` removes `data-class` attributes
 
-| Issue | Solution |
-|-------|----------|
-| No source directories | Ensure `blocksDir`, `layoutsDir`, `partialsDir` are set in `ui8kit.config` and exist. |
-| DSL artifacts in output | Run `ui8kit-lint-dsl src` and replace raw JS with `<Loop>`, `<If>`, `<Var>`. |
-| Config not found | Run from project root or use `--cwd`. Ensure `ui8kit.config.ts` or `ui8kit.config.json` exists. |
+### `semantic`
+- removes raw utility classes
+- converts `data-class="x"` into `class="x"`
 
----
+### `inline`
+- same transform as `semantic`
+- inlines generated CSS into `<style>` in `<head>`
 
-## Related Packages
+## Notes
 
-| Package | Commands | Purpose |
-|---------|----------|---------|
-| `@ui8kit/generator` | `ui8kit-generate`, `generate-templates` | Template generation |
-| `@ui8kit/sdk` | `ui8kit-validate`, `ui8kit-inspect` | Config validation |
-| `@ui8kit/lint` | `ui8kit-lint-dsl` | DSL flow validation |
+- `css.entryPath` was removed from config.
+- `generate-templates` CLI is removed from runtime package flow.
+- `buildProject()` is kept only as compatibility stub and returns an explicit error message.

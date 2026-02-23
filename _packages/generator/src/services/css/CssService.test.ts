@@ -47,14 +47,16 @@ function createMockFs() {
 }
 
 // Mock context factory
-function createMockContext(config: Partial<GeneratorConfig> = {}): IServiceContext {
+function createMockContext(
+  config: Partial<GeneratorConfig> = {},
+  converter: ReturnType<typeof createMockHtmlConverter> = createMockHtmlConverter()
+): IServiceContext {
   const fullConfig: GeneratorConfig = {
     app: { name: 'Test', lang: 'en' },
     mappings: {
       ui8kitMap: './src/lib/ui8kit.map.json',
     },
     css: {
-      entryPath: './src/main.tsx',
       routes: ['/'],
       outputDir: './dist/css',
       pureCss: true,
@@ -80,7 +82,7 @@ function createMockContext(config: Partial<GeneratorConfig> = {}): IServiceConte
     },
     registry: {
       has: vi.fn().mockReturnValue(false),
-      resolve: vi.fn(),
+      resolve: vi.fn().mockReturnValue(converter),
       register: vi.fn(),
       getServiceNames: vi.fn().mockReturnValue([]),
       getInitializationOrder: vi.fn().mockReturnValue([]),
@@ -94,6 +96,7 @@ describe('CssService', () => {
   let service: CssService;
   let mockFs: ReturnType<typeof createMockFs>;
   let mockHtmlConverter: ReturnType<typeof createMockHtmlConverter>;
+  let context: IServiceContext;
   
   beforeEach(() => {
     mockFs = createMockFs();
@@ -108,8 +111,10 @@ describe('CssService', () => {
         writeFile: mockFs.writeFile,
         mkdir: mockFs.mkdir,
       },
-      htmlConverter: mockHtmlConverter,
     });
+
+    context = createMockContext({}, mockHtmlConverter);
+    context.registry.has = vi.fn().mockReturnValue(true);
   });
   
   describe('metadata', () => {
@@ -121,23 +126,24 @@ describe('CssService', () => {
       expect(service.version).toMatch(/^\d+\.\d+\.\d+$/);
     });
     
-    it('should depend on view service', () => {
-      expect(service.dependencies).toContain('view');
+    it('should depend on html-converter service', () => {
+      expect(service.dependencies).toContain('html-converter');
     });
   });
   
   describe('initialize', () => {
     it('should initialize without error', async () => {
       const context = createMockContext();
+      context.registry.has = vi.fn().mockReturnValue(true);
       
       await expect(service.initialize(context)).resolves.not.toThrow();
     });
     
     it('should use HtmlConverterService from registry if available', async () => {
       const registryConverter = createMockHtmlConverter();
-      const context = createMockContext();
-      (context.registry as any).has = vi.fn().mockReturnValue(true);
-      (context.registry as any).resolve = vi.fn().mockReturnValue(registryConverter);
+      const context = createMockContext({}, registryConverter);
+      context.registry.has = vi.fn().mockReturnValue(true);
+      context.registry.resolve = vi.fn().mockReturnValue(registryConverter);
       
       await service.initialize(context);
       
@@ -156,7 +162,7 @@ describe('CssService', () => {
   
   describe('execute', () => {
     beforeEach(async () => {
-      await service.initialize(createMockContext());
+      await service.initialize(context);
     });
     
     it('should create output directory', async () => {

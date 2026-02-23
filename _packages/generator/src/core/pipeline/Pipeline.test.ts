@@ -1,6 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Pipeline, PipelineContext } from './Pipeline';
-import type { IPipelineStage, StageResult } from '../interfaces';
+import type { GeneratorConfig, IPipelineStage, StageResult } from '../interfaces';
+
+const TEST_CONFIG: GeneratorConfig = {
+  app: { name: 'test-app', lang: 'en' },
+  css: {
+    routes: ['/'],
+    outputDir: './dist/css',
+  },
+  html: {
+    viewsDir: './views',
+    routes: { '/': { title: 'Home' } },
+    outputDir: './dist/html',
+  },
+};
 
 // Mock stage factory
 function createMockStage(
@@ -44,7 +57,7 @@ function createMockContext(): PipelineContext {
   const results = new Map<string, StageResult>();
   
   return {
-    config: {},
+    config: TEST_CONFIG,
     logger: {
       debug: vi.fn(),
       info: vi.fn(),

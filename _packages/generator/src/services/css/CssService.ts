@@ -2,6 +2,8 @@ import type { IService, IServiceContext, RouteConfig } from '../../core/interfac
 import { HtmlConverterService } from '../html-converter';
 import { join } from 'node:path';
 import { emitVariantsApplyCss } from '../../scripts/emit-variants-apply.js';
+import { createNodeFileSystem } from '../../core/filesystem';
+import { routeToViewFileName } from '../../core/utils/routes';
 
 /**
  * CSS output file names configuration
@@ -29,6 +31,7 @@ const DEFAULT_CSS_OUTPUT_FILES: Required<CssOutputFileNames> = {
  */
 export interface CssServiceInput {
   viewsDir: string;
+  viewsPagesSubdir?: string;
   outputDir: string;
   routes: Record<string, RouteConfig>;
   pureCss?: boolean;
@@ -65,8 +68,6 @@ export interface CssFileSystem {
  */
 export interface CssServiceOptions {
   fileSystem?: CssFileSystem;
-  /** Custom HtmlConverterService instance (for testing) */
-  htmlConverter?: HtmlConverterService;
 }
 
 /**
@@ -81,41 +82,23 @@ export interface CssServiceOptions {
 export class CssService implements IService<CssServiceInput, CssServiceOutput> {
   readonly name = 'css';
   readonly version = '1.0.0';
-  readonly dependencies: readonly string[] = [];
+  readonly dependencies: readonly string[] = ['html-converter'];
   
   private context!: IServiceContext;
   private fs: CssFileSystem;
-  private htmlConverter: HtmlConverterService;
-  private converterInitialized = false;
+  private htmlConverter!: HtmlConverterService;
   
   constructor(options: CssServiceOptions = {}) {
-    this.fs = options.fileSystem ?? this.createDefaultFileSystem();
-    this.htmlConverter = options.htmlConverter ?? new HtmlConverterService();
+    this.fs = options.fileSystem ?? createNodeFileSystem();
   }
   
   async initialize(context: IServiceContext): Promise<void> {
     this.context = context;
-    
-    // Try to get HtmlConverterService from registry first
-    try {
-      const registry = (context as any).registry;
-      if (registry?.has('html-converter')) {
-        this.htmlConverter = registry.resolve('html-converter');
-        this.converterInitialized = true;
-      }
-    } catch {
-      // Use our own instance
-    }
-    
-    // Initialize our own converter if not from registry
-    if (!this.converterInitialized) {
-      await this.htmlConverter.initialize(context);
-      this.converterInitialized = true;
-    }
+    this.htmlConverter = context.registry.resolve<HtmlConverterService>('html-converter');
   }
   
   async execute(input: CssServiceInput): Promise<CssServiceOutput> {
-    const { viewsDir, outputDir, routes, pureCss = false, outputFiles = {} } = input;
+    const { viewsDir, viewsPagesSubdir = 'pages', outputDir, routes, pureCss = false, outputFiles = {} } = input;
     
     // Merge with defaults
     const cssFileNames: Required<CssOutputFileNames> = { ...DEFAULT_CSS_OUTPUT_FILES, ...outputFiles };
@@ -129,7 +112,7 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
 
     // Emit variants.apply.css first
     const variantsCss = await emitVariantsApplyCss({
-      variantsDir: (this.context.config as any)?.elements?.variantsDir ?? './src/variants',
+      variantsDir: this.context.config.elements?.variantsDir ?? './src/variants',
     });
     const variantsPath = join(outputDir, cssFileNames.variantsCss);
     await this.fs.writeFile(variantsPath, variantsCss);
@@ -143,8 +126,8 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
     
     // Process page views for each route
     for (const routePath of Object.keys(routes)) {
-      const viewFileName = this.routeToViewFileName(routePath);
-      const viewPath = join(viewsDir, 'pages', viewFileName);
+      const viewFileName = routeToViewFileName(routePath);
+      const viewPath = join(viewsDir, viewsPagesSubdir, viewFileName);
       
       try {
         const result = await this.htmlConverter.execute({
@@ -205,20 +188,7 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
   }
   
   async dispose(): Promise<void> {
-    // Dispose our own converter if we created it
-    if (this.converterInitialized && this.htmlConverter) {
-      await this.htmlConverter.dispose();
-    }
-  }
-  
-  /**
-   * Convert route path to view file name
-   */
-  private routeToViewFileName(routePath: string): string {
-    if (routePath === '/') {
-      return 'index.html';
-    }
-    return `${routePath.slice(1)}.html`;
+    // No cleanup required
   }
   
   /**
@@ -238,23 +208,4 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
     );
   }
   
-  /**
-   * Create default file system using Node.js fs
-   */
-  private createDefaultFileSystem(): CssFileSystem {
-    return {
-      readFile: async (path: string) => {
-        const { readFile } = await import('node:fs/promises');
-        return readFile(path, 'utf-8');
-      },
-      writeFile: async (path: string, content: string) => {
-        const { writeFile } = await import('node:fs/promises');
-        await writeFile(path, content, 'utf-8');
-      },
-      mkdir: async (path: string) => {
-        const { mkdir } = await import('node:fs/promises');
-        await mkdir(path, { recursive: true });
-      },
-    };
-  }
 }

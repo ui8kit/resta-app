@@ -1,6 +1,10 @@
-# Template Plugins Guide
+# Template Plugins Guide (Legacy Track)
 
-This guide explains how to use and extend the template plugin system for generating templates from React components.
+This guide explains the template plugin system used for template-engine generation (Liquid/Twig/Handlebars/Latte).
+
+Important:
+- This is a separate/legacy track and is **not** part of the main HTML/CSS runtime pipeline.
+- Main runtime focuses on static page generation via `generate()` (`CssStage -> HtmlStage`).
 
 ## Built-in Plugins
 
@@ -14,30 +18,18 @@ The generator includes 5 official plugins for popular template engines:
 | `twig` | Twig | PHP | `.twig` | Symfony, PHP applications |
 | `latte` | Latte | PHP | `.latte` | Nette Framework |
 
-## Usage
+## Usage (Dedicated Template Pipeline)
 
 ### Basic Usage
 
 ```typescript
-import { TemplateService } from '@ui8kit/generator';
+import { PluginRegistry, registerBuiltInPlugins } from '@ui8kit/generator/plugins';
 
-const service = new TemplateService();
+const registry = new PluginRegistry();
+registerBuiltInPlugins(registry);
 
-await service.initialize({
-  appRoot: process.cwd(),
-  outputDir: './dist/templates',
-  logger: console,
-  config: {},
-});
-
-const result = await service.execute({
-  sourceDirs: ['../../apps/engine/src/blocks'],
-  outputDir: './dist/templates',
-  engine: 'react', // or 'liquid', 'handlebars', 'twig', 'latte'
-  include: ['**/*.tsx'],
-  exclude: ['**/*.test.tsx', '**/index.ts'],
-  verbose: true,
-});
+const plugin = registry.get('liquid');
+// plugin.initialize(...) and plugin.transform(...)
 ```
 
 ### Generating for Multiple Engines
@@ -352,7 +344,7 @@ To create a custom template plugin:
 1. Extend `BasePlugin`:
 
 ```typescript
-import { BasePlugin } from '@ui8kit/generator';
+import { BasePlugin } from '@ui8kit/generator/plugins';
 
 export class MyCustomPlugin extends BasePlugin {
   readonly name = 'my-custom';
@@ -384,7 +376,7 @@ export class MyCustomPlugin extends BasePlugin {
 2. Register the plugin:
 
 ```typescript
-import { PluginRegistry } from '@ui8kit/generator';
+import { PluginRegistry } from '@ui8kit/generator/plugins';
 
 const registry = new PluginRegistry();
 registry.register({

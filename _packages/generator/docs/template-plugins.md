@@ -2,6 +2,11 @@
 
 This document describes the template plugin architecture for converting React components to various template formats.
 
+> Status:
+> - This subsystem belongs to the template-engine track.
+> - It is not part of the main static HTML/CSS runtime pipeline (`generate()`).
+> - For plugin APIs, prefer importing from `@ui8kit/generator/plugins`.
+
 ## Overview
 
 The template plugin system allows you to generate templates for different template engines from React components. Currently supported engines:
@@ -20,7 +25,7 @@ import {
   PluginRegistry,
   LiquidPlugin,
   registerBuiltInPlugins,
-} from '@ui8kit/generator';
+} from '@ui8kit/generator/plugins';
 
 // Create registry and register all built-in plugins
 const registry = new PluginRegistry();
@@ -216,7 +221,7 @@ Standard filters are automatically mapped to engine-specific names:
 To create a plugin for a different template engine:
 
 ```typescript
-import { BasePlugin, type TemplatePluginFeatures } from '@ui8kit/generator';
+import { BasePlugin, type TemplatePluginFeatures } from '@ui8kit/generator/plugins';
 
 export class MyTemplatePlugin extends BasePlugin {
   readonly name = 'my-template';
@@ -279,7 +284,7 @@ export class MyTemplatePlugin extends BasePlugin {
 Register your plugin:
 
 ```typescript
-import { defaultRegistry } from '@ui8kit/generator';
+import { defaultRegistry } from '@ui8kit/generator/plugins';
 
 defaultRegistry.register(
   {

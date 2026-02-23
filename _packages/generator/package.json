@@ -1,7 +1,7 @@
 {
   "name": "@ui8kit/generator",
   "version": "0.1.1",
-  "description": "Static site generator for UI8Kit - converts React to Liquid templates",
+  "description": "Static HTML/CSS generator for UI8Kit with orchestrator pipeline",
   "type": "module",
   "main": "./src/index.ts",
   "module": "./src/index.ts",
@@ -32,7 +32,6 @@
     "GUIDE.md"
   ],
   "bin": {
-    "generate-templates": "./src/cli/generate-templates.ts",
     "ui8kit-generate": "./src/cli/generate.ts"
   },
   "scripts": {
@@ -45,8 +44,7 @@
     "test:coverage": "vitest run --coverage",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist coverage",
-    "generate:templates": "bun run src/cli/generate-templates.ts"
+    "clean": "rm -rf dist coverage"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

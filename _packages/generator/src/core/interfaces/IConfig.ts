@@ -1,3 +1,5 @@
+import type { UncssStepConfig } from '../../steps/postprocess-uncss';
+
 /**
  * Generator configuration interface.
  * 
@@ -24,7 +26,6 @@ export interface GeneratorConfig {
    * CSS generation configuration
    */
   css: {
-    entryPath: string;
     routes: string[];
     outputDir: string;
     pureCss?: boolean;
@@ -48,9 +49,11 @@ export interface GeneratorConfig {
    */
   html: {
     viewsDir: string;
+    viewsPagesSubdir?: string;
     routes: Record<string, RouteConfig>;
     outputDir: string;
     mode?: 'tailwind' | 'semantic' | 'inline';
+    cssHref?: string;
     partials?: {
       sourceDir: string;
       outputDir?: string;
@@ -62,15 +65,7 @@ export interface GeneratorConfig {
   /**
    * UnCSS configuration
    */
-  uncss?: {
-    enabled?: boolean;
-    htmlFiles?: string[];
-    cssFile?: string;
-    outputDir?: string;
-    ignore?: string[];
-    media?: boolean;
-    timeout?: number;
-  };
+  uncss?: UncssStepConfig;
   
   /**
    * Variant elements generation
@@ -80,6 +75,15 @@ export interface GeneratorConfig {
     variantsDir?: string;
     outputDir?: string;
     componentsImportPath?: string;
+  };
+
+  classLog?: {
+    enabled?: boolean;
+    outputDir?: string;
+    baseName?: string;
+    uikitMapPath?: string;
+    includeResponsive?: boolean;
+    includeStates?: boolean;
   };
   
   /**
@@ -128,15 +132,16 @@ export const DEFAULT_CONFIG: GeneratorConfig = {
     lang: 'en',
   },
   css: {
-    entryPath: './src/main.tsx',
     routes: ['/'],
     outputDir: './dist/css',
     pureCss: false,
   },
   html: {
     viewsDir: './views',
+    viewsPagesSubdir: 'pages',
     routes: { '/': { title: 'Home' } },
     outputDir: './dist/html',
     mode: 'tailwind',
+    cssHref: '/css/styles.css',
   },
 };

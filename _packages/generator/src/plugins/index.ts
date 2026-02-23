@@ -11,13 +11,7 @@ export {
   registerTemplatePlugin,
   getTemplatePlugin,
   // Built-in Plugins
-  LiquidPlugin,
-  HandlebarsPlugin,
-  TwigPlugin,
-  LattePlugin,
   ReactPlugin,
-  builtInPlugins,
-  registerBuiltInPlugins,
 } from './template';
 
 export type {

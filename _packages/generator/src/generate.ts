@@ -16,7 +16,6 @@ import { join } from 'node:path';
 
 import { Logger } from './core/logger';
 import type { GeneratorConfig, RouteConfig } from './core/interfaces';
-import { ClassLogService } from './services/class-log';
 import { emitVariantElements } from './scripts/emit-variant-elements.js';
 import { runGenerateSitePipeline } from './pipelines/generate-site';
 import { runUncssPostprocess, type UncssStepConfig } from './steps/postprocess-uncss';
@@ -26,14 +25,6 @@ export type { GeneratorConfig, RouteConfig };
 
 export interface GenerateConfig extends Omit<GeneratorConfig, 'template' | 'assets' | 'clientScript'> {
   uncss?: UncssStepConfig;
-  classLog?: {
-    enabled?: boolean;
-    outputDir?: string;
-    baseName?: string;
-    uikitMapPath?: string;
-    includeResponsive?: boolean;
-    includeStates?: boolean;
-  };
   elements?: {
     enabled?: boolean;
     variantsDir?: string;
@@ -91,11 +82,6 @@ export async function generate(config: GenerateConfig): Promise<GenerateResult> 
       }
     }
 
-    if (config.classLog?.enabled) {
-      logger.info('📊 Generating class log...');
-      await generateClassLog(config, logger);
-    }
-
     if (config.uncss?.enabled) {
       logger.info('🔧 Running UnCSS optimization...');
       await runUncssPostprocess(config.uncss, logger);
@@ -128,53 +114,6 @@ export async function generate(config: GenerateConfig): Promise<GenerateResult> 
       generated,
     };
   }
-}
-
-async function generateClassLog(config: GenerateConfig, logger: Logger): Promise<void> {
-  const classLogService = new ClassLogService();
-  await classLogService.initialize({
-    config: config as any,
-    logger,
-    eventBus: {
-      emit: () => {},
-      on: () => () => {},
-      once: () => () => {},
-      off: () => {},
-      removeAllListeners: () => {},
-      listenerCount: () => 0,
-    } as any,
-    registry: {
-      has: () => false,
-      resolve: () => {
-        throw new Error('Not implemented');
-      },
-      register: () => {},
-      getServiceNames: () => [],
-      getInitializationOrder: () => [],
-      initializeAll: async () => {},
-      disposeAll: async () => {},
-    } as any,
-  });
-
-  const {
-    outputDir = './dist/maps',
-    baseName = 'ui8kit',
-    uikitMapPath,
-    includeResponsive = true,
-    includeStates = true,
-  } = config.classLog ?? {};
-
-  const result = await classLogService.execute({
-    viewsDir: config.html.viewsDir,
-    outputDir,
-    baseName,
-    uikitMapPath,
-    includeResponsive,
-    includeStates,
-  });
-
-  logger.info(`  📊 Found ${result.totalClasses} unique classes (${result.validClasses} valid)`);
-  await classLogService.dispose();
 }
 
 async function generateVariantElements(

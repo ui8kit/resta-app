@@ -1,6 +1,7 @@
 import type { IService, IServiceContext } from '../../core/interfaces';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createNodeFileSystem } from '../../core/filesystem';
 
 /**
  * Input for HtmlConverterService.execute()
@@ -75,14 +76,14 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
   private shadcnMap: Map<string, string> = new Map();
   
   constructor(options: HtmlConverterServiceOptions = {}) {
-    this.fs = options.fileSystem ?? this.createDefaultFileSystem();
+    this.fs = options.fileSystem ?? createNodeFileSystem();
   }
   
   async initialize(context: IServiceContext): Promise<void> {
     this.context = context;
     
     // Load maps from config
-    const mappings = (context.config as any)?.mappings;
+    const mappings = context.config.mappings;
     
     if (mappings?.ui8kitMap) {
       await this.loadUi8kitMap(mappings.ui8kitMap);
@@ -497,15 +498,4 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
     return deduplicatedRules.sort();
   }
   
-  /**
-   * Create default file system
-   */
-  private createDefaultFileSystem(): HtmlConverterFileSystem {
-    return {
-      readFile: async (path: string) => {
-        const { readFile } = await import('node:fs/promises');
-        return readFile(path, 'utf-8');
-      },
-    };
-  }
 }
