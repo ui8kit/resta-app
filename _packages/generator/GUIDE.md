@@ -1,49 +1,49 @@
-# @ui8kit/generator — Полный практический гайд
+# @ui8kit/generator — Comprehensive Practical Guide
 
-Гайд описывает актуальный runtime генератора после перехода на архитектуру `Orchestrator + Stage + Service` без Liquid-пайплайна.
+This guide describes the current generator's runtime following the transition to an `Orchestrator + Stage + Service` architecture, without the Liquid pipeline.
 
-## 1) Что делает генератор
+## 1) What the Generator Does
 
-`@ui8kit/generator` решает задачу статической сборки:
+`@ui8kit/generator` handles static build tasks:
 
-- вход: заранее подготовленные HTML view-файлы;
-- выход: статические HTML-страницы + CSS-артефакты;
-- основной pipeline: `CssStage -> HtmlStage` (+ опционально `ClassLogStage`).
+- Input: Pre-prepared HTML view files;
+- Output: Static HTML pages + CSS artifacts;
+- Core pipeline: `CssStage -> HtmlStage` (+ optionally `ClassLogStage`).
 
-Важно:
+Important Notes:
 
-- `dist/html-views` больше не является обязательной частью пайплайна;
-- источник страниц — `dist/html/pages` (или любой другой каталог, заданный через `html.viewsDir` + `html.viewsPagesSubdir`);
-- генерация variant elements (`generateVariantElements`) удалена.
+- `dist/html-views` is no longer a mandatory part of the pipeline;
+- The source for pages is `dist/html/pages` (or any other directory specified via `html.viewsDir` + `html.viewsPagesSubdir`);
+- Generation of variant elements (`generateVariantElements`) has been removed.
 
-## 2) Ключевые принципы настройки
+## 2) Key Configuration Principles
 
-### 2.1 Один источник правды для маршрутов
+### 2.1 Single Source of Truth for Routes
 
-Используйте один объект маршрутов для `css.routes` и `html.routes`, чтобы:
+Use a single route object for both `css.routes` and `html.routes` to ensure:
 
-- CSS собирался только для нужных страниц;
-- HTML и CSS оставались синхронизированы;
-- не появлялись лишние/пустые страницы.
+- CSS is generated only for necessary pages;
+- HTML and CSS remain synchronized;
+- Avoidance of redundant/empty pages.
 
-### 2.2 Предсказуемые входы/выходы
+### 2.2 Predictable Inputs/Outputs
 
-- `html.viewsDir` + `html.viewsPagesSubdir` указывают, где лежат source views;
-- `html.outputDir` указывает, куда писать финальные страницы;
-- `css.outputDir` указывает, куда писать промежуточные CSS-артефакты (`tailwind.apply.css`, `ui8kit.local.css`, `variants.apply.css`).
+- `html.viewsDir` + `html.viewsPagesSubdir` specify the location of source views;
+- `html.outputDir` indicates where to write the final pages;
+- `css.outputDir` indicates where to write intermediate CSS artifacts (`tailwind.apply.css`, `ui8kit.local.css`, `variants.apply.css`).
 
-### 2.3 Режимы HTML зависят от сценария публикации
+### 2.3 HTML Modes Depend on Publication Scenario
 
-- `tailwind`: сохраняет классы, подходит для внешнего `styles.css`;
-- `semantic`: заменяет utility-классы на semantic-классы из `data-class`;
-- `inline`: как `semantic`, но встраивает CSS прямо в страницу (удобно для email/изолированных поставок).
+- `tailwind`: Retains classes, suitable for external `styles.css`;
+- `semantic`: Replaces utility classes with semantic classes from `data-class`;
+- `inline`: Similar to `semantic`, but embeds CSS directly into the page (convenient for email/isolated deliveries).
 
-### 2.4 Postprocess — опционален
+### 2.4 Post-processing is Optional
 
-- `uncss` включается только при явной конфигурации;
-- class log (`classLog.enabled`) включается отдельно и не обязателен для сборки.
+- `uncss` is enabled only with explicit configuration;
+- Class logging (`classLog.enabled`) is enabled separately and is not mandatory for the build.
 
-## 3) Конфиг `generate()` по блокам
+## 3) `generate()` Configuration by Blocks
 
 ```ts
 import { generate } from '@ui8kit/generator';
@@ -90,7 +90,7 @@ const result = await generate({
     baseName: 'ui8kit',
   },
 
-  // Опционально:
+  // Optional:
   // uncss: {
   //   enabled: true,
   //   htmlFiles: ['./dist/html/index.html'],
@@ -103,59 +103,59 @@ const result = await generate({
 console.log(result.success, result.generated, result.errors);
 ```
 
-## 4) Сценарии запуска (из корня проекта)
+## 4) Execution Scenarios (from Project Root)
 
-### 4.1 Полный цикл подготовки `dist/react`
+### 4.1 Full `dist/react` Preparation Cycle
 
 ```bash
 bun run dist:app
 ```
 
-Что делает:
+What it does:
 
-- линт/валидации;
-- генерация `dist/react`;
-- finalize шаг;
-- проверка типов в `dist/react`.
+- Linting/validations;
+- Generation of `dist/react`;
+- Finalization step;
+- Type checking in `dist/react`.
 
-### 4.2 Генерация статического HTML (из React-артефактов)
+### 4.2 Static HTML Generation (from React Artifacts)
 
 ```bash
 bun run generate:html
 ```
 
-Ожидаемый результат:
+Expected result:
 
-- страницы в `dist/html/.../index.html`;
-- вложенные динамические маршруты в виде подпапок (`/menu/item` -> `dist/html/menu/item/index.html`);
-- source views в `dist/html/pages`.
+- Pages in `dist/html/.../index.html`;
+- Nested dynamic routes in subfolders (`/menu/item` -> `dist/html/menu/item/index.html`);
+- Source views in `dist/html/pages`.
 
-### 4.3 Генерация финального CSS и UnCSS-оптимизации
+### 4.3 Final CSS Generation and UnCSS Optimization
 
 ```bash
 bun run generate:styles
 ```
 
-Ожидаемый результат:
+Expected result:
 
-- `dist/html/css/styles.css` — полный сгенерированный CSS;
-- `dist/html/css/unused.css` — оптимизированный CSS после UnCSS (если шаг успешен).
+- `dist/html/css/styles.css` — full generated CSS;
+- `dist/html/css/unused.css` — optimized CSS after UnCSS (if the step is successful).
 
-### 4.4 Полная статическая генерация
+### 4.4 Full Static Generation
 
 ```bash
 bun run generate:static
 ```
 
-Эквивалент:
+Equivalent to:
 
 ```bash
 bun run generate:html && bun run generate:styles
 ```
 
-## 5) Сценарии запуска (из пакета генератора)
+## 5) Execution Scenarios (from Generator Package)
 
-Используйте для разработки самого генератора:
+Use these for developing the generator itself:
 
 ```bash
 cd _packages/generator
@@ -165,74 +165,74 @@ bun run test:watch
 bun run test:coverage
 ```
 
-## 6) Проверки качества и стабильности
+## 6) Quality and Stability Checks
 
-### 6.1 Минимальный чеклист после изменений в генераторе
+### 6.1 Minimum Checklist After Generator Changes
 
-1. `bun run typecheck` в `_packages/generator`.
-2. `bun run test` в `_packages/generator`.
-3. `bun run generate:static` в корне проекта.
-4. Проверка целевых файлов:
+1. `bun run typecheck` in `_packages/generator`.
+2. `bun run test` in `_packages/generator`.
+3. `bun run generate:static` in the project root.
+4. Check target files:
    - `dist/html/index.html`
    - `dist/html/menu/index.html`
    - `dist/html/menu/grill-salmon-steak/index.html`
    - `dist/html/css/styles.css`
-   - `dist/html/css/unused.css` (если UnCSS включён/успешен)
+   - `dist/html/css/unused.css` (if UnCSS is enabled/successful)
 
-### 6.2 Что проверять визуально/логически
+### 6.2 What to Verify Visually/Logically
 
-- у страниц есть контент (не пустой `<body>`);
-- ссылка на CSS соответствует `html.cssHref`;
-- нет дублирующих путей между source views и final output;
-- одиночные маршруты пишутся в подпапки через `index.html`.
+- Pages contain content (not an empty `<body>`);
+- CSS link corresponds to `html.cssHref`;
+- No duplicate paths between source views and final output;
+- Single item routes are written to subfolders via `index.html`.
 
-## 7) Тестовая стратегия (на уровне принципов)
+## 7) Testing Strategy (Principles)
 
-### Unit (быстрые и изолированные)
+### Unit Tests (Fast and Isolated)
 
-- `CssService`: генерация CSS-артефактов, устойчивость к отсутствию `src/variants`;
-- `HtmlService`: корректная обработка `tailwind/semantic/inline`;
-- `HtmlConverterService`: детерминированные селекторы, стабильное преобразование.
+- `CssService`: CSS artifact generation, resilience to missing `src/variants`;
+- `HtmlService`: Correct handling of `tailwind`/`semantic`/`inline` modes;
+- `HtmlConverterService`: Deterministic selectors, stable conversion.
 
-### Integration (сквозные внутри пакета)
+### Integration Tests (End-to-End within the Package)
 
-- проверка полного `generate()` на наборе маршрутов;
-- контроль структуры выходных файлов;
-- проверка, что ошибки stage корректно поднимаются в `GenerateResult.errors`.
+- Verification of full `generate()` on a set of routes;
+- Control of output file structure;
+- Verification that stage errors are correctly propagated to `GenerateResult.errors`.
 
-### E2E (уровень приложения)
+### E2E Tests (Application Level)
 
-- `bun run generate:static` в root;
-- smoke-проверка критичных страниц и CSS-артефактов.
+- `bun run generate:static` in the root;
+- Smoke testing of critical pages and CSS artifacts.
 
-## 8) Частые проблемы и диагностика
+## 8) Common Problems and Diagnostics
 
-### Проблема: пустая страница в `dist/html/.../index.html`
+### Problem: Empty page in `dist/html/.../index.html`
 
-Проверьте:
+Verify:
 
-- существует ли соответствующий source view в `dist/html/pages`;
-- присутствует ли маршрут в `html.routes`;
-- совпадают ли ключи `css.routes` и `html.routes`.
+- Corresponding source view exists in `dist/html/pages`;
+- Route is present in `html.routes`;
+- Keys in `css.routes` and `html.routes` match.
 
-### Проблема: слишком большой `styles.css`
+### Problem: `styles.css` is too large
 
-Проверьте:
+Verify:
 
-- что `generate:styles` сканирует `dist/html` (актуальный источник классов);
-- что выполнен шаг UnCSS и создан `unused.css`;
-- что в маршруты не попадают лишние страницы.
+- `generate:styles` scans `dist/html` (the actual source of classes);
+- The UnCSS step has been executed and `unused.css` is created;
+- No unnecessary pages are included in the routes.
 
-### Проблема: падение на UnCSS
+### Problem: UnCSS failure
 
-Проверьте:
+Verify:
 
-- валидность путей `uncss.htmlFiles` и `uncss.cssFile`;
-- что CSS-файл уже существует к моменту запуска postprocess.
+- Validity of `uncss.htmlFiles` and `uncss.cssFile` paths;
+- The CSS file exists when the post-processing step starts.
 
-## 9) Актуальные ограничения
+## 9) Current Limitations
 
-- `css.entryPath` удалён из конфигурации генератора;
-- `generate-templates` CLI удалён из runtime-потока;
-- `buildProject()` оставлен как compatibility stub и возвращает явную ошибку;
-- legacy template-engine track (Liquid/Twig/Handlebars/Latte) не участвует в основном static runtime.
+- `css.entryPath` has been removed from the generator configuration;
+- `generate-templates` CLI has been removed from the runtime flow;
+- `buildProject()` is retained only as a compatibility stub and returns an explicit error message;
+- The legacy template-engine track (Liquid/Twig/Handlebars/Latte) is not part of the main static runtime.
