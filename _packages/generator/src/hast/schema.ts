@@ -165,6 +165,7 @@ export const GenPropDefinitionSchema = z.object({
   required: z.boolean(),
   defaultValue: z.unknown().optional(),
   description: z.string().optional(),
+  rest: z.boolean().optional(),
 });
 
 /**

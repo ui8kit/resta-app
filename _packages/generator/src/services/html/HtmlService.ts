@@ -38,55 +38,36 @@ export interface HtmlFileSystem {
 }
 
 /**
- * Liquid engine interface
- */
-export interface LiquidEngine {
-  renderFile(template: string, data: Record<string, unknown>): Promise<string>;
-  setRoot(root: string): void;
-}
-
-/**
  * HtmlService options
  */
 export interface HtmlServiceOptions {
   fileSystem?: HtmlFileSystem;
-  liquidEngine?: LiquidEngine;
 }
 
 /**
- * HtmlService - Generates final HTML pages from Liquid views.
- * 
+ * HtmlService - Generates final HTML pages from prepared view files.
+ *
  * Responsibilities:
- * - Render Liquid views through layout templates
- * - Apply route metadata (title, SEO)
- * - Process HTML based on mode (tailwind/semantic/inline)
- * - Generate final HTML files
+ * - Read route views from views/pages/*.html
+ * - Wrap view content into minimal HTML document
+ * - Process output mode (tailwind/semantic/inline)
  */
 export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput> {
   readonly name = 'html';
-  readonly version = '1.0.0';
+  readonly version = '2.0.0';
   readonly dependencies: readonly string[] = ['css'];
-  
+
   private context!: IServiceContext;
   private fs: HtmlFileSystem;
-  private liquid: LiquidEngine | null = null;
-  
+
   constructor(options: HtmlServiceOptions = {}) {
     this.fs = options.fileSystem ?? this.createDefaultFileSystem();
-    if (options.liquidEngine) {
-      this.liquid = options.liquidEngine;
-    }
   }
-  
+
   async initialize(context: IServiceContext): Promise<void> {
     this.context = context;
-    
-    // Initialize Liquid engine if not provided
-    if (!this.liquid) {
-      this.liquid = await this.createDefaultLiquidEngine();
-    }
   }
-  
+
   async execute(input: HtmlServiceInput): Promise<HtmlServiceOutput> {
     const {
       viewsDir,
@@ -97,135 +78,126 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
       cssOutputDir,
       appConfig,
     } = input;
-    
-    // Set Liquid root to views directory
-    this.liquid!.setRoot(viewsDir);
-    
-    // Load CSS for inline mode
+
     let cssContent: string | undefined;
     if (mode === 'inline' && cssOutputDir) {
       try {
-        // Use configured CSS file name or default
-        const pureCssFileName = this.context.config ? (this.context.config as any)?.css?.outputFiles?.pureCss ?? 'ui8kit.local.css' : 'ui8kit.local.css';
-        const cssPath = join(cssOutputDir, pureCssFileName);
-        cssContent = await this.fs.readFile(cssPath);
-        this.context.logger.debug(`Loaded CSS for inline mode (${cssContent.length} bytes)`);
+        const pureCssFileName = (this.context.config as any)?.css?.outputFiles?.pureCss ?? 'ui8kit.local.css';
+        cssContent = await this.fs.readFile(join(cssOutputDir, pureCssFileName));
       } catch {
-        this.context.logger.warn('Could not load CSS for inline mode, falling back to semantic');
+        this.context.logger.warn('Could not load CSS for inline mode');
       }
     }
-    
+
     const generatedPages: HtmlServiceOutput['pages'] = [];
-    
+
     for (const [routePath, routeConfig] of Object.entries(routes)) {
+      const viewFileName = this.routeToViewFileName(routePath);
+      const viewPath = join(viewsDir, 'pages', viewFileName);
+
       try {
-        // Load view content
-        const viewFileName = this.routeToViewFileName(routePath);
-        const viewPath = join(viewsDir, 'pages', viewFileName);
         const viewContent = await this.fs.readFile(viewPath);
-        
-        // Build template data
-        const templateData = {
-          content: viewContent,
-          title: routeConfig.title,
-          meta: this.buildMetaTags(routeConfig, appConfig),
-          lang: appConfig.lang ?? 'en',
-          name: appConfig.name,
-          ...routeConfig.data,
-        };
-        
-        // Render through layout
-        let html = await this.liquid!.renderFile('layouts/layout.liquid', templateData);
-        
-        // Process HTML based on mode
+        let html = this.buildSimpleHtmlDocument(routeConfig, appConfig, viewContent);
         html = this.processHtmlContent(html, mode, cssContent, stripDataClassInTailwind);
-        
-        // Determine output path
+
         const htmlFileName = this.routeToHtmlFileName(routePath);
         const htmlPath = join(outputDir, htmlFileName);
-        
-        // Ensure directory exists
+
         await this.fs.mkdir(dirname(htmlPath));
-        
-        // Write HTML file
         await this.fs.writeFile(htmlPath, html);
-        
+
         generatedPages.push({
           route: routePath,
           path: htmlPath,
           size: html.length,
         });
-        
+
         this.context.eventBus.emit('html:generated', {
           route: routePath,
           path: htmlPath,
           size: html.length,
         });
-        
+
         this.context.logger.info(`Generated HTML: ${htmlPath} (${html.length} bytes)`);
       } catch (error) {
         this.context.logger.error(`Failed to generate HTML for ${routePath}:`, error);
         throw error;
       }
     }
-    
+
     return { pages: generatedPages };
   }
-  
+
   async dispose(): Promise<void> {
-    this.liquid = null;
+    // No cleanup required
   }
-  
-  /**
-   * Convert route path to view file name
-   */
+
   private routeToViewFileName(routePath: string): string {
-    if (routePath === '/') {
-      return 'index.liquid';
-    }
-    return `${routePath.slice(1)}.liquid`;
+    if (routePath === '/') return 'index.html';
+    return `${routePath.slice(1)}.html`;
   }
-  
-  /**
-   * Convert route path to HTML file name
-   */
+
   private routeToHtmlFileName(routePath: string): string {
-    if (routePath === '/') {
-      return 'index.html';
-    }
+    if (routePath === '/') return 'index.html';
     return `${routePath.slice(1)}/index.html`;
   }
-  
-  /**
-   * Build meta tags from route config
-   */
-  private buildMetaTags(
+
+  private buildSimpleHtmlDocument(
     route: RouteConfig,
-    appConfig: { name: string }
-  ): Record<string, string> {
+    appConfig: { name: string; lang?: string },
+    content: string
+  ): string {
+    const meta = this.buildMetaTags(route, appConfig);
+    const lang = appConfig.lang ?? 'en';
+    const title = route.title;
+
+    const metaTags = [
+      `<meta charset="UTF-8">`,
+      `<meta name="viewport" content="width=device-width, initial-scale=1.0">`,
+      `<title>${this.escapeHtml(title)}</title>`,
+      meta.description ? `<meta name="description" content="${this.escapeHtml(meta.description)}">` : '',
+      meta.keywords ? `<meta name="keywords" content="${this.escapeHtml(meta.keywords)}">` : '',
+      `<meta property="og:title" content="${this.escapeHtml(title)}">`,
+      meta['og:description'] ? `<meta property="og:description" content="${this.escapeHtml(meta['og:description'])}">` : '',
+      meta['og:image'] ? `<meta property="og:image" content="${this.escapeHtml(meta['og:image'])}">` : '',
+      `<link rel="stylesheet" href="/css/styles.css">`,
+    ]
+      .filter(Boolean)
+      .join('\n    ');
+
+    return `<!DOCTYPE html>
+<html lang="${this.escapeHtml(lang)}">
+  <head>
+    ${metaTags}
+  </head>
+  <body>
+    ${content}
+  </body>
+</html>
+`;
+  }
+
+  private buildMetaTags(route: RouteConfig, _appConfig: { name: string }): Record<string, string> {
     const meta: Record<string, string> = {};
-    
+
     if (route.seo?.description) {
       meta.description = route.seo.description;
       meta['og:description'] = route.seo.description;
     }
-    
+
     if (route.seo?.keywords) {
       meta.keywords = route.seo.keywords.join(', ');
     }
-    
+
     meta['og:title'] = route.title;
-    
+
     if (route.seo?.image) {
       meta['og:image'] = route.seo.image;
     }
-    
+
     return meta;
   }
-  
-  /**
-   * Process HTML content based on mode
-   */
+
   private processHtmlContent(
     html: string,
     mode: 'tailwind' | 'semantic' | 'inline',
@@ -234,68 +206,40 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
   ): string {
     if (mode === 'tailwind') {
       if (stripDataClass) {
-        return this.removeDataClassAttributes(html);
+        return html.replace(/\s+data-class\s*=\s*["'][^"']*["']/g, '');
       }
       return html;
     }
-    
+
     if (mode === 'semantic' || mode === 'inline') {
-      html = this.removeClassAttributes(html);
-      html = this.convertDataClassToClass(html);
+      html = html.replace(/\s+class\s*=\s*["'][^"']*["']/g, '');
+      html = html.replace(/data-class\s*=\s*["']([^"']*)["']/g, 'class="$1"');
     }
-    
+
     if (mode === 'inline' && cssContent) {
-      html = this.injectInlineStyles(html, this.minifyCss(cssContent));
+      const minified = cssContent
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/\s+/g, ' ')
+        .replace(/\s*{\s*/g, '{')
+        .replace(/\s*}\s*/g, '}')
+        .replace(/\s*;\s*/g, ';')
+        .replace(/;\s*}/g, '}')
+        .trim();
+      html = html.replace('</head>', `  <style>${minified}</style>\n  </head>`);
     }
-    
+
     return html;
   }
-  
-  /**
-   * Remove class attributes from HTML
-   */
-  private removeClassAttributes(html: string): string {
-    return html.replace(/\s+class\s*=\s*["'][^"']*["']/g, '');
+
+  private escapeHtml(s: string): string {
+    return s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
-  
-  /**
-   * Remove data-class attributes from HTML
-   */
-  private removeDataClassAttributes(html: string): string {
-    return html.replace(/\s+data-class\s*=\s*["'][^"']*["']/g, '');
-  }
-  
-  /**
-   * Convert data-class to class
-   */
-  private convertDataClassToClass(html: string): string {
-    return html.replace(/data-class\s*=\s*["']([^"']*)["']/g, 'class="$1"');
-  }
-  
-  /**
-   * Inject inline styles into head
-   */
-  private injectInlineStyles(html: string, css: string): string {
-    return html.replace('</head>', `  <style>${css}</style>\n  </head>`);
-  }
-  
-  /**
-   * Simple CSS minification
-   */
-  private minifyCss(css: string): string {
-    return css
-      .replace(/\/\*[\s\S]*?\*\//g, '')
-      .replace(/\s+/g, ' ')
-      .replace(/\s*{\s*/g, '{')
-      .replace(/\s*}\s*/g, '}')
-      .replace(/\s*;\s*/g, ';')
-      .replace(/;\s*}/g, '}')
-      .trim();
-  }
-  
-  /**
-   * Create default file system
-   */
+
   private createDefaultFileSystem(): HtmlFileSystem {
     return {
       readFile: async (path: string) => {
@@ -312,24 +256,5 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
       },
     };
   }
-  
-  /**
-   * Create default Liquid engine
-   */
-  private async createDefaultLiquidEngine(): Promise<LiquidEngine> {
-    const { Liquid } = await import('liquidjs');
-    const engine = new Liquid({ extname: '.liquid' });
-    
-    // Register common filters
-    engine.registerFilter('json', (value: unknown) => JSON.stringify(value));
-    engine.registerFilter('lowercase', (value: string) => value.toLowerCase());
-    engine.registerFilter('uppercase', (value: string) => value.toUpperCase());
-    
-    return {
-      renderFile: async (template, data) => engine.renderFile(template, data),
-      setRoot: (root: string) => {
-        (engine as any).options.root = [root];
-      },
-    };
-  }
 }
+

@@ -291,6 +291,8 @@ export interface GenPropDefinition {
   defaultValue?: unknown;
   /** JSDoc description */
   description?: string;
+  /** Is this prop a rest binding (...rest)? */
+  rest?: boolean;
 }
 
 /**

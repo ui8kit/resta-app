@@ -1,30 +1,14 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { AdminLayout } from '@/layouts';
 import { Block, Stack, Title, Text, Button, Field } from '@ui8kit/core';
 import { If } from '@ui8kit/dsl';
-import { useAdminAuth } from '@/providers/AdminAuthContext';
+import { useLoginForm } from '@/hooks';
 
 export interface AdminLoginPageViewProps {
   headerTitle?: string;
 }
 
 export function AdminLoginPageView({ headerTitle: _headerTitle }: AdminLoginPageViewProps) {
-  const { login } = useAdminAuth();
-  const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError('');
-    if (login(username, password)) {
-      navigate('/admin/dashboard');
-    } else {
-      setError('Invalid username or password');
-    }
-  }
+  const { username, setUsername, password, setPassword, error, handleSubmit } = useLoginForm();
 
   return (
     <AdminLayout>

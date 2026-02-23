@@ -2,24 +2,10 @@ import { MainLayout } from '@/layouts';
 import { Block, Container, Title, Text, Group, Badge, Grid } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
-
-type RecipeIngredient = {
-  id: string;
-  amount: number;
-  unit: string;
-  name: string;
-  note?: string;
-};
-
-type RecipeStep = {
-  id: string;
-  step: number;
-  title?: string;
-  body: string;
-};
+import type { NavItem, RecipeIngredient, RecipeStep } from '@/types';
 
 export interface RecipeDetailPageViewProps {
-  navItems?: { id: string; title: string; url: string }[];
+  navItems?: NavItem[];
   sidebar: React.ReactNode;
   headerTitle?: string;
   headerSubtitle?: string;

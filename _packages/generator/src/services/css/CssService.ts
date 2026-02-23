@@ -1,6 +1,7 @@
 import type { IService, IServiceContext, RouteConfig } from '../../core/interfaces';
 import { HtmlConverterService } from '../html-converter';
 import { join } from 'node:path';
+import { emitVariantsApplyCss } from '../../scripts/emit-variants-apply.js';
 
 /**
  * CSS output file names configuration
@@ -10,6 +11,8 @@ export interface CssOutputFileNames {
   applyCss?: string;
   /** Pure CSS file name (default: 'ui8kit.local.css') */
   pureCss?: string;
+  /** Variants CSS file name (default: 'variants.apply.css') */
+  variantsCss?: string;
 }
 
 /**
@@ -18,6 +21,7 @@ export interface CssOutputFileNames {
 const DEFAULT_CSS_OUTPUT_FILES: Required<CssOutputFileNames> = {
   applyCss: 'tailwind.apply.css',
   pureCss: 'ui8kit.local.css',
+  variantsCss: 'variants.apply.css',
 };
 
 /**
@@ -54,7 +58,6 @@ export interface CssFileSystem {
   readFile(path: string): Promise<string>;
   writeFile(path: string, content: string): Promise<void>;
   mkdir(path: string): Promise<void>;
-  readdir(path: string): Promise<Array<{ name: string; isFile: () => boolean }>>;
 }
 
 /**
@@ -67,8 +70,8 @@ export interface CssServiceOptions {
 }
 
 /**
- * CssService - Generates CSS from Liquid view files.
- * 
+ * CssService - Generates CSS from HTML view files.
+ *
  * Responsibilities:
  * - Extract classes from HTML views using HtmlConverterService
  * - Generate @apply CSS (tailwind.apply.css)
@@ -78,7 +81,7 @@ export interface CssServiceOptions {
 export class CssService implements IService<CssServiceInput, CssServiceOutput> {
   readonly name = 'css';
   readonly version = '1.0.0';
-  readonly dependencies: readonly string[] = ['view'];
+  readonly dependencies: readonly string[] = [];
   
   private context!: IServiceContext;
   private fs: CssFileSystem;
@@ -123,6 +126,20 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
     const allApplyCss: string[] = [];
     const allPureCss: string[] = [];
     const generatedFiles: CssServiceOutput['files'] = [];
+
+    // Emit variants.apply.css first
+    const variantsCss = await emitVariantsApplyCss({
+      variantsDir: (this.context.config as any)?.elements?.variantsDir ?? './src/variants',
+    });
+    const variantsPath = join(outputDir, cssFileNames.variantsCss);
+    await this.fs.writeFile(variantsPath, variantsCss);
+    generatedFiles.push({
+      path: variantsPath,
+      size: variantsCss.length,
+      type: 'variants',
+    });
+    this.context.eventBus.emit('css:generated', { path: variantsPath, size: variantsCss.length });
+    this.context.logger.info(`Generated ${variantsPath} (${variantsCss.length} bytes)`);
     
     // Process page views for each route
     for (const routePath of Object.keys(routes)) {
@@ -143,43 +160,6 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
         this.context.logger.debug(`Processed CSS for route: ${routePath}`);
       } catch (error) {
         this.context.logger.warn(`Failed to process CSS for ${routePath}:`, error);
-      }
-    }
-    
-    // Process partials and layouts directories
-    const extraDirs = [
-      join(viewsDir, 'partials'),
-      join(viewsDir, 'layouts'),
-    ];
-    
-    for (const dirPath of extraDirs) {
-      try {
-        const entries = await this.fs.readdir(dirPath);
-        
-        for (const entry of entries) {
-          if (!entry.isFile()) continue;
-          if (!entry.name.toLowerCase().endsWith('.liquid')) continue;
-          
-          const filePath = join(dirPath, entry.name);
-          
-          try {
-            const result = await this.htmlConverter.execute({
-              htmlPath: filePath,
-              verbose: false,
-            });
-            
-            allApplyCss.push(result.applyCss);
-            if (pureCss) {
-              allPureCss.push(result.pureCss);
-            }
-            
-            this.context.logger.debug(`Processed CSS for template: ${filePath}`);
-          } catch (error) {
-            this.context.logger.warn(`Failed to process CSS for ${filePath}:`, error);
-          }
-        }
-      } catch {
-        // Directory doesn't exist, skip
       }
     }
     
@@ -236,9 +216,9 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
    */
   private routeToViewFileName(routePath: string): string {
     if (routePath === '/') {
-      return 'index.liquid';
+      return 'index.html';
     }
-    return `${routePath.slice(1)}.liquid`;
+    return `${routePath.slice(1)}.html`;
   }
   
   /**
@@ -274,14 +254,6 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
       mkdir: async (path: string) => {
         const { mkdir } = await import('node:fs/promises');
         await mkdir(path, { recursive: true });
-      },
-      readdir: async (path: string) => {
-        const { readdir } = await import('node:fs/promises');
-        const entries = await readdir(path, { withFileTypes: true });
-        return entries.map(e => ({
-          name: e.name,
-          isFile: () => e.isFile(),
-        }));
       },
     };
   }

@@ -43,7 +43,6 @@ function createMockFs() {
     }),
     writeFile: vi.fn().mockResolvedValue(undefined),
     mkdir: vi.fn().mockResolvedValue(undefined),
-    readdir: vi.fn().mockResolvedValue([]),
   };
 }
 
@@ -101,14 +100,13 @@ describe('CssService', () => {
     mockHtmlConverter = createMockHtmlConverter();
     
     // Set up view files
-    mockFs.files.set('views/pages/index.liquid', '<div class="bg-red-500" data-class="test">Hello</div>');
+    mockFs.files.set('views/pages/index.html', '<div class="bg-red-500" data-class="test">Hello</div>');
     
     service = new CssService({
       fileSystem: {
         readFile: mockFs.readFile,
         writeFile: mockFs.writeFile,
         mkdir: mockFs.mkdir,
-        readdir: mockFs.readdir,
       },
       htmlConverter: mockHtmlConverter,
     });
@@ -175,8 +173,8 @@ describe('CssService', () => {
     });
     
     it('should process each route view file', async () => {
-      mockFs.files.set('views/pages/index.liquid', '<div class="test">Home</div>');
-      mockFs.files.set('views/pages/about.liquid', '<div class="test">About</div>');
+      mockFs.files.set('views/pages/index.html', '<div class="test">Home</div>');
+      mockFs.files.set('views/pages/about.html', '<div class="test">About</div>');
       
       const input = {
         viewsDir: './views',
@@ -275,46 +273,6 @@ describe('CssService', () => {
       );
     });
     
-    it('should also process partials and layouts directories', async () => {
-      // Mock readdir to return file entries for partials/layouts
-      mockFs.readdir = vi.fn().mockImplementation(async (path: string) => {
-        const normalized = path.replace(/\\/g, '/');
-        if (normalized.includes('partials')) {
-          return [{ name: 'header.liquid', isFile: () => true }];
-        }
-        if (normalized.includes('layouts')) {
-          return [{ name: 'layout.liquid', isFile: () => true }];
-        }
-        return [];
-      });
-      
-      mockFs.files.set('views/partials/header.liquid', '<header class="header">Header</header>');
-      mockFs.files.set('views/layouts/layout.liquid', '<html class="layout">Layout</html>');
-      
-      const input = {
-        viewsDir: './views',
-        outputDir: './dist/css',
-        routes: { '/': { title: 'Home' } },
-        pureCss: true,
-      };
-      
-      // Re-create service with updated mock
-      service = new CssService({
-        fileSystem: {
-          readFile: mockFs.readFile,
-          writeFile: mockFs.writeFile,
-          mkdir: mockFs.mkdir,
-          readdir: mockFs.readdir,
-        },
-        htmlConverter: mockHtmlConverter,
-      });
-      await service.initialize(createMockContext());
-      
-      await service.execute(input);
-      
-      // Should process pages + partials + layouts (3 total)
-      expect((mockHtmlConverter.execute as any).mock.calls.length).toBeGreaterThanOrEqual(3);
-    });
   });
   
   describe('dispose', () => {

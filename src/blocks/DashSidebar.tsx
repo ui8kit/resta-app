@@ -1,16 +1,11 @@
 import { Stack, Text } from '@ui8kit/core';
 import { If, Loop, Var } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
+import type { DashboardSidebarLink } from '@/types';
 
-export type DashSidebarLink = {
-  label: string;
-  href: string;
-  active?: boolean;
-};
-
-export type DashSidebarProps = {
-  label?: string;
-  links?: DashSidebarLink[];
+export interface DashSidebarProps {
+  label?: string | undefined;
+  links?: DashboardSidebarLink[];
   'data-class'?: string;
 };
 
@@ -33,7 +28,7 @@ export function DashSidebar({
       </If>
       <If test="(links ?? []).length > 0" value={(links ?? []).length > 0}>
         <Loop each="links" as="link" data={links ?? []}>
-          {(link: DashSidebarLink) => (
+          {(link: DashboardSidebarLink) => (
             <>
               <If test="!!link.active" value={!!link.active}>
                 <DomainNavButton

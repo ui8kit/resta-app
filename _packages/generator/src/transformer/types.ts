@@ -179,6 +179,7 @@ export interface AnalyzedProp {
   required: boolean;
   defaultValue?: string;
   description?: string;
+  rest?: boolean;
 }
 
 // =============================================================================

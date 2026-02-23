@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { MainLayout } from '@/layouts';
 import {
   Block,
@@ -19,61 +18,11 @@ import {
 import { If, Else, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
 import { ShoppingCart } from 'lucide-react';
-
-type MenuPrice = {
-  amount: number;
-  currency: string;
-  display: string;
-};
-
-type MenuCategory = {
-  id: string;
-  title: string;
-};
-
-type MenuVariant = {
-  id: string;
-  title: string;
-  priceModifier: MenuPrice;
-};
-
-type MenuModifier = {
-  id: string;
-  title: string;
-  price: MenuPrice;
-  type: 'checkbox' | 'radio';
-};
-
-export type MenuItem = {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  price: MenuPrice;
-  compareAtPrice?: MenuPrice;
-  category: MenuCategory;
-  image?: { src: string; alt?: string };
-  details?: string;
-  availability?: 'available' | 'unavailable' | 'limited';
-  variants?: MenuVariant[];
-  modifiers?: MenuModifier[];
-  promotionIds?: string[];
-};
-
-type PromotionItem = {
-  id: string;
-  badge?: string;
-};
-
-type CartEntry = {
-  itemId: string;
-  title: string;
-  price: MenuPrice;
-  quantity: number;
-};
+import type { CartEntry, MenuCategory, MenuItem, NavItem, PromotionItem } from '@/types';
+import { useCart, useMenuFilter } from '@/hooks';
 
 export interface MenuPageViewProps {
-  navItems?: { id: string; title: string; url: string }[];
+  navItems?: NavItem[];
   sidebar: React.ReactNode;
   headerTitle?: string;
   headerSubtitle?: string;
@@ -89,56 +38,14 @@ export function MenuPageView({
   menu,
   promotions,
 }: MenuPageViewProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [cart, setCart] = useState<CartEntry[]>([]);
-  const items = menu.items ?? [];
-  const categories = menu.categories ?? [];
-  const promotionsById = Object.fromEntries((promotions?.items ?? []).map((item) => [item.id, item]));
-
-  const withComputed = items.map((item) => {
-    const firstPromotionId = item.promotionIds?.[0];
-    const promo = firstPromotionId ? promotionsById[firstPromotionId] : undefined;
-    const hasCompareAt = !!item.compareAtPrice?.display;
-    return {
-      ...item,
-      promotionBadge: promo?.badge ?? '',
-      hasPromotion: !!promo?.badge,
-      hasCompareAt,
-    };
-  });
-
-  const filteredItems = selectedCategory
-    ? withComputed.filter((item) => item.category?.id === selectedCategory)
-    : withComputed;
-
-  const cartCount = cart.reduce((sum, e) => sum + e.quantity, 0);
-
-  function addToCart(item: MenuItem & { promotionBadge: string; hasPromotion: boolean; hasCompareAt: boolean }) {
-    setCart((prev) => {
-      const existing = prev.find((e) => e.itemId === item.id);
-      if (existing) {
-        return prev.map((e) =>
-          e.itemId === item.id ? { ...e, quantity: e.quantity + 1 } : e
-        );
-      }
-      return [...prev, { itemId: item.id, title: item.title, price: item.price, quantity: 1 }];
-    });
-  }
-
-  function removeFromCart(itemId: string) {
-    setCart((prev) => prev.filter((e) => e.itemId !== itemId));
-  }
-
-  function updateCartQuantity(itemId: string, delta: number) {
-    setCart((prev) =>
-      prev
-        .map((e) => (e.itemId === itemId ? { ...e, quantity: e.quantity + delta } : e))
-        .filter((e) => e.quantity > 0)
-    );
-  }
-
-  const allTabVariant = selectedCategory === null ? 'secondary' : 'ghost';
-  const getCategoryTabVariant = (id: string) => selectedCategory === id ? 'secondary' : 'ghost';
+  const { cart, cartCount, addToCart, removeFromCart, updateCartQuantity } = useCart();
+  const {
+    setSelectedCategory,
+    categories,
+    filteredItems,
+    allTabVariant,
+    getCategoryTabVariant,
+  } = useMenuFilter(menu, promotions);
 
   return (
     <MainLayout
@@ -179,57 +86,57 @@ export function MenuPageView({
               <Text fontSize="sm" textColor="muted-foreground" data-class="menu-cart-empty">
                 Cart is empty
               </Text>
-            </If>
-            <Else>
-              <Loop each="cart" as="entry" data={cart}>
-                {(entry: CartEntry) => (
-                  <Group key={entry.itemId} w="full" justify="between" items="center" gap="2" data-class="menu-cart-item">
-                    <Stack gap="0" min="w-0" data-class="menu-cart-item-info">
-                      <Text fontSize="sm" fontWeight="medium" data-class="menu-cart-item-title">
-                        {entry.title}
-                      </Text>
-                      <Text fontSize="xs" textColor="muted-foreground" data-class="menu-cart-item-price">
-                        {entry.price.display} × {entry.quantity}
-                      </Text>
-                    </Stack>
-                    <Group gap="1" items="center" justify="end" shrink="0" data-class="menu-cart-item-actions">
-                      <Button
-                        variant="ghost"
-                        size="xs"
-                        rounded="xs"
-                        onClick={() => updateCartQuantity(entry.itemId, -1)}
-                        data-class="menu-cart-item-minus"
-                        aria-label="Decrease quantity"
-                      >
-                        −
-                      </Button>
-                      <Text fontSize="sm" data-class="menu-cart-item-qty" className="min-w-6 text-center">
-                        {entry.quantity}
-                      </Text>
-                      <Button
-                        variant="ghost"
-                        size="xs"
-                        rounded="xs"
-                        onClick={() => updateCartQuantity(entry.itemId, 1)}
-                        data-class="menu-cart-item-plus"
-                        aria-label="Increase quantity"
-                      >
-                        +
-                      </Button>
-                      <Button
-                        variant="link"
-                        size="xs"
-                        rounded="xs"
-                        onClick={() => removeFromCart(entry.itemId)}
-                        data-class="menu-cart-item-remove"
-                      >
-                        Remove
-                      </Button>
+              <Else>
+                <Loop each="cart" as="entry" data={cart}>
+                  {(entry: CartEntry) => (
+                    <Group key={entry.itemId} w="full" justify="between" items="center" gap="2" data-class="menu-cart-item">
+                      <Stack gap="0" min="w-0" data-class="menu-cart-item-info">
+                        <Text fontSize="sm" fontWeight="medium" data-class="menu-cart-item-title">
+                          {entry.title}
+                        </Text>
+                        <Text fontSize="xs" textColor="muted-foreground" data-class="menu-cart-item-price">
+                          {entry.price.display} × {entry.quantity}
+                        </Text>
+                      </Stack>
+                      <Group gap="1" items="center" justify="end" shrink="0" data-class="menu-cart-item-actions">
+                        <Button
+                          variant="ghost"
+                          size="xs"
+                          rounded="xs"
+                          onClick={() => updateCartQuantity(entry.itemId, -1)}
+                          data-class="menu-cart-item-minus"
+                          aria-label="Decrease quantity"
+                        >
+                          −
+                        </Button>
+                        <Text fontSize="sm" data-class="menu-cart-item-qty" className="min-w-6 text-center">
+                          {entry.quantity}
+                        </Text>
+                        <Button
+                          variant="ghost"
+                          size="xs"
+                          rounded="xs"
+                          onClick={() => updateCartQuantity(entry.itemId, 1)}
+                          data-class="menu-cart-item-plus"
+                          aria-label="Increase quantity"
+                        >
+                          +
+                        </Button>
+                        <Button
+                          variant="link"
+                          size="xs"
+                          rounded="xs"
+                          onClick={() => removeFromCart(entry.itemId)}
+                          data-class="menu-cart-item-remove"
+                        >
+                          Remove
+                        </Button>
+                      </Group>
                     </Group>
-                  </Group>
-                )}
-              </Loop>
-            </Else>
+                  )}
+                </Loop>
+              </Else>
+            </If>
           </Stack>
         </Sheet>
         <Block py="16" data-class="menu-header">

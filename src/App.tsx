@@ -10,12 +10,6 @@ import { PromotionsPage } from '@/routes/promotions/PromotionsPage';
 import { PromotionDetailPage } from '@/routes/promotions/DetailPage';
 import { LoginPage } from '@/routes/admin/LoginPage';
 import { DashboardPage } from '@/routes/admin/DashboardPage';
-import { OverviewPage } from '@/routes/design/OverviewPage';
-import { ColorsPage } from '@/routes/design/ColorsPage';
-import { TypographyPage } from '@/routes/design/TypographyPage';
-import { ComponentsPage } from '@/routes/design/ComponentsPage';
-import { WidgetsPage } from '@/routes/design/WidgetsPage';
-import { PagesPage } from '@/routes/design/PagesPage';
 
 export function App() {
   return (
@@ -29,12 +23,6 @@ export function App() {
       <Route path="/blog/:slug" element={<BlogDetailPage />} />
       <Route path="/promotions" element={<PromotionsPage />} />
       <Route path="/promotions/:id" element={<PromotionDetailPage />} />
-      <Route path="/design" element={<OverviewPage />} />
-      <Route path="/design/colors" element={<ColorsPage />} />
-      <Route path="/design/typography" element={<TypographyPage />} />
-      <Route path="/design/components" element={<ComponentsPage />} />
-      <Route path="/design/widgets" element={<WidgetsPage />} />
-      <Route path="/design/pages" element={<PagesPage />} />
       <Route path="/admin" element={<LoginPage />} />
       <Route path="/admin/dashboard" element={<DashboardPage />} />
     </Routes>

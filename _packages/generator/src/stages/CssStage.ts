@@ -1,17 +1,18 @@
 import type { IPipelineStage, IPipelineContext } from '../core/interfaces';
 import { CssService, type CssServiceOutput } from '../services/css';
+import { runGenerateCss } from '../steps/generate-css';
 
 /**
  * CssStage - Pipeline stage for CSS generation
  * 
  * Extracts and generates CSS from Liquid views.
  */
-export class CssStage implements IPipelineStage {
+export class CssStage implements IPipelineStage<unknown, CssServiceOutput> {
   readonly name = 'css';
-  readonly order = 2;
+  readonly order = 1;
   readonly enabled = true;
-  readonly dependencies: string[] = ['view'];
-  readonly description = 'Extract and generate CSS from Liquid views';
+  readonly dependencies: string[] = [];
+  readonly description = 'Generate CSS from prepared HTML views';
   
   private service: CssService;
   
@@ -19,35 +20,18 @@ export class CssStage implements IPipelineStage {
     this.service = new CssService();
   }
   
-  canExecute(): boolean {
+  canExecute(_context: IPipelineContext): boolean {
     return true;
   }
   
-  async execute(context: IPipelineContext): Promise<void> {
+  async execute(_input: unknown, context: IPipelineContext): Promise<CssServiceOutput> {
     const { config, logger, eventBus } = context;
     
     // Initialize service
-    await this.service.initialize({ config, logger, eventBus, registry: null as any });
-    
-    const cfg = config as any;
-    const viewsDir = cfg.html?.viewsDir ?? './views';
-    const outputDir = cfg.css?.outputDir ?? './dist/css';
-    const routes = cfg.html?.routes ?? {};
-    const pureCss = cfg.css?.pureCss ?? false;
-    
-    logger.info('Generating CSS...');
-    
-    const result = await this.service.execute({
-      viewsDir,
-      outputDir,
-      routes,
-      pureCss,
-      mappings: cfg.mappings,
-    });
+    await this.service.initialize({ config, logger, eventBus, registry: context.registry });
+    const result = await runGenerateCss(context, this.service);
     
     // Store result in context
-    context.setData('css:result', result);
-    
     const totalSize = result.files.reduce((sum, f) => sum + f.size, 0);
     logger.info(`Generated ${result.files.length} CSS file(s) (${formatSize(totalSize)})`);
     
@@ -55,6 +39,8 @@ export class CssStage implements IPipelineStage {
       name: this.name,
       result,
     });
+    
+    return result;
   }
 }
 

@@ -57,25 +57,6 @@ export interface GeneratorConfig {
       props?: Record<string, Record<string, unknown>>;
     };
     stripDataClassInTailwind?: boolean;
-    /**
-     * Layout configuration
-     */
-    layout?: {
-      /** Main layout template path (default: 'layouts/layout.liquid') */
-      template?: string;
-      /** Custom layout templates directory */
-      templatesDir?: string;
-    };
-  };
-  
-  /**
-   * Client script configuration
-   */
-  clientScript?: {
-    enabled?: boolean;
-    outputDir?: string;
-    fileName?: string;
-    darkModeSelector?: string;
   };
   
   /**
@@ -89,13 +70,6 @@ export interface GeneratorConfig {
     ignore?: string[];
     media?: boolean;
     timeout?: number;
-  };
-  
-  /**
-   * Asset copying configuration
-   */
-  assets?: {
-    copy?: string[];
   };
   
   /**
@@ -123,35 +97,6 @@ export interface GeneratorConfig {
     toc?: {
       minLevel?: number;
       maxLevel?: number;
-    };
-  };
-  
-  /**
-   * Template generation configuration
-   * 
-   * Transforms React components to template files (Liquid, Handlebars, Twig, Latte)
-   */
-  template?: {
-    /** Enable template generation */
-    enabled?: boolean;
-    /** Template engine to use */
-    engine?: 'react' | 'liquid' | 'handlebars' | 'twig' | 'latte';
-    /** Source directories for components (relative to root) */
-    sourceDirs?: string[];
-    /** Output directory for generated templates (relative to root) */
-    outputDir?: string;
-    /** File patterns to include (default: ['**\/*.tsx']) */
-    include?: string[];
-    /** File patterns to exclude */
-    exclude?: string[];
-    /** Enable verbose logging */
-    verbose?: boolean;
-    /** Plugin-specific configuration */
-    pluginConfig?: {
-      /** Prepend text to every template */
-      prependComment?: string;
-      /** Enable pretty printing */
-      prettyPrint?: boolean;
     };
   };
   
@@ -193,10 +138,5 @@ export const DEFAULT_CONFIG: GeneratorConfig = {
     routes: { '/': { title: 'Home' } },
     outputDir: './dist/html',
     mode: 'tailwind',
-  },
-  clientScript: {
-    enabled: false,
-    outputDir: './dist/assets/js',
-    fileName: 'main.js',
   },
 };

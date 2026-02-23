@@ -1,11 +1,10 @@
 export { Header } from './Header';
-export type { HeaderProps, NavItem } from './Header';
+export type { NavItem } from '@/types';
 
 export { Footer } from './Footer';
-export type { FooterProps, FooterLink, FooterSection } from './Footer';
+export type { FooterLink, FooterSection } from '@/types';
 
 export { Sidebar } from './Sidebar';
-export type { SidebarProps } from './Sidebar';
 
 export { DomainNavButton } from './DomainNavButton';
 export { ThemeToggle } from './ThemeToggle';

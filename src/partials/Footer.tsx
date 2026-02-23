@@ -1,15 +1,6 @@
 import { Block, Container, Text } from '@ui8kit/core';
 import { If, Var } from '@ui8kit/dsl';
-
-export type FooterLink = {
-  label: string;
-  href: string;
-};
-
-export type FooterSection = {
-  title: string;
-  links: FooterLink[];
-};
+import type { FooterSection } from '@/types';
 
 export type FooterProps = {
   copyright?: string;

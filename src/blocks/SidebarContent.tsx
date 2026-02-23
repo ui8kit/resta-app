@@ -1,17 +1,13 @@
 import { Stack, Text } from '@ui8kit/core';
 import { If, Loop, Var } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
+import type { SidebarLink } from '@/types';
 
-export type SidebarLink = {
-  label: string;
-  href: string;
-};
-
-export type SidebarContentProps = {
+export interface SidebarContentProps {
   title?: string;
   links?: SidebarLink[];
-  'data-class'?: string;
-};
+  'data-class'?: string | undefined;
+}
 
 export function SidebarContent({
   title,

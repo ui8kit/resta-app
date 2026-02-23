@@ -1,24 +1,12 @@
-import { useNavigate } from 'react-router-dom';
 import { Block, Container, Group, Text, Sheet, Stack, Icon, Button } from '@ui8kit/core';
 import { If, Else, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from './DomainNavButton';
 import { ThemeToggle } from './ThemeToggle';
 import { useAdminAuth } from '@/providers/AdminAuthContext';
-import { UtensilsCrossed, ChefHat, FileText, Percent, Palette, LogIn, LogOut, Menu } from 'lucide-react';
-
-const NAV_ICONS: Record<string, (typeof UtensilsCrossed)> = {
-  menu: UtensilsCrossed,
-  recipes: ChefHat,
-  blog: FileText,
-  promotions: Percent,
-  design: Palette,
-};
-
-export type NavItem = {
-  id: string;
-  title: string;
-  url: string;
-};
+import { NAV_ICONS } from '@/constants';
+import { useAdminNav } from '@/hooks';
+import { ChefHat, LogIn, LogOut, Menu } from 'lucide-react';
+import type { NavItem } from '@/types';
 
 export type HeaderProps = {
   title?: string;
@@ -38,13 +26,8 @@ export function Header({
   'data-class': dataClassAttr,
   beforeThemeToggle,
 }: HeaderProps) {
-  const { isAuthenticated, logout } = useAdminAuth();
-  const navigate = useNavigate();
-
-  function handleLogout() {
-    logout();
-    navigate('/');
-  }
+  const { isAuthenticated } = useAdminAuth();
+  const { handleLogout } = useAdminNav();
 
   return (
     <Block
@@ -179,7 +162,6 @@ export function Header({
             >
               <Icon lucideIcon={LogOut} size="sm" data-class="header-admin-icon" />
             </Button>
-          </If>
           <Else>
             <DomainNavButton
               variant="link"
@@ -192,6 +174,7 @@ export function Header({
               <Icon lucideIcon={LogIn} size="sm" data-class="header-admin-icon" />
             </DomainNavButton>
           </Else>
+          </If>
         </Group>
       </Container>
     </Block>
