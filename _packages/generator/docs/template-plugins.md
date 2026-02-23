@@ -6,6 +6,7 @@ This document describes the template plugin architecture for converting React co
 > - This subsystem belongs to the template-engine track.
 > - It is not part of the main static HTML/CSS runtime pipeline (`generate()`).
 > - For plugin APIs, prefer importing from `@ui8kit/generator/plugins`.
+> - For current runtime usage, use `README.md` and `GUIDE.md` in the package root.
 
 ## Overview
 
@@ -346,8 +347,8 @@ if (!validation.valid) {
 }
 ```
 
-## Next Steps
+## Operational Notes
 
-- Phase 2: JSX Transformer (React → HAST)
-- Phase 6: Integration with Orchestrator
-- Phase 8: Complete Documentation
+- Keep template-plugin usage isolated from the main static runtime pipeline.
+- If your delivery target is static pages, prefer `generate()` and HTML modes (`tailwind`/`semantic`/`inline`).
+- Use this document when maintaining or extending template-engine outputs.

@@ -15,22 +15,17 @@ export class CssStage implements IPipelineStage<unknown, CssServiceOutput> {
   readonly dependencies: string[] = [];
   readonly description = 'Generate CSS from prepared HTML views';
   
-  private service: CssService;
-  
-  constructor() {
-    this.service = new CssService();
-  }
-  
   canExecute(_context: IPipelineContext): boolean {
     return true;
   }
   
   async execute(_input: unknown, context: IPipelineContext): Promise<CssServiceOutput> {
     const { config, logger, eventBus } = context;
+    const service = context.registry.resolve<CssService>('css');
     
     // Initialize service
-    await this.service.initialize({ config, logger, eventBus, registry: context.registry });
-    const result = await runGenerateCss(context, this.service);
+    await service.initialize({ config, logger, eventBus, registry: context.registry });
+    const result = await runGenerateCss(context, service);
     
     // Store result in context
     const totalSize = result.files.reduce((sum, f) => sum + f.size, 0);

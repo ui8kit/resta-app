@@ -8,23 +8,18 @@ export class ClassLogStage implements IPipelineStage<unknown, ClassLogServiceOut
   readonly dependencies: string[] = ['html'];
   readonly description = 'Generate class usage logs from generated views';
 
-  private service: ClassLogService;
-
-  constructor() {
-    this.service = new ClassLogService();
-  }
-
   canExecute(context: IPipelineContext): boolean {
     return !!context.config.classLog?.enabled;
   }
 
   async execute(_input: unknown, context: IPipelineContext): Promise<ClassLogServiceOutput> {
     const { config, logger, eventBus } = context;
+    const service = context.registry.resolve<ClassLogService>('class-log');
 
-    await this.service.initialize({ config, logger, eventBus, registry: context.registry });
+    await service.initialize({ config, logger, eventBus, registry: context.registry });
 
     const classLogConfig = config.classLog ?? {};
-    const result = await this.service.execute({
+    const result = await service.execute({
       viewsDir: config.html.viewsDir,
       outputDir: classLogConfig.outputDir ?? './dist/maps',
       baseName: classLogConfig.baseName ?? 'ui8kit',

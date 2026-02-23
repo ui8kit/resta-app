@@ -2,6 +2,7 @@ import type { IService, IServiceContext } from '../../core/interfaces';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createNodeFileSystem } from '../../core/filesystem';
+import { createHash } from 'node:crypto';
 
 /**
  * Input for HtmlConverterService.execute()
@@ -301,12 +302,13 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
     
     while ((match = tagRegex.exec(html)) !== null) {
       const tagContent = match[0];
+      const tagIndex = elements.length;
       
       const classes = this.extractClassAttribute(tagContent);
       const dataClass = this.extractDataClassAttribute(tagContent);
       
       if (classes.length > 0 || dataClass) {
-        const selector = dataClass || this.generateSelector(tagContent);
+        const selector = dataClass || this.generateSelector(tagContent, sourceFile, tagIndex);
         
         if (dataClass && isIgnored(selector)) {
           continue;
@@ -326,16 +328,12 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
   /**
    * Generate selector for elements without data-class
    */
-  private generateSelector(tagContent: string): string {
+  private generateSelector(tagContent: string, sourceFile: string, tagIndex: number): string {
     const tagMatch = tagContent.match(/^<([a-zA-Z][a-zA-Z0-9]*)/);
     const tagName = tagMatch ? tagMatch[1] : 'div';
-    
-    // Generate random suffix
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let suffix = '';
-    for (let i = 0; i < 7; i++) {
-      suffix += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
+
+    const seed = `${sourceFile}|${tagName}|${tagIndex}|${tagContent}`;
+    const suffix = createHash('sha1').update(seed).digest('hex').slice(0, 8);
     return `${tagName}-${suffix}`;
   }
   

@@ -1,13 +1,25 @@
 # JSX Transformer
 
-The JSX Transformer converts React components to GenHAST (Hypertext Abstract Syntax Tree) with annotations that can be processed by template plugins.
+The transformer converts React JSX/TSX into GenHAST with annotations.
+
+## Status
+
+- This module is active and used by current generator internals.
+- Primary runtime is static HTML/CSS generation (`generate()` pipeline).
+- Template plugins may still consume transformer output, but that is a separate legacy track.
+
+## Where It Is Used
+
+In this project, transformer output is used in two practical ways:
+
+1. Internal/static generation helpers (DSL-aware transformations).
+2. Optional template-plugin workflows (legacy track in `PLUGINS.md`).
 
 ## Quick Start
 
 ```typescript
 import { transformJsx, transformJsxFile } from '@ui8kit/generator';
 
-// Transform source code
 const result = transformJsx(`
   export function ProductCard({ product, isOnSale }) {
     return (
@@ -21,295 +33,151 @@ const result = transformJsx(`
 `);
 
 console.log(result.tree);
-// GenRoot with variable and conditional annotations
+console.log(result.variables);
+console.log(result.dependencies);
 
-// Transform file
 const fileResult = await transformJsxFile('./src/components/ProductCard.tsx');
 ```
+
+## Core API
+
+### `transformJsx(source, options?)`
+
+- Transforms source string into GenHAST.
+- Returns `TransformResult`.
+- Does not throw on most parse/analysis issues; collects them in `errors`/`warnings`.
+
+### `transformJsxFile(filePath, options?)`
+
+- Reads one `.tsx/.jsx` file.
+- Auto-detects component name from filename if `componentName` is not provided.
+
+### `transformJsxFiles(filePaths, options?)`
+
+- Batch async transform helper.
+- Returns `Map<string, TransformResult>`.
 
 ## What Gets Detected
 
 ### Variables
 
-Simple expressions like `{title}` or `{user.profile.name}`:
+Examples:
 
 ```jsx
 <h1>{title}</h1>
 <p>{user.profile.name}</p>
 ```
 
-→ Creates `GenElement` with `variable` annotation:
-
-```typescript
-{
-  type: 'element',
-  tagName: 'span',
-  properties: {
-    _gen: {
-      variable: { name: 'title' },
-      unwrap: true
-    }
-  }
-}
-```
-
 ### Loops
 
-`.map()` calls are detected as loops:
+`.map()` patterns are recognized:
 
 ```jsx
-<ul>
-  {items.map(item => (
-    <li key={item.id}>{item.name}</li>
-  ))}
-</ul>
-```
-
-→ Creates `GenElement` with `loop` annotation:
-
-```typescript
-{
-  type: 'element',
-  tagName: 'div',
-  properties: {
-    _gen: {
-      loop: {
-        item: 'item',
-        collection: 'items',
-        key: 'item.id'
-      },
-      unwrap: true
-    }
-  }
-}
+{items.map((item) => (
+  <li key={item.id}>{item.name}</li>
+))}
 ```
 
 ### Conditionals
 
-Both `&&` and ternary `? :` patterns:
+Both `&&` and ternary are supported:
 
 ```jsx
-// && pattern
 {isActive && <span>Active</span>}
-
-// Ternary pattern
 {isLoading ? <Spinner /> : <Content />}
 ```
 
-→ Creates `GenElement` with `condition` annotation:
+### Children Slot
 
-```typescript
-{
-  type: 'element',
-  tagName: 'div',
-  properties: {
-    _gen: {
-      condition: {
-        expression: 'isActive',
-        isElse: false
-      },
-      unwrap: true
-    }
-  }
-}
-```
-
-### Slots (Children)
-
-`{children}` becomes a slot:
-
-```jsx
-function Card({ children }) {
-  return <div className="card">{children}</div>;
-}
-```
-
-→ Creates `GenElement` with `slot` annotation:
-
-```typescript
-{
-  type: 'element',
-  tagName: 'div',
-  properties: {
-    _gen: {
-      slot: { name: 'default' },
-      unwrap: true
-    }
-  }
-}
-```
+`{children}` is recognized as slot-like dynamic content.
 
 ### Component References
 
-PascalCase tags are detected as includes:
-
-```jsx
-function Page() {
-  return (
-    <div>
-      <Header title="My App" />
-      <Footer />
-    </div>
-  );
-}
-```
-
-→ Creates `GenElement` with `include` annotation:
-
-```typescript
-{
-  type: 'element',
-  tagName: 'div',
-  properties: {
-    _gen: {
-      include: {
-        partial: 'partials/header',
-        props: { title: '"My App"' }
-      }
-    }
-  }
-}
-```
+PascalCase tags are tracked as component dependencies.
 
 ## Transform Options
 
 ```typescript
 interface TransformOptions {
-  // Source file path (for error messages)
   sourceFile?: string;
-  
-  // Component name to transform (auto-detected if not specified)
   componentName?: string;
-  
-  // Extract props interface
   extractProps?: boolean;
-  
-  // Patterns for component type detection
   componentPatterns?: {
-    layouts?: RegExp[];   // e.g., [/Layout$/]
-    partials?: RegExp[];  // e.g., [/^Header$/]
-    pages?: RegExp[];     // e.g., [/Page$/]
-    blocks?: RegExp[];    // e.g., [/Block$/]
+    layouts?: RegExp[];
+    partials?: RegExp[];
+    pages?: RegExp[];
+    blocks?: RegExp[];
   };
-  
-  // Include source locations in annotations
   includeSourceLocations?: boolean;
+  passthroughComponents?: string[];
 }
 ```
+
+Important option:
+
+- `passthroughComponents` keeps specific PascalCase components as elements (instead of converting to includes), useful for UI primitives.
 
 ## Transform Result
 
 ```typescript
 interface TransformResult {
-  // Generated HAST tree
   tree: GenRoot;
-  
-  // Detected variables (full paths)
   variables: string[];
-  // ['product.name', 'product.price', 'isOnSale']
-  
-  // Detected component dependencies (as partial paths)
   dependencies: string[];
-  // ['partials/header', 'partials/footer']
-  
-  // Warnings during transformation
   warnings: string[];
-  
-  // Errors during transformation
   errors: string[];
+  imports?: AnalyzedImport[];
 }
 ```
 
-## Component Metadata
+Notes:
 
-The transformer extracts metadata about the component:
+- `imports` are preserved for downstream full-file React emission flows.
+- `dependencies` are de-duplicated before return.
 
-```typescript
-interface GenComponentMeta {
-  sourceFile: string;          // 'src/components/Card.tsx'
-  componentName: string;       // 'Card'
-  exports: string[];           // ['Card']
-  dependencies: string[];      // ['partials/header']
-  componentType?: string;      // 'component' | 'layout' | 'partial' | 'page' | 'block'
-  props?: GenPropDefinition[]; // Extracted props
-}
-```
-
-Props are extracted from destructuring patterns:
-
-```tsx
-function Card({ title, description, children }) { ... }
-
-// Results in:
-props: [
-  { name: 'title', type: 'unknown', required: true },
-  { name: 'description', type: 'unknown', required: true },
-  { name: 'children', type: 'unknown', required: true },
-]
-```
-
-## Integration with Plugins
-
-The transformed HAST tree can be passed directly to template plugins:
+## Practical Integration Example
 
 ```typescript
-import { transformJsx, LiquidPlugin, PluginRegistry } from '@ui8kit/generator';
+import { transformJsxFile } from '@ui8kit/generator';
+import { ReactPlugin } from '@ui8kit/generator/plugins';
 
-// Transform React component
-const result = transformJsx(source);
-
-// Initialize Liquid plugin
-const registry = new PluginRegistry();
-const plugin = new LiquidPlugin();
-await plugin.initialize({
-  logger: console,
-  config: { fileExtension: '.liquid', outputDir: './dist' },
-  outputDir: './dist',
+const transformed = await transformJsxFile('./src/blocks/HeroView.tsx', {
+  passthroughComponents: ['Block', 'Stack', 'Container'],
 });
 
-// Generate Liquid template
-const output = await plugin.transform(result.tree);
+if (transformed.errors.length > 0) {
+  throw new Error(transformed.errors.join('; '));
+}
 
+const plugin = new ReactPlugin();
+const output = await plugin.transform(transformed.tree);
 console.log(output.content);
-// {% for item in items %}
-//   <li>{{ item.name }}</li>
-// {% endfor %}
-```
-
-## TemplateService
-
-For batch processing, use `TemplateService`:
-
-```typescript
-import { TemplateService } from '@ui8kit/generator';
-
-const service = new TemplateService();
-await service.initialize(context);
-
-const result = await service.execute({
-  sourceDirs: ['./src/components', './src/layouts'],
-  outputDir: './dist/templates',
-  engine: 'liquid',
-  include: ['**/*.tsx'],
-  exclude: ['**/*.test.tsx'],
-  verbose: true,
-});
-
-console.log(`Generated ${result.files.length} templates`);
 ```
 
 ## Limitations
 
-1. **Dynamic expressions**: Complex expressions like `{fn()}` are not fully analyzed
-2. **Spread props**: `{...props}` generates a warning (not supported in templates)
-3. **Hooks**: React hooks are ignored (not relevant for static templates)
-4. **Context**: React context is not analyzed
-5. **Higher-order components**: HOCs are not unwrapped
+1. Complex dynamic expressions (`{fn()}` with side effects, nested logic) are only partially analyzable.
+2. Spread-heavy patterns can reduce metadata quality.
+3. React hooks/context runtime behavior is not executed/analyzed by transformer.
+4. HOC unwrapping is limited; prefer transforming concrete components.
 
-## Best Practices
+## Validation and Tests
 
-1. **Keep components simple**: The simpler the JSX, the cleaner the template
-2. **Use destructuring**: Props are extracted from destructuring patterns
-3. **Name components clearly**: PascalCase names are used for type detection
-4. **Use key prop**: Keys in `.map()` are extracted for template loops
-5. **Avoid complex expressions**: Split complex logic into multiple expressions
+Run transformer tests from package root:
+
+```bash
+cd _packages/generator
+bun run test
+```
+
+For static checks:
+
+```bash
+bun run typecheck
+```
+
+## Related Docs
+
+- `README.md` — package overview and quick runtime usage.
+- `GUIDE.md` — full static runtime scenarios, commands, checks.
+- `PLUGINS.md` — template plugin legacy track.

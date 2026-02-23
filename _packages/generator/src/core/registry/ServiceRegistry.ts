@@ -1,4 +1,5 @@
 import type { IService, IServiceContext, IServiceRegistry } from '../interfaces/IService';
+import type { ILogger } from '../interfaces/ILogger';
 
 /**
  * Error thrown when a circular dependency is detected
@@ -34,6 +35,7 @@ export class ServiceRegistry implements IServiceRegistry {
   private services = new Map<string, IService>();
   private initializationOrder: string[] | null = null;
   private initialized = false;
+  constructor(private readonly logger?: ILogger) {}
   
   /**
    * Register a service
@@ -101,7 +103,11 @@ export class ServiceRegistry implements IServiceRegistry {
       
       const service = this.services.get(name);
       if (!service) {
-        console.warn(`[ServiceRegistry] Service "${name}" has missing dependency, skipping`);
+        if (this.logger) {
+          this.logger.warn(`[ServiceRegistry] Service "${name}" has missing dependency, skipping`);
+        } else {
+          console.warn(`[ServiceRegistry] Service "${name}" has missing dependency, skipping`);
+        }
         return;
       }
       
@@ -110,7 +116,11 @@ export class ServiceRegistry implements IServiceRegistry {
       // Visit dependencies first
       for (const dep of service.dependencies) {
         if (!this.services.has(dep)) {
-          console.warn(`[ServiceRegistry] Service "${name}" depends on "${dep}" which is a missing dependency`);
+          if (this.logger) {
+            this.logger.warn(`[ServiceRegistry] Service "${name}" depends on "${dep}" which is a missing dependency`);
+          } else {
+            console.warn(`[ServiceRegistry] Service "${name}" depends on "${dep}" which is a missing dependency`);
+          }
           continue;
         }
         visit(dep, [...path, name]);
@@ -180,7 +190,11 @@ export class ServiceRegistry implements IServiceRegistry {
       try {
         await service.dispose();
       } catch (error) {
-        console.error(`[ServiceRegistry] Error disposing service "${name}":`, error);
+        if (this.logger) {
+          this.logger.error(`[ServiceRegistry] Error disposing service "${name}":`, error);
+        } else {
+          console.error(`[ServiceRegistry] Error disposing service "${name}":`, error);
+        }
         // Continue disposing other services
       }
     }

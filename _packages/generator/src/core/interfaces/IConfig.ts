@@ -67,16 +67,6 @@ export interface GeneratorConfig {
    */
   uncss?: UncssStepConfig;
   
-  /**
-   * Variant elements generation
-   */
-  elements?: {
-    enabled?: boolean;
-    variantsDir?: string;
-    outputDir?: string;
-    componentsImportPath?: string;
-  };
-
   classLog?: {
     enabled?: boolean;
     outputDir?: string;

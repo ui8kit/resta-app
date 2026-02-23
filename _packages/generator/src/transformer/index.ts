@@ -1,8 +1,10 @@
 /**
  * Transformer Module - JSX to HAST Transformation
  *
- * Converts React JSX/TSX components to GenHAST trees with annotations
- * for template generation.
+ * Converts React JSX/TSX components to GenHAST trees with annotations.
+ * The resulting tree is used by:
+ * - static runtime generation pipeline internals
+ * - template-plugin legacy track (optional)
  *
  * @example
  * ```ts
@@ -22,9 +24,8 @@
  * // Transform file
  * const fileResult = await transformJsxFile('./src/components/MyComponent.tsx');
  *
- * // Use with template plugin
- * const plugin = new LiquidPlugin();
- * const template = await plugin.transform(result.tree);
+ * // Inspect extracted metadata
+ * console.log(result.variables, result.dependencies);
  * ```
  */
 

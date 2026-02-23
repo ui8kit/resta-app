@@ -1,12 +1,12 @@
 #!/usr/bin/env bun
 /**
- * Generate styles.css from HTML views via PostCSS + Tailwind.
+ * Generate styles.css from final HTML via PostCSS + Tailwind.
  *
  * Run after: bun run generate:html
  *
  * Prerequisites:
  *   - dist/css/ — tailwind.apply.css, variants.apply.css
- *   - dist/html-views/ — HTML pages with actual classes
+ *   - dist/html/ — generated HTML pages
  *
  * Uses @source to scan HTML files for real class usage, then builds
  * a single styles.css with Tailwind processing.
@@ -26,7 +26,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 
 const DIST_CSS = resolve(ROOT, 'dist', 'css');
-const DIST_HTML_VIEWS = resolve(ROOT, 'dist', 'html-views');
+const DIST_HTML = resolve(ROOT, 'dist', 'html');
 const DIST_HTML_CSS = resolve(ROOT, 'dist', 'html', 'css');
 const ENTRY_CSS = resolve(DIST_CSS, 'entry.css');
 const OUTPUT_CSS = resolve(DIST_HTML_CSS, 'styles.css');
@@ -38,11 +38,9 @@ const ENTRY_CONTENT = `/* Auto-generated entry for PostCSS. Do not edit. */
 /* Design tokens and base styles */
 @import "../../src/assets/css/shadcn.css";
 
-/* Scan HTML views for actual class usage */
-@source "../html-views";
+/* Scan generated HTML pages for actual class usage */
+@source "../html";
 `;
-
-const DIST_HTML = resolve(ROOT, 'dist', 'html');
 
 /** Convert path to file:// URL for uncss (fixes Windows drive letters) */
 function toFileUrl(path: string): string {
@@ -75,8 +73,8 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  if (!existsSync(DIST_HTML_VIEWS)) {
-    console.error('  dist/html-views/ not found.');
+  if (!existsSync(DIST_HTML)) {
+    console.error('  dist/html/ not found.');
     console.error('  Run: bun run generate:html');
     process.exit(1);
   }

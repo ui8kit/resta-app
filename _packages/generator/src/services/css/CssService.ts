@@ -110,10 +110,15 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
     const allPureCss: string[] = [];
     const generatedFiles: CssServiceOutput['files'] = [];
 
-    // Emit variants.apply.css first
-    const variantsCss = await emitVariantsApplyCss({
-      variantsDir: this.context.config.elements?.variantsDir ?? './src/variants',
-    });
+    // Emit variants.apply.css first. In package-local runs this directory may not exist.
+    let variantsCss = '';
+    try {
+      variantsCss = await emitVariantsApplyCss({
+        variantsDir: './src/variants',
+      });
+    } catch (error) {
+      this.context.logger.warn('Failed to generate variants.apply.css, using empty output.', error);
+    }
     const variantsPath = join(outputDir, cssFileNames.variantsCss);
     await this.fs.writeFile(variantsPath, variantsCss);
     generatedFiles.push({

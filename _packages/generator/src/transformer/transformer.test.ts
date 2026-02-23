@@ -545,8 +545,8 @@ describe('transformJsx', () => {
 // Integration Tests
 // =============================================================================
 
-describe('Integration: Transform + Plugin', () => {
-  it('produces valid HAST for Liquid plugin', async () => {
+describe('Integration: Transform output', () => {
+  it('produces valid HAST for downstream consumers', async () => {
     const source = `
       export function ProductCard({ product, isOnSale }) {
         return (

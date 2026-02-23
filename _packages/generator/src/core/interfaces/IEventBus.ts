@@ -78,12 +78,15 @@ export interface GeneratorEvents {
   
   // HTML events
   'html:generated': { route: string; path: string; size: number };
+  'html-converter:complete': { htmlPath: string; elementsCount: number; selectorsCount: number };
   
-  // View events
-  'view:generated': { route: string; path: string };
-  
-  // Asset events
-  'asset:copied': { source: string; destination: string };
+  // Class log events
+  'class-log:generated': {
+    jsonPath: string;
+    filteredJsonPath: string;
+    totalClasses: number;
+    validClasses: number;
+  };
 }
 
 /**

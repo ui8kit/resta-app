@@ -51,8 +51,8 @@ export class Orchestrator implements IOrchestrator {
     };
     
     this.logger = this.options.logger;
-    this.eventBus = new EventBus();
-    this.registry = new ServiceRegistry();
+    this.eventBus = new EventBus(this.logger);
+    this.registry = new ServiceRegistry(this.logger);
     this.pipeline = new Pipeline({ continueOnError: this.options.continueOnError });
   }
   

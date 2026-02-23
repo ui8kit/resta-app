@@ -1,12 +1,16 @@
 # @ui8kit/generator
 
-Static HTML/CSS generator for UI8Kit.
+Static HTML/CSS generator for UI8Kit with orchestrator pipeline.
 
-The package now focuses on one runtime path only:
+## Runtime Scope
+
+The active runtime path is:
 
 - `Orchestrator -> CssStage -> HtmlStage -> (optional) ClassLogStage`
-- React views in `views/pages/*.html`
-- output: static HTML and CSS artifacts
+- source views from `html.viewsDir` + `html.viewsPagesSubdir` (recommended: `dist/html/pages`)
+- final output in `html.outputDir` (recommended: `dist/html`)
+
+Legacy Liquid runtime flow is not part of this pipeline.
 
 ## Installation
 
@@ -19,20 +23,23 @@ bun add @ui8kit/generator
 ```ts
 import { generate } from '@ui8kit/generator';
 
+const routes = {
+  '/': { title: 'Home' },
+  '/blog': { title: 'Blog' },
+  '/menu/grill-salmon-steak': { title: 'Grill Salmon Steak' },
+};
+
 await generate({
   app: { name: 'My App', lang: 'en' },
   css: {
-    routes: ['/', '/blog'],
-    outputDir: './dist/html/css',
+    routes: Object.keys(routes),
+    outputDir: './dist/css',
     pureCss: true,
   },
   html: {
-    viewsDir: './dist/react/views',
+    viewsDir: './dist/html',
     viewsPagesSubdir: 'pages',
-    routes: {
-      '/': { title: 'Home' },
-      '/blog': { title: 'Blog' },
-    },
+    routes,
     outputDir: './dist/html',
     mode: 'tailwind', // 'tailwind' | 'semantic' | 'inline'
     cssHref: '/css/styles.css',
@@ -40,42 +47,35 @@ await generate({
 });
 ```
 
-## Supported HTML Modes
+## HTML Modes
 
-- `tailwind`: keeps class-based markup
-- `semantic`: converts `data-class` to `class` and strips raw utility classes
-- `inline`: same as semantic + inlines generated CSS into `<style>`
+- `tailwind`: keeps class attributes
+- `semantic`: converts `data-class` to semantic classes and removes utility-only class output
+- `inline`: semantic transform + inlined CSS in `<style>`
 
-## Active Services and Stages
+## Common Commands (root project)
 
-### Services
-- `HtmlConverterService`
-- `CssService`
-- `HtmlService`
-- `ClassLogService` (optional)
+```bash
+bun run dist:app
+bun run generate:html
+bun run generate:styles
+bun run generate:static
+```
 
-### Stages
-- `CssStage`
-- `HtmlStage`
-- `ClassLogStage` (optional, enabled by `config.classLog.enabled`)
+## Generator Development Commands
 
-## Important Changes
+```bash
+cd _packages/generator
+bun run typecheck
+bun run test
+bun run test:coverage
+```
 
-- Legacy runtime services removed from generator pipeline:
-  - `LayoutService`
-  - `RenderService`
-  - `ViewService`
-  - `AssetService`
-  - `TemplateService`
-  - `ViteBundleService`
-- `css.entryPath` removed from generator config
-- `generate-templates` CLI removed from generator runtime
-- Legacy template plugins are no longer exported from the main entrypoint
+## Full Guide
 
-## Optional Postprocessing
+For complete scenarios, configuration principles, validations, and troubleshooting, see:
 
-- `uncss` can still be used as optional postprocess through `runUncssPostprocess`
-- class logs are supported through `classLog` config and `ClassLogStage`
+- `GUIDE.md`
 
 ## License
 

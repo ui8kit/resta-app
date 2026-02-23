@@ -5,6 +5,22 @@ This guide explains the template plugin system used for template-engine generati
 Important:
 - This is a separate/legacy track and is **not** part of the main HTML/CSS runtime pipeline.
 - Main runtime focuses on static page generation via `generate()` (`CssStage -> HtmlStage`).
+- The canonical docs for current runtime behavior are `README.md` and `GUIDE.md`.
+- Treat this file as a reference for template-plugin internals and migration support.
+
+## Status and Boundaries
+
+Use template plugins only when you explicitly need template-engine output (`.liquid`, `.hbs`, `.twig`, `.latte`, `.tsx`).
+
+Do **not** use this track for the default static flow. Default flow is:
+
+- source views -> `generate()` -> static HTML pages + CSS artifacts
+- optional postprocess: class log, UnCSS
+
+In short:
+
+- `generate()` path = primary production runtime
+- template plugins path = dedicated legacy/template-engine track
 
 ## Built-in Plugins
 

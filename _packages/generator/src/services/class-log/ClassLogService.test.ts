@@ -101,7 +101,7 @@ describe('ClassLogService', () => {
   it('has correct service metadata', () => {
     expect(service.name).toBe('class-log');
     expect(service.version).toBe('3.0.0');
-    expect(service.dependencies).toContain('view');
+    expect(service.dependencies).toEqual([]);
   });
 
   it('extracts classes and generates JSON output files', async () => {

@@ -1,4 +1,5 @@
 import type { IEventBus, EventHandler } from '../interfaces/IEventBus';
+import type { ILogger } from '../interfaces/ILogger';
 
 /**
  * EventBus implementation for inter-service communication.
@@ -11,6 +12,7 @@ import type { IEventBus, EventHandler } from '../interfaces/IEventBus';
  */
 export class EventBus implements IEventBus {
   private listeners = new Map<string, Set<EventHandler>>();
+  constructor(private readonly logger?: Pick<ILogger, 'error'>) {}
   
   /**
    * Emit an event to all subscribers
@@ -32,12 +34,20 @@ export class EventBus implements IEventBus {
         // If handler returns a promise, catch any errors
         if (result && typeof result === 'object' && 'catch' in result) {
           (result as Promise<void>).catch((error) => {
-            console.error(`[EventBus] Async handler error for "${event}":`, error);
+            if (this.logger) {
+              this.logger.error(`[EventBus] Async handler error for "${event}":`, error);
+            } else {
+              console.error(`[EventBus] Async handler error for "${event}":`, error);
+            }
           });
         }
       } catch (error) {
         // Don't let one handler break others
-        console.error(`[EventBus] Handler error for "${event}":`, error);
+        if (this.logger) {
+          this.logger.error(`[EventBus] Handler error for "${event}":`, error);
+        } else {
+          console.error(`[EventBus] Handler error for "${event}":`, error);
+        }
       }
     }
   }

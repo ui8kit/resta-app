@@ -15,22 +15,17 @@ export class HtmlStage implements IPipelineStage<unknown, HtmlServiceOutput> {
   readonly dependencies: string[] = ['css'];
   readonly description = 'Render pages from prepared views to final HTML';
   
-  private service: HtmlService;
-  
-  constructor() {
-    this.service = new HtmlService();
-  }
-  
   canExecute(_context: IPipelineContext): boolean {
     return true;
   }
   
   async execute(_input: unknown, context: IPipelineContext): Promise<HtmlServiceOutput> {
     const { config, logger, eventBus } = context;
+    const service = context.registry.resolve<HtmlService>('html');
     
     // Initialize service
-    await this.service.initialize({ config, logger, eventBus, registry: context.registry });
-    const result = await runGenerateHtml(context, this.service);
+    await service.initialize({ config, logger, eventBus, registry: context.registry });
+    const result = await runGenerateHtml(context, service);
     
     // Store result in context
     const totalSize = result.pages.reduce((sum, p) => sum + p.size, 0);

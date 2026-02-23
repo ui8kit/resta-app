@@ -267,12 +267,6 @@ export {
   type VariantsArtifacts,
 } from './scripts/emit-variants-apply.js';
 
-export {
-  emitVariantElements,
-  type EmitVariantElementsOptions,
-  type EmitVariantElementsResult,
-} from './scripts/emit-variant-elements.js';
-
 // =============================================================================
 // Registry Generator
 // =============================================================================

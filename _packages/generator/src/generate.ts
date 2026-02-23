@@ -8,29 +8,109 @@
  * Optional postprocess:
  * - class log
  * - uncss
- * - variant elements
  */
 
-import { mkdir, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { existsSync } from 'node:fs';
+import { z } from 'zod';
 
 import { Logger } from './core/logger';
 import type { GeneratorConfig, RouteConfig } from './core/interfaces';
-import { emitVariantElements } from './scripts/emit-variant-elements.js';
 import { runGenerateSitePipeline } from './pipelines/generate-site';
 import { runUncssPostprocess, type UncssStepConfig } from './steps/postprocess-uncss';
 
 // Re-export types for convenience
 export type { GeneratorConfig, RouteConfig };
 
+const routeConfigSchema = z.object({
+  title: z.string().min(1),
+  seo: z
+    .object({
+      description: z.string().optional(),
+      keywords: z.array(z.string()).optional(),
+      image: z.string().optional(),
+    })
+    .optional(),
+  data: z.record(z.unknown()).optional(),
+});
+
+const generateConfigSchema = z.object({
+  app: z.object({
+    name: z.string().min(1),
+    lang: z.string().optional(),
+  }),
+  mappings: z
+    .object({
+      ui8kitMap: z.string().optional(),
+      shadcnMap: z.string().optional(),
+    })
+    .optional(),
+  css: z.object({
+    routes: z.array(z.string()).default(['/']),
+    outputDir: z.string().min(1),
+    pureCss: z.boolean().optional(),
+    outputFiles: z
+      .object({
+        applyCss: z.string().optional(),
+        pureCss: z.string().optional(),
+        variantsCss: z.string().optional(),
+        shadcnCss: z.string().optional(),
+      })
+      .optional(),
+  }),
+  html: z.object({
+    viewsDir: z.string().min(1),
+    viewsPagesSubdir: z.string().optional(),
+    routes: z.record(routeConfigSchema),
+    outputDir: z.string().min(1),
+    mode: z.enum(['tailwind', 'semantic', 'inline']).optional(),
+    cssHref: z.string().optional(),
+    stripDataClassInTailwind: z.boolean().optional(),
+  }),
+  uncss: z
+    .object({
+      enabled: z.boolean().optional(),
+      htmlFiles: z.array(z.string()).optional(),
+      cssFile: z.string().optional(),
+      outputDir: z.string().optional(),
+      outputFileName: z.string().optional(),
+      ignore: z.array(z.string()).optional(),
+      media: z.boolean().optional(),
+      timeout: z.number().optional(),
+    })
+    .optional(),
+  classLog: z
+    .object({
+      enabled: z.boolean().optional(),
+      outputDir: z.string().optional(),
+      baseName: z.string().optional(),
+      uikitMapPath: z.string().optional(),
+      includeResponsive: z.boolean().optional(),
+      includeStates: z.boolean().optional(),
+    })
+    .optional(),
+  mdx: z
+    .object({
+      enabled: z.boolean(),
+      docsDir: z.string(),
+      outputDir: z.string(),
+      demosDir: z.string().optional(),
+      navOutput: z.string().optional(),
+      basePath: z.string().optional(),
+      components: z.record(z.string()).optional(),
+      propsSource: z.string().optional(),
+      toc: z
+        .object({
+          minLevel: z.number().optional(),
+          maxLevel: z.number().optional(),
+        })
+        .optional(),
+    })
+    .optional(),
+  plugins: z.record(z.unknown()).optional(),
+});
+
 export interface GenerateConfig extends Omit<GeneratorConfig, 'template' | 'assets' | 'clientScript'> {
   uncss?: UncssStepConfig;
-  elements?: {
-    enabled?: boolean;
-    variantsDir?: string;
-    outputDir?: string;
-    componentsImportPath?: string;
-  };
 }
 
 export interface GenerateResult {
@@ -43,7 +123,6 @@ export interface GenerateResult {
     cssFiles: number;
     htmlPages: number;
     assets: number;
-    elements: number;
     templates: number;
   };
 }
@@ -58,15 +137,14 @@ export async function generate(config: GenerateConfig): Promise<GenerateResult> 
     cssFiles: 0,
     htmlPages: 0,
     assets: 0,
-    elements: 0,
     templates: 0,
   };
 
   try {
-    validateConfig(config);
-    logger.info(`🚀 Generating static site for ${config.app.name}`);
+    const parsedConfig = validateConfig(config);
+    logger.info(`🚀 Generating static site for ${parsedConfig.app.name}`);
 
-    const pipelineResult = await runGenerateSitePipeline(config, logger);
+    const pipelineResult = await runGenerateSitePipeline(parsedConfig, logger);
     errors.push(...pipelineResult.errors);
 
     // Extract generated counts from stage outputs
@@ -82,15 +160,9 @@ export async function generate(config: GenerateConfig): Promise<GenerateResult> 
       }
     }
 
-    if (config.uncss?.enabled) {
+    if (parsedConfig.uncss?.enabled) {
       logger.info('🔧 Running UnCSS optimization...');
-      await runUncssPostprocess(config.uncss, logger);
-    }
-
-    if (config.elements?.enabled) {
-      logger.info('🧩 Generating variant elements...');
-      const elementsResult = await generateVariantElements(config, logger);
-      generated.elements = elementsResult.generated;
+      await runUncssPostprocess(parsedConfig.uncss, logger);
     }
 
     const duration = performance.now() - startTime;
@@ -116,42 +188,21 @@ export async function generate(config: GenerateConfig): Promise<GenerateResult> 
   }
 }
 
-async function generateVariantElements(
-  config: GenerateConfig,
-  logger: Logger
-): Promise<{ generated: number }> {
-  const elementsConfig = config.elements;
-  if (!elementsConfig) return { generated: 0 };
+function validateConfig(config: GenerateConfig): GenerateConfig {
+  const parsed = generateConfigSchema.parse(config) as GenerateConfig;
 
-  const outputDir = elementsConfig.outputDir ?? './src/elements';
-  const result = await emitVariantElements({
-    variantsDir: elementsConfig.variantsDir ?? './src/variants',
-    outputDir,
-    componentsImportPath: elementsConfig.componentsImportPath ?? '../components',
-  });
-
-  await mkdir(outputDir, { recursive: true });
-  for (const [fileName, content] of result.files.entries()) {
-    const filePath = join(outputDir, fileName);
-    await writeFile(filePath, content, 'utf-8');
-    logger.info(`  → ${filePath}`);
+  if (!existsSync(parsed.html.viewsDir)) {
+    throw new Error(`config.html.viewsDir does not exist: ${parsed.html.viewsDir}`);
   }
 
-  logger.info(`✅ Generated ${result.files.size} element files`);
-  return { generated: result.files.size };
-}
+  if (parsed.html.mode === 'inline' && !parsed.css.outputDir) {
+    throw new Error('html.mode=inline requires config.css.outputDir');
+  }
 
-function validateConfig(config: GenerateConfig): void {
-  if (!config.app?.name) {
-    throw new Error('config.app.name is required');
+  if (parsed.uncss?.enabled && (!parsed.uncss.htmlFiles?.length || !parsed.uncss.cssFile)) {
+    throw new Error('uncss.enabled=true requires uncss.htmlFiles and uncss.cssFile');
   }
-  if (!config.css?.outputDir || !config.html?.outputDir || !config.html?.viewsDir) {
-    throw new Error('config.css.outputDir, config.html.outputDir and config.html.viewsDir are required');
-  }
-  if (config.uncss?.enabled) {
-    if (!config.uncss.htmlFiles?.length || !config.uncss.cssFile) {
-      throw new Error('uncss.enabled=true requires uncss.htmlFiles and uncss.cssFile');
-    }
-  }
+
+  return parsed;
 }
 
