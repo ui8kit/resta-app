@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "generate": "bun run --cwd _packages/generator build && bunx ui8kit-generate",
+    "generate": "bun run _packages/generator/src/cli/generate.ts static",
     "finalize": "bun run scripts/finalize-dist.ts",
     "dist:app": "bun run lint:dsl && bun run lint:gen && bun run validate && bun run generate && bun run finalize && bun run typecheck:dist",
     "clean": "bash scripts/clean-workspace.sh",
@@ -26,7 +26,9 @@
     "lint:all": "bun run typecheck && bun run lint",
     "audit:refactor": "bun run scripts/refactor-audit.ts",
     "build:props": "bun run scripts/build-props-classlist.ts",
-    "generate:html": "bun run scripts/generate-html-from-react.ts","generate:styles":"bun run scripts/generate-styles.ts","generate:static":"bun run generate:html && bun run generate:styles"
+    "generate:static": "bun run _packages/generator/src/cli/generate.ts static",
+    "generate:html": "bun run _packages/generator/src/cli/generate.ts html",
+    "generate:styles": "bun run _packages/generator/src/cli/generate.ts styles"
   },
   "dependencies": {
     "@ui8kit/contracts": "^0.1.0",

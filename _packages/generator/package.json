@@ -1,6 +1,6 @@
 {
   "name": "@ui8kit/generator",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Static HTML/CSS generator for UI8Kit with orchestrator pipeline",
   "type": "module",
   "main": "./src/index.ts",
@@ -51,14 +51,14 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@ui8kit/sdk": "^0.1.0",
     "@babel/parser": "^7.24.0",
     "@babel/traverse": "^7.24.0",
     "@babel/types": "^7.24.0",
+    "@tailwindcss/postcss": "^4.1.18",
     "chalk": "^5.3.0",
     "commander": "^11.1.0",
     "glob": "^13.0.0",
-    "liquidjs": "^10.10.0",
+    "postcss": "^8.5.6",
     "uncss": "^0.17.3",
     "zod": "^3.23.0"
   },

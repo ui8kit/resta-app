@@ -2,15 +2,15 @@
  * High-level generate() API.
  *
  * Orchestrator-only path:
+ * - React SSR stage (optional)
  * - CSS stage
  * - HTML stage
+ * - PostCSS stage (optional)
  *
  * Optional postprocess:
- * - class log
- * - uncss
+ * - uncss (via PostCssStage or standalone)
  */
 
-import { existsSync } from 'node:fs';
 import { z } from 'zod';
 
 import { Logger } from './core/logger';
@@ -18,7 +18,6 @@ import type { GeneratorConfig, RouteConfig } from './core/interfaces';
 import { runGenerateSitePipeline } from './pipelines/generate-site';
 import { runUncssPostprocess, type UncssStepConfig } from './steps/postprocess-uncss';
 
-// Re-export types for convenience
 export type { GeneratorConfig, RouteConfig };
 
 const routeConfigSchema = z.object({
@@ -58,14 +57,42 @@ const generateConfigSchema = z.object({
       .optional(),
   }),
   html: z.object({
-    viewsDir: z.string().min(1),
-    viewsPagesSubdir: z.string().optional(),
     routes: z.record(routeConfigSchema),
     outputDir: z.string().min(1),
     mode: z.enum(['tailwind', 'semantic', 'inline']).optional(),
     cssHref: z.string().optional(),
     stripDataClassInTailwind: z.boolean().optional(),
   }),
+  ssr: z
+    .object({
+      registryPath: z.string().min(1),
+      reactDistDir: z.string().min(1),
+      outputDir: z.string().optional(),
+      routeComponentMap: z.record(z.string()).optional(),
+    })
+    .optional(),
+  postcss: z
+    .object({
+      enabled: z.boolean().optional(),
+      entryImports: z.array(z.string()).optional(),
+      sourceDir: z.string().optional(),
+      outputDir: z.string().optional(),
+      outputFileName: z.string().optional(),
+      uncss: z
+        .object({
+          enabled: z.boolean().optional(),
+          outputFileName: z.string().optional(),
+          timeout: z.number().optional(),
+        })
+        .optional(),
+    })
+    .optional(),
+  fixtures: z
+    .object({
+      dir: z.string(),
+      collections: z.array(z.string()).optional(),
+    })
+    .optional(),
   uncss: z
     .object({
       enabled: z.boolean().optional(),
@@ -76,16 +103,6 @@ const generateConfigSchema = z.object({
       ignore: z.array(z.string()).optional(),
       media: z.boolean().optional(),
       timeout: z.number().optional(),
-    })
-    .optional(),
-  classLog: z
-    .object({
-      enabled: z.boolean().optional(),
-      outputDir: z.string().optional(),
-      baseName: z.string().optional(),
-      uikitMapPath: z.string().optional(),
-      includeResponsive: z.boolean().optional(),
-      includeStates: z.boolean().optional(),
     })
     .optional(),
   mdx: z
@@ -118,12 +135,10 @@ export interface GenerateResult {
   duration: number;
   errors: Array<{ stage: string; error: Error }>;
   generated: {
-    views: number;
-    partials: number;
+    ssrPages: number;
     cssFiles: number;
     htmlPages: number;
-    assets: number;
-    templates: number;
+    postcssFiles: number;
   };
 }
 
@@ -132,24 +147,25 @@ export async function generate(config: GenerateConfig): Promise<GenerateResult> 
   const logger = new Logger({ level: 'info' });
   const errors: Array<{ stage: string; error: Error }> = [];
   const generated: GenerateResult['generated'] = {
-    views: 0,
-    partials: 0,
+    ssrPages: 0,
     cssFiles: 0,
     htmlPages: 0,
-    assets: 0,
-    templates: 0,
+    postcssFiles: 0,
   };
 
   try {
     const parsedConfig = validateConfig(config);
-    logger.info(`🚀 Generating static site for ${parsedConfig.app.name}`);
+    logger.info(`Generating static site for ${parsedConfig.app.name}`);
 
     const pipelineResult = await runGenerateSitePipeline(parsedConfig, logger);
     errors.push(...pipelineResult.errors);
 
-    // Extract generated counts from stage outputs
     for (const stage of pipelineResult.stages) {
       if (!stage.success || !stage.output) continue;
+      if (stage.stage === 'react-ssr') {
+        const out = stage.output as { pages?: Array<unknown> };
+        generated.ssrPages = out.pages?.length ?? 0;
+      }
       if (stage.stage === 'css') {
         const out = stage.output as { files?: Array<unknown> };
         generated.cssFiles = out.files?.length ?? 0;
@@ -158,15 +174,18 @@ export async function generate(config: GenerateConfig): Promise<GenerateResult> 
         const out = stage.output as { pages?: Array<unknown> };
         generated.htmlPages = out.pages?.length ?? 0;
       }
+      if (stage.stage === 'postcss') {
+        generated.postcssFiles = 1;
+      }
     }
 
     if (parsedConfig.uncss?.enabled) {
-      logger.info('🔧 Running UnCSS optimization...');
+      logger.info('Running UnCSS optimization...');
       await runUncssPostprocess(parsedConfig.uncss, logger);
     }
 
     const duration = performance.now() - startTime;
-    logger.info(`✅ Static site generation completed in ${Math.round(duration)}ms!`);
+    logger.info(`Static site generation completed in ${Math.round(duration)}ms`);
 
     return {
       success: errors.length === 0,
@@ -177,7 +196,7 @@ export async function generate(config: GenerateConfig): Promise<GenerateResult> 
   } catch (error) {
     const duration = performance.now() - startTime;
     const err = error instanceof Error ? error : new Error(String(error));
-    logger.error(`❌ Generation failed: ${err.message}`);
+    logger.error(`Generation failed: ${err.message}`);
     errors.push({ stage: 'generate', error: err });
     return {
       success: false,
@@ -191,10 +210,6 @@ export async function generate(config: GenerateConfig): Promise<GenerateResult> 
 function validateConfig(config: GenerateConfig): GenerateConfig {
   const parsed = generateConfigSchema.parse(config) as GenerateConfig;
 
-  /*if (!existsSync(parsed.html.viewsDir)) {
-    throw new Error(`config.html.viewsDir does not exist: ${parsed.html.viewsDir}`);
-  }*/
-
   if (parsed.html.mode === 'inline' && !parsed.css.outputDir) {
     throw new Error('html.mode=inline requires config.css.outputDir');
   }
@@ -205,4 +220,3 @@ function validateConfig(config: GenerateConfig): GenerateConfig {
 
   return parsed;
 }
-

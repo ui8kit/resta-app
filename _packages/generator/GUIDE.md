@@ -1,238 +1,177 @@
 # @ui8kit/generator — Comprehensive Practical Guide
 
-This guide describes the current generator's runtime following the transition to an `Orchestrator + Stage + Service` architecture, without the Liquid pipeline.
+This guide describes the current generator runtime following the transition to an `Orchestrator + Stage + Service` architecture with React SSR and PostCSS integration.
 
 ## 1) What the Generator Does
 
 `@ui8kit/generator` handles static build tasks:
 
-- Input: Pre-prepared HTML view files;
-- Output: Static HTML pages + CSS artifacts;
-- Core pipeline: `CssStage -> HtmlStage` (+ optionally `ClassLogStage`).
+- Input: React components (via `registry.json`) + fixture data;
+- Output: Static HTML pages + CSS artifacts + optimized styles;
+- Core pipeline: `ReactSsrStage -> CssStage -> HtmlStage -> PostCssStage`.
 
-Important Notes:
+Key Points:
 
-- `dist/html-views` is no longer a mandatory part of the pipeline;
-- The source for pages is `dist/html/pages` (or any other directory specified via `html.viewsDir` + `html.viewsPagesSubdir`);
-- Generation of variant elements (`generateVariantElements`) has been removed.
+- React SSR renders components to static HTML using `renderToStaticMarkup()`;
+- `dist/html-views` and `viewsDir/viewsPagesSubdir` are no longer used;
+- The source for pages is `registry.json` which maps components to routes;
+- PostCSS + Tailwind produces optimized `styles.css` with UnCSS support.
 
-## 2) Key Configuration Principles
+## 2) Configuration
 
-### 2.1 Single Source of Truth for Routes
+### 2.1 dist.config.json
 
-Use a single route object for both `css.routes` and `html.routes` to ensure:
+The CLI reads configuration from `dist.config.json` in the project root:
 
-- CSS is generated only for necessary pages;
-- HTML and CSS remain synchronized;
-- Avoidance of redundant/empty pages.
-
-### 2.2 Predictable Inputs/Outputs
-
-- `html.viewsDir` + `html.viewsPagesSubdir` specify the location of source views;
-- `html.outputDir` indicates where to write the final pages;
-- `css.outputDir` indicates where to write intermediate CSS artifacts (`tailwind.apply.css`, `ui8kit.local.css`, `variants.apply.css`).
-
-### 2.3 HTML Modes Depend on Publication Scenario
-
-- `tailwind`: Retains classes, suitable for external `styles.css`;
-- `semantic`: Replaces utility classes with semantic classes from `data-class`;
-- `inline`: Similar to `semantic`, but embeds CSS directly into the page (convenient for email/isolated deliveries).
-
-### 2.4 Post-processing is Optional
-
-- `uncss` is enabled only with explicit configuration;
-- Class logging (`classLog.enabled`) is enabled separately and is not mandatory for the build.
-
-## 3) `generate()` Configuration by Blocks
-
-```ts
-import { generate } from '@ui8kit/generator';
-
-const routes = {
-  '/': { title: 'Home' },
-  '/menu': { title: 'Menu' },
-  '/blog': { title: 'Blog' },
-  '/menu/grill-salmon-steak': { title: 'Grill Salmon Steak' },
-};
-
-const result = await generate({
-  app: { name: 'Resta App', lang: 'en' },
-
-  mappings: {
-    ui8kitMap: './src/lib/ui8kit.map.json',
-    shadcnMap: './src/lib/shadcn.map.json',
+```json
+{
+  "app": { "name": "App Name", "lang": "en" },
+  "ssr": {
+    "registryPath": "dist/react/_temp/registry.json",
+    "reactDistDir": "dist/react",
+    "outputDir": "dist/html"
   },
-
-  css: {
-    routes: Object.keys(routes),
-    outputDir: './dist/css',
-    pureCss: true,
-    outputFiles: {
-      applyCss: 'tailwind.apply.css',
-      pureCss: 'ui8kit.local.css',
-      variantsCss: 'variants.apply.css',
+  "css": { "outputDir": "dist/css", "pureCss": true },
+  "html": {
+    "routes": {
+      "/": { "title": "Home" },
+      "/menu": { "title": "Menu" }
     },
+    "outputDir": "dist/html",
+    "mode": "tailwind"
   },
-
-  html: {
-    viewsDir: './dist/html',
-    viewsPagesSubdir: 'pages',
-    routes,
-    outputDir: './dist/html',
-    mode: 'tailwind', // 'tailwind' | 'semantic' | 'inline'
-    cssHref: '/css/styles.css',
-    stripDataClassInTailwind: false,
+  "postcss": {
+    "enabled": true,
+    "entryImports": ["../../src/assets/css/shadcn.css"],
+    "sourceDir": "../html",
+    "outputDir": "dist/html/css",
+    "uncss": { "enabled": true }
   },
-
-  classLog: {
-    enabled: false,
-    outputDir: './dist/maps',
-    baseName: 'ui8kit',
-  },
-
-  // Optional:
-  // uncss: {
-  //   enabled: true,
-  //   htmlFiles: ['./dist/html/index.html'],
-  //   cssFile: './dist/html/css/styles.css',
-  //   outputDir: './dist/html/css',
-  //   outputFileName: 'unused.css',
-  // },
-});
-
-console.log(result.success, result.generated, result.errors);
+  "mappings": { "ui8kitMap": "src/lib/ui8kit.map.json" },
+  "fixtures": {
+    "dir": "fixtures",
+    "collections": ["menu", "recipes", "blog", "promotions"]
+  }
+}
 ```
 
-## 4) Execution Scenarios (from Project Root)
+### 2.2 Single Source of Truth for Routes
 
-### 4.1 Full `dist/react` Preparation Cycle
+Base routes are defined statically in `html.routes`. Fixture-based routes (e.g., `/menu/grill-salmon-steak`) are loaded automatically from `fixtures/*.json` and merged at runtime.
+
+### 2.3 HTML Output Modes
+
+| Mode | Description |
+|------|-------------|
+| `tailwind` | Keeps Tailwind utility classes + `data-class` attributes |
+| `semantic` | Replaces `data-class` -> `class`, strips utility classes |
+| `inline` | Same as semantic + embeds minified CSS in `<style>` tag |
+
+## 3) Pipeline Architecture
+
+```
+ReactSsrStage (order=0)  -> renders React components to raw HTML fragments
+CssStage      (order=1)  -> extracts classes from HTML, generates tailwind.apply.css
+HtmlStage     (order=2)  -> wraps HTML in document, applies mode processing
+PostCssStage  (order=3)  -> runs PostCSS/Tailwind, generates styles.css + unused.css
+```
+
+### 3.1 ReactSsrStage
+
+- Reads `registry.json` to discover component names and source paths
+- Maps routes to components (e.g., `/menu` -> `MenuPageView`)
+- Imports components from `dist/react/src/` and renders via `renderToStaticMarkup()`
+- Writes raw HTML fragments to `outputDir`
+
+### 3.2 CssStage
+
+- Reads rendered HTML from `html.outputDir`
+- Extracts CSS classes using `HtmlConverterService`
+- Generates `tailwind.apply.css`, `ui8kit.local.css`, `variants.apply.css`
+
+### 3.3 HtmlStage
+
+- Reads raw HTML fragments from `html.outputDir`
+- Wraps in full HTML document (DOCTYPE, head, meta, body)
+- Applies mode processing (tailwind/semantic/inline)
+- Overwrites files in place
+
+### 3.4 PostCssStage
+
+- Generates `entry.css` with `@import "tailwindcss"` and `@source`
+- Runs PostCSS with `@tailwindcss/postcss`
+- Outputs `styles.css`
+- Optionally runs UnCSS to produce `unused.css`
+
+## 4) CLI Commands
 
 ```bash
-bun run dist:app
+# Full pipeline (default)
+bunx ui8kit-generate static
+
+# SSR + HTML only (no PostCSS)
+bunx ui8kit-generate html
+
+# PostCSS only (requires existing HTML)
+bunx ui8kit-generate styles
+
+# Custom working directory
+bunx ui8kit-generate static --cwd ./my-project
+
+# Custom config path
+bunx ui8kit-generate static --config my-config.json
+
+# Override fixtures directory
+bunx ui8kit-generate html --fixtures ./custom-fixtures
 ```
 
-What it does:
+## 5) Fixture-Based Routes
 
-- Linting/validations;
-- Generation of `dist/react`;
-- Finalization step;
-- Type checking in `dist/react`.
+The `loadFixtureRoutes()` utility reads JSON files from the fixtures directory:
 
-### 4.2 Static HTML Generation (from React Artifacts)
+- `fixtures/menu.json` -> `/menu/{id}` routes
+- `fixtures/recipes.json` -> `/recipes/{slug}` routes
+- `fixtures/blog.json` -> `/blog/{slug}` routes (uses `posts` key)
+- `fixtures/promotions.json` -> `/promotions/{id}` routes
 
-```bash
-bun run generate:html
-```
+Each item's `id` or `slug` field becomes the route segment, and `title` becomes the page title.
 
-Expected result:
+## 6) Services
 
-- Pages in `dist/html/.../index.html`;
-- Nested dynamic routes in subfolders (`/menu/item` -> `dist/html/menu/item/index.html`);
-- Source views in `dist/html/pages`.
+| Service | Responsibility |
+|---------|---------------|
+| `ReactSsrService` | Render React components to static HTML |
+| `CssService` | Extract and generate CSS from HTML |
+| `HtmlService` | Wrap HTML in documents, apply modes |
+| `HtmlConverterService` | Parse HTML elements, generate @apply CSS |
+| `PostCssService` | PostCSS processing + UnCSS optimization |
 
-### 4.3 Final CSS Generation and UnCSS Optimization
+## 7) Common Problems
 
-```bash
-bun run generate:styles
-```
+### SSR renders empty content
 
-Expected result:
+Components using React context (ThemeProvider, AdminAuthProvider) render empty during SSR. Use SSR-safe component variants or provide mock data via `routeConfig.data`.
 
-- `dist/html/css/styles.css` — full generated CSS;
-- `dist/html/css/unused.css` — optimized CSS after UnCSS (if the step is successful).
+### PostCSS generates too much CSS
 
-### 4.4 Full Static Generation
+Ensure `@source` points to the directory with rendered HTML so Tailwind only includes used classes.
 
-```bash
-bun run generate:static
-```
+### Component not found in registry
 
-Equivalent to:
+Verify the component name in `routeComponentMap` matches the `name` field in `registry.json`.
 
-```bash
-bun run generate:html && bun run generate:styles
-```
-
-## 5) Execution Scenarios (from Generator Package)
-
-Use these for developing the generator itself:
+## 8) Testing
 
 ```bash
 cd _packages/generator
-bun run typecheck
-bun run test
-bun run test:watch
-bun run test:coverage
+bun run test          # all tests
+bun run test:watch    # watch mode
+bun run test:coverage # coverage report
+bun run typecheck     # TypeScript checks
 ```
 
-## 6) Quality and Stability Checks
+## 9) Related Documentation
 
-### 6.1 Minimum Checklist After Generator Changes
-
-1. `bun run typecheck` in `_packages/generator`.
-2. `bun run test` in `_packages/generator`.
-3. `bun run generate:static` in the project root.
-4. Check target files:
-   - `dist/html/index.html`
-   - `dist/html/menu/index.html`
-   - `dist/html/menu/grill-salmon-steak/index.html`
-   - `dist/html/css/styles.css`
-   - `dist/html/css/unused.css` (if UnCSS is enabled/successful)
-
-### 6.2 What to Verify Visually/Logically
-
-- Pages contain content (not an empty `<body>`);
-- CSS link corresponds to `html.cssHref`;
-- No duplicate paths between source views and final output;
-- Single item routes are written to subfolders via `index.html`.
-
-## 7) Testing Strategy (Principles)
-
-### Unit Tests (Fast and Isolated)
-
-- `CssService`: CSS artifact generation, resilience to missing `src/variants`;
-- `HtmlService`: Correct handling of `tailwind`/`semantic`/`inline` modes;
-- `HtmlConverterService`: Deterministic selectors, stable conversion.
-
-### Integration Tests (End-to-End within the Package)
-
-- Verification of full `generate()` on a set of routes;
-- Control of output file structure;
-- Verification that stage errors are correctly propagated to `GenerateResult.errors`.
-
-### E2E Tests (Application Level)
-
-- `bun run generate:static` in the root;
-- Smoke testing of critical pages and CSS artifacts.
-
-## 8) Common Problems and Diagnostics
-
-### Problem: Empty page in `dist/html/.../index.html`
-
-Verify:
-
-- Corresponding source view exists in `dist/html/pages`;
-- Route is present in `html.routes`;
-- Keys in `css.routes` and `html.routes` match.
-
-### Problem: `styles.css` is too large
-
-Verify:
-
-- `generate:styles` scans `dist/html` (the actual source of classes);
-- The UnCSS step has been executed and `unused.css` is created;
-- No unnecessary pages are included in the routes.
-
-### Problem: UnCSS failure
-
-Verify:
-
-- Validity of `uncss.htmlFiles` and `uncss.cssFile` paths;
-- The CSS file exists when the post-processing step starts.
-
-## 9) Current Limitations
-
-- `css.entryPath` has been removed from the generator configuration;
-- `generate-templates` CLI has been removed from the runtime flow;
-- `buildProject()` is retained only as a compatibility stub and returns an explicit error message;
-- The legacy template-engine track (Liquid/Twig/Handlebars/Latte) is not part of the main static runtime.
+- [README.md](./README.md) - Quick overview
+- [PLUGINS.md](./PLUGINS.md) - Template plugins (legacy track)
+- [docs/transformer.md](./docs/transformer.md) - JSX transformer

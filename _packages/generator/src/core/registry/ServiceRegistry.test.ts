@@ -9,7 +9,6 @@ const TEST_CONFIG: GeneratorConfig = {
     outputDir: './dist/css',
   },
   html: {
-    viewsDir: './views',
     routes: { '/': { title: 'Home' } },
     outputDir: './dist/html',
   },

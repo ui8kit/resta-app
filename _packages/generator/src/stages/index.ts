@@ -1,9 +1,11 @@
+export { ReactSsrStage } from './ReactSsrStage';
 export { CssStage } from './CssStage';
 export { HtmlStage } from './HtmlStage';
-export { ClassLogStage } from './ClassLogStage';
+export { PostCssStage } from './PostCssStage';
 
-// Default generation pipeline stages
 export const DEFAULT_STAGES = [
+  'react-ssr',
   'css',
   'html',
+  'postcss',
 ] as const;

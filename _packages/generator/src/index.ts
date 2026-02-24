@@ -1,26 +1,39 @@
 /**
  * @ui8kit/generator - Static Site Generator
- * 
+ *
  * Modern architecture with Orchestrator, Services, and Pipeline.
  */
 
 // =============================================================================
-// Main API - Simple usage
+// Main API
 // =============================================================================
 
 export { generate } from './generate';
 export type { GenerateConfig, GenerateResult } from './generate';
 
-export { buildProject } from './build-project';
-
-// Re-export config types for convenience
 export type { GeneratorConfig, RouteConfig } from './core/interfaces';
 
 // =============================================================================
-// Orchestrator System - Advanced usage
+// Utilities
 // =============================================================================
 
-// Core exports
+export {
+  loadFixtureRoutes,
+  type LoadFixtureRoutesOptions,
+  type FixtureCollection,
+} from './utils';
+
+export {
+  emitVariantsApplyCss,
+  emitVariantsArtifacts,
+  type EmitVariantsApplyCssOptions,
+  type VariantsArtifacts,
+} from './scripts/emit-variants-apply.js';
+
+// =============================================================================
+// Orchestrator System
+// =============================================================================
+
 export {
   Orchestrator,
   Pipeline,
@@ -32,15 +45,8 @@ export {
   Logger,
 } from './core';
 
-// Scanner utilities
-export {
-  getCoreComponentNames,
-  getFallbackCoreComponents,
-  isKnownCoreComponent,
-  findUnknownComponents,
-} from './core/scanner/core-component-scanner';
+export { getCoreComponentNames, getFallbackCoreComponents, isKnownCoreComponent, findUnknownComponents } from './core/scanner/core-component-scanner';
 
-// Types and interfaces
 export type {
   IOrchestrator,
   GeneratorResult,
@@ -70,7 +76,8 @@ export {
   CssService,
   HtmlService,
   HtmlConverterService,
-  ClassLogService,
+  ReactSsrService,
+  PostCssService,
 } from './services';
 
 export type {
@@ -81,9 +88,10 @@ export type {
   HtmlServiceOutput,
   HtmlConverterInput,
   HtmlConverterOutput,
-  ClassLogServiceInput,
-  ClassLogServiceOutput,
-  ClassLogFile,
+  ReactSsrServiceInput,
+  ReactSsrServiceOutput,
+  PostCssServiceInput,
+  PostCssServiceOutput,
 } from './services';
 
 // =============================================================================
@@ -91,8 +99,10 @@ export type {
 // =============================================================================
 
 export {
+  ReactSsrStage,
   CssStage,
   HtmlStage,
+  PostCssStage,
   DEFAULT_STAGES,
 } from './stages';
 
@@ -115,14 +125,11 @@ export type {
 // =============================================================================
 
 export {
-  // Base
   BasePlugin,
-  // Registry
   PluginRegistry,
   defaultRegistry,
   registerTemplatePlugin,
   getTemplatePlugin,
-  // Built-in Plugins
   ReactPlugin,
 } from './plugins';
 
@@ -143,7 +150,6 @@ export type {
 // =============================================================================
 
 export {
-  // Type guards
   isElement,
   isText,
   isComment,
@@ -151,16 +157,13 @@ export {
   hasAnnotations,
   hasAnnotation,
   getAnnotations,
-  // Traversal
   visit,
   visitMatch,
   visitElements,
   visitText,
-  // Transformation
   map,
   filter,
   remove,
-  // Querying
   find,
   findAll,
   findByTag,
@@ -168,19 +171,15 @@ export {
   findById,
   findByClass,
   findByAnnotation,
-  // Statistics
   countNodes,
   countByType,
   getDepth,
-  // Variable collection
   collectVariables,
   collectDependencies,
-  // Building
   text,
   element,
   root,
   annotate,
-  // Schemas
   GenLoopSchema,
   GenConditionSchema,
   GenVariableSchema,
@@ -198,7 +197,6 @@ export {
 } from './hast';
 
 export type {
-  // Node types
   GenNodeType,
   GenNode,
   GenElement,
@@ -207,7 +205,6 @@ export type {
   GenDoctype,
   GenChild,
   GenRoot,
-  // Annotation types
   GenAnnotations,
   GenLoop,
   GenCondition,
@@ -215,17 +212,13 @@ export type {
   GenSlot,
   GenInclude,
   GenBlock,
-  // Property types
   GenProperties,
   GenElementProperties,
-  // Metadata types
   GenComponentMeta,
   GenPropDefinition,
-  // Traversal types
   GenVisitor,
   GenVisitorObject,
   GenNodePredicate,
-  // Output types
   TemplateOutput,
 } from './hast';
 
@@ -255,17 +248,6 @@ export type {
   AnalyzedProp,
   AnalyzedImport,
 } from './transformer';
-
-// =============================================================================
-// Utilities
-// =============================================================================
-
-export {
-  emitVariantsApplyCss,
-  emitVariantsArtifacts,
-  type EmitVariantsApplyCssOptions,
-  type VariantsArtifacts,
-} from './scripts/emit-variants-apply.js';
 
 // =============================================================================
 // Registry Generator

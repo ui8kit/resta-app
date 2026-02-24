@@ -27,7 +27,6 @@ function createContext(): IServiceContext {
       outputFiles: { pureCss: 'ui8kit.local.css' },
     },
     html: {
-      viewsDir: './views',
       routes: { '/': { title: 'Home' } },
       outputDir: './dist/html',
       mode: 'tailwind',
@@ -68,11 +67,9 @@ describe('HtmlService modes integration', () => {
   });
 
   it('tailwind mode keeps classes and data-class', async () => {
-    mockFs.files.set('views/pages/index.html', '<div class="p-4" data-class="card">A</div>');
+    mockFs.files.set('dist/html/index.html', '<div class="p-4" data-class="card">A</div>');
 
     await service.execute({
-      viewsDir: './views',
-      viewsPagesSubdir: 'pages',
       outputDir: './dist/html',
       routes: { '/': { title: 'Home' } },
       mode: 'tailwind',
@@ -85,11 +82,9 @@ describe('HtmlService modes integration', () => {
   });
 
   it('semantic mode replaces data-class and strips utility class', async () => {
-    mockFs.files.set('views/pages/index.html', '<div class="p-4" data-class="card">A</div>');
+    mockFs.files.set('dist/html/index.html', '<div class="p-4" data-class="card">A</div>');
 
     await service.execute({
-      viewsDir: './views',
-      viewsPagesSubdir: 'pages',
       outputDir: './dist/html',
       routes: { '/': { title: 'Home' } },
       mode: 'semantic',
@@ -103,12 +98,10 @@ describe('HtmlService modes integration', () => {
   });
 
   it('inline mode embeds minified css into head', async () => {
-    mockFs.files.set('views/pages/index.html', '<div data-class="card">A</div>');
+    mockFs.files.set('dist/html/index.html', '<div data-class="card">A</div>');
     mockFs.files.set('dist/css/ui8kit.local.css', '.card { color: red; }');
 
     await service.execute({
-      viewsDir: './views',
-      viewsPagesSubdir: 'pages',
       outputDir: './dist/html',
       routes: { '/': { title: 'Home' } },
       mode: 'inline',
@@ -120,4 +113,3 @@ describe('HtmlService modes integration', () => {
     expect(html).toContain('<style>.card{color: red}</style>');
   });
 });
-

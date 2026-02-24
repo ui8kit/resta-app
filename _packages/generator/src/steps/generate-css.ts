@@ -6,8 +6,7 @@ export async function runGenerateCss(
   service: CssService
 ): Promise<CssServiceOutput> {
   const cfg = context.config;
-  const viewsDir = cfg.html?.viewsDir ?? './views';
-  const viewsPagesSubdir = cfg.html?.viewsPagesSubdir ?? 'pages';
+  const htmlDir = cfg.html?.outputDir ?? './dist/html';
   const outputDir = cfg.css?.outputDir ?? './dist/css';
   const routes = cfg.html?.routes ?? {};
   const pureCss = cfg.css?.pureCss ?? false;
@@ -15,8 +14,7 @@ export async function runGenerateCss(
   context.logger.info('Generating CSS...');
 
   const result = await service.execute({
-    viewsDir,
-    viewsPagesSubdir,
+    htmlDir,
     outputDir,
     routes,
     pureCss,
@@ -27,4 +25,3 @@ export async function runGenerateCss(
   context.setData('css:result', result);
   return result;
 }
-

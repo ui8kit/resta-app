@@ -4,7 +4,6 @@ import { HtmlConverterService } from '../html-converter';
 import type { IServiceContext, GeneratorConfig } from '../../core/interfaces';
 import { createMockLogger } from '../../../test/setup';
 
-// Mock HtmlConverterService
 function createMockHtmlConverter() {
   const executeMock = vi.fn().mockResolvedValue({
     applyCss: '.test { @apply bg-red-500; }',
@@ -12,7 +11,7 @@ function createMockHtmlConverter() {
     elementsCount: 1,
     selectorsCount: 1,
   });
-  
+
   return {
     name: 'html-converter',
     version: '1.0.0',
@@ -23,10 +22,9 @@ function createMockHtmlConverter() {
   } as unknown as HtmlConverterService & { execute: typeof executeMock };
 }
 
-// Mock file system
 function createMockFs() {
   const files = new Map<string, string>();
-  
+
   return {
     files,
     readFile: vi.fn(async (path: string) => {
@@ -46,7 +44,6 @@ function createMockFs() {
   };
 }
 
-// Mock context factory
 function createMockContext(
   config: Partial<GeneratorConfig> = {},
   converter: ReturnType<typeof createMockHtmlConverter> = createMockHtmlConverter()
@@ -62,13 +59,12 @@ function createMockContext(
       pureCss: true,
     },
     html: {
-      viewsDir: './views',
       routes: { '/': { title: 'Home' } },
       outputDir: './dist/html',
     },
     ...config,
   };
-  
+
   return {
     config: fullConfig,
     logger: createMockLogger(),
@@ -97,14 +93,13 @@ describe('CssService', () => {
   let mockFs: ReturnType<typeof createMockFs>;
   let mockHtmlConverter: ReturnType<typeof createMockHtmlConverter>;
   let context: IServiceContext;
-  
+
   beforeEach(() => {
     mockFs = createMockFs();
     mockHtmlConverter = createMockHtmlConverter();
-    
-    // Set up view files
-    mockFs.files.set('views/pages/index.html', '<div class="bg-red-500" data-class="test">Hello</div>');
-    
+
+    mockFs.files.set('dist/html/index.html', '<div class="bg-red-500" data-class="test">Hello</div>');
+
     service = new CssService({
       fileSystem: {
         readFile: mockFs.readFile,
@@ -116,74 +111,73 @@ describe('CssService', () => {
     context = createMockContext({}, mockHtmlConverter);
     context.registry.has = vi.fn().mockReturnValue(true);
   });
-  
+
   describe('metadata', () => {
     it('should have correct name', () => {
       expect(service.name).toBe('css');
     });
-    
+
     it('should have version', () => {
       expect(service.version).toMatch(/^\d+\.\d+\.\d+$/);
     });
-    
+
     it('should depend on html-converter service', () => {
       expect(service.dependencies).toContain('html-converter');
     });
   });
-  
+
   describe('initialize', () => {
     it('should initialize without error', async () => {
       const context = createMockContext();
       context.registry.has = vi.fn().mockReturnValue(true);
-      
+
       await expect(service.initialize(context)).resolves.not.toThrow();
     });
-    
+
     it('should use HtmlConverterService from registry if available', async () => {
       const registryConverter = createMockHtmlConverter();
       const context = createMockContext({}, registryConverter);
       context.registry.has = vi.fn().mockReturnValue(true);
       context.registry.resolve = vi.fn().mockReturnValue(registryConverter);
-      
+
       await service.initialize(context);
-      
-      // Execute to verify it uses the registry converter
+
       const input = {
-        viewsDir: './views',
+        htmlDir: './dist/html',
         outputDir: './dist/css',
         routes: { '/': { title: 'Home' } },
       };
-      
+
       await service.execute(input);
-      
+
       expect(registryConverter.execute).toHaveBeenCalled();
     });
   });
-  
+
   describe('execute', () => {
     beforeEach(async () => {
       await service.initialize(context);
     });
-    
+
     it('should create output directory', async () => {
       const input = {
-        viewsDir: './views',
+        htmlDir: './dist/html',
         outputDir: './dist/css',
         routes: { '/': { title: 'Home' } },
         pureCss: true,
       };
-      
+
       await service.execute(input);
-      
+
       expect(mockFs.mkdir).toHaveBeenCalledWith('./dist/css');
     });
-    
-    it('should process each route view file', async () => {
-      mockFs.files.set('views/pages/index.html', '<div class="test">Home</div>');
-      mockFs.files.set('views/pages/about.html', '<div class="test">About</div>');
-      
+
+    it('should process each route HTML file', async () => {
+      mockFs.files.set('dist/html/index.html', '<div class="test">Home</div>');
+      mockFs.files.set('dist/html/about/index.html', '<div class="test">About</div>');
+
       const input = {
-        viewsDir: './views',
+        htmlDir: './dist/html',
         outputDir: './dist/css',
         routes: {
           '/': { title: 'Home' },
@@ -191,67 +185,65 @@ describe('CssService', () => {
         },
         pureCss: true,
       };
-      
+
       await service.execute(input);
-      
+
       expect(mockHtmlConverter.execute).toHaveBeenCalledTimes(2);
     });
-    
+
     it('should generate tailwind.apply.css', async () => {
       const input = {
-        viewsDir: './views',
+        htmlDir: './dist/html',
         outputDir: './dist/css',
         routes: { '/': { title: 'Home' } },
         pureCss: false,
       };
-      
+
       await service.execute(input);
-      
-      // Normalize paths for cross-platform
-      const writeCalls = mockFs.writeFile.mock.calls.map(call => 
+
+      const writeCalls = mockFs.writeFile.mock.calls.map(call =>
         [(call[0] as string).replace(/\\/g, '/'), call[1]]
       );
-      
+
       expect(writeCalls).toContainEqual([
         expect.stringContaining('tailwind.apply.css'),
         expect.any(String)
       ]);
     });
-    
+
     it('should generate ui8kit.local.css when pureCss is true', async () => {
       const input = {
-        viewsDir: './views',
+        htmlDir: './dist/html',
         outputDir: './dist/css',
         routes: { '/': { title: 'Home' } },
         pureCss: true,
       };
-      
+
       await service.execute(input);
-      
-      // Normalize paths for cross-platform
-      const writeCalls = mockFs.writeFile.mock.calls.map(call => 
+
+      const writeCalls = mockFs.writeFile.mock.calls.map(call =>
         [(call[0] as string).replace(/\\/g, '/'), call[1]]
       );
-      
+
       expect(writeCalls).toContainEqual([
         expect.stringContaining('ui8kit.local.css'),
         expect.any(String)
       ]);
     });
-    
+
     it('should emit css:generated event', async () => {
       const context = createMockContext();
       await service.initialize(context);
-      
+
       const input = {
-        viewsDir: './views',
+        htmlDir: './dist/html',
         outputDir: './dist/css',
         routes: { '/': { title: 'Home' } },
         pureCss: true,
       };
-      
+
       await service.execute(input);
-      
+
       expect(context.eventBus.emit).toHaveBeenCalledWith(
         'css:generated',
         expect.objectContaining({
@@ -260,17 +252,17 @@ describe('CssService', () => {
         })
       );
     });
-    
+
     it('should return generated file info', async () => {
       const input = {
-        viewsDir: './views',
+        htmlDir: './dist/html',
         outputDir: './dist/css',
         routes: { '/': { title: 'Home' } },
         pureCss: true,
       };
-      
+
       const result = await service.execute(input);
-      
+
       expect(result.files).toContainEqual(
         expect.objectContaining({
           path: expect.stringContaining('tailwind.apply.css'),
@@ -278,13 +270,12 @@ describe('CssService', () => {
         })
       );
     });
-    
   });
-  
+
   describe('dispose', () => {
     it('should dispose without error', async () => {
       await service.initialize(createMockContext());
-      
+
       await expect(service.dispose()).resolves.not.toThrow();
     });
   });

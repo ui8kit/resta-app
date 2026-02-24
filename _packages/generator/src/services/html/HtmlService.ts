@@ -1,37 +1,8 @@
 import type { IService, IServiceContext, RouteConfig } from '../../core/interfaces';
 import { join, dirname } from 'node:path';
 import { createNodeFileSystem } from '../../core/filesystem';
-import { routeToViewFileName } from '../../core/utils/routes';
 
-async function debugLog(runId: string, hypothesisId: string, location: string, message: string, data: Record<string, unknown>): Promise<void> {
-  try {
-    await fetch('http://127.0.0.1:7618/ingest/1a743e9b-8a63-4e35-95d4-015cb5a878d0', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Debug-Session-Id': '4cbe3d',
-      },
-      body: JSON.stringify({
-        sessionId: '4cbe3d',
-        runId,
-        hypothesisId,
-        location,
-        message,
-        data,
-        timestamp: Date.now(),
-      }),
-    });
-  } catch {
-    // ignore logging transport failures
-  }
-}
-
-/**
- * Input for HtmlService.execute()
- */
 export interface HtmlServiceInput {
-  viewsDir: string;
-  viewsPagesSubdir?: string;
   outputDir: string;
   routes: Record<string, RouteConfig>;
   mode?: 'tailwind' | 'semantic' | 'inline';
@@ -44,9 +15,6 @@ export interface HtmlServiceInput {
   };
 }
 
-/**
- * Output from HtmlService.execute()
- */
 export interface HtmlServiceOutput {
   pages: Array<{
     route: string;
@@ -55,33 +23,26 @@ export interface HtmlServiceOutput {
   }>;
 }
 
-/**
- * File system interface for HtmlService
- */
 export interface HtmlFileSystem {
   readFile(path: string): Promise<string>;
   writeFile(path: string, content: string): Promise<void>;
   mkdir(path: string): Promise<void>;
 }
 
-/**
- * HtmlService options
- */
 export interface HtmlServiceOptions {
   fileSystem?: HtmlFileSystem;
 }
 
 /**
- * HtmlService - Generates final HTML pages from prepared view files.
+ * HtmlService - Generates final HTML pages from SSR output.
  *
- * Responsibilities:
- * - Read route views from views/pages/*.html
- * - Wrap view content into minimal HTML document
- * - Process output mode (tailwind/semantic/inline)
+ * Reads raw HTML fragments from outputDir (written by ReactSsrStage),
+ * wraps them in a full HTML document with head/meta tags,
+ * and processes the output mode (tailwind/semantic/inline).
  */
 export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput> {
   readonly name = 'html';
-  readonly version = '2.0.0';
+  readonly version = '3.0.0';
   readonly dependencies: readonly string[] = ['css'];
 
   private context!: IServiceContext;
@@ -97,8 +58,6 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
 
   async execute(input: HtmlServiceInput): Promise<HtmlServiceOutput> {
     const {
-      viewsDir,
-      viewsPagesSubdir = 'pages',
       outputDir,
       routes,
       mode = 'tailwind',
@@ -119,33 +78,15 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
     }
 
     const generatedPages: HtmlServiceOutput['pages'] = [];
-    // #region agent log
-    await debugLog('pre-fix', 'H8', 'src/services/html/HtmlService.ts:123', 'HtmlService execute entered', {
-      viewsDir,
-      viewsPagesSubdir,
-      outputDir,
-      routesCount: Object.keys(routes).length,
-      mode,
-    });
-    // #endregion
 
     for (const [routePath, routeConfig] of Object.entries(routes)) {
-      const viewFileName = routeToViewFileName(routePath);
-      const viewPath = join(viewsDir, viewsPagesSubdir, viewFileName);
+      const htmlFileName = this.routeToHtmlFileName(routePath);
+      const htmlPath = join(outputDir, htmlFileName);
 
       try {
-        // #region agent log
-        await debugLog('pre-fix', 'H8', 'src/services/html/HtmlService.ts:136', 'Reading route view', {
-          routePath,
-          viewPath,
-        });
-        // #endregion
-        const viewContent = await this.fs.readFile(viewPath);
-        let html = this.buildSimpleHtmlDocument(routeConfig, appConfig, viewContent, cssHref);
+        const rawContent = await this.fs.readFile(htmlPath);
+        let html = this.buildSimpleHtmlDocument(routeConfig, appConfig, rawContent, cssHref);
         html = this.processHtmlContent(html, mode, cssContent, stripDataClassInTailwind);
-
-        const htmlFileName = this.routeToHtmlFileName(routePath);
-        const htmlPath = join(outputDir, htmlFileName);
 
         await this.fs.mkdir(dirname(htmlPath));
         await this.fs.writeFile(htmlPath, html);
@@ -164,15 +105,6 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
 
         this.context.logger.info(`Generated HTML: ${htmlPath} (${html.length} bytes)`);
       } catch (error) {
-        const err = error as NodeJS.ErrnoException;
-        // #region agent log
-        await debugLog('pre-fix', 'H8', 'src/services/html/HtmlService.ts:162', 'Failed reading/generating route view', {
-          routePath,
-          viewPath,
-          code: err.code,
-          message: err.message,
-        });
-        // #endregion
         this.context.logger.error(`Failed to generate HTML for ${routePath}:`, error);
         throw error;
       }
@@ -181,9 +113,7 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
     return { pages: generatedPages };
   }
 
-  async dispose(): Promise<void> {
-    // No cleanup required
-  }
+  async dispose(): Promise<void> {}
 
   private routeToHtmlFileName(routePath: string): string {
     if (routePath === '/') return 'index.html';
@@ -288,6 +218,4 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
   }
-
 }
-

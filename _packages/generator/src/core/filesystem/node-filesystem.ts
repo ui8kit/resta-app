@@ -28,7 +28,7 @@ export class NodeFileSystem implements IFileSystem {
   }
 
   async mkdir(dirPath: string, options?: { recursive?: boolean }): Promise<void> {
-    await fsMkdir(dirPath, options);
+    await fsMkdir(dirPath, { recursive: true, ...options });
   }
 
   async readdir(dirPath: string, options?: { withFileTypes?: false }): Promise<string[]>;

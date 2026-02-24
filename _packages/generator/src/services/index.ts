@@ -1,4 +1,3 @@
-// Services barrel export
 export { CssService } from './css';
 export type {
   CssServiceInput,
@@ -24,14 +23,21 @@ export type {
   HtmlConverterFileSystem,
 } from './html-converter';
 
-export { ClassLogService } from './class-log';
+export { ReactSsrService } from './react-ssr';
 export type {
-  ClassLogServiceInput,
-  ClassLogServiceOutput,
-  ClassLogServiceOptions,
-  ClassLogFile,
-  ClassLogFileSystem,
-} from './class-log';
+  ReactSsrServiceInput,
+  ReactSsrServiceOutput,
+  ReactSsrServiceOptions,
+  ReactSsrFileSystem,
+} from './react-ssr';
+
+export { PostCssService } from './postcss';
+export type {
+  PostCssServiceInput,
+  PostCssServiceOutput,
+  PostCssServiceOptions,
+  PostCssFileSystem,
+} from './postcss';
 
 export { UiKitMapService } from './uikit-map';
 export type {
@@ -40,4 +46,3 @@ export type {
   UiKitMapServiceOptions,
   UiKitMapFileSystem,
 } from './uikit-map';
-

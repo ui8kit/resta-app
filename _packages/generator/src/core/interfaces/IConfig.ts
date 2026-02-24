@@ -48,8 +48,6 @@ export interface GeneratorConfig {
    * HTML generation configuration
    */
   html: {
-    viewsDir: string;
-    viewsPagesSubdir?: string;
     routes: Record<string, RouteConfig>;
     outputDir: string;
     mode?: 'tailwind' | 'semantic' | 'inline';
@@ -66,15 +64,6 @@ export interface GeneratorConfig {
    * UnCSS configuration
    */
   uncss?: UncssStepConfig;
-  
-  classLog?: {
-    enabled?: boolean;
-    outputDir?: string;
-    baseName?: string;
-    uikitMapPath?: string;
-    includeResponsive?: boolean;
-    includeStates?: boolean;
-  };
   
   /**
    * MDX documentation configuration
@@ -94,6 +83,40 @@ export interface GeneratorConfig {
     };
   };
   
+  /**
+   * React SSR configuration
+   */
+  ssr?: {
+    registryPath: string;
+    reactDistDir: string;
+    outputDir?: string;
+    routeComponentMap?: Record<string, string>;
+  };
+
+  /**
+   * PostCSS + Tailwind processing
+   */
+  postcss?: {
+    enabled?: boolean;
+    entryImports?: string[];
+    sourceDir?: string;
+    outputDir?: string;
+    outputFileName?: string;
+    uncss?: {
+      enabled?: boolean;
+      outputFileName?: string;
+      timeout?: number;
+    };
+  };
+
+  /**
+   * Fixture-based route discovery
+   */
+  fixtures?: {
+    dir: string;
+    collections?: string[];
+  };
+
   /**
    * Plugin-specific configuration
    */
@@ -127,8 +150,6 @@ export const DEFAULT_CONFIG: GeneratorConfig = {
     pureCss: false,
   },
   html: {
-    viewsDir: './views',
-    viewsPagesSubdir: 'pages',
     routes: { '/': { title: 'Home' } },
     outputDir: './dist/html',
     mode: 'tailwind',

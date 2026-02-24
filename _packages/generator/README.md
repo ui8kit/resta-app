@@ -4,13 +4,13 @@ Static HTML/CSS generator for UI8Kit with orchestrator pipeline.
 
 ## Runtime Scope
 
-The active runtime path is:
+The active pipeline is:
 
-- `Orchestrator -> CssStage -> HtmlStage -> (optional) ClassLogStage`
-- source views from `html.viewsDir` + `html.viewsPagesSubdir` (recommended: `dist/html/pages`)
-- final output in `html.outputDir` (recommended: `dist/html`)
-
-Legacy Liquid runtime flow is not part of this pipeline.
+- `Orchestrator -> ReactSsrStage -> CssStage -> HtmlStage -> PostCssStage`
+- React SSR renders components from `registry.json` to raw HTML
+- CssService extracts classes from rendered HTML
+- HtmlService wraps HTML fragments in full documents
+- PostCssStage runs Tailwind + optional UnCSS
 
 ## Installation
 
@@ -18,65 +18,74 @@ Legacy Liquid runtime flow is not part of this pipeline.
 bun add @ui8kit/generator
 ```
 
-## Quick Start
+## Quick Start (CLI)
+
+Create `dist.config.json` in project root:
+
+```json
+{
+  "app": { "name": "My App", "lang": "en" },
+  "ssr": {
+    "registryPath": "dist/react/_temp/registry.json",
+    "reactDistDir": "dist/react",
+    "outputDir": "dist/html"
+  },
+  "css": { "outputDir": "dist/css", "pureCss": true },
+  "html": {
+    "routes": { "/": { "title": "Home" }, "/menu": { "title": "Menu" } },
+    "outputDir": "dist/html",
+    "mode": "tailwind"
+  },
+  "postcss": { "enabled": true, "outputDir": "dist/html/css" },
+  "fixtures": { "dir": "fixtures", "collections": ["menu", "recipes", "blog"] }
+}
+```
+
+Run:
+
+```bash
+bunx ui8kit-generate static      # full pipeline
+bunx ui8kit-generate html         # SSR + HTML only
+bunx ui8kit-generate styles       # PostCSS only
+```
+
+## Quick Start (API)
 
 ```ts
 import { generate } from '@ui8kit/generator';
 
-const routes = {
-  '/': { title: 'Home' },
-  '/blog': { title: 'Blog' },
-  '/menu/grill-salmon-steak': { title: 'Grill Salmon Steak' },
-};
-
 await generate({
   app: { name: 'My App', lang: 'en' },
-  css: {
-    routes: Object.keys(routes),
-    outputDir: './dist/css',
-    pureCss: true,
-  },
+  css: { routes: ['/'], outputDir: './dist/css', pureCss: true },
   html: {
-    viewsDir: './dist/html',
-    viewsPagesSubdir: 'pages',
-    routes,
+    routes: { '/': { title: 'Home' } },
     outputDir: './dist/html',
-    mode: 'tailwind', // 'tailwind' | 'semantic' | 'inline'
-    cssHref: '/css/styles.css',
+    mode: 'tailwind',
+  },
+  ssr: {
+    registryPath: './dist/react/_temp/registry.json',
+    reactDistDir: './dist/react',
+    outputDir: './dist/html',
   },
 });
 ```
 
-## HTML Modes
+## Common Commands (Root)
 
-- `tailwind`: keeps class attributes
-- `semantic`: converts `data-class` to semantic classes and removes utility-only class output
-- `inline`: semantic transform + inlined CSS in `<style>`
+| Command | Description |
+|---------|-------------|
+| `bun run generate:static` | Full pipeline via CLI |
+| `bun run generate:html` | SSR + HTML only |
+| `bun run generate:styles` | PostCSS + UnCSS only |
 
-## Common Commands (root project)
+## Common Commands (Generator Dev)
 
-```bash
-bun run dist:app
-bun run generate:html
-bun run generate:styles
-bun run generate:static
-```
+| Command | Description |
+|---------|-------------|
+| `bun run test` | Run all tests |
+| `bun run typecheck` | TypeScript checks |
+| `bun run test:coverage` | Coverage report |
 
-## Generator Development Commands
+## Full Documentation
 
-```bash
-cd _packages/generator
-bun run typecheck
-bun run test
-bun run test:coverage
-```
-
-## Full Guide
-
-For complete scenarios, configuration principles, validations, and troubleshooting, see:
-
-- `GUIDE.md`
-
-## License
-
-MIT
+See [GUIDE.md](./GUIDE.md) for complete architecture, configuration, and troubleshooting.

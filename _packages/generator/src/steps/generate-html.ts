@@ -6,8 +6,6 @@ export async function runGenerateHtml(
   service: HtmlService
 ): Promise<HtmlServiceOutput> {
   const cfg = context.config;
-  const viewsDir = cfg.html?.viewsDir ?? './views';
-  const viewsPagesSubdir = cfg.html?.viewsPagesSubdir ?? 'pages';
   const outputDir = cfg.html?.outputDir ?? './dist/html';
   const routes = cfg.html?.routes ?? {};
   const mode = cfg.html?.mode ?? 'tailwind';
@@ -16,8 +14,6 @@ export async function runGenerateHtml(
   context.logger.info('Generating HTML pages...');
 
   const result = await service.execute({
-    viewsDir,
-    viewsPagesSubdir,
     outputDir,
     routes,
     mode,
@@ -30,4 +26,3 @@ export async function runGenerateHtml(
   context.setData('html:result', result);
   return result;
 }
-
