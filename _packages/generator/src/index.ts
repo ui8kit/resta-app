@@ -10,6 +10,7 @@
 
 export { generate } from './generate';
 export type { GenerateConfig, GenerateResult } from './generate';
+export { buildProject } from './build-project';
 
 export type { GeneratorConfig, RouteConfig } from './core/interfaces';
 
@@ -76,7 +77,6 @@ export {
   CssService,
   HtmlService,
   HtmlConverterService,
-  ReactSsrService,
   PostCssService,
 } from './services';
 
@@ -88,8 +88,6 @@ export type {
   HtmlServiceOutput,
   HtmlConverterInput,
   HtmlConverterOutput,
-  ReactSsrServiceInput,
-  ReactSsrServiceOutput,
   PostCssServiceInput,
   PostCssServiceOutput,
 } from './services';
@@ -99,7 +97,6 @@ export type {
 // =============================================================================
 
 export {
-  ReactSsrStage,
   CssStage,
   HtmlStage,
   PostCssStage,

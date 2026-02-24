@@ -49,7 +49,7 @@ export interface CssServiceOptions {
 /**
  * CssService - Generates CSS from HTML files.
  *
- * Reads rendered HTML from htmlDir (output of ReactSsrStage or HtmlStage),
+ * Reads prepared HTML from htmlDir,
  * extracts classes via HtmlConverterService, and produces:
  *   - tailwind.apply.css
  *   - ui8kit.local.css (if pureCss enabled)

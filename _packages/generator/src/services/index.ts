@@ -23,14 +23,6 @@ export type {
   HtmlConverterFileSystem,
 } from './html-converter';
 
-export { ReactSsrService } from './react-ssr';
-export type {
-  ReactSsrServiceInput,
-  ReactSsrServiceOutput,
-  ReactSsrServiceOptions,
-  ReactSsrFileSystem,
-} from './react-ssr';
-
 export { PostCssService } from './postcss';
 export type {
   PostCssServiceInput,

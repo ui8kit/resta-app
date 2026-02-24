@@ -6,9 +6,8 @@ Static HTML/CSS generator for UI8Kit with orchestrator pipeline.
 
 The active pipeline is:
 
-- `Orchestrator -> ReactSsrStage -> CssStage -> HtmlStage -> PostCssStage`
-- React SSR renders components from `registry.json` to raw HTML
-- CssService extracts classes from rendered HTML
+- `Orchestrator -> CssStage -> HtmlStage -> PostCssStage`
+- CssService extracts classes from prepared HTML
 - HtmlService wraps HTML fragments in full documents
 - PostCssStage runs Tailwind + optional UnCSS
 
@@ -25,11 +24,6 @@ Create `dist.config.json` in project root:
 ```json
 {
   "app": { "name": "My App", "lang": "en" },
-  "ssr": {
-    "registryPath": "dist/react/_temp/registry.json",
-    "reactDistDir": "dist/react",
-    "outputDir": "dist/html"
-  },
   "css": { "outputDir": "dist/css", "pureCss": true },
   "html": {
     "routes": { "/": { "title": "Home" }, "/menu": { "title": "Menu" } },
@@ -45,7 +39,7 @@ Run:
 
 ```bash
 bunx ui8kit-generate static      # full pipeline
-bunx ui8kit-generate html         # SSR + HTML only
+bunx ui8kit-generate html         # CSS + HTML only
 bunx ui8kit-generate styles       # PostCSS only
 ```
 
@@ -62,11 +56,6 @@ await generate({
     outputDir: './dist/html',
     mode: 'tailwind',
   },
-  ssr: {
-    registryPath: './dist/react/_temp/registry.json',
-    reactDistDir: './dist/react',
-    outputDir: './dist/html',
-  },
 });
 ```
 
@@ -75,7 +64,7 @@ await generate({
 | Command | Description |
 |---------|-------------|
 | `bun run generate:static` | Full pipeline via CLI |
-| `bun run generate:html` | SSR + HTML only |
+| `bun run generate:html` | CSS + HTML only |
 | `bun run generate:styles` | PostCSS + UnCSS only |
 
 ## Common Commands (Generator Dev)

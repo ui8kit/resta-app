@@ -110,14 +110,18 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  const hasBlocks = existsSync(join(DIST_REACT, "blocks"));
-  const hasLayouts = existsSync(join(DIST_REACT, "layouts"));
-  if (!hasBlocks || !hasLayouts) {
-    console.error("  dist/react/blocks/ or dist/react/layouts/ missing. Run: bun run generate");
+  const distSrc = join(DIST_REACT, "src");
+  const hasRootBlocks = existsSync(join(DIST_REACT, "blocks"));
+  const hasRootLayouts = existsSync(join(DIST_REACT, "layouts"));
+  const hasSrcBlocks = existsSync(join(distSrc, "blocks"));
+  const hasSrcLayouts = existsSync(join(distSrc, "layouts"));
+
+  const hasLegacyRootLayout = hasRootBlocks && hasRootLayouts;
+  const hasModernSrcLayout = hasSrcBlocks && hasSrcLayouts;
+  if (!hasLegacyRootLayout && !hasModernSrcLayout) {
+    console.error("  Generated blocks/layouts not found in dist/react or dist/react/src. Run: bun run generate");
     process.exit(1);
   }
-
-  const distSrc = join(DIST_REACT, "src");
 
   // Step 1: Move generated dirs into src/
   console.log("  [1/7] Reorganizing generated files into src/...\n");
@@ -125,10 +129,12 @@ async function main(): Promise<void> {
   for (const dir of ["blocks", "layouts", "partials"]) {
     const from = join(DIST_REACT, dir);
     const to = join(distSrc, dir);
-    if (existsSync(to)) rmSync(to, { recursive: true, force: true });
     if (existsSync(from)) {
+      if (existsSync(to)) rmSync(to, { recursive: true, force: true });
       moveDir(from, to);
       log(`moved: dist/react/${dir} → dist/react/src/${dir}`);
+    } else if (existsSync(to)) {
+      log(`using existing: dist/react/src/${dir}`);
     }
   }
   // Step 2: Normalize generated layout typing (legacy fallback)
@@ -380,12 +386,9 @@ export default defineConfig({
   // index.html (copy from project root)
   copyFile(join(ROOT, "index.html"), join(DIST_REACT, "index.html"));
 
-  // Remove _temp/ (registry metadata, not needed in the dist app)
-  const tempDir = join(DIST_REACT, "_temp");
-  if (existsSync(tempDir)) {
-    rmSync(tempDir, { recursive: true, force: true });
-    log(`- dist/react/_temp (removed)`);
-  }
+  // Keep _temp/ with registry.json.
+  // It is required by generator SSR commands (generate:html/generate:static)
+  // when they run after finalize.
 
   console.log(`
   ─────────────────────────────

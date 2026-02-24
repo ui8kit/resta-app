@@ -84,16 +84,6 @@ export interface GeneratorConfig {
   };
   
   /**
-   * React SSR configuration
-   */
-  ssr?: {
-    registryPath: string;
-    reactDistDir: string;
-    outputDir?: string;
-    routeComponentMap?: Record<string, string>;
-  };
-
-  /**
    * PostCSS + Tailwind processing
    */
   postcss?: {

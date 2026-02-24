@@ -34,16 +34,16 @@ export interface HtmlServiceOptions {
 }
 
 /**
- * HtmlService - Generates final HTML pages from SSR output.
+ * HtmlService - Generates final HTML pages from prepared HTML input.
  *
- * Reads raw HTML fragments from outputDir (written by ReactSsrStage),
+ * Reads raw HTML fragments from outputDir,
  * wraps them in a full HTML document with head/meta tags,
  * and processes the output mode (tailwind/semantic/inline).
  */
 export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput> {
   readonly name = 'html';
   readonly version = '3.0.0';
-  readonly dependencies: readonly string[] = ['css'];
+  readonly dependencies: readonly string[] = [];
 
   private context!: IServiceContext;
   private fs: HtmlFileSystem;

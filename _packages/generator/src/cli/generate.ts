@@ -3,18 +3,16 @@ import { Command } from 'commander';
 import { resolve, join } from 'node:path';
 import { readFileSync, existsSync } from 'node:fs';
 import chalk from 'chalk';
+import { loadAppConfig } from '@ui8kit/sdk/config';
+import type { AppConfig } from '@ui8kit/sdk';
 import { generate, type GenerateConfig } from '../generate';
+import { buildProject } from '../build-project';
 import { loadFixtureRoutes } from '../utils/load-fixture-routes';
 import type { RouteConfig } from '../core/interfaces';
+import type { GenerateStageName } from '../pipelines/generate-site';
 
 interface DistConfig {
   app: { name: string; lang?: string };
-  ssr?: {
-    registryPath: string;
-    reactDistDir: string;
-    outputDir?: string;
-    routeComponentMap?: Record<string, string>;
-  };
   css: {
     routes?: string[];
     outputDir: string;
@@ -120,17 +118,6 @@ function buildGenerateConfig(
     };
   }
 
-  if (distConfig.ssr) {
-    config.ssr = {
-      registryPath: resolve(cwd, distConfig.ssr.registryPath),
-      reactDistDir: resolve(cwd, distConfig.ssr.reactDistDir),
-      outputDir: distConfig.ssr.outputDir
-        ? resolve(cwd, distConfig.ssr.outputDir)
-        : undefined,
-      routeComponentMap: distConfig.ssr.routeComponentMap,
-    };
-  }
-
   if (distConfig.postcss) {
     config.postcss = {
       ...distConfig.postcss,
@@ -150,6 +137,11 @@ function buildGenerateConfig(
   return config;
 }
 
+function routeToHtmlFileName(routePath: string): string {
+  if (routePath === '/') return 'index.html';
+  return `${routePath.slice(1)}/index.html`;
+}
+
 const program = new Command();
 
 program
@@ -158,8 +150,17 @@ program
   .version('0.2.0');
 
 program
+  .command('react')
+  .description('Build DSL source to React: blocks, layouts, partials, registry')
+  .option('--cwd <dir>', 'Working directory', '.')
+  .option('--out-dir <dir>', 'Output directory override')
+  .action(async (opts) => {
+    await runReactBuild(opts);
+  });
+
+program
   .command('static', { isDefault: true })
-  .description('Full pipeline: SSR -> CSS -> HTML -> PostCSS')
+  .description('Full pipeline: CSS -> HTML -> PostCSS')
   .option('--cwd <dir>', 'Working directory', '.')
   .option('--config <path>', 'Config file path', 'dist.config.json')
   .option('--fixtures <dir>', 'Fixtures directory override')
@@ -169,7 +170,7 @@ program
 
 program
   .command('html')
-  .description('SSR + HTML stages only')
+  .description('HTML stage only')
   .option('--cwd <dir>', 'Working directory', '.')
   .option('--config <path>', 'Config file path', 'dist.config.json')
   .option('--fixtures <dir>', 'Fixtures directory override')
@@ -179,12 +180,61 @@ program
 
 program
   .command('styles')
-  .description('PostCSS stage only')
+  .description('Styles pipeline: CSS extraction + PostCSS')
   .option('--cwd <dir>', 'Working directory', '.')
   .option('--config <path>', 'Config file path', 'dist.config.json')
   .action(async (opts) => {
     await runPipeline(opts, 'styles');
   });
+
+const MODE_STAGES: Record<'static' | 'html' | 'styles', readonly GenerateStageName[]> = {
+  static: ['css', 'html', 'postcss'],
+  html: ['html'],
+  styles: ['css', 'postcss'],
+};
+
+async function runReactBuild(opts: { cwd: string; outDir?: string }): Promise<void> {
+  const cwd = resolve(opts.cwd);
+
+  console.log(`\n  ${chalk.bold('UI8Kit Generator')} — react\n`);
+  console.log(`  ${chalk.gray('CWD:')} ${cwd}\n`);
+
+  try {
+    const baseConfig = await loadAppConfig(cwd);
+    const runtimeConfig: AppConfig = {
+      ...baseConfig,
+      ...(opts.outDir ? { outDir: opts.outDir } : {}),
+      target: 'react',
+    };
+
+    const result = await buildProject(runtimeConfig, cwd);
+    if (!result.ok) {
+      console.error(chalk.red('\n  Generation failed:'));
+      for (const error of result.errors) {
+        console.error(`    - ${error}`);
+      }
+      process.exit(1);
+    }
+
+    console.log(chalk.green(`\n  Generation completed.`));
+    console.log(`  Engine: ${result.engine}`);
+    console.log(`  Output: ${result.outputDir}`);
+    console.log(`  Files: ${result.generated}`);
+
+    if (result.warnings.length > 0) {
+      console.log(chalk.yellow('\n  Warnings:'));
+      for (const warning of result.warnings) {
+        console.log(`    - ${warning}`);
+      }
+    }
+
+    console.log();
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error(chalk.red(`\n  Error: ${msg}\n`));
+    process.exit(1);
+  }
+}
 
 async function runPipeline(
   opts: { cwd: string; config: string; fixtures?: string },
@@ -199,15 +249,10 @@ async function runPipeline(
 
   try {
     const distConfig = loadDistConfig(configPath);
+    const stages = MODE_STAGES[mode];
 
     if (opts.fixtures) {
       distConfig.fixtures = { dir: opts.fixtures, collections: distConfig.fixtures?.collections };
-    }
-
-    if (mode === 'html') {
-      delete distConfig.postcss;
-    } else if (mode === 'styles') {
-      delete distConfig.ssr;
     }
 
     const allRoutes = mergeFixtureRoutes(distConfig, cwd);
@@ -218,7 +263,24 @@ async function runPipeline(
     console.log(`  Routes: ${routeCount} total${fixtureCount > 0 ? ` (${fixtureCount} from fixtures)` : ''}`);
 
     const config = buildGenerateConfig(distConfig, allRoutes, cwd);
-    const result = await generate(config);
+
+    if (stages.includes('css') || stages.includes('html')) {
+      const htmlInputDir = config.html.outputDir;
+      const missingInput = Object.keys(allRoutes).every((routePath) => {
+        const htmlPath = join(htmlInputDir, routeToHtmlFileName(routePath));
+        return !existsSync(htmlPath);
+      });
+
+      if (missingInput) {
+        throw new Error(
+          `No prepared HTML input found in "${htmlInputDir}". ` +
+          'HTML/static commands do not render React components. ' +
+          'Run SPA flow (`bun run generate` + `bun run finalize`) or provide ready HTML fragments first.'
+        );
+      }
+    }
+
+    const result = await generate(config, stages);
 
     if (!result.success) {
       console.error(chalk.red('\n  Generation failed:'));
@@ -230,10 +292,9 @@ async function runPipeline(
 
     console.log(chalk.green(`\n  Done in ${Math.round(result.duration)}ms`));
     const g = result.generated;
-    if (g.ssrPages > 0) console.log(`  SSR pages: ${g.ssrPages}`);
-    if (g.cssFiles > 0) console.log(`  CSS files: ${g.cssFiles}`);
-    if (g.htmlPages > 0) console.log(`  HTML pages: ${g.htmlPages}`);
-    if (g.postcssFiles > 0) console.log(`  PostCSS: styles.css generated`);
+    if (stages.includes('css') && g.cssFiles > 0) console.log(`  CSS files: ${g.cssFiles}`);
+    if (stages.includes('html') && g.htmlPages > 0) console.log(`  HTML pages: ${g.htmlPages}`);
+    if (stages.includes('postcss') && g.postcssFiles > 0) console.log(`  PostCSS: styles.css generated`);
     console.log();
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);

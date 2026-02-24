@@ -2,33 +2,40 @@ import { Orchestrator } from '../core/orchestrator';
 import { CssService } from '../services/css';
 import { HtmlService } from '../services/html';
 import { HtmlConverterService } from '../services/html-converter';
-import { ReactSsrService } from '../services/react-ssr';
 import { PostCssService } from '../services/postcss';
-import { ReactSsrStage } from '../stages/ReactSsrStage';
 import { CssStage } from '../stages/CssStage';
 import { HtmlStage } from '../stages/HtmlStage';
 import { PostCssStage } from '../stages/PostCssStage';
 import type { GeneratorConfig, GeneratorResult, ILogger } from '../core/interfaces';
 
+export type GenerateStageName = 'css' | 'html' | 'postcss';
+
 export async function runGenerateSitePipeline(
   config: GeneratorConfig,
-  logger: ILogger
+  logger: ILogger,
+  stages?: readonly GenerateStageName[]
 ): Promise<GeneratorResult> {
+  const requestedStages = new Set<GenerateStageName>(stages ?? ['css', 'html', 'postcss']);
   const orchestrator = new Orchestrator({ logger });
 
-  orchestrator.registerService(new HtmlConverterService());
-  orchestrator.registerService(new CssService());
-  orchestrator.registerService(new HtmlService());
-
-  if (config.ssr?.registryPath) {
-    orchestrator.registerService(new ReactSsrService());
-    orchestrator.addStage(new ReactSsrStage());
+  if (requestedStages.has('css')) {
+    orchestrator.registerService(new HtmlConverterService());
+    orchestrator.registerService(new CssService());
   }
 
-  orchestrator.addStage(new CssStage());
-  orchestrator.addStage(new HtmlStage());
+  if (requestedStages.has('html')) {
+    orchestrator.registerService(new HtmlService());
+  }
 
-  if (config.postcss?.enabled) {
+  if (requestedStages.has('css')) {
+    orchestrator.addStage(new CssStage());
+  }
+
+  if (requestedStages.has('html')) {
+    orchestrator.addStage(new HtmlStage());
+  }
+
+  if (requestedStages.has('postcss') && config.postcss?.enabled) {
     orchestrator.registerService(new PostCssService());
     orchestrator.addStage(new PostCssStage());
   }

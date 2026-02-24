@@ -80,8 +80,6 @@ export interface GeneratorEvents {
   'html:generated': { route: string; path: string; size: number };
   'html-converter:complete': { htmlPath: string; elementsCount: number; selectorsCount: number };
   
-  // SSR events
-  'ssr:rendered': { route: string; component: string; path: string; size: number };
 }
 
 /**

@@ -2,7 +2,6 @@
  * High-level generate() API.
  *
  * Orchestrator-only path:
- * - React SSR stage (optional)
  * - CSS stage
  * - HTML stage
  * - PostCSS stage (optional)
@@ -15,7 +14,7 @@ import { z } from 'zod';
 
 import { Logger } from './core/logger';
 import type { GeneratorConfig, RouteConfig } from './core/interfaces';
-import { runGenerateSitePipeline } from './pipelines/generate-site';
+import { runGenerateSitePipeline, type GenerateStageName } from './pipelines/generate-site';
 import { runUncssPostprocess, type UncssStepConfig } from './steps/postprocess-uncss';
 
 export type { GeneratorConfig, RouteConfig };
@@ -63,14 +62,6 @@ const generateConfigSchema = z.object({
     cssHref: z.string().optional(),
     stripDataClassInTailwind: z.boolean().optional(),
   }),
-  ssr: z
-    .object({
-      registryPath: z.string().min(1),
-      reactDistDir: z.string().min(1),
-      outputDir: z.string().optional(),
-      routeComponentMap: z.record(z.string()).optional(),
-    })
-    .optional(),
   postcss: z
     .object({
       enabled: z.boolean().optional(),
@@ -135,19 +126,21 @@ export interface GenerateResult {
   duration: number;
   errors: Array<{ stage: string; error: Error }>;
   generated: {
-    ssrPages: number;
     cssFiles: number;
     htmlPages: number;
     postcssFiles: number;
   };
 }
 
-export async function generate(config: GenerateConfig): Promise<GenerateResult> {
+export async function generate(
+  config: GenerateConfig,
+  stages?: readonly GenerateStageName[]
+): Promise<GenerateResult> {
   const startTime = performance.now();
   const logger = new Logger({ level: 'info' });
   const errors: Array<{ stage: string; error: Error }> = [];
+  const requestedStages = new Set<GenerateStageName>(stages ?? ['css', 'html', 'postcss']);
   const generated: GenerateResult['generated'] = {
-    ssrPages: 0,
     cssFiles: 0,
     htmlPages: 0,
     postcssFiles: 0,
@@ -157,24 +150,20 @@ export async function generate(config: GenerateConfig): Promise<GenerateResult> 
     const parsedConfig = validateConfig(config);
     logger.info(`Generating static site for ${parsedConfig.app.name}`);
 
-    const pipelineResult = await runGenerateSitePipeline(parsedConfig, logger);
+    const pipelineResult = await runGenerateSitePipeline(parsedConfig, logger, stages);
     errors.push(...pipelineResult.errors);
 
     for (const stage of pipelineResult.stages) {
       if (!stage.success || !stage.output) continue;
-      if (stage.stage === 'react-ssr') {
-        const out = stage.output as { pages?: Array<unknown> };
-        generated.ssrPages = out.pages?.length ?? 0;
-      }
-      if (stage.stage === 'css') {
+      if (stage.stage === 'css' && requestedStages.has('css')) {
         const out = stage.output as { files?: Array<unknown> };
         generated.cssFiles = out.files?.length ?? 0;
       }
-      if (stage.stage === 'html') {
+      if (stage.stage === 'html' && requestedStages.has('html')) {
         const out = stage.output as { pages?: Array<unknown> };
         generated.htmlPages = out.pages?.length ?? 0;
       }
-      if (stage.stage === 'postcss') {
+      if (stage.stage === 'postcss' && requestedStages.has('postcss')) {
         generated.postcssFiles = 1;
       }
     }

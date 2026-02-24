@@ -12,7 +12,7 @@ export class HtmlStage implements IPipelineStage<unknown, HtmlServiceOutput> {
   readonly name = 'html';
   readonly order = 2;
   readonly enabled = true;
-  readonly dependencies: string[] = ['css'];
+  readonly dependencies: string[] = [];
   readonly description = 'Render pages from prepared views to final HTML';
   
   canExecute(_context: IPipelineContext): boolean {

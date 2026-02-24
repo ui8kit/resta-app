@@ -3,11 +3,6 @@
     "name": "Resta App",
     "lang": "en"
   },
-  "ssr": {
-    "registryPath": "dist/react/_temp/registry.json",
-    "reactDistDir": "dist/react",
-    "outputDir": "dist/html"
-  },
   "css": {
     "outputDir": "dist/css",
     "pureCss": true
