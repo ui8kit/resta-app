@@ -1,0 +1,189 @@
+{
+  "title": "Popular Restaurant Recipes at Home",
+  "subtitle": "Cook our best-selling dishes in your home kitchen.",
+  "items": [
+    {
+      "id": "recipe-grilled-salmon",
+      "slug": "grilled-salmon",
+      "title": "Salmon Steak on the Grill at Home",
+      "excerpt": "Replicate our grill salmon method with herb butter in 25 minutes.",
+      "body": "This recipe mirrors our signature salmon steak from the grill menu and is optimized for home grilling or cast-iron cooking.",
+      "image": { "src": "", "alt": "Salmon Steak on the Grill at Home", "width": 0, "height": 0 },
+      "date": "2025-02-10T00:00:00Z",
+      "category": { "id": "grill", "title": "Grill" },
+      "linkedMenuItemId": "grill-salmon-steak",
+      "difficulty": "medium",
+      "cookTime": { "prep": 10, "cook": 15, "total": 25 },
+      "servings": 2,
+      "ingredients": [
+        { "id": "salmon-1", "amount": 400, "unit": "g", "name": "Atlantic salmon fillet" },
+        { "id": "salmon-2", "amount": 80, "unit": "g", "name": "Butter", "note": "softened" },
+        { "id": "salmon-3", "amount": 1, "unit": "tbsp", "name": "Fresh dill, chopped" },
+        { "id": "salmon-4", "amount": 1, "unit": "tbsp", "name": "Fresh parsley, chopped" },
+        { "id": "salmon-5", "amount": 0.5, "unit": "tsp", "name": "Lemon zest" },
+        { "id": "salmon-6", "amount": 0, "unit": "", "name": "Salt and black pepper" }
+      ],
+      "steps": [
+        { "id": "salmon-step-1", "step": 1, "title": "Season", "body": "Pat salmon dry and season both sides with salt and pepper." },
+        { "id": "salmon-step-2", "step": 2, "body": "Preheat grill or cast-iron skillet over medium-high heat and lightly oil the surface." },
+        { "id": "salmon-step-3", "step": 3, "body": "Cook salmon 4-5 minutes on first side without moving." },
+        { "id": "salmon-step-4", "step": 4, "body": "Flip and cook 3-4 more minutes until center is just opaque." },
+        { "id": "salmon-step-5", "step": 5, "title": "Herb butter", "body": "Mix butter with dill, parsley, lemon zest and a pinch of salt, then serve over hot salmon." }
+      ],
+      "tags": ["charcoal", "grill", "salmon", "gluten-free"],
+      "nutrition": { "calories": 420, "protein": 38, "fat": 28, "carbs": 2 }
+    },
+    {
+      "id": "recipe-beef-ribs-bbq",
+      "slug": "beef-ribs-bbq",
+      "title": "BBQ Beef Ribs at Home",
+      "excerpt": "Slow-cook and glaze beef ribs just like our delivery bestseller.",
+      "body": "A home-friendly version of our BBQ ribs with oven braise and final grill-style caramelization.",
+      "image": { "src": "", "alt": "BBQ Beef Ribs at Home", "width": 0, "height": 0 },
+      "date": "2025-02-08T00:00:00Z",
+      "category": { "id": "grill", "title": "Grill" },
+      "linkedMenuItemId": "grill-beef-ribs",
+      "difficulty": "hard",
+      "cookTime": { "prep": 20, "cook": 120, "total": 140 },
+      "servings": 3,
+      "ingredients": [
+        { "id": "ribs-1", "amount": 1000, "unit": "g", "name": "Beef ribs" },
+        { "id": "ribs-2", "amount": 2, "unit": "tbsp", "name": "Smoked paprika" },
+        { "id": "ribs-3", "amount": 1, "unit": "tbsp", "name": "Garlic powder" },
+        { "id": "ribs-4", "amount": 220, "unit": "ml", "name": "BBQ sauce" },
+        { "id": "ribs-5", "amount": 1, "unit": "tbsp", "name": "Brown sugar" },
+        { "id": "ribs-6", "amount": 0, "unit": "", "name": "Salt and black pepper" }
+      ],
+      "steps": [
+        { "id": "ribs-step-1", "step": 1, "body": "Rub ribs with paprika, garlic powder, salt and pepper." },
+        { "id": "ribs-step-2", "step": 2, "body": "Wrap in foil and bake at 160C for 90 minutes." },
+        { "id": "ribs-step-3", "step": 3, "body": "Mix BBQ sauce with brown sugar and brush over ribs." },
+        { "id": "ribs-step-4", "step": 4, "body": "Bake uncovered 20 minutes at 200C until glazed." },
+        { "id": "ribs-step-5", "step": 5, "body": "Rest for 10 minutes and slice between bones." }
+      ],
+      "tags": ["bbq", "beef", "slow-cook", "grill-style"],
+      "nutrition": { "calories": 640, "protein": 41, "fat": 46, "carbs": 10 }
+    },
+    {
+      "id": "recipe-greek-salad-classic",
+      "slug": "greek-salad-classic",
+      "title": "Classic Greek Salad",
+      "excerpt": "A fresh cold starter from our menu with home pantry ingredients.",
+      "body": "A crisp salad with feta and olives based on our cold-starters section.",
+      "image": { "src": "", "alt": "Classic Greek Salad", "width": 0, "height": 0 },
+      "date": "2025-02-06T00:00:00Z",
+      "category": { "id": "cold-starters", "title": "Cold Starters" },
+      "linkedMenuItemId": "cold-greek-salad",
+      "difficulty": "easy",
+      "cookTime": { "prep": 12, "cook": 0, "total": 12 },
+      "servings": 2,
+      "ingredients": [
+        { "id": "greek-1", "amount": 2, "unit": "pcs", "name": "Tomatoes" },
+        { "id": "greek-2", "amount": 1, "unit": "pcs", "name": "Cucumber" },
+        { "id": "greek-3", "amount": 80, "unit": "g", "name": "Feta cheese" },
+        { "id": "greek-4", "amount": 40, "unit": "g", "name": "Kalamata olives" },
+        { "id": "greek-5", "amount": 2, "unit": "tbsp", "name": "Olive oil" },
+        { "id": "greek-6", "amount": 1, "unit": "tsp", "name": "Dried oregano" }
+      ],
+      "steps": [
+        { "id": "greek-step-1", "step": 1, "body": "Cut tomatoes and cucumber into bite-size chunks." },
+        { "id": "greek-step-2", "step": 2, "body": "Add olives and gently combine in a bowl." },
+        { "id": "greek-step-3", "step": 3, "body": "Top with feta cubes." },
+        { "id": "greek-step-4", "step": 4, "body": "Drizzle olive oil and sprinkle oregano before serving." }
+      ],
+      "tags": ["salad", "vegetarian", "no-cook", "cold-starter"],
+      "nutrition": { "calories": 280, "protein": 9, "fat": 23, "carbs": 10 }
+    },
+    {
+      "id": "recipe-caesar-dressing",
+      "slug": "caesar-dressing",
+      "title": "House Caesar Dressing",
+      "excerpt": "The same creamy dressing we serve with our Caesar salad.",
+      "body": "A robust Caesar dressing that works for romaine, chicken and croutons.",
+      "image": { "src": "", "alt": "House Caesar Dressing", "width": 0, "height": 0 },
+      "date": "2025-02-05T00:00:00Z",
+      "category": { "id": "cold-starters", "title": "Cold Starters" },
+      "linkedMenuItemId": "cold-caesar",
+      "difficulty": "medium",
+      "cookTime": { "prep": 15, "cook": 0, "total": 15 },
+      "servings": 4,
+      "ingredients": [
+        { "id": "caesar-1", "amount": 1, "unit": "pcs", "name": "Egg yolk" },
+        { "id": "caesar-2", "amount": 1, "unit": "tbsp", "name": "Dijon mustard" },
+        { "id": "caesar-3", "amount": 1, "unit": "tsp", "name": "Anchovy paste" },
+        { "id": "caesar-4", "amount": 1, "unit": "clove", "name": "Garlic", "note": "minced" },
+        { "id": "caesar-5", "amount": 2, "unit": "tbsp", "name": "Lemon juice" },
+        { "id": "caesar-6", "amount": 80, "unit": "ml", "name": "Olive oil" },
+        { "id": "caesar-7", "amount": 30, "unit": "g", "name": "Parmesan", "note": "finely grated" }
+      ],
+      "steps": [
+        { "id": "caesar-step-1", "step": 1, "body": "Whisk egg yolk, mustard, anchovy paste, garlic and lemon juice." },
+        { "id": "caesar-step-2", "step": 2, "body": "Slowly drizzle in olive oil while whisking continuously." },
+        { "id": "caesar-step-3", "step": 3, "body": "Stir in parmesan and season with pepper." },
+        { "id": "caesar-step-4", "step": 4, "body": "Chill for 10 minutes before using." }
+      ],
+      "tags": ["sauce", "caesar", "cold-starter", "home-kitchen"],
+      "nutrition": { "calories": 160, "protein": 4, "fat": 15, "carbs": 2 }
+    },
+    {
+      "id": "recipe-herb-rice",
+      "slug": "herb-rice",
+      "title": "Herb Rice Three Ways",
+      "excerpt": "Base side dish with plain, herb and mushroom variations.",
+      "body": "A flexible side recipe inspired by our rice variants in delivery menu.",
+      "image": { "src": "", "alt": "Herb Rice Three Ways", "width": 0, "height": 0 },
+      "date": "2025-02-03T00:00:00Z",
+      "category": { "id": "sides", "title": "Sides & Garnish" },
+      "linkedMenuItemId": "side-rice",
+      "difficulty": "easy",
+      "cookTime": { "prep": 5, "cook": 20, "total": 25 },
+      "servings": 3,
+      "ingredients": [
+        { "id": "rice-1", "amount": 250, "unit": "g", "name": "Long grain rice" },
+        { "id": "rice-2", "amount": 500, "unit": "ml", "name": "Water" },
+        { "id": "rice-3", "amount": 1, "unit": "tbsp", "name": "Butter" },
+        { "id": "rice-4", "amount": 1, "unit": "tbsp", "name": "Parsley", "note": "chopped for herb version" },
+        { "id": "rice-5", "amount": 80, "unit": "g", "name": "Mushrooms", "note": "sauteed for mushroom version" }
+      ],
+      "steps": [
+        { "id": "rice-step-1", "step": 1, "body": "Rinse rice until water runs clear." },
+        { "id": "rice-step-2", "step": 2, "body": "Bring water to a boil, add rice and a pinch of salt." },
+        { "id": "rice-step-3", "step": 3, "body": "Cover and simmer on low heat for 15 minutes." },
+        { "id": "rice-step-4", "step": 4, "body": "Turn off heat and rest for 5 minutes." },
+        { "id": "rice-step-5", "step": 5, "body": "Split into portions and finish plain, with herbs, or with sauteed mushrooms." }
+      ],
+      "tags": ["side", "rice", "three-ways", "budget-friendly"],
+      "nutrition": { "calories": 230, "protein": 4, "fat": 4, "carbs": 44 }
+    },
+    {
+      "id": "recipe-grilled-vegetables",
+      "slug": "grilled-vegetables",
+      "title": "Quick Grilled Vegetables",
+      "excerpt": "A fast side dish with smoky flavor and simple seasoning.",
+      "body": "Charred vegetables that pair with all grill proteins from our menu.",
+      "image": { "src": "", "alt": "Quick Grilled Vegetables", "width": 0, "height": 0 },
+      "date": "2025-02-01T00:00:00Z",
+      "category": { "id": "sides", "title": "Sides & Garnish" },
+      "linkedMenuItemId": "side-grilled-vegetables",
+      "difficulty": "easy",
+      "cookTime": { "prep": 10, "cook": 12, "total": 22 },
+      "servings": 2,
+      "ingredients": [
+        { "id": "veg-1", "amount": 1, "unit": "pcs", "name": "Zucchini" },
+        { "id": "veg-2", "amount": 1, "unit": "pcs", "name": "Red bell pepper" },
+        { "id": "veg-3", "amount": 1, "unit": "pcs", "name": "Onion" },
+        { "id": "veg-4", "amount": 2, "unit": "tbsp", "name": "Olive oil" },
+        { "id": "veg-5", "amount": 1, "unit": "tsp", "name": "Italian herbs" },
+        { "id": "veg-6", "amount": 0, "unit": "", "name": "Salt and black pepper" }
+      ],
+      "steps": [
+        { "id": "veg-step-1", "step": 1, "body": "Slice vegetables into similar thickness." },
+        { "id": "veg-step-2", "step": 2, "body": "Toss with olive oil, herbs, salt and pepper." },
+        { "id": "veg-step-3", "step": 3, "body": "Grill on high heat 3-4 minutes per side until lightly charred." },
+        { "id": "veg-step-4", "step": 4, "body": "Serve immediately with a squeeze of lemon if desired." }
+      ],
+      "tags": ["vegetables", "grill", "side", "quick-recipe"],
+      "nutrition": { "calories": 140, "protein": 3, "fat": 9, "carbs": 13 }
+    }
+  ]
+}

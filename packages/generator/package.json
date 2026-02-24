@@ -1,0 +1,78 @@
+{
+  "name": "@ui8kit/generator",
+  "version": "0.2.0",
+  "description": "Static HTML/CSS generator for UI8Kit with orchestrator pipeline",
+  "type": "module",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./plugins": {
+      "import": "./src/plugins/template/index.ts",
+      "types": "./src/plugins/template/index.ts"
+    },
+    "./react": {
+      "import": "./src/plugins/template/built-in/ReactPlugin.ts",
+      "types": "./src/plugins/template/built-in/ReactPlugin.ts"
+    },
+    "./source": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "templates",
+    "README.md",
+    "GUIDE.md"
+  ],
+  "bin": {
+    "ui8kit-generate": "./src/cli/generate.ts"
+  },
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "dev": "vite build --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist coverage"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.24.0",
+    "@babel/traverse": "^7.24.0",
+    "@babel/types": "^7.24.0",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@ui8kit/sdk": "^0.1.1",
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "glob": "^13.0.0",
+    "postcss": "^8.5.6",
+    "uncss": "^0.17.3",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/babel__traverse": "^7.20.0",
+    "@types/bun": "^1.2.16",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitest/coverage-v8": "^3.2.3",
+    "@vitest/ui": "^3.2.3",
+    "typescript": "^5.8.0",
+    "vite": "^6.3.5",
+    "vitest": "^3.2.3"
+  }
+}

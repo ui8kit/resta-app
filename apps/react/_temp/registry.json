@@ -1,0 +1,579 @@
+{
+  "$schema": "https://buildy.tw/schema/registry.json",
+  "items": [
+    {
+      "name": "AdminDashboardPageView",
+      "type": "registry:block",
+      "description": "",
+      "dependencies": [
+        "@/blocks",
+        "@/data",
+        "@/hooks",
+        "@/layouts"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "blocks/admin/DashboardPageView.tsx",
+          "target": "src/blocks"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\blocks\\admin\\DashboardPageView.tsx",
+      "props": [
+        "onExport",
+        "onImport",
+        "data"
+      ],
+      "domain": "admin"
+    },
+    {
+      "name": "AdminLoginPageView",
+      "type": "registry:block",
+      "description": "",
+      "dependencies": [
+        "@/hooks",
+        "@/layouts",
+        "@ui8kit/core"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "blocks/admin/LoginPageView.tsx",
+          "target": "src/blocks"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\blocks\\admin\\LoginPageView.tsx",
+      "props": [
+        "headerTitle"
+      ],
+      "domain": "admin"
+    },
+    {
+      "name": "BlogDetailPageView",
+      "type": "registry:block",
+      "description": "",
+      "dependencies": [
+        "@/layouts",
+        "@ui8kit/core"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "blocks/blog/DetailPageView.tsx",
+          "target": "src/blocks"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\blocks\\blog\\DetailPageView.tsx",
+      "props": [
+        "navItems",
+        "id",
+        "title",
+        "url"
+      ],
+      "domain": "blog"
+    },
+    {
+      "name": "BlogPageView",
+      "type": "registry:block",
+      "description": "",
+      "dependencies": [
+        "@/layouts",
+        "@/partials",
+        "@/types",
+        "@ui8kit/core"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "blocks/blog/BlogPageView.tsx",
+          "target": "src/blocks"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\blocks\\blog\\BlogPageView.tsx",
+      "props": [
+        "navItems",
+        "sidebar",
+        "headerTitle",
+        "headerSubtitle",
+        "blog",
+        "title",
+        "subtitle",
+        "posts"
+      ],
+      "domain": "blog"
+    },
+    {
+      "name": "DashSidebar",
+      "type": "registry:block",
+      "description": "",
+      "dependencies": [
+        "@/partials",
+        "@/types",
+        "@ui8kit/core"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "blocks/DashSidebar.tsx",
+          "target": "src/blocks"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\blocks\\DashSidebar.tsx",
+      "props": [
+        "label",
+        "links",
+        "class"
+      ]
+    },
+    {
+      "name": "HeroBlock",
+      "type": "registry:block",
+      "description": "",
+      "dependencies": [
+        "@ui8kit/core"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "blocks/HeroBlock.tsx",
+          "target": "src/blocks"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\blocks\\HeroBlock.tsx",
+      "props": [
+        "title",
+        "subtitle",
+        "ctaText",
+        "ctaUrl",
+        "secondaryCtaText",
+        "secondaryCtaUrl",
+        "backgroundImage"
+      ]
+    },
+    {
+      "name": "LandingPageView",
+      "type": "registry:block",
+      "description": "",
+      "dependencies": [
+        "@/blocks",
+        "@/layouts",
+        "react"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "blocks/landing/PageView.tsx",
+          "target": "src/blocks"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\blocks\\landing\\PageView.tsx",
+      "props": [
+        "mode",
+        "navItems",
+        "id",
+        "title",
+        "url"
+      ],
+      "domain": "landing"
+    },
+    {
+      "name": "MenuDetailPageView",
+      "type": "registry:block",
+      "description": "",
+      "dependencies": [
+        "@/layouts",
+        "@ui8kit/core",
+        "react"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "blocks/menu/DetailPageView.tsx",
+          "target": "src/blocks"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\blocks\\menu\\DetailPageView.tsx",
+      "props": [
+        "navItems",
+        "sidebar",
+        "headerTitle",
+        "headerSubtitle",
+        "item",
+        "id",
+        "slug",
+        "title",
+        "description",
+        "price",
+        "compareAtPrice",
+        "category",
+        "details",
+        "availability",
+        "variants",
+        "modifiers",
+        "promotionIds"
+      ],
+      "domain": "menu"
+    },
+    {
+      "name": "MenuPageView",
+      "type": "registry:block",
+      "description": "",
+      "dependencies": [
+        "@/hooks",
+        "@/layouts",
+        "@/partials",
+        "@/types",
+        "lucide-react"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "blocks/menu/MenuPageView.tsx",
+          "target": "src/blocks"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\blocks\\menu\\MenuPageView.tsx",
+      "props": [
+        "navItems",
+        "sidebar",
+        "headerTitle",
+        "headerSubtitle",
+        "menu",
+        "title",
+        "subtitle",
+        "categories",
+        "items"
+      ],
+      "domain": "menu"
+    },
+    {
+      "name": "PromotionDetailPageView",
+      "type": "registry:block",
+      "description": "",
+      "dependencies": [
+        "@/layouts",
+        "@/types",
+        "@ui8kit/core"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "blocks/promotions/DetailPageView.tsx",
+          "target": "src/blocks"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\blocks\\promotions\\DetailPageView.tsx",
+      "props": [
+        "navItems",
+        "sidebar",
+        "headerTitle",
+        "headerSubtitle",
+        "item",
+        "id",
+        "slug",
+        "title",
+        "description",
+        "validUntil",
+        "badge",
+        "discount",
+        "details"
+      ],
+      "domain": "promotions"
+    },
+    {
+      "name": "PromotionsPageView",
+      "type": "registry:block",
+      "description": "",
+      "dependencies": [
+        "@/layouts",
+        "@/partials",
+        "@/types",
+        "@ui8kit/core"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "blocks/promotions/PromotionsPageView.tsx",
+          "target": "src/blocks"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\blocks\\promotions\\PromotionsPageView.tsx",
+      "props": [
+        "navItems",
+        "sidebar",
+        "headerTitle",
+        "headerSubtitle",
+        "promotions",
+        "title",
+        "subtitle",
+        "items"
+      ],
+      "domain": "promotions"
+    },
+    {
+      "name": "RecipeDetailPageView",
+      "type": "registry:block",
+      "description": "",
+      "dependencies": [
+        "@/layouts",
+        "@/partials",
+        "@/types",
+        "@ui8kit/core"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "blocks/recipes/DetailPageView.tsx",
+          "target": "src/blocks"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\blocks\\recipes\\DetailPageView.tsx",
+      "props": [
+        "navItems",
+        "sidebar",
+        "headerTitle",
+        "headerSubtitle",
+        "recipe",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "body",
+        "image",
+        "src",
+        "alt"
+      ],
+      "domain": "recipes"
+    },
+    {
+      "name": "RecipesPageView",
+      "type": "registry:block",
+      "description": "",
+      "dependencies": [
+        "@/layouts",
+        "@/partials",
+        "@/types",
+        "@ui8kit/core"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "blocks/recipes/RecipesPageView.tsx",
+          "target": "src/blocks"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\blocks\\recipes\\RecipesPageView.tsx",
+      "props": [
+        "navItems",
+        "sidebar",
+        "headerTitle",
+        "headerSubtitle",
+        "recipes",
+        "title",
+        "subtitle",
+        "items"
+      ],
+      "domain": "recipes"
+    },
+    {
+      "name": "SidebarContent",
+      "type": "registry:block",
+      "description": "",
+      "dependencies": [
+        "@/partials",
+        "@/types",
+        "@ui8kit/core"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "blocks/SidebarContent.tsx",
+          "target": "src/blocks"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\blocks\\SidebarContent.tsx",
+      "props": [
+        "title",
+        "links",
+        "class"
+      ]
+    },
+    {
+      "name": "AdminLayout",
+      "type": "registry:layout",
+      "description": "",
+      "dependencies": [
+        "@/partials",
+        "@ui8kit/core",
+        "react"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "layouts/AdminLayout.tsx",
+          "target": "src/layouts"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\layouts\\AdminLayout.tsx",
+      "props": [
+        "sidebar"
+      ]
+    },
+    {
+      "name": "MainLayout",
+      "type": "registry:layout",
+      "description": "",
+      "dependencies": [
+        "@/types",
+        "react"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "layouts/MainLayout.tsx",
+          "target": "src/layouts"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\layouts\\MainLayout.tsx"
+    },
+    {
+      "name": "MainLayoutView",
+      "type": "registry:layout",
+      "description": "",
+      "dependencies": [
+        "@/types",
+        "@ui8kit/core",
+        "react"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "layouts/views/MainLayoutView.tsx",
+          "target": "src/layouts"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\layouts\\views\\MainLayoutView.tsx"
+    },
+    {
+      "name": "DomainNavButton",
+      "type": "registry:partial",
+      "description": "",
+      "dependencies": [
+        "@ui8kit/core",
+        "react"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "partials/DomainNavButton.tsx",
+          "target": "src/partials"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\partials\\DomainNavButton.tsx",
+      "props": [
+        "href",
+        "variant",
+        "size",
+        "justify",
+        "w",
+        "onClick",
+        "title",
+        "label",
+        "class"
+      ]
+    },
+    {
+      "name": "Footer",
+      "type": "registry:partial",
+      "description": "",
+      "dependencies": [
+        "@/types",
+        "@ui8kit/core"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "partials/Footer.tsx",
+          "target": "src/partials"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\partials\\Footer.tsx",
+      "props": [
+        "copyright",
+        "sections",
+        "dataClass",
+        "class"
+      ]
+    },
+    {
+      "name": "Header",
+      "type": "registry:partial",
+      "description": "",
+      "dependencies": [
+        "@/constants",
+        "@/hooks",
+        "@/providers",
+        "@/types",
+        "@ui8kit/core",
+        "lucide-react"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "partials/Header.tsx",
+          "target": "src/partials"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\partials\\Header.tsx",
+      "props": [
+        "title",
+        "subtitle",
+        "navItems",
+        "dataClass",
+        "class",
+        "beforeThemeToggle"
+      ]
+    },
+    {
+      "name": "Sidebar",
+      "type": "registry:partial",
+      "description": "",
+      "dependencies": [
+        "@ui8kit/core",
+        "react"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "partials/Sidebar.tsx",
+          "target": "src/partials"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\partials\\Sidebar.tsx",
+      "props": [
+        "position"
+      ]
+    },
+    {
+      "name": "ThemeToggle",
+      "type": "registry:partial",
+      "description": "",
+      "dependencies": [
+        "@/providers",
+        "@ui8kit/core",
+        "lucide-react"
+      ],
+      "devDependencies": [],
+      "files": [
+        {
+          "path": "partials/ThemeToggle.tsx",
+          "target": "src/partials"
+        }
+      ],
+      "sourcePath": "E:\\_@Bun\\@ui8kit-resta-app\\apps\\dsl\\src\\partials\\ThemeToggle.tsx"
+    }
+  ],
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-24T21:41:40.852Z",
+  "registry": "@ui8kit"
+}

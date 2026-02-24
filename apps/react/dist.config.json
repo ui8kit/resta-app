@@ -1,0 +1,30 @@
+{
+  "app": { "name": "Resta App", "lang": "en" },
+  "render": {
+    "appEntry": "src/App.tsx",
+    "skipRoutes": ["/admin/dashboard"]
+  },
+  "css": { "outputDir": "dist/css", "pureCss": true },
+  "html": {
+    "routes": {
+      "/": { "title": "Home" },
+      "/menu": { "title": "Menu" },
+      "/recipes": { "title": "Recipes" },
+      "/blog": { "title": "Blog" },
+      "/promotions": { "title": "Promotions" },
+      "/admin": { "title": "Admin Login" },
+      "/admin/dashboard": { "title": "Admin Dashboard" }
+    },
+    "outputDir": "dist/html",
+    "mode": "tailwind"
+  },
+  "postcss": {
+    "enabled": true,
+    "entryImports": ["src/assets/css/shadcn.css"],
+    "sourceDir": "dist/html",
+    "outputDir": "dist/html/css",
+    "uncss": { "enabled": true }
+  },
+  "mappings": { "ui8kitMap": "src/ui8kit.map.json" },
+  "fixtures": { "dir": "fixtures", "collections": ["menu", "recipes", "blog", "promotions"] }
+}

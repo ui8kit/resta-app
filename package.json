@@ -1,60 +1,28 @@
 {
-  "name": "@ui8kit/resta-app",
+  "name": "@ui8kit/resta-monorepo",
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "packageManager": "bun@1.3.3",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "download-fonts": "bun run scripts/download-fonts.ts",
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "generate": "bun run _packages/generator/src/cli/generate.ts react",
-    "finalize": "bun run scripts/finalize-dist.ts",
-    "dist:app": "bun run lint:dsl && bun run lint:gen && bun run validate && bun run generate && bun run finalize && bun run typecheck:dist",
-    "clean": "bash scripts/clean-workspace.sh",
-    "clean:dist": "bash scripts/clean-engine.sh",
-    "validate": "bunx ui8kit-validate",
-    "validate:fixtures": "bun run scripts/validate-fixtures.ts",
-    "validate:invariants": "bun run scripts/validate-invariants.ts",
-    "validate:view-exports": "bun run scripts/validate-view-exports.ts",
-    "inspect": "bunx ui8kit-inspect",
-    "lint:dsl": "bunx ui8kit-lint-dsl src",
-    "lint:gen": "bun run scripts/lint-gen.ts",
-    "lint": "bunx ui8kit-lint",
-    "typecheck": "tsc --noEmit",
-    "typecheck:dist": "cd dist/react && npx tsc --noEmit",
-    "lint:all": "bun run typecheck && bun run lint",
-    "audit:refactor": "bun run scripts/refactor-audit.ts",
-    "build:props": "bun run scripts/build-props-classlist.ts",
-    "generate:static": "bun run _packages/generator/src/cli/generate.ts static",
-    "generate:html": "bun run _packages/generator/src/cli/generate.ts html",
-    "generate:styles": "bun run _packages/generator/src/cli/generate.ts styles"
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "generate": "turbo run generate",
+    "generate:html": "turbo run generate:html",
+    "generate:styles": "turbo run generate:styles"
   },
   "dependencies": {
-    "@ui8kit/contracts": "^0.1.0",
-    "@ui8kit/generator": "file:./_packages/generator",
-    "@ui8kit/dsl": "^0.1.0",
-    "@ui8kit/lint": "^0.1.1",
-    "@ui8kit/sdk": "^0.1.1",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.460.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-router-dom": "^7.0.1",
-    "tailwind-merge": "^3.4.1"
+    "@ui8kit/generator": "workspace:*",
+    "@ui8kit/resta-app-dist": "workspace:*",
+    "@ui8kit/resta-dsl": "workspace:*"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.18",
-    "@types/node": "^22.13.10",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react-swc": "^3.11.0",
-    "ajv": "^8.18.0",
-    "ajv-formats": "^3.0.1",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.18",
-    "typescript": "^5.8.0",
-    "vite": "^6.3.5"
+    "turbo": "^2.8.10"
   }
 }
