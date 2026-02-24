@@ -32,8 +32,8 @@
   },
   "dependencies": {
     "@ui8kit/contracts": "^0.1.0",
-    "@ui8kit/dsl": "^0.1.0",
     "@ui8kit/generator": "file:./_packages/generator",
+    "@ui8kit/dsl": "^0.1.0",
     "@ui8kit/lint": "^0.1.1",
     "@ui8kit/sdk": "^0.1.1",
     "class-variance-authority": "^0.7.1",
