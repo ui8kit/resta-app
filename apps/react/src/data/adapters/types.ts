@@ -1,20 +1,4 @@
-import type { DashboardSidebarLink, NavItem, SidebarLink } from '../../types/navigation';
-
-export type SiteInfo = {
-  title: string;
-  subtitle?: string;
-  [key: string]: unknown;
-};
-
-export type PageFixture = {
-  page: {
-    website?: unknown[];
-    admin?: unknown[];
-    [key: string]: unknown;
-  };
-};
-
-
+import type { DashboardSidebarLink, NavItem, PageFixture, SidebarLink, SiteInfo } from '@ui8kit/sdk/source/data';
 
 export type Price = {
   amount: number;

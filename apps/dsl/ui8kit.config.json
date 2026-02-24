@@ -9,6 +9,12 @@
   "platformDomain": "catalog",
   "platformMapPath": "./schemas/platform-map/shopify.json",
   "outDir": "../react",
+  "dist": {
+    "static": true,
+    "render": { "appEntry": "src/App.tsx", "skipRoutes": ["/admin/dashboard"] },
+    "html": { "mode": "tailwind" },
+    "postcss": { "enabled": true, "uncss": { "enabled": true } }
+  },
   "aliases": {
     "@": "./src",
     "@/components": "./src/components",

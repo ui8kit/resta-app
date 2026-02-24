@@ -1,28 +1,13 @@
-import type { DashboardSidebarLink, NavItem, SidebarLink } from '../types/navigation';
+import { createContext, EMPTY_ARRAY } from '@ui8kit/sdk/source/data';
+import type {
+  DashboardSidebarLink,
+  NavItem,
+  SidebarLink,
+} from '@ui8kit/sdk/source/data';
 import { loadFixturesContextInput } from './adapters/fixtures.adapter';
 import { loadWpGraphqlContextInput } from './adapters/wpgraphql.adapter';
 import { loadShopifyContextInput } from './adapters/shopify.adapter';
 import type { CanonicalContextInput } from './adapters/types';
-
-function createAppContext<TFixtures extends Record<string, unknown>>(input: {
-  site: CanonicalContextInput['site'];
-  page: CanonicalContextInput['page'];
-  navItems: NavItem[];
-  sidebarLinks: SidebarLink[];
-  adminSidebarLinks: DashboardSidebarLink[];
-  adminSidebarLabel: string;
-  dynamicRoutePatterns: string[];
-  fixtures: TFixtures;
-}) {
-  return Object.freeze({
-    ...input,
-    getAdminSidebarLinks: (currentPath?: string) =>
-      input.adminSidebarLinks.map((link) => ({
-        ...link,
-        active: currentPath ? link.href === currentPath : link.active,
-      })),
-  });
-}
 
 function resolveContextInput(): CanonicalContextInput {
   const source = (import.meta.env.VITE_DATA_SOURCE ?? 'fixtures') as 'fixtures' | 'wpgraphql' | 'shopify';
@@ -38,11 +23,11 @@ function resolveContextInput(): CanonicalContextInput {
 const input = resolveContextInput();
 const page = input.page;
 const navItems = input.navigation.navItems as NavItem[];
-const sidebarLinks = (input.navigation.sidebarLinks ?? []) as SidebarLink[];
-const adminSidebarLinks = (input.navigation.adminSidebarLinks ?? []) as DashboardSidebarLink[];
+const sidebarLinks = (input.navigation.sidebarLinks ?? EMPTY_ARRAY) as SidebarLink[];
+const adminSidebarLinks = (input.navigation.adminSidebarLinks ?? EMPTY_ARRAY) as DashboardSidebarLink[];
 const adminSidebarLabel = input.navigation.labels?.adminSidebarLabel ?? 'Admin';
 
-const baseContext = createAppContext<{
+const baseContext = createContext<{
   landing: CanonicalContextInput['fixtures']['landing'];
   menu: CanonicalContextInput['fixtures']['menu'];
   recipes: CanonicalContextInput['fixtures']['recipes'];

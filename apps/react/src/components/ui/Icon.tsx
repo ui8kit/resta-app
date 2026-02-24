@@ -1,4 +1,4 @@
-
+import { If, Else } from "@ui8kit/dsl";
 import type { ElementType, ReactNode } from "react";
 import { forwardRef } from "react";
 import { cn } from "../../lib/utils";
@@ -65,8 +65,8 @@ export const Icon = forwardRef<HTMLElement, IconProps>(
         role={role}
         {...rest}
       >
-        {LucideIcon ? (
-<LucideIcon
+        <If test="LucideIcon" value={!!LucideIcon}>
+          <LucideIcon
             className={cn(
               sizeClasses,
               utilityClassName,
@@ -74,9 +74,10 @@ export const Icon = forwardRef<HTMLElement, IconProps>(
             )}
             strokeWidth={strokeWidth}
           />
-        ) : (
-{children}
-        )}
+          <Else>
+            {children}
+          </Else>
+        </If>
       </ComponentWithRef>
     );
   }

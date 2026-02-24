@@ -9,6 +9,10 @@
  * Or run both steps at once:
  *   bun run dist:app
  *
+ * Modes (from ui8kit.config.json dist.static):
+ *   static: false — Clean SPA only: no generate scripts, no @ui8kit/generator, no _temp/, no dist.config.json
+ *   static: true  — Full generator support: generate:html/styles/static scripts, dist.config.json, keep _temp/
+ *
  * What this does:
  *   1. Moves generated blocks/layouts/partials from apps/react/ into apps/react/src/
  *   2. Fixes MainLayout.tsx (generator emits `any` for spread props — replace with ComponentProps)
@@ -17,11 +21,7 @@
  *   5. Generates design support files (design/previews, design/fixtures) — DSL-transformed via generator
  *   6. Copies fixtures/ into apps/react/fixtures/
  *   7. Generates project config: package.json, vite.config.ts, tsconfig.json,
- *      postcss.config.js, index.html
- *
- * Result: apps/react/ is a self-contained Vite+React app with real context data,
- * no DSL components (If/Var/Loop replaced with plain React), ready to run with:
- *   cd apps/react && bun install && bun run dev
+ *      postcss.config.js, index.html; when static:true also dist.config.json
  */
 
 import {
@@ -101,9 +101,78 @@ function generateExportsIndex(names: string[]): string {
   return names.map((n) => `export * from './${n}';`).join("\n") + "\n";
 }
 
+interface Ui8KitDistConfig {
+  static?: boolean;
+  render?: { appEntry?: string; skipRoutes?: string[] };
+  html?: { mode?: string };
+  postcss?: { enabled?: boolean; uncss?: { enabled?: boolean } };
+  fixtures?: { collections?: string[] };
+}
+
+function loadUi8KitConfig(): { dist?: Ui8KitDistConfig; brand?: string } {
+  const configPath = join(ROOT, "ui8kit.config.json");
+  if (!existsSync(configPath)) return {};
+  try {
+    return JSON.parse(readFileSync(configPath, "utf-8"));
+  } catch {
+    return {};
+  }
+}
+
+function discoverFixtureCollections(): string[] {
+  if (!existsSync(FIXTURES)) return ["menu", "recipes", "blog", "promotions"];
+  const names: string[] = [];
+  for (const entry of readdirSync(FIXTURES, { withFileTypes: true })) {
+    if (entry.isFile() && entry.name.endsWith(".json")) {
+      names.push(entry.name.replace(/\.json$/, ""));
+    }
+  }
+  return names.length > 0 ? names.sort() : ["menu", "recipes", "blog", "promotions"];
+}
+
+function buildDistConfig(ui8kit: { dist?: Ui8KitDistConfig; brand?: string }): object {
+  const dist = ui8kit.dist ?? {};
+  const collections = dist.fixtures?.collections ?? discoverFixtureCollections();
+  const baseRoutes: Record<string, { title: string }> = {
+    "/": { title: "Home" },
+    "/menu": { title: "Menu" },
+    "/recipes": { title: "Recipes" },
+    "/blog": { title: "Blog" },
+    "/promotions": { title: "Promotions" },
+    "/admin": { title: "Admin Login" },
+    "/admin/dashboard": { title: "Admin Dashboard" },
+  };
+  return {
+    app: { name: "Resta App", lang: "en" },
+    render: {
+      appEntry: dist.render?.appEntry ?? "src/App.tsx",
+      skipRoutes: dist.render?.skipRoutes ?? ["/admin/dashboard"],
+    },
+    css: { outputDir: "dist/css", pureCss: true },
+    html: {
+      routes: baseRoutes,
+      outputDir: "dist/html",
+      mode: dist.html?.mode ?? "tailwind",
+    },
+    postcss: {
+      enabled: dist.postcss?.enabled ?? true,
+      entryImports: ["src/assets/css/shadcn.css"],
+      sourceDir: "dist/html",
+      outputDir: "dist/html/css",
+      uncss: dist.postcss?.uncss ?? { enabled: true },
+    },
+    mappings: { ui8kitMap: "src/ui8kit.map.json" },
+    fixtures: { dir: "fixtures", collections },
+  };
+}
+
 async function main(): Promise<void> {
   console.log("\n  UI8Kit — Finalize apps/react\n");
   console.log("  ─────────────────────────────\n");
+
+  const ui8kit = loadUi8KitConfig();
+  const staticMode = ui8kit.dist?.static ?? true;
+  log(`Mode: ${staticMode ? "static (generate:html/styles/static)" : "SPA only"}\n`);
 
   if (!existsSync(DIST_REACT)) {
     console.error("  apps/react/ not found. Run: bun run generate");
@@ -285,7 +354,34 @@ async function main(): Promise<void> {
     devDependencies: Record<string, string>;
   };
 
-  // package.json
+  // package.json — conditional on static mode
+  const baseScripts: Record<string, string> = {
+    dev: "vite",
+    build: "vite build",
+    typecheck: "tsc --noEmit",
+    preview: "vite preview",
+  };
+  if (staticMode) {
+    baseScripts["generate:html"] = "ui8kit-generate html --cwd . --config dist.config.json";
+    baseScripts["generate:styles"] = "ui8kit-generate styles --cwd . --config dist.config.json";
+    baseScripts["generate:static"] = "ui8kit-generate static --cwd . --config dist.config.json";
+  }
+
+  const baseDevDeps: Record<string, string> = {
+    "@tailwindcss/postcss": rootPkg.devDependencies["@tailwindcss/postcss"],
+    "@types/react": rootPkg.devDependencies["@types/react"],
+    "@types/react-dom": rootPkg.devDependencies["@types/react-dom"],
+    "@types/node": rootPkg.devDependencies["@types/node"],
+    "@vitejs/plugin-react-swc": rootPkg.devDependencies["@vitejs/plugin-react-swc"],
+    postcss: rootPkg.devDependencies["postcss"],
+    tailwindcss: rootPkg.devDependencies["tailwindcss"],
+    typescript: rootPkg.devDependencies["typescript"],
+    vite: rootPkg.devDependencies["vite"],
+  };
+  if (staticMode) {
+    baseDevDeps["@ui8kit/generator"] = "workspace:*";
+  }
+
   writeFile(
     join(DIST_REACT, "package.json"),
     JSON.stringify(
@@ -294,34 +390,14 @@ async function main(): Promise<void> {
         version: rootPkg.version,
         private: true,
         type: "module",
-        scripts: {
-          dev: "vite",
-          build: "vite build",
-          typecheck: "tsc --noEmit",
-          preview: "vite preview",
-          "generate:html": "ui8kit-generate html --cwd . --config dist.config.json",
-          "generate:styles": "ui8kit-generate styles --cwd . --config dist.config.json",
-          "generate:static": "ui8kit-generate static --cwd . --config dist.config.json",
-        },
-        // Exclude dev/build-only packages that are not needed at runtime in dist
+        scripts: baseScripts,
         dependencies: Object.fromEntries(
           Object.entries(rootPkg.dependencies).filter(([pkg]) =>
             !['@ui8kit/dsl', '@ui8kit/generator', '@ui8kit/lint', '@ui8kit/sdk', '@ui8kit/contracts'].includes(pkg) &&
             !pkg.startsWith('file:')
           )
         ),
-        devDependencies: {
-          "@ui8kit/generator": "workspace:*",
-          "@tailwindcss/postcss": rootPkg.devDependencies["@tailwindcss/postcss"],
-          "@types/react": rootPkg.devDependencies["@types/react"],
-          "@types/react-dom": rootPkg.devDependencies["@types/react-dom"],
-          "@types/node": rootPkg.devDependencies["@types/node"],
-          "@vitejs/plugin-react-swc": rootPkg.devDependencies["@vitejs/plugin-react-swc"],
-          postcss: rootPkg.devDependencies["postcss"],
-          tailwindcss: rootPkg.devDependencies["tailwindcss"],
-          typescript: rootPkg.devDependencies["typescript"],
-          vite: rootPkg.devDependencies["vite"],
-        },
+        devDependencies: baseDevDeps,
       },
       null,
       2
@@ -390,9 +466,20 @@ export default defineConfig({
   // index.html (copy from project root)
   copyFile(join(ROOT, "index.html"), join(DIST_REACT, "index.html"));
 
-  // Keep _temp/ with registry.json.
-  // It is required by generator SSR commands (generate:html/generate:static)
-  // when they run after finalize.
+  if (staticMode) {
+    writeFile(
+      join(DIST_REACT, "dist.config.json"),
+      JSON.stringify(buildDistConfig(ui8kit), null, 2) + "\n"
+    );
+    log("dist.config.json (from ui8kit.config.json dist)");
+    // _temp/registry.json is kept — required by generate:html/generate:static
+  } else {
+    const tempDir = join(DIST_REACT, "_temp");
+    if (existsSync(tempDir)) {
+      rmSync(tempDir, { recursive: true, force: true });
+      log("removed: apps/react/_temp/ (SPA-only mode)");
+    }
+  }
 
   console.log(`
   ─────────────────────────────
@@ -402,6 +489,12 @@ export default defineConfig({
     cd apps/react
     bun install
     bun run dev       → http://localhost:3021
+${staticMode ? `
+  Static generation:
+    bun run generate:html   → React to HTML
+    bun run generate:styles → CSS + PostCSS
+    bun run generate:static → full pipeline
+` : ""}
 
   Structure:
     apps/react/
@@ -419,7 +512,7 @@ export default defineConfig({
     ├── package.json
     ├── vite.config.ts
     ├── tsconfig.json
-    └── index.html
+    ${staticMode ? "├── index.html\n    ├── dist.config.json  ← for generate:html/styles/static\n    └── _temp/registry.json" : "└── index.html"}
 `);
 }
 

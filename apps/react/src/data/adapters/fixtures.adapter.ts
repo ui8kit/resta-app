@@ -8,7 +8,7 @@ import recipesData from '../../../fixtures/recipes.json';
 import blogData from '../../../fixtures/blog.json';
 import promotionsData from '../../../fixtures/promotions.json';
 import adminData from '../../../fixtures/admin.json';
-import type { PageFixture, SiteInfo } from './types';
+import type { PageFixture, SiteInfo } from '@ui8kit/sdk/source/data';
 
 export function loadFixturesContextInput(): CanonicalContextInput {
   return {

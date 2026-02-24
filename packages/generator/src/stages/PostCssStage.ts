@@ -1,4 +1,5 @@
 import type { IPipelineStage, IPipelineContext } from '../core/interfaces';
+import { dirname, join, relative } from 'node:path';
 import { PostCssService, type PostCssServiceOutput } from '../services/postcss';
 
 export class PostCssStage implements IPipelineStage<unknown, PostCssServiceOutput> {
@@ -19,10 +20,20 @@ export class PostCssStage implements IPipelineStage<unknown, PostCssServiceOutpu
     await service.initialize({ config, logger, eventBus, registry: context.registry });
 
     const postcssConfig = config.postcss!;
+    const cssOutputDir = config.css.outputDir;
+    const htmlDir = config.html.outputDir;
+    const projectRoot = cssOutputDir ? dirname(dirname(cssOutputDir)) : '.';
+    const sourceDir =
+      (cssOutputDir && htmlDir ? relative(cssOutputDir, htmlDir) : postcssConfig.sourceDir ?? '../html').replace(/\\/g, '/');
+    const entryImports =
+      postcssConfig.entryImports?.map((imp) =>
+        relative(cssOutputDir, join(projectRoot, imp)).replace(/\\/g, '/')
+      ) ?? [];
+
     const result = await service.execute({
       enabled: true,
-      entryImports: postcssConfig.entryImports,
-      sourceDir: postcssConfig.sourceDir,
+      entryImports,
+      sourceDir,
       cssOutputDir: config.css.outputDir,
       htmlDir: config.html.outputDir,
       outputDir: postcssConfig.outputDir ?? config.html.outputDir,
