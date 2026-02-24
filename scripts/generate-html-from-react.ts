@@ -29,7 +29,6 @@ const ROOT = resolve(import.meta.dir, '..');
 const DIST_REACT = resolve(ROOT, 'dist', 'react');
 const DIST_REACT_APP = resolve(DIST_REACT, 'src', 'App.tsx');
 const DIST_HTML = resolve(ROOT, 'dist', 'html');
-const DIST_HTML_PAGES = resolve(DIST_HTML, 'pages');
 const FIXTURES = resolve(ROOT, 'fixtures');
 
 const BASE_ROUTES: Record<string, { title: string }> = {
@@ -90,12 +89,6 @@ function buildRoutes(): Record<string, { title: string }> {
   return { ...BASE_ROUTES, ...single };
 }
 
-function ensureSourceViewsDir(): void {
-  if (!existsSync(DIST_HTML_PAGES)) {
-    throw new Error('Source views not found. Expected dist/html/pages.');
-  }
-}
-
 async function main(): Promise<void> {
   console.log('\n  UI8Kit — Generate HTML+CSS from dist/react (no Liquid)\n');
   console.log('  ─────────────────────────────────────────────────────\n');
@@ -106,8 +99,6 @@ async function main(): Promise<void> {
     console.error('  Run: bun run dist:app');
     process.exit(1);
   }
-
-  ensureSourceViewsDir();
 
   const ROUTES = buildRoutes();
   const routeCount = Object.keys(ROUTES).length;

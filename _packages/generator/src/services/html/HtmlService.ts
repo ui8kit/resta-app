@@ -3,6 +3,29 @@ import { join, dirname } from 'node:path';
 import { createNodeFileSystem } from '../../core/filesystem';
 import { routeToViewFileName } from '../../core/utils/routes';
 
+async function debugLog(runId: string, hypothesisId: string, location: string, message: string, data: Record<string, unknown>): Promise<void> {
+  try {
+    await fetch('http://127.0.0.1:7618/ingest/1a743e9b-8a63-4e35-95d4-015cb5a878d0', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Debug-Session-Id': '4cbe3d',
+      },
+      body: JSON.stringify({
+        sessionId: '4cbe3d',
+        runId,
+        hypothesisId,
+        location,
+        message,
+        data,
+        timestamp: Date.now(),
+      }),
+    });
+  } catch {
+    // ignore logging transport failures
+  }
+}
+
 /**
  * Input for HtmlService.execute()
  */
@@ -96,12 +119,27 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
     }
 
     const generatedPages: HtmlServiceOutput['pages'] = [];
+    // #region agent log
+    await debugLog('pre-fix', 'H8', 'src/services/html/HtmlService.ts:123', 'HtmlService execute entered', {
+      viewsDir,
+      viewsPagesSubdir,
+      outputDir,
+      routesCount: Object.keys(routes).length,
+      mode,
+    });
+    // #endregion
 
     for (const [routePath, routeConfig] of Object.entries(routes)) {
       const viewFileName = routeToViewFileName(routePath);
       const viewPath = join(viewsDir, viewsPagesSubdir, viewFileName);
 
       try {
+        // #region agent log
+        await debugLog('pre-fix', 'H8', 'src/services/html/HtmlService.ts:136', 'Reading route view', {
+          routePath,
+          viewPath,
+        });
+        // #endregion
         const viewContent = await this.fs.readFile(viewPath);
         let html = this.buildSimpleHtmlDocument(routeConfig, appConfig, viewContent, cssHref);
         html = this.processHtmlContent(html, mode, cssContent, stripDataClassInTailwind);
@@ -126,6 +164,15 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
 
         this.context.logger.info(`Generated HTML: ${htmlPath} (${html.length} bytes)`);
       } catch (error) {
+        const err = error as NodeJS.ErrnoException;
+        // #region agent log
+        await debugLog('pre-fix', 'H8', 'src/services/html/HtmlService.ts:162', 'Failed reading/generating route view', {
+          routePath,
+          viewPath,
+          code: err.code,
+          message: err.message,
+        });
+        // #endregion
         this.context.logger.error(`Failed to generate HTML for ${routePath}:`, error);
         throw error;
       }

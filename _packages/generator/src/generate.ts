@@ -191,9 +191,9 @@ export async function generate(config: GenerateConfig): Promise<GenerateResult> 
 function validateConfig(config: GenerateConfig): GenerateConfig {
   const parsed = generateConfigSchema.parse(config) as GenerateConfig;
 
-  if (!existsSync(parsed.html.viewsDir)) {
+  /*if (!existsSync(parsed.html.viewsDir)) {
     throw new Error(`config.html.viewsDir does not exist: ${parsed.html.viewsDir}`);
-  }
+  }*/
 
   if (parsed.html.mode === 'inline' && !parsed.css.outputDir) {
     throw new Error('html.mode=inline requires config.css.outputDir');

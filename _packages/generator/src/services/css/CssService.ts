@@ -1,6 +1,7 @@
 import type { IService, IServiceContext, RouteConfig } from '../../core/interfaces';
 import { HtmlConverterService } from '../html-converter';
 import { join } from 'node:path';
+import { existsSync } from 'node:fs';
 import { emitVariantsApplyCss } from '../../scripts/emit-variants-apply.js';
 import { createNodeFileSystem } from '../../core/filesystem';
 import { routeToViewFileName } from '../../core/utils/routes';
@@ -25,6 +26,29 @@ const DEFAULT_CSS_OUTPUT_FILES: Required<CssOutputFileNames> = {
   pureCss: 'ui8kit.local.css',
   variantsCss: 'variants.apply.css',
 };
+
+async function debugLog(runId: string, hypothesisId: string, location: string, message: string, data: Record<string, unknown>): Promise<void> {
+  try {
+    await fetch('http://127.0.0.1:7618/ingest/1a743e9b-8a63-4e35-95d4-015cb5a878d0', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Debug-Session-Id': '4cbe3d',
+      },
+      body: JSON.stringify({
+        sessionId: '4cbe3d',
+        runId,
+        hypothesisId,
+        location,
+        message,
+        data,
+        timestamp: Date.now(),
+      }),
+    });
+  } catch {
+    // ignore logging transport failures
+  }
+}
 
 /**
  * Input for CssService.execute()
@@ -99,12 +123,51 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
   
   async execute(input: CssServiceInput): Promise<CssServiceOutput> {
     const { viewsDir, viewsPagesSubdir = 'pages', outputDir, routes, pureCss = false, outputFiles = {} } = input;
+    // #region agent log
+    await debugLog('pre-fix', 'H1', 'src/services/css/CssService.ts:127', 'CssService execute entered', {
+      outputDir,
+      outputDirExists: existsSync(outputDir),
+      routesCount: Object.keys(routes).length,
+      pureCss,
+    });
+    // #endregion
     
     // Merge with defaults
     const cssFileNames: Required<CssOutputFileNames> = { ...DEFAULT_CSS_OUTPUT_FILES, ...outputFiles };
     
     // Ensure output directory exists
-    await this.fs.mkdir(outputDir);
+    try {
+      // #region agent log
+      await debugLog('pre-fix', 'H1', 'src/services/css/CssService.ts:139', 'About to mkdir outputDir', {
+        outputDir,
+      });
+      // #endregion
+      await this.fs.mkdir(outputDir);
+      // #region agent log
+      await debugLog('pre-fix', 'H1', 'src/services/css/CssService.ts:145', 'mkdir outputDir succeeded', {
+        outputDir,
+      });
+      // #endregion
+    } catch (error) {
+      const err = error as NodeJS.ErrnoException;
+      if (err.code === 'EEXIST') {
+        // #region agent log
+        await debugLog('post-fix', 'H1', 'src/services/css/CssService.ts:153', 'mkdir outputDir already exists; continuing', {
+          outputDir,
+        });
+        // #endregion
+        this.context.logger.debug(`Output directory already exists: ${outputDir}`);
+      } else {
+      // #region agent log
+        await debugLog('post-fix', 'H1', 'src/services/css/CssService.ts:159', 'mkdir outputDir failed', {
+        outputDir,
+        code: err.code,
+        message: err.message,
+      });
+      // #endregion
+        throw error;
+      }
+    }
     
     const allApplyCss: string[] = [];
     const allPureCss: string[] = [];
@@ -130,6 +193,7 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
     this.context.logger.info(`Generated ${variantsPath} (${variantsCss.length} bytes)`);
     
     // Process page views for each route
+    let routeReadFailures = 0;
     for (const routePath of Object.keys(routes)) {
       const viewFileName = routeToViewFileName(routePath);
       const viewPath = join(viewsDir, viewsPagesSubdir, viewFileName);
@@ -147,9 +211,27 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
         
         this.context.logger.debug(`Processed CSS for route: ${routePath}`);
       } catch (error) {
+        routeReadFailures += 1;
+        if (routeReadFailures <= 5) {
+          const err = error as NodeJS.ErrnoException;
+          // #region agent log
+          await debugLog('pre-fix', 'H7', 'src/services/css/CssService.ts:225', 'Failed route view conversion for CSS', {
+            routePath,
+            viewPath,
+            code: err.code,
+            message: err.message,
+          });
+          // #endregion
+        }
         this.context.logger.warn(`Failed to process CSS for ${routePath}:`, error);
       }
     }
+    // #region agent log
+    await debugLog('pre-fix', 'H7', 'src/services/css/CssService.ts:235', 'CSS route conversion summary', {
+      totalRoutes: Object.keys(routes).length,
+      routeReadFailures,
+    });
+    // #endregion
     
     // Merge and write apply CSS
     const mergedApplyCss = this.mergeCssFiles(allApplyCss.filter(Boolean));
@@ -188,6 +270,12 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
       
       this.context.logger.info(`Generated ${pureCssPath} (${mergedPureCss.length} bytes)`);
     }
+    // #region agent log
+    await debugLog('post-fix', 'H1', 'src/services/css/CssService.ts:257', 'CssService execute completed', {
+      generatedFiles: generatedFiles.map((f) => f.path),
+      generatedCount: generatedFiles.length,
+    });
+    // #endregion
     
     return { files: generatedFiles };
   }
