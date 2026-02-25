@@ -78,3 +78,8 @@ await generate({
 ## Full Documentation
 
 See [GUIDE.md](./GUIDE.md) for complete architecture, configuration, and troubleshooting.
+
+For onboarding and rebrand workflows, start with:
+
+- [docs/README.md](./docs/README.md)
+- [docs/rebrand-automation-101.md](./docs/rebrand-automation-101.md)

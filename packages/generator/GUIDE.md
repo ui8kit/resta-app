@@ -124,3 +124,5 @@ bun run test
 - [README.md](./README.md)
 - [PLUGINS.md](./PLUGINS.md)
 - [docs/transformer.md](./docs/transformer.md)
+- [docs/README.md](./docs/README.md)
+- [docs/rebrand-automation-101.md](./docs/rebrand-automation-101.md)
