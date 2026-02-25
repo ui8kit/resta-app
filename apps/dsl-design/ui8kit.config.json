@@ -1,0 +1,37 @@
+{
+  "$schema": "https://ui.buildy.tw/schema.json",
+  "configVersion": "1",
+  "brand": "resta-design-system",
+  "framework": "vite-react",
+  "typescript": true,
+  "target": "react",
+  "platform": "shopify",
+  "platformDomain": "website",
+  "outDir": "../react-design",
+  "dist": {
+    "static": false,
+    "render": { "appEntry": "src/App.tsx" },
+    "html": { "mode": "tailwind" },
+    "postcss": { "enabled": true, "uncss": { "enabled": true } }
+  },
+  "aliases": {
+    "@": "./src",
+    "@/layouts": "./src/layouts",
+    "@/blocks": "./src/blocks",
+    "@/lib": "../dsl/src/lib",
+    "@/variants": "../dsl/src/variants",
+    "@/components": "../dsl/src/components"
+  },
+  "fixtures": "./fixtures",
+  "tokens": "./src/assets/css/shadcn.css",
+  "componentsDir": "../dsl/src/components",
+  "blocksDir": "./src/blocks",
+  "layoutsDir": "./src/layouts",
+  "partialsDir": "./src/partials",
+  "libDir": "../dsl/src/lib",
+  "registry": "@ui8kit",
+  "lint": {
+    "strict": false,
+    "dsl": true
+  }
+}

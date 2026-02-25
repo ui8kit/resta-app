@@ -1,0 +1,27 @@
+{
+  "title": "Page Patterns",
+  "subtitle": "End-to-end page templates for dashboard documentation and product surfaces.",
+  "items": [
+    {
+      "id": "page-doc-dashboard",
+      "slug": "docs-dashboard",
+      "title": "Docs Dashboard",
+      "description": "Sidebar + content layout optimized for technical documentation.",
+      "badge": "Documentation"
+    },
+    {
+      "id": "page-catalog-overview",
+      "slug": "catalog-overview",
+      "title": "Catalog Overview",
+      "description": "Collection page pattern for menu and inventory overviews.",
+      "badge": "Catalog"
+    },
+    {
+      "id": "page-detail-template",
+      "slug": "detail-template",
+      "title": "Detail Template",
+      "description": "Item detail pattern with metadata, actions, and contextual links.",
+      "badge": "Detail"
+    }
+  ]
+}

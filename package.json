@@ -20,7 +20,8 @@
   "dependencies": {
     "@ui8kit/generator": "workspace:*",
     "@ui8kit/resta-app-dist": "workspace:*",
-    "@ui8kit/resta-dsl": "workspace:*"
+    "@ui8kit/resta-dsl": "workspace:*",
+    "@ui8kit/resta-dsl-design": "workspace:*"
   },
   "devDependencies": {
     "turbo": "^2.8.10"

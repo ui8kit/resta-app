@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@import "./shadcn.css";
+
+@source "../../**/*.{ts,tsx}";
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  [class*="border-"] {
+    border-color: var(--color-border);
+  }
+}

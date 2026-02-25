@@ -1,0 +1,16 @@
+{
+  "navItems": [
+    { "id": "tokens", "title": "Tokens", "url": "/tokens" },
+    { "id": "primitives", "title": "Primitives", "url": "/primitives" },
+    { "id": "widgets", "title": "Widgets", "url": "/widgets" },
+    { "id": "typography", "title": "Typography", "url": "/typography" },
+    { "id": "pages", "title": "Pages", "url": "/pages" }
+  ],
+  "sidebarLinks": [
+    { "label": "Tokens", "href": "/tokens" },
+    { "label": "Primitives", "href": "/primitives" },
+    { "label": "Widgets", "href": "/widgets" },
+    { "label": "Typography", "href": "/typography" },
+    { "label": "Pages", "href": "/pages" }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui8kit.local/schemas/blueprint.schema.json",
+  "title": "UI8Kit Blueprint",
+  "type": "object",
+  "required": [
+    "$schema",
+    "version",
+    "app",
+    "brand",
+    "entities",
+    "layouts",
+    "partials",
+    "components",
+    "navigation",
+    "context",
+    "domains"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "string" },
+    "app": { "type": "object" },
+    "brand": { "type": "object" },
+    "entities": { "type": "array" },
+    "layouts": { "type": "array" },
+    "partials": { "type": "array" },
+    "components": { "type": "object" },
+    "navigation": { "type": "object" },
+    "context": { "type": "object" },
+    "domains": { "type": "array" }
+  },
+  "additionalProperties": true
+}

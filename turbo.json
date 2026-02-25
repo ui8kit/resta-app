@@ -19,6 +19,15 @@
     "generate:html": {
       "dependsOn": ["generate"]
     },
-    "generate:styles": {}
+    "generate:styles": {},
+    "blueprint:scan": {
+      "dependsOn": ["^build"]
+    },
+    "blueprint:validate": {
+      "dependsOn": ["blueprint:scan"]
+    },
+    "dist:app": {
+      "dependsOn": ["blueprint:validate", "^build"]
+    }
   }
 }

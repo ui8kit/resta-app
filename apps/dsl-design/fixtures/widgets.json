@@ -1,0 +1,27 @@
+{
+  "title": "Widgets",
+  "subtitle": "Composed widgets that combine multiple primitives into reusable UI patterns.",
+  "items": [
+    {
+      "id": "widget-card-grid",
+      "slug": "card-grid",
+      "title": "Card Grid",
+      "description": "Catalog card pattern used for menu, recipes, and blog listings.",
+      "badge": "Composite"
+    },
+    {
+      "id": "widget-sidebar-nav",
+      "slug": "sidebar-navigation",
+      "title": "Sidebar Navigation",
+      "description": "Dashboard navigation panel with grouped links and active states.",
+      "badge": "Navigation"
+    },
+    {
+      "id": "widget-sheet-actions",
+      "slug": "sheet-actions",
+      "title": "Sheet Actions",
+      "description": "Mobile-friendly action panel for compact interactions.",
+      "badge": "Overlay"
+    }
+  ]
+}

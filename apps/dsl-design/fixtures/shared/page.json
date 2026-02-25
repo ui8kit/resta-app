@@ -1,0 +1,11 @@
+{
+  "page": {
+    "website": [
+      { "id": "tokens", "domain": "website", "title": "Tokens", "path": "/tokens", "component": "TokensPage" },
+      { "id": "primitives", "domain": "website", "title": "Primitives", "path": "/primitives", "component": "PrimitivesPage" },
+      { "id": "widgets", "domain": "website", "title": "Widgets", "path": "/widgets", "component": "WidgetsPage" },
+      { "id": "typography", "domain": "website", "title": "Typography", "path": "/typography", "component": "TypographyPage" },
+      { "id": "pages", "domain": "website", "title": "Pages", "path": "/pages", "component": "PagesPage" }
+    ]
+  }
+}

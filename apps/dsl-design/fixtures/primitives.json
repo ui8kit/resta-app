@@ -1,0 +1,27 @@
+{
+  "title": "Primitives",
+  "subtitle": "Core building blocks from @ui8kit/core that compose every page.",
+  "items": [
+    {
+      "id": "primitive-block",
+      "slug": "block",
+      "title": "Block",
+      "description": "Semantic section wrapper for page-level structure.",
+      "badge": "Layout"
+    },
+    {
+      "id": "primitive-stack",
+      "slug": "stack",
+      "title": "Stack",
+      "description": "Vertical flow component for ordered content groups.",
+      "badge": "Layout"
+    },
+    {
+      "id": "primitive-title",
+      "slug": "title",
+      "title": "Title",
+      "description": "Typography primitive for page headings and card titles.",
+      "badge": "Typography"
+    }
+  ]
+}

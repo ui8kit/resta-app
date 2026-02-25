@@ -1,0 +1,617 @@
+{
+  "generatedAt": "2026-02-25T08:51:24.491Z",
+  "blueprintPath": "blueprint.json",
+  "nodes": [
+    {
+      "id": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "type": "adapter",
+      "label": "fixtures.adapter.ts",
+      "file": "src/data/adapters/fixtures.adapter.ts"
+    },
+    {
+      "id": "component:Badge",
+      "type": "component",
+      "label": "Badge",
+      "entity": "pages"
+    },
+    {
+      "id": "component:Block",
+      "type": "component",
+      "label": "Block",
+      "entity": "pages"
+    },
+    {
+      "id": "component:Card",
+      "type": "component",
+      "label": "Card",
+      "entity": "pages"
+    },
+    {
+      "id": "component:CardContent",
+      "type": "component",
+      "label": "CardContent",
+      "entity": "pages"
+    },
+    {
+      "id": "component:CardDescription",
+      "type": "component",
+      "label": "CardDescription",
+      "entity": "pages"
+    },
+    {
+      "id": "component:CardHeader",
+      "type": "component",
+      "label": "CardHeader",
+      "entity": "pages"
+    },
+    {
+      "id": "component:CardTitle",
+      "type": "component",
+      "label": "CardTitle",
+      "entity": "pages"
+    },
+    {
+      "id": "component:Grid",
+      "type": "component",
+      "label": "Grid",
+      "entity": "pages"
+    },
+    {
+      "id": "component:Text",
+      "type": "component",
+      "label": "Text",
+      "entity": "pages"
+    },
+    {
+      "id": "context:src/data/context.ts",
+      "type": "context",
+      "label": "context.ts",
+      "file": "src/data/context.ts"
+    },
+    {
+      "id": "fixture:fixtures/pages.json",
+      "type": "fixture",
+      "label": "pages.json",
+      "file": "fixtures/pages.json",
+      "entity": "pages"
+    },
+    {
+      "id": "fixture:fixtures/primitives.json",
+      "type": "fixture",
+      "label": "primitives.json",
+      "file": "fixtures/primitives.json",
+      "entity": "primitives"
+    },
+    {
+      "id": "fixture:fixtures/tokens.json",
+      "type": "fixture",
+      "label": "tokens.json",
+      "file": "fixtures/tokens.json",
+      "entity": "tokens"
+    },
+    {
+      "id": "fixture:fixtures/typography.json",
+      "type": "fixture",
+      "label": "typography.json",
+      "file": "fixtures/typography.json",
+      "entity": "typography"
+    },
+    {
+      "id": "fixture:fixtures/widgets.json",
+      "type": "fixture",
+      "label": "widgets.json",
+      "file": "fixtures/widgets.json",
+      "entity": "widgets"
+    },
+    {
+      "id": "navigation:fixtures/shared/navigation.json",
+      "type": "navigation",
+      "label": "navigation.json",
+      "file": "fixtures/shared/navigation.json"
+    },
+    {
+      "id": "route:src/routes/pages/Page.tsx",
+      "type": "route",
+      "label": "Page.tsx",
+      "file": "src/routes/pages/Page.tsx",
+      "entity": "pages"
+    },
+    {
+      "id": "route:src/routes/primitives/Page.tsx",
+      "type": "route",
+      "label": "Page.tsx",
+      "file": "src/routes/primitives/Page.tsx",
+      "entity": "primitives"
+    },
+    {
+      "id": "route:src/routes/tokens/Page.tsx",
+      "type": "route",
+      "label": "Page.tsx",
+      "file": "src/routes/tokens/Page.tsx",
+      "entity": "tokens"
+    },
+    {
+      "id": "route:src/routes/typography/Page.tsx",
+      "type": "route",
+      "label": "Page.tsx",
+      "file": "src/routes/typography/Page.tsx",
+      "entity": "typography"
+    },
+    {
+      "id": "route:src/routes/widgets/Page.tsx",
+      "type": "route",
+      "label": "Page.tsx",
+      "file": "src/routes/widgets/Page.tsx",
+      "entity": "widgets"
+    },
+    {
+      "id": "type:src/types/pages.ts",
+      "type": "type",
+      "label": "pages.ts",
+      "file": "src/types/pages.ts",
+      "entity": "pages"
+    },
+    {
+      "id": "type:src/types/primitives.ts",
+      "type": "type",
+      "label": "primitives.ts",
+      "file": "src/types/primitives.ts",
+      "entity": "primitives"
+    },
+    {
+      "id": "type:src/types/tokens.ts",
+      "type": "type",
+      "label": "tokens.ts",
+      "file": "src/types/tokens.ts",
+      "entity": "tokens"
+    },
+    {
+      "id": "type:src/types/typography.ts",
+      "type": "type",
+      "label": "typography.ts",
+      "file": "src/types/typography.ts",
+      "entity": "typography"
+    },
+    {
+      "id": "type:src/types/widgets.ts",
+      "type": "type",
+      "label": "widgets.ts",
+      "file": "src/types/widgets.ts",
+      "entity": "widgets"
+    },
+    {
+      "id": "view:src/blocks/pages/PageView.tsx",
+      "type": "view",
+      "label": "PageView.tsx",
+      "file": "src/blocks/pages/PageView.tsx",
+      "entity": "pages"
+    },
+    {
+      "id": "view:src/blocks/primitives/PageView.tsx",
+      "type": "view",
+      "label": "PageView.tsx",
+      "file": "src/blocks/primitives/PageView.tsx",
+      "entity": "primitives"
+    },
+    {
+      "id": "view:src/blocks/tokens/PageView.tsx",
+      "type": "view",
+      "label": "PageView.tsx",
+      "file": "src/blocks/tokens/PageView.tsx",
+      "entity": "tokens"
+    },
+    {
+      "id": "view:src/blocks/typography/PageView.tsx",
+      "type": "view",
+      "label": "PageView.tsx",
+      "file": "src/blocks/typography/PageView.tsx",
+      "entity": "typography"
+    },
+    {
+      "id": "view:src/blocks/widgets/PageView.tsx",
+      "type": "view",
+      "label": "PageView.tsx",
+      "file": "src/blocks/widgets/PageView.tsx",
+      "entity": "widgets"
+    }
+  ],
+  "edges": [
+    {
+      "from": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "to": "context:src/data/context.ts",
+      "relation": "loads-context",
+      "entity": "pages"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/pages/Page.tsx",
+      "relation": "registers-route",
+      "entity": "pages"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/primitives/Page.tsx",
+      "relation": "registers-route",
+      "entity": "primitives"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/tokens/Page.tsx",
+      "relation": "registers-route",
+      "entity": "tokens"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/typography/Page.tsx",
+      "relation": "registers-route",
+      "entity": "typography"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/widgets/Page.tsx",
+      "relation": "registers-route",
+      "entity": "widgets"
+    },
+    {
+      "from": "fixture:fixtures/pages.json",
+      "to": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "relation": "uses-adapter",
+      "entity": "pages"
+    },
+    {
+      "from": "fixture:fixtures/primitives.json",
+      "to": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "relation": "uses-adapter",
+      "entity": "primitives"
+    },
+    {
+      "from": "fixture:fixtures/tokens.json",
+      "to": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "relation": "uses-adapter",
+      "entity": "tokens"
+    },
+    {
+      "from": "fixture:fixtures/typography.json",
+      "to": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "relation": "uses-adapter",
+      "entity": "typography"
+    },
+    {
+      "from": "fixture:fixtures/widgets.json",
+      "to": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "relation": "uses-adapter",
+      "entity": "widgets"
+    },
+    {
+      "from": "route:src/routes/pages/Page.tsx",
+      "to": "view:src/blocks/pages/PageView.tsx",
+      "relation": "renders-view",
+      "entity": "pages"
+    },
+    {
+      "from": "route:src/routes/primitives/Page.tsx",
+      "to": "view:src/blocks/primitives/PageView.tsx",
+      "relation": "renders-view",
+      "entity": "primitives"
+    },
+    {
+      "from": "route:src/routes/tokens/Page.tsx",
+      "to": "view:src/blocks/tokens/PageView.tsx",
+      "relation": "renders-view",
+      "entity": "tokens"
+    },
+    {
+      "from": "route:src/routes/typography/Page.tsx",
+      "to": "view:src/blocks/typography/PageView.tsx",
+      "relation": "renders-view",
+      "entity": "typography"
+    },
+    {
+      "from": "route:src/routes/widgets/Page.tsx",
+      "to": "view:src/blocks/widgets/PageView.tsx",
+      "relation": "renders-view",
+      "entity": "widgets"
+    },
+    {
+      "from": "view:src/blocks/pages/PageView.tsx",
+      "to": "component:Badge",
+      "relation": "imports-component",
+      "entity": "pages"
+    },
+    {
+      "from": "view:src/blocks/pages/PageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "pages"
+    },
+    {
+      "from": "view:src/blocks/pages/PageView.tsx",
+      "to": "component:Card",
+      "relation": "imports-component",
+      "entity": "pages"
+    },
+    {
+      "from": "view:src/blocks/pages/PageView.tsx",
+      "to": "component:CardContent",
+      "relation": "imports-component",
+      "entity": "pages"
+    },
+    {
+      "from": "view:src/blocks/pages/PageView.tsx",
+      "to": "component:CardDescription",
+      "relation": "imports-component",
+      "entity": "pages"
+    },
+    {
+      "from": "view:src/blocks/pages/PageView.tsx",
+      "to": "component:CardHeader",
+      "relation": "imports-component",
+      "entity": "pages"
+    },
+    {
+      "from": "view:src/blocks/pages/PageView.tsx",
+      "to": "component:CardTitle",
+      "relation": "imports-component",
+      "entity": "pages"
+    },
+    {
+      "from": "view:src/blocks/pages/PageView.tsx",
+      "to": "component:Grid",
+      "relation": "imports-component",
+      "entity": "pages"
+    },
+    {
+      "from": "view:src/blocks/pages/PageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "pages"
+    },
+    {
+      "from": "view:src/blocks/pages/PageView.tsx",
+      "to": "type:src/types/pages.ts",
+      "relation": "uses-type",
+      "entity": "pages"
+    },
+    {
+      "from": "view:src/blocks/primitives/PageView.tsx",
+      "to": "component:Badge",
+      "relation": "imports-component",
+      "entity": "primitives"
+    },
+    {
+      "from": "view:src/blocks/primitives/PageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "primitives"
+    },
+    {
+      "from": "view:src/blocks/primitives/PageView.tsx",
+      "to": "component:Card",
+      "relation": "imports-component",
+      "entity": "primitives"
+    },
+    {
+      "from": "view:src/blocks/primitives/PageView.tsx",
+      "to": "component:CardContent",
+      "relation": "imports-component",
+      "entity": "primitives"
+    },
+    {
+      "from": "view:src/blocks/primitives/PageView.tsx",
+      "to": "component:CardDescription",
+      "relation": "imports-component",
+      "entity": "primitives"
+    },
+    {
+      "from": "view:src/blocks/primitives/PageView.tsx",
+      "to": "component:CardHeader",
+      "relation": "imports-component",
+      "entity": "primitives"
+    },
+    {
+      "from": "view:src/blocks/primitives/PageView.tsx",
+      "to": "component:CardTitle",
+      "relation": "imports-component",
+      "entity": "primitives"
+    },
+    {
+      "from": "view:src/blocks/primitives/PageView.tsx",
+      "to": "component:Grid",
+      "relation": "imports-component",
+      "entity": "primitives"
+    },
+    {
+      "from": "view:src/blocks/primitives/PageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "primitives"
+    },
+    {
+      "from": "view:src/blocks/primitives/PageView.tsx",
+      "to": "type:src/types/primitives.ts",
+      "relation": "uses-type",
+      "entity": "primitives"
+    },
+    {
+      "from": "view:src/blocks/tokens/PageView.tsx",
+      "to": "component:Badge",
+      "relation": "imports-component",
+      "entity": "tokens"
+    },
+    {
+      "from": "view:src/blocks/tokens/PageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "tokens"
+    },
+    {
+      "from": "view:src/blocks/tokens/PageView.tsx",
+      "to": "component:Card",
+      "relation": "imports-component",
+      "entity": "tokens"
+    },
+    {
+      "from": "view:src/blocks/tokens/PageView.tsx",
+      "to": "component:CardContent",
+      "relation": "imports-component",
+      "entity": "tokens"
+    },
+    {
+      "from": "view:src/blocks/tokens/PageView.tsx",
+      "to": "component:CardDescription",
+      "relation": "imports-component",
+      "entity": "tokens"
+    },
+    {
+      "from": "view:src/blocks/tokens/PageView.tsx",
+      "to": "component:CardHeader",
+      "relation": "imports-component",
+      "entity": "tokens"
+    },
+    {
+      "from": "view:src/blocks/tokens/PageView.tsx",
+      "to": "component:CardTitle",
+      "relation": "imports-component",
+      "entity": "tokens"
+    },
+    {
+      "from": "view:src/blocks/tokens/PageView.tsx",
+      "to": "component:Grid",
+      "relation": "imports-component",
+      "entity": "tokens"
+    },
+    {
+      "from": "view:src/blocks/tokens/PageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "tokens"
+    },
+    {
+      "from": "view:src/blocks/tokens/PageView.tsx",
+      "to": "type:src/types/tokens.ts",
+      "relation": "uses-type",
+      "entity": "tokens"
+    },
+    {
+      "from": "view:src/blocks/typography/PageView.tsx",
+      "to": "component:Badge",
+      "relation": "imports-component",
+      "entity": "typography"
+    },
+    {
+      "from": "view:src/blocks/typography/PageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "typography"
+    },
+    {
+      "from": "view:src/blocks/typography/PageView.tsx",
+      "to": "component:Card",
+      "relation": "imports-component",
+      "entity": "typography"
+    },
+    {
+      "from": "view:src/blocks/typography/PageView.tsx",
+      "to": "component:CardContent",
+      "relation": "imports-component",
+      "entity": "typography"
+    },
+    {
+      "from": "view:src/blocks/typography/PageView.tsx",
+      "to": "component:CardDescription",
+      "relation": "imports-component",
+      "entity": "typography"
+    },
+    {
+      "from": "view:src/blocks/typography/PageView.tsx",
+      "to": "component:CardHeader",
+      "relation": "imports-component",
+      "entity": "typography"
+    },
+    {
+      "from": "view:src/blocks/typography/PageView.tsx",
+      "to": "component:CardTitle",
+      "relation": "imports-component",
+      "entity": "typography"
+    },
+    {
+      "from": "view:src/blocks/typography/PageView.tsx",
+      "to": "component:Grid",
+      "relation": "imports-component",
+      "entity": "typography"
+    },
+    {
+      "from": "view:src/blocks/typography/PageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "typography"
+    },
+    {
+      "from": "view:src/blocks/typography/PageView.tsx",
+      "to": "type:src/types/typography.ts",
+      "relation": "uses-type",
+      "entity": "typography"
+    },
+    {
+      "from": "view:src/blocks/widgets/PageView.tsx",
+      "to": "component:Badge",
+      "relation": "imports-component",
+      "entity": "widgets"
+    },
+    {
+      "from": "view:src/blocks/widgets/PageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "widgets"
+    },
+    {
+      "from": "view:src/blocks/widgets/PageView.tsx",
+      "to": "component:Card",
+      "relation": "imports-component",
+      "entity": "widgets"
+    },
+    {
+      "from": "view:src/blocks/widgets/PageView.tsx",
+      "to": "component:CardContent",
+      "relation": "imports-component",
+      "entity": "widgets"
+    },
+    {
+      "from": "view:src/blocks/widgets/PageView.tsx",
+      "to": "component:CardDescription",
+      "relation": "imports-component",
+      "entity": "widgets"
+    },
+    {
+      "from": "view:src/blocks/widgets/PageView.tsx",
+      "to": "component:CardHeader",
+      "relation": "imports-component",
+      "entity": "widgets"
+    },
+    {
+      "from": "view:src/blocks/widgets/PageView.tsx",
+      "to": "component:CardTitle",
+      "relation": "imports-component",
+      "entity": "widgets"
+    },
+    {
+      "from": "view:src/blocks/widgets/PageView.tsx",
+      "to": "component:Grid",
+      "relation": "imports-component",
+      "entity": "widgets"
+    },
+    {
+      "from": "view:src/blocks/widgets/PageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "widgets"
+    },
+    {
+      "from": "view:src/blocks/widgets/PageView.tsx",
+      "to": "type:src/types/widgets.ts",
+      "relation": "uses-type",
+      "entity": "widgets"
+    }
+  ],
+  "mermaid": "flowchart LR\n  adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"] --> context_src_data_context_ts[\"context.ts\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_pages_Page_tsx[\"Page.tsx\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_primitives_Page_tsx[\"Page.tsx\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_tokens_Page_tsx[\"Page.tsx\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_typography_Page_tsx[\"Page.tsx\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_widgets_Page_tsx[\"Page.tsx\"]\n  fixture_fixtures_pages_json[\"pages.json\"] --> adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"]\n  fixture_fixtures_primitives_json[\"primitives.json\"] --> adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"]\n  fixture_fixtures_tokens_json[\"tokens.json\"] --> adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"]\n  fixture_fixtures_typography_json[\"typography.json\"] --> adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"]\n  fixture_fixtures_widgets_json[\"widgets.json\"] --> adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"]\n  route_src_routes_pages_Page_tsx[\"Page.tsx\"] --> view_src_blocks_pages_PageView_tsx[\"PageView.tsx\"]\n  route_src_routes_primitives_Page_tsx[\"Page.tsx\"] --> view_src_blocks_primitives_PageView_tsx[\"PageView.tsx\"]\n  route_src_routes_tokens_Page_tsx[\"Page.tsx\"] --> view_src_blocks_tokens_PageView_tsx[\"PageView.tsx\"]\n  route_src_routes_typography_Page_tsx[\"Page.tsx\"] --> view_src_blocks_typography_PageView_tsx[\"PageView.tsx\"]\n  route_src_routes_widgets_Page_tsx[\"Page.tsx\"] --> view_src_blocks_widgets_PageView_tsx[\"PageView.tsx\"]\n  view_src_blocks_pages_PageView_tsx[\"PageView.tsx\"] --> component_Badge[\"Badge\"]\n  view_src_blocks_pages_PageView_tsx[\"PageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_pages_PageView_tsx[\"PageView.tsx\"] --> component_Card[\"Card\"]\n  view_src_blocks_pages_PageView_tsx[\"PageView.tsx\"] --> component_CardContent[\"CardContent\"]\n  view_src_blocks_pages_PageView_tsx[\"PageView.tsx\"] --> component_CardDescription[\"CardDescription\"]\n  view_src_blocks_pages_PageView_tsx[\"PageView.tsx\"] --> component_CardHeader[\"CardHeader\"]\n  view_src_blocks_pages_PageView_tsx[\"PageView.tsx\"] --> component_CardTitle[\"CardTitle\"]\n  view_src_blocks_pages_PageView_tsx[\"PageView.tsx\"] --> component_Grid[\"Grid\"]\n  view_src_blocks_pages_PageView_tsx[\"PageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_pages_PageView_tsx[\"PageView.tsx\"] --> type_src_types_pages_ts[\"pages.ts\"]\n  view_src_blocks_primitives_PageView_tsx[\"PageView.tsx\"] --> component_Badge[\"Badge\"]\n  view_src_blocks_primitives_PageView_tsx[\"PageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_primitives_PageView_tsx[\"PageView.tsx\"] --> component_Card[\"Card\"]\n  view_src_blocks_primitives_PageView_tsx[\"PageView.tsx\"] --> component_CardContent[\"CardContent\"]\n  view_src_blocks_primitives_PageView_tsx[\"PageView.tsx\"] --> component_CardDescription[\"CardDescription\"]\n  view_src_blocks_primitives_PageView_tsx[\"PageView.tsx\"] --> component_CardHeader[\"CardHeader\"]\n  view_src_blocks_primitives_PageView_tsx[\"PageView.tsx\"] --> component_CardTitle[\"CardTitle\"]\n  view_src_blocks_primitives_PageView_tsx[\"PageView.tsx\"] --> component_Grid[\"Grid\"]\n  view_src_blocks_primitives_PageView_tsx[\"PageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_primitives_PageView_tsx[\"PageView.tsx\"] --> type_src_types_primitives_ts[\"primitives.ts\"]\n  view_src_blocks_tokens_PageView_tsx[\"PageView.tsx\"] --> component_Badge[\"Badge\"]\n  view_src_blocks_tokens_PageView_tsx[\"PageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_tokens_PageView_tsx[\"PageView.tsx\"] --> component_Card[\"Card\"]\n  view_src_blocks_tokens_PageView_tsx[\"PageView.tsx\"] --> component_CardContent[\"CardContent\"]\n  view_src_blocks_tokens_PageView_tsx[\"PageView.tsx\"] --> component_CardDescription[\"CardDescription\"]\n  view_src_blocks_tokens_PageView_tsx[\"PageView.tsx\"] --> component_CardHeader[\"CardHeader\"]\n  view_src_blocks_tokens_PageView_tsx[\"PageView.tsx\"] --> component_CardTitle[\"CardTitle\"]\n  view_src_blocks_tokens_PageView_tsx[\"PageView.tsx\"] --> component_Grid[\"Grid\"]\n  view_src_blocks_tokens_PageView_tsx[\"PageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_tokens_PageView_tsx[\"PageView.tsx\"] --> type_src_types_tokens_ts[\"tokens.ts\"]\n  view_src_blocks_typography_PageView_tsx[\"PageView.tsx\"] --> component_Badge[\"Badge\"]\n  view_src_blocks_typography_PageView_tsx[\"PageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_typography_PageView_tsx[\"PageView.tsx\"] --> component_Card[\"Card\"]\n  view_src_blocks_typography_PageView_tsx[\"PageView.tsx\"] --> component_CardContent[\"CardContent\"]\n  view_src_blocks_typography_PageView_tsx[\"PageView.tsx\"] --> component_CardDescription[\"CardDescription\"]\n  view_src_blocks_typography_PageView_tsx[\"PageView.tsx\"] --> component_CardHeader[\"CardHeader\"]\n  view_src_blocks_typography_PageView_tsx[\"PageView.tsx\"] --> component_CardTitle[\"CardTitle\"]\n  view_src_blocks_typography_PageView_tsx[\"PageView.tsx\"] --> component_Grid[\"Grid\"]\n  view_src_blocks_typography_PageView_tsx[\"PageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_typography_PageView_tsx[\"PageView.tsx\"] --> type_src_types_typography_ts[\"typography.ts\"]\n  view_src_blocks_widgets_PageView_tsx[\"PageView.tsx\"] --> component_Badge[\"Badge\"]\n  view_src_blocks_widgets_PageView_tsx[\"PageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_widgets_PageView_tsx[\"PageView.tsx\"] --> component_Card[\"Card\"]\n  view_src_blocks_widgets_PageView_tsx[\"PageView.tsx\"] --> component_CardContent[\"CardContent\"]\n  view_src_blocks_widgets_PageView_tsx[\"PageView.tsx\"] --> component_CardDescription[\"CardDescription\"]\n  view_src_blocks_widgets_PageView_tsx[\"PageView.tsx\"] --> component_CardHeader[\"CardHeader\"]\n  view_src_blocks_widgets_PageView_tsx[\"PageView.tsx\"] --> component_CardTitle[\"CardTitle\"]\n  view_src_blocks_widgets_PageView_tsx[\"PageView.tsx\"] --> component_Grid[\"Grid\"]\n  view_src_blocks_widgets_PageView_tsx[\"PageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_widgets_PageView_tsx[\"PageView.tsx\"] --> type_src_types_widgets_ts[\"widgets.ts\"]"
+}

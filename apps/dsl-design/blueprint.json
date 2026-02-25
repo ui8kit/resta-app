@@ -1,0 +1,128 @@
+{
+  "$schema": "./schemas/blueprint.schema.json",
+  "version": "1",
+  "app": {
+    "name": "RestA Design System",
+    "domain": "website",
+    "lang": "en"
+  },
+  "brand": {
+    "primary": "hsl(346 77% 50%)",
+    "accent": "hsl(346 80% 92%)",
+    "font": "\"Nunito\", sans-serif"
+  },
+  "entities": [
+    {
+      "name": "pages",
+      "singular": "Page",
+      "fixture": "fixtures/pages.json",
+      "fixtureType": "DesignSectionFixture",
+      "itemsKey": "items",
+      "slugField": "slug",
+      "types": "src/types/pages.ts",
+      "routes": [
+        "/pages"
+      ],
+      "views": [
+        "src/blocks/pages/PageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/pages/Page.tsx"
+      ]
+    },
+    {
+      "name": "primitives",
+      "singular": "Primitive",
+      "fixture": "fixtures/primitives.json",
+      "fixtureType": "DesignSectionFixture",
+      "itemsKey": "items",
+      "slugField": "slug",
+      "types": "src/types/primitives.ts",
+      "routes": [
+        "/primitives"
+      ],
+      "views": [
+        "src/blocks/primitives/PageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/primitives/Page.tsx"
+      ]
+    },
+    {
+      "name": "tokens",
+      "singular": "Token",
+      "fixture": "fixtures/tokens.json",
+      "fixtureType": "DesignSectionFixture",
+      "itemsKey": "items",
+      "slugField": "slug",
+      "types": "src/types/tokens.ts",
+      "routes": [
+        "/tokens"
+      ],
+      "views": [
+        "src/blocks/tokens/PageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/tokens/Page.tsx"
+      ]
+    },
+    {
+      "name": "typography",
+      "singular": "Typography",
+      "fixture": "fixtures/typography.json",
+      "fixtureType": "DesignSectionFixture",
+      "itemsKey": "items",
+      "slugField": "slug",
+      "types": "src/types/typography.ts",
+      "routes": [
+        "/typography"
+      ],
+      "views": [
+        "src/blocks/typography/PageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/typography/Page.tsx"
+      ]
+    },
+    {
+      "name": "widgets",
+      "singular": "Widget",
+      "fixture": "fixtures/widgets.json",
+      "fixtureType": "DesignSectionFixture",
+      "itemsKey": "items",
+      "slugField": "slug",
+      "types": "src/types/widgets.ts",
+      "routes": [
+        "/widgets"
+      ],
+      "views": [
+        "src/blocks/widgets/PageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/widgets/Page.tsx"
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "name": "DesignLayout",
+      "file": "src/layouts/DesignLayout.tsx"
+    }
+  ],
+  "partials": [],
+  "components": {
+    "index": "src/components/index.ts",
+    "count": 17
+  },
+  "navigation": {
+    "source": "fixtures/shared/navigation.json",
+    "type": "src/types/navigation.ts"
+  },
+  "context": {
+    "file": "src/data/context.ts",
+    "adapter": "src/data/adapters/fixtures.adapter.ts"
+  },
+  "domains": [
+    "website"
+  ]
+}

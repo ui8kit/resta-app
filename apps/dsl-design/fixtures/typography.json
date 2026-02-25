@@ -1,0 +1,27 @@
+{
+  "title": "Typography",
+  "subtitle": "Heading, body text, and muted copy styles used in dashboards and marketing pages.",
+  "items": [
+    {
+      "id": "typography-display",
+      "slug": "display-scale",
+      "title": "Display Scale",
+      "description": "Large title hierarchy for hero sections and page entry points.",
+      "badge": "Heading"
+    },
+    {
+      "id": "typography-body",
+      "slug": "body-copy",
+      "title": "Body Copy",
+      "description": "Readable paragraph styles for long-form content and docs.",
+      "badge": "Text"
+    },
+    {
+      "id": "typography-meta",
+      "slug": "meta-labels",
+      "title": "Meta Labels",
+      "description": "Compact caption styles for badges, helper text, and metadata.",
+      "badge": "Utility"
+    }
+  ]
+}
