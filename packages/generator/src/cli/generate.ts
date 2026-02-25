@@ -10,6 +10,10 @@ import { buildProject } from '../build-project';
 import { loadFixtureRoutes } from '../utils/load-fixture-routes';
 import type { RouteConfig } from '../core/interfaces';
 import type { GenerateStageName } from '../pipelines/generate-site';
+import { scanBlueprint } from '../scripts/scan-blueprint';
+import { validateBlueprint } from '../scripts/validate-blueprint';
+import { buildDependencyGraph } from '../scripts/build-dependency-graph';
+import { scaffoldEntity } from '../scripts/scaffold-entity';
 
 interface DistConfig {
   app: { name: string; lang?: string };
@@ -203,6 +207,118 @@ program
   .option('--config <path>', 'Config file path', 'dist.config.json')
   .action(async (opts) => {
     await runPipeline(opts, 'styles');
+  });
+
+program
+  .command('blueprint:scan')
+  .description('Scan DSL app and generate blueprint.json')
+  .option('--cwd <dir>', 'Working directory', '.')
+  .option('--output <path>', 'Blueprint output path (default: blueprint.json)')
+  .action(async (opts) => {
+    const cwd = resolve(opts.cwd);
+    try {
+      const result = scanBlueprint({
+        cwd,
+        outputFile: opts.output,
+      });
+      console.log(chalk.green(`\n  Blueprint generated: ${result.blueprintPath}\n`));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(chalk.red(`\n  Error: ${message}\n`));
+      process.exit(1);
+    }
+  });
+
+program
+  .command('blueprint:validate')
+  .description('Validate project structure against blueprint.json')
+  .option('--cwd <dir>', 'Working directory', '.')
+  .option('--blueprint <path>', 'Blueprint file path (default: blueprint.json)')
+  .option('--report-dir <path>', 'Report directory (default: .cursor/reports)')
+  .action(async (opts) => {
+    const cwd = resolve(opts.cwd);
+    try {
+      const result = validateBlueprint({
+        cwd,
+        blueprintFile: opts.blueprint,
+        reportDir: opts.reportDir,
+      });
+      if (!result.ok) {
+        console.error(chalk.red('\n  Blueprint validation failed.\n'));
+        process.exit(1);
+      }
+      console.log(chalk.green('\n  Blueprint validation passed.\n'));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(chalk.red(`\n  Error: ${message}\n`));
+      process.exit(1);
+    }
+  });
+
+program
+  .command('blueprint:graph')
+  .description('Build dependency graph from blueprint.json')
+  .option('--cwd <dir>', 'Working directory', '.')
+  .option('--blueprint <path>', 'Blueprint file path (default: blueprint.json)')
+  .option('--output <path>', 'Graph output path (default: dependency-graph.json)')
+  .action(async (opts) => {
+    const cwd = resolve(opts.cwd);
+    try {
+      const result = buildDependencyGraph({
+        cwd,
+        blueprintFile: opts.blueprint,
+        outputFile: opts.output,
+      });
+      console.log(chalk.green(`\n  Dependency graph generated: ${result.graphPath}\n`));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(chalk.red(`\n  Error: ${message}\n`));
+      process.exit(1);
+    }
+  });
+
+const scaffoldCommand = program
+  .command('scaffold')
+  .description('Scaffold helpers for DSL applications');
+
+scaffoldCommand
+  .command('entity')
+  .description('Scaffold a new entity with routes, views, and fixture wiring')
+  .requiredOption('--name <name>', 'Entity name (kebab-case), e.g. contacts')
+  .requiredOption('--singular <name>', 'Singular entity name, e.g. Contact')
+  .requiredOption(
+    '--fields <fields>',
+    'Comma-separated field definitions, e.g. "name:string,email:string,status:active|archived"'
+  )
+  .option('--routes <routes>', 'List and detail routes, e.g. "/contacts,/contacts/:slug"')
+  .option('--layout <layout>', 'Layout component to use (default: MainLayout)', 'MainLayout')
+  .option('--cwd <dir>', 'Working directory', '.')
+  .action(async (opts) => {
+    const cwd = resolve(opts.cwd);
+    try {
+      const result = scaffoldEntity({
+        cwd,
+        name: opts.name,
+        singular: opts.singular,
+        fields: opts.fields,
+        routes: opts.routes,
+        layout: opts.layout,
+      });
+      console.log(chalk.green('\n  Entity scaffold completed.'));
+      console.log(`  Created files: ${result.createdFiles.length}`);
+      for (const file of result.createdFiles) {
+        console.log(`    + ${file}`);
+      }
+      console.log(`  Updated files: ${result.updatedFiles.length}`);
+      for (const file of result.updatedFiles) {
+        console.log(`    ~ ${file}`);
+      }
+      console.log(`  Blueprint refreshed: ${result.blueprintPath}\n`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(chalk.red(`\n  Error: ${message}\n`));
+      process.exit(1);
+    }
   });
 
 const MODE_STAGES: Record<'static' | 'html' | 'styles' | 'render', readonly GenerateStageName[]> = {
