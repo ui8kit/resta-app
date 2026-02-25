@@ -47,9 +47,9 @@ export function DesignLayout({
         </Group>
       </Block>
 
-      <Block flex="" flex="row" data-class="design-layout-body">
+      <Block flex="row" data-class="design-layout-body">
         <If test="links.length > 0" value={links.length > 0}>
-          <Block component="aside" border="r" bg="sidebar" p="6" data-class="design-layout-sidebar">
+          <Block component="aside" border="r" bg="card" p="6" data-class="design-layout-sidebar">
             <Stack gap="2" data-class="design-layout-sidebar-links">
               <Loop each="sidebarLinks" as="link" data={links}>
                 {(link: SidebarLink) => (

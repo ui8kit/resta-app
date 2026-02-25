@@ -10,7 +10,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(process.cwd(), './src'),
-      '@ui8kit/core': path.resolve(process.cwd(), '../dsl/src/components/index.ts'),
+      '@ui8kit/core': path.resolve(process.cwd(), './src/components/index.ts'),
     },
   },
 });

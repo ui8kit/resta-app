@@ -19,7 +19,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@ui8kit/core": ["../dsl/src/components/index.ts"]
+      "@ui8kit/core": ["./src/components/index.ts"]
     }
   },
   "include": ["src"],
