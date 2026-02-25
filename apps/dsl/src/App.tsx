@@ -16,13 +16,13 @@ export function App() {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/menu" element={<MenuPage />} />
-      <Route path="/menu/:id" element={<MenuDetailPage />} />
+      <Route path="/menu/:slug" element={<MenuDetailPage />} />
       <Route path="/recipes" element={<RecipesPage />} />
       <Route path="/recipes/:slug" element={<RecipeDetailPage />} />
       <Route path="/blog" element={<BlogPage />} />
       <Route path="/blog/:slug" element={<BlogDetailPage />} />
       <Route path="/promotions" element={<PromotionsPage />} />
-      <Route path="/promotions/:id" element={<PromotionDetailPage />} />
+      <Route path="/promotions/:slug" element={<PromotionDetailPage />} />
       <Route path="/admin" element={<LoginPage />} />
       <Route path="/admin/dashboard" element={<DashboardPage />} />
     </Routes>

@@ -1,0 +1,149 @@
+{
+  "$schema": "./schemas/blueprint.schema.json",
+  "version": "1",
+  "app": {
+    "name": "RestA",
+    "domain": "catalog",
+    "lang": "en"
+  },
+  "brand": {
+    "primary": "hsl(346 77% 50%)",
+    "accent": "hsl(346 80% 92%)",
+    "font": "var(--font-nunito)"
+  },
+  "entities": [
+    {
+      "name": "blog",
+      "singular": "BlogPost",
+      "fixture": "fixtures/blog.json",
+      "fixtureType": "BlogFixture",
+      "itemsKey": "posts",
+      "slugField": "slug",
+      "types": "src/types/blog.ts",
+      "routes": [
+        "/blog",
+        "/blog/:slug"
+      ],
+      "views": [
+        "src/blocks/blog/BlogPageView.tsx",
+        "src/blocks/blog/DetailPageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/blog/BlogPage.tsx",
+        "src/routes/blog/DetailPage.tsx"
+      ]
+    },
+    {
+      "name": "menu",
+      "singular": "MenuItem",
+      "fixture": "fixtures/menu.json",
+      "fixtureType": "MenuFixture",
+      "itemsKey": "items",
+      "slugField": "slug",
+      "types": "src/types/menu.ts",
+      "routes": [
+        "/menu",
+        "/menu/:slug"
+      ],
+      "views": [
+        "src/blocks/menu/DetailPageView.tsx",
+        "src/blocks/menu/MenuPageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/menu/DetailPage.tsx",
+        "src/routes/menu/MenuPage.tsx"
+      ]
+    },
+    {
+      "name": "promotions",
+      "singular": "PromotionItem",
+      "fixture": "fixtures/promotions.json",
+      "fixtureType": "PromotionsFixture",
+      "itemsKey": "items",
+      "slugField": "slug",
+      "types": "src/types/promotions.ts",
+      "routes": [
+        "/promotions",
+        "/promotions/:slug"
+      ],
+      "views": [
+        "src/blocks/promotions/DetailPageView.tsx",
+        "src/blocks/promotions/PromotionsPageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/promotions/DetailPage.tsx",
+        "src/routes/promotions/PromotionsPage.tsx"
+      ]
+    },
+    {
+      "name": "recipes",
+      "singular": "RecipeItem",
+      "fixture": "fixtures/recipes.json",
+      "fixtureType": "RecipesFixture",
+      "itemsKey": "items",
+      "slugField": "slug",
+      "types": "src/types/recipes.ts",
+      "routes": [
+        "/recipes",
+        "/recipes/:slug"
+      ],
+      "views": [
+        "src/blocks/recipes/DetailPageView.tsx",
+        "src/blocks/recipes/RecipesPageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/recipes/DetailPage.tsx",
+        "src/routes/recipes/RecipesPage.tsx"
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "name": "AdminLayout",
+      "file": "src/layouts/AdminLayout.tsx"
+    },
+    {
+      "name": "MainLayout",
+      "file": "src/layouts/MainLayout.tsx",
+      "view": "src/layouts/views/MainLayoutView.tsx"
+    }
+  ],
+  "partials": [
+    {
+      "name": "DomainNavButton",
+      "file": "src/partials/DomainNavButton.tsx"
+    },
+    {
+      "name": "Footer",
+      "file": "src/partials/Footer.tsx"
+    },
+    {
+      "name": "Header",
+      "file": "src/partials/Header.tsx"
+    },
+    {
+      "name": "Sidebar",
+      "file": "src/partials/Sidebar.tsx"
+    },
+    {
+      "name": "ThemeToggle",
+      "file": "src/partials/ThemeToggle.tsx"
+    }
+  ],
+  "components": {
+    "index": "src/components/index.ts",
+    "count": 17
+  },
+  "navigation": {
+    "source": "fixtures/shared/navigation.json",
+    "type": "src/types/navigation.ts"
+  },
+  "context": {
+    "file": "src/data/context.ts",
+    "adapter": "src/data/adapters/fixtures.adapter.ts"
+  },
+  "domains": [
+    "admin",
+    "website"
+  ]
+}

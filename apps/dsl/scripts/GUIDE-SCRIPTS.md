@@ -10,6 +10,7 @@ Reference for all scripts in the `scripts/` directory. Describes what each scrip
 |--------|------------|---------|
 | `finalize-dist.ts` | `bun run finalize` | Assemble `dist/react/` into a standalone runnable Vite app |
 | `validate-invariants.ts` | `bun run validate:invariants` | Check architectural invariants (routes, fixtures, blocks, context) |
+| `contract-tests.ts` | `bun run test:contracts` | Blueprint-driven contract checks between fixtures, types, views, and routes |
 | `refactor-audit.ts` | `bun run audit:refactor` | Scan for residual old brand terms after a brand refactor |
 | `build-props-classlist.ts` | `bun run build:props` | Extract all prop→class combinations from `utility-props.map.ts` |
 | `clean-workspace.sh` | `bun run clean` | Full cleanup: `node_modules`, `dist`, `*.tsbuildinfo` |
@@ -80,7 +81,7 @@ Checks that the project structure is internally consistent. Produces a report in
 
 **Checks performed:**
 1. `fixtures/shared/page.json` — exists, has `website` and `admin` arrays
-2. `src/App.tsx` — contains all required routes: `/`, `/menu`, `/menu/:id`, `/recipes`, `/recipes/:slug`, `/blog`, `/blog/:slug`, `/promotions`, `/promotions/:id`, `/admin`, `/admin/dashboard`
+2. `src/App.tsx` — contains all required routes: `/`, `/menu`, `/menu/:slug`, `/recipes`, `/recipes/:slug`, `/blog`, `/blog/:slug`, `/promotions`, `/promotions/:slug`, `/admin`, `/admin/dashboard`
 3. `src/routes/` — every route component referenced in `App.tsx` has a corresponding `.tsx` file
 4. `src/blocks/index.ts` — all `.tsx` files in `src/blocks/` are exported
 5. `src/data/context.ts` — all fixture JSON files imported in `context.ts` actually exist on disk
@@ -244,6 +245,9 @@ JSON Schema for the refactor audit report file. Describes the structure of repor
 bun run dev                   # Vite dev server → http://localhost:3020
 bun run validate              # Validate props + DSL syntax
 bun run lint:dsl              # Enforce DSL rules in src/
+bun run blueprint:scan        # Generate blueprint.json
+bun run blueprint:validate    # Validate blueprint integrity + write report
+bun run test:contracts        # Contract checks driven by blueprint
 bun run validate:invariants   # Check routes, fixtures, exports, context
 ```
 

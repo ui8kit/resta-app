@@ -3,8 +3,8 @@ import { SidebarContent, MenuDetailPageView } from '@/blocks';
 import { context } from '@/data/context';
 
 export function DetailPage() {
-  const { id } = useParams<{ id: string }>();
-  const item = context.menu.items?.find((i) => i.id === id);
+  const { slug } = useParams<{ slug: string }>();
+  const item = context.menu.items?.find((i) => i.slug === slug);
 
   return (
     <MenuDetailPageView

@@ -41,7 +41,7 @@ const baseContext = createContext<{
   sidebarLinks,
   adminSidebarLinks,
   adminSidebarLabel,
-  dynamicRoutePatterns: ['/menu/:id', '/recipes/:slug', '/blog/:slug', '/promotions/:id'],
+  dynamicRoutePatterns: ['/menu/:slug', '/recipes/:slug', '/blog/:slug', '/promotions/:slug'],
   fixtures: {
     landing: input.fixtures.landing,
     menu: input.fixtures.menu,

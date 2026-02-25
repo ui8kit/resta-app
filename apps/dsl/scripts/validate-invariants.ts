@@ -104,7 +104,7 @@ async function main(): Promise<void> {
     }
 
     // Required routes for resta-app
-    const requiredRoutes = ["/", "/menu", "/menu/:id", "/recipes", "/recipes/:slug", "/blog", "/blog/:slug", "/promotions", "/promotions/:id", "/admin", "/admin/dashboard"];
+    const requiredRoutes = ["/", "/menu", "/menu/:slug", "/recipes", "/recipes/:slug", "/blog", "/blog/:slug", "/promotions", "/promotions/:slug", "/admin", "/admin/dashboard"];
     for (const route of requiredRoutes) {
       if (!routePaths.includes(route)) {
         addIssue(issues, { level: "error", code: "ROUTE_MISSING", message: `Required route not wired in App.tsx: ${route}`, path: appPath });

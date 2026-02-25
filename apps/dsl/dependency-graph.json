@@ -1,0 +1,884 @@
+{
+  "generatedAt": "2026-02-25T08:51:32.261Z",
+  "blueprintPath": "blueprint.json",
+  "nodes": [
+    {
+      "id": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "type": "adapter",
+      "label": "fixtures.adapter.ts",
+      "file": "src/data/adapters/fixtures.adapter.ts"
+    },
+    {
+      "id": "component:Badge",
+      "type": "component",
+      "label": "Badge",
+      "entity": "menu"
+    },
+    {
+      "id": "component:Block",
+      "type": "component",
+      "label": "Block",
+      "entity": "blog"
+    },
+    {
+      "id": "component:Button",
+      "type": "component",
+      "label": "Button",
+      "entity": "menu"
+    },
+    {
+      "id": "component:Card",
+      "type": "component",
+      "label": "Card",
+      "entity": "blog"
+    },
+    {
+      "id": "component:CardContent",
+      "type": "component",
+      "label": "CardContent",
+      "entity": "blog"
+    },
+    {
+      "id": "component:CardDescription",
+      "type": "component",
+      "label": "CardDescription",
+      "entity": "blog"
+    },
+    {
+      "id": "component:CardHeader",
+      "type": "component",
+      "label": "CardHeader",
+      "entity": "blog"
+    },
+    {
+      "id": "component:CardTitle",
+      "type": "component",
+      "label": "CardTitle",
+      "entity": "blog"
+    },
+    {
+      "id": "component:Container",
+      "type": "component",
+      "label": "Container",
+      "entity": "blog"
+    },
+    {
+      "id": "component:Field",
+      "type": "component",
+      "label": "Field",
+      "entity": "menu"
+    },
+    {
+      "id": "component:Grid",
+      "type": "component",
+      "label": "Grid",
+      "entity": "blog"
+    },
+    {
+      "id": "component:Group",
+      "type": "component",
+      "label": "Group",
+      "entity": "menu"
+    },
+    {
+      "id": "component:Icon",
+      "type": "component",
+      "label": "Icon",
+      "entity": "menu"
+    },
+    {
+      "id": "component:Sheet",
+      "type": "component",
+      "label": "Sheet",
+      "entity": "menu"
+    },
+    {
+      "id": "component:Stack",
+      "type": "component",
+      "label": "Stack",
+      "entity": "menu"
+    },
+    {
+      "id": "component:Text",
+      "type": "component",
+      "label": "Text",
+      "entity": "blog"
+    },
+    {
+      "id": "component:Title",
+      "type": "component",
+      "label": "Title",
+      "entity": "blog"
+    },
+    {
+      "id": "component:Toast",
+      "type": "component",
+      "label": "Toast",
+      "entity": "menu"
+    },
+    {
+      "id": "context:src/data/context.ts",
+      "type": "context",
+      "label": "context.ts",
+      "file": "src/data/context.ts"
+    },
+    {
+      "id": "fixture:fixtures/blog.json",
+      "type": "fixture",
+      "label": "blog.json",
+      "file": "fixtures/blog.json",
+      "entity": "blog"
+    },
+    {
+      "id": "fixture:fixtures/menu.json",
+      "type": "fixture",
+      "label": "menu.json",
+      "file": "fixtures/menu.json",
+      "entity": "menu"
+    },
+    {
+      "id": "fixture:fixtures/promotions.json",
+      "type": "fixture",
+      "label": "promotions.json",
+      "file": "fixtures/promotions.json",
+      "entity": "promotions"
+    },
+    {
+      "id": "fixture:fixtures/recipes.json",
+      "type": "fixture",
+      "label": "recipes.json",
+      "file": "fixtures/recipes.json",
+      "entity": "recipes"
+    },
+    {
+      "id": "navigation:fixtures/shared/navigation.json",
+      "type": "navigation",
+      "label": "navigation.json",
+      "file": "fixtures/shared/navigation.json"
+    },
+    {
+      "id": "partial:src/partials/Header.tsx",
+      "type": "partial",
+      "label": "Header",
+      "file": "src/partials/Header.tsx"
+    },
+    {
+      "id": "route:src/routes/blog/BlogPage.tsx",
+      "type": "route",
+      "label": "BlogPage.tsx",
+      "file": "src/routes/blog/BlogPage.tsx",
+      "entity": "blog"
+    },
+    {
+      "id": "route:src/routes/blog/DetailPage.tsx",
+      "type": "route",
+      "label": "DetailPage.tsx",
+      "file": "src/routes/blog/DetailPage.tsx",
+      "entity": "blog"
+    },
+    {
+      "id": "route:src/routes/menu/DetailPage.tsx",
+      "type": "route",
+      "label": "DetailPage.tsx",
+      "file": "src/routes/menu/DetailPage.tsx",
+      "entity": "menu"
+    },
+    {
+      "id": "route:src/routes/menu/MenuPage.tsx",
+      "type": "route",
+      "label": "MenuPage.tsx",
+      "file": "src/routes/menu/MenuPage.tsx",
+      "entity": "menu"
+    },
+    {
+      "id": "route:src/routes/promotions/DetailPage.tsx",
+      "type": "route",
+      "label": "DetailPage.tsx",
+      "file": "src/routes/promotions/DetailPage.tsx",
+      "entity": "promotions"
+    },
+    {
+      "id": "route:src/routes/promotions/PromotionsPage.tsx",
+      "type": "route",
+      "label": "PromotionsPage.tsx",
+      "file": "src/routes/promotions/PromotionsPage.tsx",
+      "entity": "promotions"
+    },
+    {
+      "id": "route:src/routes/recipes/DetailPage.tsx",
+      "type": "route",
+      "label": "DetailPage.tsx",
+      "file": "src/routes/recipes/DetailPage.tsx",
+      "entity": "recipes"
+    },
+    {
+      "id": "route:src/routes/recipes/RecipesPage.tsx",
+      "type": "route",
+      "label": "RecipesPage.tsx",
+      "file": "src/routes/recipes/RecipesPage.tsx",
+      "entity": "recipes"
+    },
+    {
+      "id": "type:src/types/blog.ts",
+      "type": "type",
+      "label": "blog.ts",
+      "file": "src/types/blog.ts",
+      "entity": "blog"
+    },
+    {
+      "id": "type:src/types/menu.ts",
+      "type": "type",
+      "label": "menu.ts",
+      "file": "src/types/menu.ts",
+      "entity": "menu"
+    },
+    {
+      "id": "type:src/types/promotions.ts",
+      "type": "type",
+      "label": "promotions.ts",
+      "file": "src/types/promotions.ts",
+      "entity": "promotions"
+    },
+    {
+      "id": "type:src/types/recipes.ts",
+      "type": "type",
+      "label": "recipes.ts",
+      "file": "src/types/recipes.ts",
+      "entity": "recipes"
+    },
+    {
+      "id": "view:src/blocks/blog/BlogPageView.tsx",
+      "type": "view",
+      "label": "BlogPageView.tsx",
+      "file": "src/blocks/blog/BlogPageView.tsx",
+      "entity": "blog"
+    },
+    {
+      "id": "view:src/blocks/blog/DetailPageView.tsx",
+      "type": "view",
+      "label": "DetailPageView.tsx",
+      "file": "src/blocks/blog/DetailPageView.tsx",
+      "entity": "blog"
+    },
+    {
+      "id": "view:src/blocks/menu/DetailPageView.tsx",
+      "type": "view",
+      "label": "DetailPageView.tsx",
+      "file": "src/blocks/menu/DetailPageView.tsx",
+      "entity": "menu"
+    },
+    {
+      "id": "view:src/blocks/menu/MenuPageView.tsx",
+      "type": "view",
+      "label": "MenuPageView.tsx",
+      "file": "src/blocks/menu/MenuPageView.tsx",
+      "entity": "menu"
+    },
+    {
+      "id": "view:src/blocks/promotions/DetailPageView.tsx",
+      "type": "view",
+      "label": "DetailPageView.tsx",
+      "file": "src/blocks/promotions/DetailPageView.tsx",
+      "entity": "promotions"
+    },
+    {
+      "id": "view:src/blocks/promotions/PromotionsPageView.tsx",
+      "type": "view",
+      "label": "PromotionsPageView.tsx",
+      "file": "src/blocks/promotions/PromotionsPageView.tsx",
+      "entity": "promotions"
+    },
+    {
+      "id": "view:src/blocks/recipes/DetailPageView.tsx",
+      "type": "view",
+      "label": "DetailPageView.tsx",
+      "file": "src/blocks/recipes/DetailPageView.tsx",
+      "entity": "recipes"
+    },
+    {
+      "id": "view:src/blocks/recipes/RecipesPageView.tsx",
+      "type": "view",
+      "label": "RecipesPageView.tsx",
+      "file": "src/blocks/recipes/RecipesPageView.tsx",
+      "entity": "recipes"
+    }
+  ],
+  "edges": [
+    {
+      "from": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "to": "context:src/data/context.ts",
+      "relation": "loads-context",
+      "entity": "blog"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/blog/BlogPage.tsx",
+      "relation": "registers-route",
+      "entity": "blog"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/blog/DetailPage.tsx",
+      "relation": "registers-route",
+      "entity": "blog"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/menu/DetailPage.tsx",
+      "relation": "registers-route",
+      "entity": "menu"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/menu/MenuPage.tsx",
+      "relation": "registers-route",
+      "entity": "menu"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/promotions/DetailPage.tsx",
+      "relation": "registers-route",
+      "entity": "promotions"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/promotions/PromotionsPage.tsx",
+      "relation": "registers-route",
+      "entity": "promotions"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/recipes/DetailPage.tsx",
+      "relation": "registers-route",
+      "entity": "recipes"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/recipes/RecipesPage.tsx",
+      "relation": "registers-route",
+      "entity": "recipes"
+    },
+    {
+      "from": "fixture:fixtures/blog.json",
+      "to": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "relation": "uses-adapter",
+      "entity": "blog"
+    },
+    {
+      "from": "fixture:fixtures/menu.json",
+      "to": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "relation": "uses-adapter",
+      "entity": "menu"
+    },
+    {
+      "from": "fixture:fixtures/promotions.json",
+      "to": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "relation": "uses-adapter",
+      "entity": "promotions"
+    },
+    {
+      "from": "fixture:fixtures/recipes.json",
+      "to": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "relation": "uses-adapter",
+      "entity": "recipes"
+    },
+    {
+      "from": "navigation:fixtures/shared/navigation.json",
+      "to": "partial:src/partials/Header.tsx",
+      "relation": "drives-partial"
+    },
+    {
+      "from": "route:src/routes/blog/BlogPage.tsx",
+      "to": "view:src/blocks/blog/BlogPageView.tsx",
+      "relation": "renders-view",
+      "entity": "blog"
+    },
+    {
+      "from": "route:src/routes/blog/DetailPage.tsx",
+      "to": "view:src/blocks/blog/DetailPageView.tsx",
+      "relation": "renders-view",
+      "entity": "blog"
+    },
+    {
+      "from": "route:src/routes/menu/DetailPage.tsx",
+      "to": "view:src/blocks/menu/DetailPageView.tsx",
+      "relation": "renders-view",
+      "entity": "menu"
+    },
+    {
+      "from": "route:src/routes/menu/MenuPage.tsx",
+      "to": "view:src/blocks/menu/MenuPageView.tsx",
+      "relation": "renders-view",
+      "entity": "menu"
+    },
+    {
+      "from": "route:src/routes/promotions/DetailPage.tsx",
+      "to": "view:src/blocks/promotions/DetailPageView.tsx",
+      "relation": "renders-view",
+      "entity": "promotions"
+    },
+    {
+      "from": "route:src/routes/promotions/PromotionsPage.tsx",
+      "to": "view:src/blocks/promotions/PromotionsPageView.tsx",
+      "relation": "renders-view",
+      "entity": "promotions"
+    },
+    {
+      "from": "route:src/routes/recipes/DetailPage.tsx",
+      "to": "view:src/blocks/recipes/DetailPageView.tsx",
+      "relation": "renders-view",
+      "entity": "recipes"
+    },
+    {
+      "from": "route:src/routes/recipes/RecipesPage.tsx",
+      "to": "view:src/blocks/recipes/RecipesPageView.tsx",
+      "relation": "renders-view",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/blog/BlogPageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "blog"
+    },
+    {
+      "from": "view:src/blocks/blog/BlogPageView.tsx",
+      "to": "component:Card",
+      "relation": "imports-component",
+      "entity": "blog"
+    },
+    {
+      "from": "view:src/blocks/blog/BlogPageView.tsx",
+      "to": "component:CardContent",
+      "relation": "imports-component",
+      "entity": "blog"
+    },
+    {
+      "from": "view:src/blocks/blog/BlogPageView.tsx",
+      "to": "component:CardDescription",
+      "relation": "imports-component",
+      "entity": "blog"
+    },
+    {
+      "from": "view:src/blocks/blog/BlogPageView.tsx",
+      "to": "component:CardHeader",
+      "relation": "imports-component",
+      "entity": "blog"
+    },
+    {
+      "from": "view:src/blocks/blog/BlogPageView.tsx",
+      "to": "component:CardTitle",
+      "relation": "imports-component",
+      "entity": "blog"
+    },
+    {
+      "from": "view:src/blocks/blog/BlogPageView.tsx",
+      "to": "component:Grid",
+      "relation": "imports-component",
+      "entity": "blog"
+    },
+    {
+      "from": "view:src/blocks/blog/BlogPageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "blog"
+    },
+    {
+      "from": "view:src/blocks/blog/BlogPageView.tsx",
+      "to": "type:src/types/blog.ts",
+      "relation": "uses-type",
+      "entity": "blog"
+    },
+    {
+      "from": "view:src/blocks/blog/DetailPageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "blog"
+    },
+    {
+      "from": "view:src/blocks/blog/DetailPageView.tsx",
+      "to": "component:Container",
+      "relation": "imports-component",
+      "entity": "blog"
+    },
+    {
+      "from": "view:src/blocks/blog/DetailPageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "blog"
+    },
+    {
+      "from": "view:src/blocks/blog/DetailPageView.tsx",
+      "to": "component:Title",
+      "relation": "imports-component",
+      "entity": "blog"
+    },
+    {
+      "from": "view:src/blocks/blog/DetailPageView.tsx",
+      "to": "type:src/types/blog.ts",
+      "relation": "uses-type",
+      "entity": "blog"
+    },
+    {
+      "from": "view:src/blocks/menu/DetailPageView.tsx",
+      "to": "component:Badge",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/DetailPageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/DetailPageView.tsx",
+      "to": "component:Button",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/DetailPageView.tsx",
+      "to": "component:Container",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/DetailPageView.tsx",
+      "to": "component:Field",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/DetailPageView.tsx",
+      "to": "component:Group",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/DetailPageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/DetailPageView.tsx",
+      "to": "component:Title",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/DetailPageView.tsx",
+      "to": "component:Toast",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/DetailPageView.tsx",
+      "to": "type:src/types/menu.ts",
+      "relation": "uses-type",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "component:Badge",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "component:Button",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "component:Card",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "component:CardContent",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "component:CardDescription",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "component:CardHeader",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "component:CardTitle",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "component:Grid",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "component:Group",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "component:Icon",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "component:Sheet",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "component:Stack",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/menu/MenuPageView.tsx",
+      "to": "type:src/types/menu.ts",
+      "relation": "uses-type",
+      "entity": "menu"
+    },
+    {
+      "from": "view:src/blocks/promotions/DetailPageView.tsx",
+      "to": "component:Badge",
+      "relation": "imports-component",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/DetailPageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/DetailPageView.tsx",
+      "to": "component:Container",
+      "relation": "imports-component",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/DetailPageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/DetailPageView.tsx",
+      "to": "component:Title",
+      "relation": "imports-component",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/DetailPageView.tsx",
+      "to": "type:src/types/promotions.ts",
+      "relation": "uses-type",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/PromotionsPageView.tsx",
+      "to": "component:Badge",
+      "relation": "imports-component",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/PromotionsPageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/PromotionsPageView.tsx",
+      "to": "component:Card",
+      "relation": "imports-component",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/PromotionsPageView.tsx",
+      "to": "component:CardContent",
+      "relation": "imports-component",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/PromotionsPageView.tsx",
+      "to": "component:CardDescription",
+      "relation": "imports-component",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/PromotionsPageView.tsx",
+      "to": "component:CardHeader",
+      "relation": "imports-component",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/PromotionsPageView.tsx",
+      "to": "component:CardTitle",
+      "relation": "imports-component",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/PromotionsPageView.tsx",
+      "to": "component:Grid",
+      "relation": "imports-component",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/PromotionsPageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/promotions/PromotionsPageView.tsx",
+      "to": "type:src/types/promotions.ts",
+      "relation": "uses-type",
+      "entity": "promotions"
+    },
+    {
+      "from": "view:src/blocks/recipes/DetailPageView.tsx",
+      "to": "component:Badge",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/DetailPageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/DetailPageView.tsx",
+      "to": "component:Container",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/DetailPageView.tsx",
+      "to": "component:Grid",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/DetailPageView.tsx",
+      "to": "component:Group",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/DetailPageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/DetailPageView.tsx",
+      "to": "component:Title",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/DetailPageView.tsx",
+      "to": "type:src/types/recipes.ts",
+      "relation": "uses-type",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/RecipesPageView.tsx",
+      "to": "component:Badge",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/RecipesPageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/RecipesPageView.tsx",
+      "to": "component:Card",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/RecipesPageView.tsx",
+      "to": "component:CardContent",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/RecipesPageView.tsx",
+      "to": "component:CardDescription",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/RecipesPageView.tsx",
+      "to": "component:CardHeader",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/RecipesPageView.tsx",
+      "to": "component:CardTitle",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/RecipesPageView.tsx",
+      "to": "component:Grid",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/RecipesPageView.tsx",
+      "to": "component:Group",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/RecipesPageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "recipes"
+    },
+    {
+      "from": "view:src/blocks/recipes/RecipesPageView.tsx",
+      "to": "type:src/types/recipes.ts",
+      "relation": "uses-type",
+      "entity": "recipes"
+    }
+  ],
+  "mermaid": "flowchart LR\n  adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"] --> context_src_data_context_ts[\"context.ts\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_blog_BlogPage_tsx[\"BlogPage.tsx\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_blog_DetailPage_tsx[\"DetailPage.tsx\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_menu_DetailPage_tsx[\"DetailPage.tsx\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_menu_MenuPage_tsx[\"MenuPage.tsx\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_promotions_DetailPage_tsx[\"DetailPage.tsx\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_promotions_PromotionsPage_tsx[\"PromotionsPage.tsx\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_recipes_DetailPage_tsx[\"DetailPage.tsx\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_recipes_RecipesPage_tsx[\"RecipesPage.tsx\"]\n  fixture_fixtures_blog_json[\"blog.json\"] --> adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"]\n  fixture_fixtures_menu_json[\"menu.json\"] --> adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"]\n  fixture_fixtures_promotions_json[\"promotions.json\"] --> adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"]\n  fixture_fixtures_recipes_json[\"recipes.json\"] --> adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"]\n  navigation_fixtures_shared_navigation_json[\"navigation.json\"] --> partial_src_partials_Header_tsx[\"Header\"]\n  route_src_routes_blog_BlogPage_tsx[\"BlogPage.tsx\"] --> view_src_blocks_blog_BlogPageView_tsx[\"BlogPageView.tsx\"]\n  route_src_routes_blog_DetailPage_tsx[\"DetailPage.tsx\"] --> view_src_blocks_blog_DetailPageView_tsx[\"DetailPageView.tsx\"]\n  route_src_routes_menu_DetailPage_tsx[\"DetailPage.tsx\"] --> view_src_blocks_menu_DetailPageView_tsx[\"DetailPageView.tsx\"]\n  route_src_routes_menu_MenuPage_tsx[\"MenuPage.tsx\"] --> view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"]\n  route_src_routes_promotions_DetailPage_tsx[\"DetailPage.tsx\"] --> view_src_blocks_promotions_DetailPageView_tsx[\"DetailPageView.tsx\"]\n  route_src_routes_promotions_PromotionsPage_tsx[\"PromotionsPage.tsx\"] --> view_src_blocks_promotions_PromotionsPageView_tsx[\"PromotionsPageView.tsx\"]\n  route_src_routes_recipes_DetailPage_tsx[\"DetailPage.tsx\"] --> view_src_blocks_recipes_DetailPageView_tsx[\"DetailPageView.tsx\"]\n  route_src_routes_recipes_RecipesPage_tsx[\"RecipesPage.tsx\"] --> view_src_blocks_recipes_RecipesPageView_tsx[\"RecipesPageView.tsx\"]\n  view_src_blocks_blog_BlogPageView_tsx[\"BlogPageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_blog_BlogPageView_tsx[\"BlogPageView.tsx\"] --> component_Card[\"Card\"]\n  view_src_blocks_blog_BlogPageView_tsx[\"BlogPageView.tsx\"] --> component_CardContent[\"CardContent\"]\n  view_src_blocks_blog_BlogPageView_tsx[\"BlogPageView.tsx\"] --> component_CardDescription[\"CardDescription\"]\n  view_src_blocks_blog_BlogPageView_tsx[\"BlogPageView.tsx\"] --> component_CardHeader[\"CardHeader\"]\n  view_src_blocks_blog_BlogPageView_tsx[\"BlogPageView.tsx\"] --> component_CardTitle[\"CardTitle\"]\n  view_src_blocks_blog_BlogPageView_tsx[\"BlogPageView.tsx\"] --> component_Grid[\"Grid\"]\n  view_src_blocks_blog_BlogPageView_tsx[\"BlogPageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_blog_BlogPageView_tsx[\"BlogPageView.tsx\"] --> type_src_types_blog_ts[\"blog.ts\"]\n  view_src_blocks_blog_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_blog_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Container[\"Container\"]\n  view_src_blocks_blog_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_blog_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Title[\"Title\"]\n  view_src_blocks_blog_DetailPageView_tsx[\"DetailPageView.tsx\"] --> type_src_types_blog_ts[\"blog.ts\"]\n  view_src_blocks_menu_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Badge[\"Badge\"]\n  view_src_blocks_menu_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_menu_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Button[\"Button\"]\n  view_src_blocks_menu_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Container[\"Container\"]\n  view_src_blocks_menu_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Field[\"Field\"]\n  view_src_blocks_menu_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Group[\"Group\"]\n  view_src_blocks_menu_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_menu_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Title[\"Title\"]\n  view_src_blocks_menu_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Toast[\"Toast\"]\n  view_src_blocks_menu_DetailPageView_tsx[\"DetailPageView.tsx\"] --> type_src_types_menu_ts[\"menu.ts\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> component_Badge[\"Badge\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> component_Button[\"Button\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> component_Card[\"Card\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> component_CardContent[\"CardContent\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> component_CardDescription[\"CardDescription\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> component_CardHeader[\"CardHeader\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> component_CardTitle[\"CardTitle\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> component_Grid[\"Grid\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> component_Group[\"Group\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> component_Icon[\"Icon\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> component_Sheet[\"Sheet\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> component_Stack[\"Stack\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_menu_MenuPageView_tsx[\"MenuPageView.tsx\"] --> type_src_types_menu_ts[\"menu.ts\"]\n  view_src_blocks_promotions_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Badge[\"Badge\"]\n  view_src_blocks_promotions_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_promotions_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Container[\"Container\"]\n  view_src_blocks_promotions_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_promotions_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Title[\"Title\"]\n  view_src_blocks_promotions_DetailPageView_tsx[\"DetailPageView.tsx\"] --> type_src_types_promotions_ts[\"promotions.ts\"]\n  view_src_blocks_promotions_PromotionsPageView_tsx[\"PromotionsPageView.tsx\"] --> component_Badge[\"Badge\"]\n  view_src_blocks_promotions_PromotionsPageView_tsx[\"PromotionsPageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_promotions_PromotionsPageView_tsx[\"PromotionsPageView.tsx\"] --> component_Card[\"Card\"]\n  view_src_blocks_promotions_PromotionsPageView_tsx[\"PromotionsPageView.tsx\"] --> component_CardContent[\"CardContent\"]\n  view_src_blocks_promotions_PromotionsPageView_tsx[\"PromotionsPageView.tsx\"] --> component_CardDescription[\"CardDescription\"]\n  view_src_blocks_promotions_PromotionsPageView_tsx[\"PromotionsPageView.tsx\"] --> component_CardHeader[\"CardHeader\"]\n  view_src_blocks_promotions_PromotionsPageView_tsx[\"PromotionsPageView.tsx\"] --> component_CardTitle[\"CardTitle\"]\n  view_src_blocks_promotions_PromotionsPageView_tsx[\"PromotionsPageView.tsx\"] --> component_Grid[\"Grid\"]\n  view_src_blocks_promotions_PromotionsPageView_tsx[\"PromotionsPageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_promotions_PromotionsPageView_tsx[\"PromotionsPageView.tsx\"] --> type_src_types_promotions_ts[\"promotions.ts\"]\n  view_src_blocks_recipes_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Badge[\"Badge\"]\n  view_src_blocks_recipes_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_recipes_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Container[\"Container\"]\n  view_src_blocks_recipes_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Grid[\"Grid\"]\n  view_src_blocks_recipes_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Group[\"Group\"]\n  view_src_blocks_recipes_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_recipes_DetailPageView_tsx[\"DetailPageView.tsx\"] --> component_Title[\"Title\"]\n  view_src_blocks_recipes_DetailPageView_tsx[\"DetailPageView.tsx\"] --> type_src_types_recipes_ts[\"recipes.ts\"]\n  view_src_blocks_recipes_RecipesPageView_tsx[\"RecipesPageView.tsx\"] --> component_Badge[\"Badge\"]\n  view_src_blocks_recipes_RecipesPageView_tsx[\"RecipesPageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_recipes_RecipesPageView_tsx[\"RecipesPageView.tsx\"] --> component_Card[\"Card\"]\n  view_src_blocks_recipes_RecipesPageView_tsx[\"RecipesPageView.tsx\"] --> component_CardContent[\"CardContent\"]\n  view_src_blocks_recipes_RecipesPageView_tsx[\"RecipesPageView.tsx\"] --> component_CardDescription[\"CardDescription\"]\n  view_src_blocks_recipes_RecipesPageView_tsx[\"RecipesPageView.tsx\"] --> component_CardHeader[\"CardHeader\"]\n  view_src_blocks_recipes_RecipesPageView_tsx[\"RecipesPageView.tsx\"] --> component_CardTitle[\"CardTitle\"]\n  view_src_blocks_recipes_RecipesPageView_tsx[\"RecipesPageView.tsx\"] --> component_Grid[\"Grid\"]\n  view_src_blocks_recipes_RecipesPageView_tsx[\"RecipesPageView.tsx\"] --> component_Group[\"Group\"]\n  view_src_blocks_recipes_RecipesPageView_tsx[\"RecipesPageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_recipes_RecipesPageView_tsx[\"RecipesPageView.tsx\"] --> type_src_types_recipes_ts[\"recipes.ts\"]"
+}

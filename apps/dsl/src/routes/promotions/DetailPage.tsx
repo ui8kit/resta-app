@@ -3,8 +3,8 @@ import { SidebarContent, PromotionDetailPageView } from '@/blocks';
 import { context } from '@/data/context';
 
 export function PromotionDetailPage() {
-  const { id } = useParams<{ id: string }>();
-  const item = context.promotions.items?.find((i) => i.id === id);
+  const { slug } = useParams<{ slug: string }>();
+  const item = context.promotions.items?.find((i) => (i.slug ?? i.id) === slug);
 
   return (
     <PromotionDetailPageView

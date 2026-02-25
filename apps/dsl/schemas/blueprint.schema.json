@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ui8kit.local/schemas/blueprint.schema.json",
+  "title": "UI8Kit Blueprint",
+  "type": "object",
+  "required": [
+    "$schema",
+    "version",
+    "app",
+    "brand",
+    "entities",
+    "layouts",
+    "partials",
+    "components",
+    "navigation",
+    "context",
+    "domains"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "app": {
+      "type": "object",
+      "required": ["name", "domain", "lang"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "domain": { "type": "string", "minLength": 1 },
+        "lang": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "brand": {
+      "type": "object",
+      "required": ["primary", "accent", "font"],
+      "properties": {
+        "primary": { "type": "string", "minLength": 1 },
+        "accent": { "type": "string", "minLength": 1 },
+        "font": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "singular",
+          "fixture",
+          "itemsKey",
+          "slugField",
+          "types",
+          "routes",
+          "views",
+          "routeFiles"
+        ],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "singular": { "type": "string", "minLength": 1 },
+          "fixture": { "type": "string", "minLength": 1 },
+          "fixtureType": { "type": "string", "minLength": 1 },
+          "itemsKey": { "type": "string", "minLength": 1 },
+          "slugField": { "type": "string", "minLength": 1 },
+          "types": { "type": "string", "minLength": 1 },
+          "routes": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "views": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "routeFiles": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "layouts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "file"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "file": { "type": "string", "minLength": 1 },
+          "view": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "partials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "file"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "file": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "components": {
+      "type": "object",
+      "required": ["index", "count"],
+      "properties": {
+        "index": { "type": "string", "minLength": 1 },
+        "count": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "navigation": {
+      "type": "object",
+      "required": ["source", "type"],
+      "properties": {
+        "source": { "type": "string", "minLength": 1 },
+        "type": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "context": {
+      "type": "object",
+      "required": ["file", "adapter"],
+      "properties": {
+        "file": { "type": "string", "minLength": 1 },
+        "adapter": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
+    "domains": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "additionalProperties": true
+}

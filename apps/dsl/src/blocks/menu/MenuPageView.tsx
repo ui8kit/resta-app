@@ -227,7 +227,7 @@ export function MenuPageView({
                     </If>
                   </Group>
                   <Group justify="between" items="center" gap="4">
-                    <DomainNavButton href={`/menu/${item.id}`} size="sm" data-class="menu-item-link">
+                    <DomainNavButton href={`/menu/${item.slug}`} size="sm" data-class="menu-item-link">
                       View / Order
                     </DomainNavButton>
                     <Button

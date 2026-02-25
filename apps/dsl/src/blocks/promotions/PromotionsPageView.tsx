@@ -85,7 +85,7 @@ export function PromotionsPageView({
                   </If>
                 </CardHeader>
                 <CardContent data-class="promotions-item-actions">
-                  <DomainNavButton href={`/promotions/${item.id}`} size="sm" data-class="promotions-item-link">
+                  <DomainNavButton href={`/promotions/${item.slug ?? item.id}`} size="sm" data-class="promotions-item-link">
                     View Details
                   </DomainNavButton>
                 </CardContent>
