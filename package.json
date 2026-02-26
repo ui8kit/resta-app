@@ -15,7 +15,8 @@
     "typecheck": "turbo run typecheck",
     "generate": "turbo run generate",
     "generate:html": "turbo run generate:html",
-    "generate:styles": "turbo run generate:styles"
+    "generate:styles": "turbo run generate:styles",
+    "maintain": "turbo run maintain"
   },
   "dependencies": {
     "@ui8kit/generator": "workspace:*",
@@ -24,6 +25,7 @@
     "@ui8kit/resta-dsl-design": "workspace:*"
   },
   "devDependencies": {
+    "@ui8kit/maintain": "workspace:*",
     "turbo": "^2.8.10"
   }
 }

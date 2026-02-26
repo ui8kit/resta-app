@@ -1,0 +1,89 @@
+{
+  "$schema": "../../packages/maintain/schemas/maintain.config.schema.json",
+  "root": ".",
+  "reportsDir": ".cursor/reports",
+  "continueOnError": true,
+  "maxParallel": 2,
+  "checkers": {
+    "refactorAudit": {
+      "mapping": "scripts/schemas/brand-mapping.json",
+      "scope": [
+        "src",
+        "fixtures"
+      ],
+      "maxMatchesPerEntry": 10
+    },
+    "invariants": {
+      "routes": {
+        "appFile": "src/App.tsx",
+        "required": [
+          "/",
+          "/menu",
+          "/menu/:slug",
+          "/recipes",
+          "/recipes/:slug",
+          "/blog",
+          "/blog/:slug",
+          "/promotions",
+          "/promotions/:slug",
+          "/admin",
+          "/admin/dashboard"
+        ]
+      },
+      "fixtures": {
+        "pageFile": "fixtures/shared/page.json",
+        "requiredPageDomains": [
+          "website",
+          "admin"
+        ]
+      },
+      "blocks": {
+        "dir": "src/blocks",
+        "indexFile": "src/blocks/index.ts",
+        "recursive": true
+      },
+      "context": {
+        "file": "src/data/adapters/fixtures.adapter.ts",
+        "requiredSymbols": [
+          "loadFixturesContextInput"
+        ]
+      }
+    },
+    "fixtures": {
+      "targets": [
+        {
+          "file": "fixtures/landing.json",
+          "schema": "schemas/canonical/landing.schema.json"
+        },
+        {
+          "file": "fixtures/shared/site.json",
+          "schema": "schemas/canonical/site.schema.json"
+        },
+        {
+          "file": "fixtures/shared/navigation.json",
+          "schema": "schemas/canonical/navigation.schema.json"
+        },
+        {
+          "file": "fixtures/shared/page.json",
+          "schema": "schemas/canonical/page.schema.json"
+        }
+      ]
+    },
+    "viewExports": {
+      "pattern": "src/**/*View.tsx",
+      "exportShape": "interface+function"
+    },
+    "contracts": {
+      "blueprint": "blueprint.json",
+      "appFile": "src/App.tsx"
+    },
+    "clean": {
+      "paths": [
+        "node_modules",
+        "../react",
+        "node_modules/.vite"
+      ],
+      "includeTsBuildInfo": true
+    }
+  }
+}

@@ -28,6 +28,9 @@
     },
     "dist:app": {
       "dependsOn": ["blueprint:validate", "^build"]
+    },
+    "maintain": {
+      "cache": false
     }
   }
 }
