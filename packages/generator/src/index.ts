@@ -251,6 +251,20 @@ export type {
 } from './transformer';
 
 // =============================================================================
+// Component Tag Map (validation for HtmlConverterService, Maintain, ui8kit-validate)
+// =============================================================================
+
+export {
+  loadComponentTagMap,
+  isTagAllowedForComponent,
+  getComponentByDataClass,
+  getAllowedTags,
+  validateComponentTag,
+} from './lib';
+
+export type { ComponentTagMap, ComponentTagConfig } from './lib';
+
+// =============================================================================
 // Registry Generator
 // =============================================================================
 

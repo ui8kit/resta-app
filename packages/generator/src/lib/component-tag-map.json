@@ -1,0 +1,71 @@
+{
+  "$schema": "https://ui8kit.dev/schemas/component-tag-map.json",
+  "version": "1.0.0",
+  "description": "Component-to-allowed-HTML-tag mapping for validation. Used by HtmlConverterService, Maintain checker, and ui8kit-validate.",
+  "components": {
+    "Block": {
+      "allowedTags": ["section", "article", "aside", "header", "footer", "nav", "main", "figure", "address", "form"],
+      "defaultTag": "div",
+      "dataClass": "block"
+    },
+    "Box": {
+      "allowedTags": ["div", "form", "blockquote"],
+      "defaultTag": "div",
+      "dataClass": "box"
+    },
+    "Container": {
+      "allowedTags": ["div", "form", "blockquote"],
+      "defaultTag": "div",
+      "dataClass": "container"
+    },
+    "Stack": {
+      "allowedTags": ["div", "span"],
+      "defaultTag": "div",
+      "dataClass": "stack",
+      "notes": {
+        "span": "Only valid inside <a> for inline layout (valid HTML5)"
+      }
+    },
+    "Group": {
+      "allowedTags": ["div", "span"],
+      "defaultTag": "div",
+      "dataClass": "group",
+      "notes": {
+        "span": "Only valid inside <a> for inline layout (valid HTML5)"
+      }
+    },
+    "Text": {
+      "allowedTags": ["p", "h1", "h2", "h3", "h4", "h5", "h6", "span", "label", "small", "cite", "q", "time", "mark", "abbr", "code", "figcaption"],
+      "defaultTag": "p",
+      "dataClass": "text"
+    },
+    "Field": {
+      "allowedTags": ["input", "textarea", "select", "button"],
+      "defaultTag": "input",
+      "dataClass": "field"
+    },
+    "Icon": {
+      "allowedTags": ["span"],
+      "defaultTag": "span",
+      "dataClass": "icon"
+    },
+    "List": {
+      "allowedTags": ["ul", "ol", "li"],
+      "defaultTag": "ul",
+      "dataClass": "list",
+      "status": "planned"
+    },
+    "Table": {
+      "allowedTags": ["table", "thead", "tbody", "tr", "th", "td"],
+      "defaultTag": "table",
+      "dataClass": "table",
+      "status": "planned"
+    }
+  },
+  "exclusions": {
+    "description": "Tags that must NOT appear in Box, Stack, Group (form controls belong to Field)",
+    "layoutForbidden": ["input", "textarea", "select", "button"],
+    "blockForbiddenInLayout": ["section", "article", "aside", "header", "footer", "nav", "main", "figure", "address"],
+    "textForbiddenInLayout": ["p", "h1", "h2", "h3", "h4", "h5", "h6", "label", "small", "cite", "q", "time", "mark", "abbr", "code", "figcaption"]
+  }
+}

@@ -3,6 +3,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createNodeFileSystem } from '../../core/filesystem';
 import { createHash } from 'node:crypto';
+import { getComponentByDataClass, validateComponentTag } from '../../lib';
 
 /**
  * Input for HtmlConverterService.execute()
@@ -44,6 +45,8 @@ interface ElementData {
   selector: string;
   classes: string[];
   sourceFile: string;
+  /** Tag name when present (for component-tag validation) */
+  tag?: string;
 }
 
 /**
@@ -115,6 +118,19 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
     
     // Extract elements
     const elements = this.extractElementsFromHtml(html, htmlPath, ignoreSelectors);
+    
+    // Validate component+tag when data-class maps to known component
+    for (const el of elements) {
+      if (el.tag) {
+        const component = getComponentByDataClass(el.selector);
+        if (component) {
+          const err = validateComponentTag(component, el.tag);
+          if (err) {
+            this.context.logger.warn(`[${htmlPath}] ${err}`);
+          }
+        }
+      }
+    }
     
     if (verbose) {
       this.context.logger.info(`Found ${elements.length} elements with classes`);
@@ -314,10 +330,14 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
           continue;
         }
         
+        const tagMatch = tagContent.match(/^<([a-zA-Z][a-zA-Z0-9]*)/);
+        const tag = tagMatch ? tagMatch[1] : undefined;
+        
         elements.push({
           selector,
           classes: classes.filter(cls => !cls.includes('data-class')),
           sourceFile,
+          tag,
         });
       }
     }

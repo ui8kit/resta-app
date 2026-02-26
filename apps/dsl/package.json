@@ -19,6 +19,7 @@
     "validate:view-exports": "bun run scripts/validate-view-exports.ts",
     "maintain": "bun run maintain:check",
     "maintain:check": "maintain run --config maintain.config.json",
+    "maintain:validate": "maintain validate --config maintain.config.json --check invariants,fixtures,view-exports,contracts",
     "blueprint:scan": "bunx ui8kit-generate blueprint:scan --cwd .",
     "blueprint:validate": "bunx ui8kit-generate blueprint:validate --cwd .",
     "blueprint:graph": "bunx ui8kit-generate blueprint:graph --cwd .",

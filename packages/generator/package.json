@@ -22,6 +22,10 @@
     "./source": {
       "import": "./src/index.ts",
       "types": "./src/index.ts"
+    },
+    "./lib": {
+      "import": "./src/lib/index.ts",
+      "types": "./src/lib/index.ts"
     }
   },
   "files": [

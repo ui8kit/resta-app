@@ -307,19 +307,33 @@ fixtures/*.json
 <Button className="bg-[#3b82f6]">
 ```
 
-### 7.5 Семантический HTML5
+### 7.5 Семантический HTML5 и проп `component`
 
-Используй `component` для блоков:
+Используй `component` для семантических тегов. Допустимые теги заданы в `component-tag-map.json` (пакет `@ui8kit/generator`). Валидация выполняется через HtmlConverterService, Maintain checker и ui8kit-validate.
+
+**Block** — секционирование:
 
 ```tsx
 <Block component="section" data-class="hero-section">   // секция страницы
-<Block component="article" data-class="feature-card">    // карточка, статья
-<Block component="header">                               // шапка
-<Block component="nav">                                  // навигация
-<Block component="main">                                 // основной контент
-<Block component="footer">                               // подвал
-<Block component="aside">                                // сайдбар
+<Block component="article" data-class="feature-card">   // карточка, статья
+<Block component="header" data-class="page-header">    // шапка
+<Block component="nav" data-class="main-nav">            // навигация
+<Block component="main" data-class="page-main">         // основной контент
+<Block component="footer" data-class="page-footer">      // подвал
+<Block component="aside" data-class="sidebar">          // сайдбар
+<Block component="figure" data-class="hero-image">      // иллюстрация
+<Block component="form" data-class="contact-form">      // форма
 ```
+
+**Box / Container** — layout-контейнеры: `div`, `form`, `blockquote`.
+
+**Text** — типографика: `p`, `h1`–`h6`, `span`, `label`, `cite`, `q`, `figcaption` и др.
+
+**Stack / Group** — layout: `div`, `span` (span только внутри `<a>` для inline).
+
+**Field** — form-элементы: `input`, `textarea`, `select`, `button`.
+
+Карта целиком: `packages/generator/src/lib/component-tag-map.json`.
 
 ---
 
@@ -354,18 +368,34 @@ bun run dev
 ### 9.2 Валидация и линтинг
 
 ```bash
-bun run validate      # ui8kit-validate — конфиг + DSL
+bun run validate      # ui8kit-validate — конфиг, DSL, пропсы (в т.ч. component+tag)
 bun run lint:dsl      # ui8kit-lint-dsl — проверка If/Var/Loop
 bun run lint          # ui8kit-lint — общий линт
 bun run typecheck     # TypeScript
 ```
 
+**ui8kit-validate** проверяет:
+- конфиг приложения;
+- DSL-правила;
+- пропсы (utility-props, цвета из токенов);
+- соответствие `component` допустимым тегам (по `component-tag-map.json`).
+
 ### 9.3 Maintain (проверки проекта)
 
 ```bash
-bun run maintain:check
-bun run maintain:validate
+bun run maintain:check      # Все чекеры из maintain.config.json
+bun run maintain:validate   # Только validate-чекеры (invariants, view-exports, contracts)
 ```
+
+**Maintain checkers** (настраиваются в `maintain.config.json`):
+- **invariants** — роуты, fixtures, blocks, context;
+- **fixtures** — соответствие JSON схемам;
+- **viewExports** — экспорт View-компонентов;
+- **contracts** — соответствие blueprint и App;
+- **refactorAudit** — аудит для рефакторинга;
+- **clean** — очистка dist/node_modules.
+
+Maintain может использовать `@ui8kit/generator/lib` для проверки component+tag (интеграция с ui8kit-validate).
 
 ### 9.4 Генерация
 
@@ -409,6 +439,23 @@ bun run clean         # Полная очистка (node_modules, outDir)
 | `bg="red"` invalid | Используй `bg="destructive"` или другой токен |
 | DSL: use `<Loop>` instead of `.map` | Замени `.map()` на `<Loop>` |
 | DSL: use `<If>` instead of `&&` | Замени `&&` на `<If>` |
+| Block does not allow tag "div" | Block — только section, article, header, nav, main, footer, aside, figure, address, form |
+| Text does not allow tag "div" | Text — только p, h1–h6, span, label, cite, q и др. (см. component-tag-map) |
+| Box/Stack/Group + form control | input, textarea, select, button — только в Field |
+
+### 10.3 Валидация component+tag
+
+Карта допустимых тегов: `packages/generator/src/lib/component-tag-map.json`. Используется:
+
+- **HtmlConverterService** — при генерации HTML→CSS проверяет data-class + тег;
+- **ui8kit-validate** — при проверке TSX;
+- **Maintain** — через `@ui8kit/generator/lib`.
+
+Импорт для своих чекеров:
+
+```ts
+import { isTagAllowedForComponent, validateComponentTag } from '@ui8kit/generator/lib';
+```
 
 ---
 
@@ -601,6 +648,7 @@ import { HeroBlock, FeaturedItemsBlock } from '@/blocks';
 bun run lint:dsl
 bun run validate
 bun run maintain:validate
+bun run typecheck
 ```
 
 ---
@@ -608,12 +656,14 @@ bun run maintain:validate
 ## 14. Чеклист перед коммитом
 
 - [ ] `bun run lint:dsl` — проверка DSL
-- [ ] `bun run validate` — проверка конфига и пропсов
+- [ ] `bun run validate` — проверка конфига, пропсов и component+tag
+- [ ] `bun run maintain:validate` — invariants, fixtures, view-exports, contracts
 - [ ] `bun run typecheck` — TypeScript
 - [ ] Если менял блоки — `bun run generate` (и при необходимости `bun run finalize`)
 - [ ] Нет хардкода — все данные из context или props
 - [ ] Нет `className` и `style`
 - [ ] У всех семантических элементов есть `data-class`
+- [ ] `component` использует только допустимые теги (см. component-tag-map)
 - [ ] Используются If, Var, Loop вместо JS-условий и циклов
 - [ ] Комментарии на английском
 
@@ -625,9 +675,11 @@ bun run maintain:validate
 - `.cursor/rules/engine-dsl-enforcement.mdc` — правила DSL
 - `.cursor/rules/project-structure.mdc` — структура проекта
 - `.cursor/rules/ui8kit-architecture.mdc` — архитектура UI8Kit
-- `packages/maintain/GUIDE.md` — работа с maintain
+- `packages/maintain/GUIDE.md` — работа с maintain (checkers, validate, audit, clean)
 - `packages/generator/docs/rebrand-automation-101.md` — Blueprint и rebrand
+- `packages/generator/src/lib/component-tag-map.json` — карта component→теги для валидации
+- `@ui8kit/generator/lib` — API валидации (`isTagAllowedForComponent`, `validateComponentTag`)
 
 ---
 
-*Документ: ONBOARDING-101. Версия для стажёров. Обновление: 2025.*
+*Документ: ONBOARDING-101. Версия для стажёров. Обновление: 2025-02.*
