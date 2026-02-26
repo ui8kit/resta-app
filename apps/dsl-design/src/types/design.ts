@@ -11,3 +11,16 @@ export type DesignSectionFixture = {
   subtitle: string;
   items: DesignSectionItem[];
 };
+
+export type OverviewSectionItem = {
+  id: string;
+  title: string;
+  description: string;
+  href: string;
+};
+
+export type OverviewFixture = {
+  title: string;
+  intro: string;
+  sections: OverviewSectionItem[];
+};

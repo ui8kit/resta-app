@@ -9,3 +9,10 @@ export type SidebarLink = {
   label: string;
   href: string;
 };
+
+export type DashboardSidebarLink = {
+  id?: string;
+  label: string;
+  href: string;
+  active?: boolean;
+};

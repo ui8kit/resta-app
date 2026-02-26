@@ -37,8 +37,8 @@ export function PrimitivesPageView({
       headerTitle={headerTitle}
       headerSubtitle={headerSubtitle}
     >
-      <Block component="section" gap="6" data-class="primitives-page-section">
-        <Block component="header" gap="2" data-class="primitives-page-header">
+      <Block component="section" flex="col" gap="6" data-class="primitives-page-section">
+        <Block component="header" flex="col" gap="2" data-class="primitives-page-header">
           <CardTitle order={2} data-class="primitives-page-title">
             <Var name="section.title" value={section.title} />
           </CardTitle>

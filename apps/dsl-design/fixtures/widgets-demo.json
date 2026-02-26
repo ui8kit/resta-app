@@ -1,0 +1,30 @@
+{
+  "hero": {
+    "title": "Welcome",
+    "subtitle": "A reduced hero block for design reference.",
+    "ctaText": "Get Started",
+    "ctaUrl": "/",
+    "secondaryCtaText": "Learn More",
+    "secondaryCtaUrl": "/"
+  },
+  "menuItems": [
+    {
+      "id": "m1",
+      "title": "Salmon Steak on the Grill",
+      "description": "Atlantic salmon, herb butter, lemon.",
+      "category": { "title": "Grill" },
+      "price": { "display": "890 ₽" },
+      "compareAtPrice": { "display": "990 ₽" },
+      "promotionIds": ["p1"],
+      "variants": [
+        { "id": "v1", "title": "200g", "priceModifier": { "display": "" } },
+        { "id": "v2", "title": "300g", "priceModifier": { "display": "+200 ₽" } }
+      ]
+    }
+  ],
+  "accordionItems": [
+    { "id": "faq-1", "trigger": "What are your delivery hours?", "content": "We deliver Mon–Sun from 11:00 to 23:00." },
+    { "id": "faq-2", "trigger": "Do you offer vegetarian options?", "content": "Yes, we have salads, sides, and several main courses." },
+    { "id": "faq-3", "trigger": "How can I apply a promo code?", "content": "Enter the code at checkout. Some promos apply automatically." }
+  ]
+}

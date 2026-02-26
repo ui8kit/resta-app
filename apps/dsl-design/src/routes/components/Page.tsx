@@ -1,14 +1,14 @@
-import { TypographyPageView } from '@/blocks';
+import { ComponentsPageView } from '@/blocks';
 import { context } from '@/data/context';
 
-export function TypographyPage() {
+export function ComponentsPage() {
   return (
-    <TypographyPageView
+    <ComponentsPageView
       navItems={context.navItems}
       sidebarLinks={context.sidebarLinks}
       headerTitle={context.site.title}
       headerSubtitle={context.site.subtitle}
-      typographyScale={context.typographyScale}
+      components={context.components}
     />
   );
 }

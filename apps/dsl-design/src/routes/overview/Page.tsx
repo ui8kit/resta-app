@@ -1,14 +1,14 @@
-import { TypographyPageView } from '@/blocks';
+import { OverviewPageView } from '@/blocks';
 import { context } from '@/data/context';
 
-export function TypographyPage() {
+export function OverviewPage() {
   return (
-    <TypographyPageView
+    <OverviewPageView
       navItems={context.navItems}
       sidebarLinks={context.sidebarLinks}
       headerTitle={context.site.title}
       headerSubtitle={context.site.subtitle}
-      typographyScale={context.typographyScale}
+      overview={context.overview}
     />
   );
 }

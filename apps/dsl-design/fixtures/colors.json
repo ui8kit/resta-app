@@ -1,0 +1,41 @@
+{
+  "title": "Color Tokens",
+  "subtitle": "Semantic color tokens used across RestA UI.",
+  "groups": [
+    {
+      "id": "background",
+      "label": "Background",
+      "tokens": [
+        { "id": "background", "label": "background" },
+        { "id": "card", "label": "card" },
+        { "id": "popover", "label": "popover" },
+        { "id": "muted", "label": "muted" },
+        { "id": "accent", "label": "accent" }
+      ]
+    },
+    {
+      "id": "brand",
+      "label": "Brand",
+      "tokens": [
+        { "id": "primary", "label": "primary" },
+        { "id": "secondary", "label": "secondary" },
+        { "id": "destructive", "label": "destructive" },
+        { "id": "border", "label": "border" },
+        { "id": "input", "label": "input" },
+        { "id": "ring", "label": "ring" }
+      ]
+    },
+    {
+      "id": "foreground",
+      "label": "Foreground",
+      "tokens": [
+        { "id": "foreground", "label": "foreground" },
+        { "id": "muted-foreground", "label": "muted-foreground" },
+        { "id": "primary-foreground", "label": "primary-foreground" },
+        { "id": "secondary-foreground", "label": "secondary-foreground" },
+        { "id": "destructive-foreground", "label": "destructive-foreground" },
+        { "id": "accent-foreground", "label": "accent-foreground" }
+      ]
+    }
+  ]
+}

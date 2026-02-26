@@ -1,0 +1,29 @@
+{
+  "title": "Components",
+  "subtitle": "Button, Badge, Field, and Icon variants from @ui8kit/core.",
+  "buttonVariants": ["default", "primary", "destructive", "outline", "secondary", "ghost", "link"],
+  "buttonSizes": ["xs", "sm", "default", "lg", "xl", "icon"],
+  "badgeVariants": ["default", "secondary", "destructive", "outline", "success", "warning", "info"],
+  "badgeSizes": ["xs", "sm", "default", "lg"],
+  "iconSamples": [
+    { "icon": "Home", "label": "Home" },
+    { "icon": "Menu", "label": "Menu" },
+    { "icon": "UtensilsCrossed", "label": "Utensils" },
+    { "icon": "ShoppingCart", "label": "Cart" },
+    { "icon": "User", "label": "User" },
+    { "icon": "Settings", "label": "Settings" },
+    { "icon": "Sun", "label": "Sun" },
+    { "icon": "Moon", "label": "Moon" },
+    { "icon": "ChevronRight", "label": "Chevron" },
+    { "icon": "Heart", "label": "Heart" }
+  ],
+  "fieldTypes": [
+    { "type": "text", "label": "text", "placeholder": "Enter text" },
+    { "type": "email", "label": "email", "placeholder": "email@example.com" },
+    { "type": "password", "label": "password", "placeholder": "••••••••" },
+    { "type": "textarea", "label": "textarea", "placeholder": "Message", "rows": 3 },
+    { "type": "checkbox", "label": "checkbox", "optionLabel": "Label" },
+    { "type": "radio", "label": "radio", "options": [{ "value": "a", "label": "Option A" }, { "value": "b", "label": "Option B" }] },
+    { "type": "select", "label": "select", "options": [{ "value": "", "label": "Select..." }, { "value": "1", "label": "Option 1" }, { "value": "2", "label": "Option 2" }] }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "title": "Design System",
+  "intro": "Visual reference for design tokens, primitives, components, and widgets from the restaurant site.",
+  "sections": [
+    {
+      "id": "colors",
+      "title": "Colors",
+      "description": "Semantic color tokens and swatches.",
+      "href": "/colors"
+    },
+    {
+      "id": "tokens",
+      "title": "Tokens",
+      "description": "Semantic color, spacing, radius, and elevation tokens used across RestA UI.",
+      "href": "/tokens"
+    },
+    {
+      "id": "typography",
+      "title": "Typography",
+      "description": "Font sizes, weights, line heights, and Title scale.",
+      "href": "/typography"
+    },
+    {
+      "id": "components",
+      "title": "Components",
+      "description": "Button, Badge, Field, Icon, and Card variants.",
+      "href": "/components"
+    },
+    {
+      "id": "primitives",
+      "title": "Primitives",
+      "description": "Block, Stack, Group, Title, Text, Button, Badge, Field, Icon, and Card variants.",
+      "href": "/primitives"
+    },
+    {
+      "id": "widgets",
+      "title": "Widgets",
+      "description": "Hero, menu cards grid, recipe card, promo, blog, Accordion, Sheet.",
+      "href": "/widgets"
+    },
+    {
+      "id": "pages",
+      "title": "Pages",
+      "description": "Full page previews: menu, recipe, promotion detail.",
+      "href": "/pages"
+    }
+  ]
+}

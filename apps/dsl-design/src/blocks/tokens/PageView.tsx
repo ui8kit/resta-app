@@ -37,8 +37,8 @@ export function TokensPageView({
       headerTitle={headerTitle}
       headerSubtitle={headerSubtitle}
     >
-      <Block component="section" gap="6" data-class="tokens-page-section">
-        <Block component="header" gap="2" data-class="tokens-page-header">
+      <Block component="section" flex="col" gap="6" data-class="tokens-page-section">
+        <Block component="header" flex="col" gap="2" data-class="tokens-page-header">
           <CardTitle order={2} data-class="tokens-page-title">
             <Var name="section.title" value={section.title} />
           </CardTitle>

@@ -8,7 +8,7 @@ export function PagesPage() {
       sidebarLinks={context.sidebarLinks}
       headerTitle={context.site.title}
       headerSubtitle={context.site.subtitle}
-      section={context.pages}
+      pagesPreview={context.pagesPreview}
     />
   );
 }

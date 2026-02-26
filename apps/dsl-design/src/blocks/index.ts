@@ -1,5 +1,10 @@
+export { DashSidebar } from './DashSidebar';
+export { HeroBlock } from './HeroBlock';
+export { OverviewPageView } from './overview/PageView';
+export { ColorsPageView } from './colors/PageView';
 export { TokensPageView } from './tokens/PageView';
+export { TypographyPageView } from './typography/PageView';
+export { ComponentsPageView } from './components/PageView';
 export { PrimitivesPageView } from './primitives/PageView';
 export { WidgetsPageView } from './widgets/PageView';
-export { TypographyPageView } from './typography/PageView';
 export { PagesPageView } from './pages/PageView';

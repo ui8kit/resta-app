@@ -8,11 +8,17 @@ const navItems = input.navigation.navItems as NavItem[];
 const sidebarLinks = (input.navigation.sidebarLinks ?? EMPTY_ARRAY) as SidebarLink[];
 
 const baseContext = createContext<{
+  overview: CanonicalContextInput['fixtures']['overview'];
+  colors: CanonicalContextInput['fixtures']['colors'];
   tokens: CanonicalContextInput['fixtures']['tokens'];
+  components: CanonicalContextInput['fixtures']['components'];
   primitives: CanonicalContextInput['fixtures']['primitives'];
   widgets: CanonicalContextInput['fixtures']['widgets'];
   typography: CanonicalContextInput['fixtures']['typography'];
+  typographyScale: CanonicalContextInput['fixtures']['typographyScale'];
   pages: CanonicalContextInput['fixtures']['pages'];
+  widgetsDemo: CanonicalContextInput['fixtures']['widgetsDemo'];
+  pagesPreview: CanonicalContextInput['fixtures']['pagesPreview'];
 }>({
   site: input.site,
   page: input.page,
@@ -22,17 +28,26 @@ const baseContext = createContext<{
   adminSidebarLabel: 'Design',
   dynamicRoutePatterns: [],
   fixtures: {
+    overview: input.fixtures.overview,
+    colors: input.fixtures.colors,
     tokens: input.fixtures.tokens,
+    components: input.fixtures.components,
     primitives: input.fixtures.primitives,
     widgets: input.fixtures.widgets,
     typography: input.fixtures.typography,
+    typographyScale: input.fixtures.typographyScale,
     pages: input.fixtures.pages,
+    widgetsDemo: input.fixtures.widgetsDemo,
+    pagesPreview: input.fixtures.pagesPreview,
   },
 });
 
 const websiteDomain = Object.freeze({
   page: input.page.website ?? [],
+  overview: baseContext.fixtures.overview,
+  colors: baseContext.fixtures.colors,
   tokens: baseContext.fixtures.tokens,
+  components: baseContext.fixtures.components,
   primitives: baseContext.fixtures.primitives,
   widgets: baseContext.fixtures.widgets,
   typography: baseContext.fixtures.typography,
@@ -44,11 +59,17 @@ const websiteDomain = Object.freeze({
 
 export const context = Object.freeze({
   ...baseContext,
+  overview: baseContext.fixtures.overview,
+  colors: baseContext.fixtures.colors,
   tokens: baseContext.fixtures.tokens,
+  components: baseContext.fixtures.components,
   primitives: baseContext.fixtures.primitives,
   widgets: baseContext.fixtures.widgets,
   typography: baseContext.fixtures.typography,
+  typographyScale: baseContext.fixtures.typographyScale,
   pages: baseContext.fixtures.pages,
+  widgetsDemo: baseContext.fixtures.widgetsDemo,
+  pagesPreview: baseContext.fixtures.pagesPreview,
   domains: Object.freeze({
     website: websiteDomain,
   }),

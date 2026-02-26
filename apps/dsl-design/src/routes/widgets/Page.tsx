@@ -8,7 +8,7 @@ export function WidgetsPage() {
       sidebarLinks={context.sidebarLinks}
       headerTitle={context.site.title}
       headerSubtitle={context.site.subtitle}
-      section={context.widgets}
+      widgetsDemo={context.widgetsDemo}
     />
   );
 }

@@ -1,24 +1,15 @@
+import { useState } from 'react';
 import { DesignLayout } from '@/layouts';
-import {
-  Block,
-  Grid,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  Badge,
-  Text,
-} from '@ui8kit/core';
-import { If, Loop, Var } from '@ui8kit/dsl';
-import type { DesignSectionFixture, DesignSectionItem, NavItem, SidebarLink } from '@/types';
+import { Block, Stack, Title, Text, Toast } from '@ui8kit/core';
+import { MenuDetailPreview, RecipeDetailPreview, PromotionDetailPreview } from '@/blocks/previews';
+import type { PagesPreviewFixture, NavItem, SidebarLink } from '@/types';
 
 export interface PagesPageViewProps {
   navItems?: NavItem[];
   sidebarLinks?: SidebarLink[];
   headerTitle?: string;
   headerSubtitle?: string;
-  section: DesignSectionFixture;
+  pagesPreview: PagesPreviewFixture;
 }
 
 export function PagesPageView({
@@ -26,9 +17,16 @@ export function PagesPageView({
   sidebarLinks,
   headerTitle,
   headerSubtitle,
-  section,
+  pagesPreview,
 }: PagesPageViewProps) {
-  const items = section.items ?? [];
+  const [showToast, setShowToast] = useState(false);
+  const { menuDetail, recipeDetail, promotionDetail } = pagesPreview;
+  const promotionBadge = '-15%';
+
+  const handleOrderClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowToast(true);
+  };
 
   return (
     <DesignLayout
@@ -37,42 +35,51 @@ export function PagesPageView({
       headerTitle={headerTitle}
       headerSubtitle={headerSubtitle}
     >
-      <Block component="section" gap="6" data-class="pages-page-section">
-        <Block component="header" gap="2" data-class="pages-page-header">
-          <CardTitle order={2} data-class="pages-page-title">
-            <Var name="section.title" value={section.title} />
-          </CardTitle>
-          <CardDescription data-class="pages-page-subtitle">
-            <Var name="section.subtitle" value={section.subtitle} />
-          </CardDescription>
-        </Block>
+      <Block component="section" py="8" data-class="design-pages-section">
+        <Stack gap="8" max="w-4xl" mx="auto" items="stretch" data-class="design-pages-stack">
+          <Title fontSize="2xl" fontWeight="bold" data-class="design-pages-title">
+            Pages
+          </Title>
 
-        <Grid grid="cols-1" gap="4" data-class="pages-page-grid">
-          <Loop each="items" as="item" data={items}>
-            {(item: DesignSectionItem) => (
-              <Card data-class="pages-item-card">
-                <CardHeader>
-                  <CardTitle order={4} data-class="pages-item-title">
-                    <Var name="item.title" value={item.title} />
-                  </CardTitle>
-                  <CardDescription data-class="pages-item-description">
-                    <Var name="item.description" value={item.description} />
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <If test="item.badge" value={!!item.badge}>
-                    <Badge variant="outline" data-class="pages-item-badge">
-                      <Var name="item.badge" value={item.badge ?? ''} />
-                    </Badge>
-                  </If>
-                  <Text fontSize="sm" textColor="muted-foreground" data-class="pages-item-slug">
-                    <Var name="item.slug" value={item.slug} />
-                  </Text>
-                </CardContent>
-              </Card>
-            )}
-          </Loop>
-        </Grid>
+          <Block data-class="design-pages-preview-section">
+            <Stack gap="2" mb="4">
+              <Title order={4} data-class="design-pages-preview-title">Menu Page</Title>
+              <Text fontSize="sm" textColor="muted-foreground">Menu item detail</Text>
+            </Stack>
+            <Block rounded="md" border="" overflow="hidden" data-class="design-pages-preview">
+              <MenuDetailPreview
+                item={menuDetail as never}
+                promotionBadge={promotionBadge}
+                onOrderClick={handleOrderClick}
+              />
+            </Block>
+          </Block>
+
+          <Block data-class="design-pages-preview-section">
+            <Stack gap="2" mb="4">
+              <Title order={4} data-class="design-pages-preview-title">Recipe Page</Title>
+              <Text fontSize="sm" textColor="muted-foreground">Recipe detail with ingredients and steps</Text>
+            </Stack>
+            <Block rounded="md" border="" overflow="hidden" data-class="design-pages-preview">
+              <RecipeDetailPreview
+                recipe={recipeDetail as never}
+                onOrderClick={handleOrderClick}
+              />
+            </Block>
+          </Block>
+
+          <Block data-class="design-pages-preview-section">
+            <Stack gap="2" mb="4">
+              <Title order={4} data-class="design-pages-preview-title">Promotion Page</Title>
+              <Text fontSize="sm" textColor="muted-foreground">Promo detail with discount and validity</Text>
+            </Stack>
+            <Block rounded="md" border="" overflow="hidden" data-class="design-pages-preview">
+              <PromotionDetailPreview item={promotionDetail as never} />
+            </Block>
+          </Block>
+
+          <Toast visible={showToast} onClose={() => setShowToast(false)} duration={9000} />
+        </Stack>
       </Block>
     </DesignLayout>
   );

@@ -1,0 +1,32 @@
+{
+  "menuDetail": {
+    "id": "menu-1",
+    "title": "Salmon Steak on the Grill",
+    "description": "Atlantic salmon fillet with herb butter and lemon. Served with seasonal vegetables.",
+    "category": { "title": "Grill" },
+    "price": { "display": "890 ₽" },
+    "compareAtPrice": { "display": "990 ₽" },
+    "image": null,
+    "variants": [
+      { "id": "v1", "title": "200g", "priceModifier": { "display": "" } },
+      { "id": "v2", "title": "300g", "priceModifier": { "display": "+200 ₽" } }
+    ]
+  },
+  "recipeDetail": {
+    "id": "r1",
+    "title": "Salmon Steak on the Grill at Home",
+    "description": "Replicate our grill salmon method in 25 minutes.",
+    "category": { "title": "Grill" },
+    "time": "25 min",
+    "servings": "2 servings",
+    "ingredients": ["Salmon fillet 300g", "Herb butter", "Lemon", "Salt", "Pepper"],
+    "steps": ["Prepare the grill", "Season the salmon", "Grill 4–5 min per side"]
+  },
+  "promotionDetail": {
+    "id": "promo-1",
+    "title": "Happy Hour Grill",
+    "description": "15% off grill items, Mon–Fri 11:00–13:00.",
+    "discount": "-15%",
+    "validity": "Mon–Fri 11:00–13:00"
+  }
+}

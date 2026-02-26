@@ -1,14 +1,14 @@
-import { TypographyPageView } from '@/blocks';
+import { ColorsPageView } from '@/blocks';
 import { context } from '@/data/context';
 
-export function TypographyPage() {
+export function ColorsPage() {
   return (
-    <TypographyPageView
+    <ColorsPageView
       navItems={context.navItems}
       sidebarLinks={context.sidebarLinks}
       headerTitle={context.site.title}
       headerSubtitle={context.site.subtitle}
-      typographyScale={context.typographyScale}
+      colors={context.colors}
     />
   );
 }

@@ -1,0 +1,10 @@
+{
+  "title": "Typography",
+  "subtitle": "Font sizes, weights, line heights, and Title scale.",
+  "sampleText": "The quick brown fox jumps over the lazy dog.",
+  "fontSizes": ["xs", "sm", "base", "lg", "xl", "2xl", "3xl", "4xl", "5xl"],
+  "fontWeights": ["normal", "medium", "semibold", "bold"],
+  "lineHeights": ["tight", "normal", "relaxed"],
+  "letterSpacings": ["tighter", "tight", "normal", "wide", "wider", "widest"],
+  "titleOrders": [1, 2, 3, 4, 5, 6]
+}
