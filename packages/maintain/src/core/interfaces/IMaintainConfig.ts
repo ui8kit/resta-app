@@ -46,10 +46,21 @@ export interface ViewExportsCheckerConfig {
 export interface ContractTestsCheckerConfig {
   blueprint: string;
   appFile?: string;
+  /**
+   * When true (default), entity types must be inline objects or interfaces so required fields can be validated.
+   * When false, type aliases (e.g. `export type Page = DesignSectionItem`) are accepted; required-fields check is skipped.
+   * The strict shape requirement (interface or inline type) applies only to View components (*View.tsx) via viewExports checker.
+   */
+  entityTypeRequireInlineBody?: boolean;
 }
 
+export type CleanMode = 'full' | 'dist';
+
 export interface CleanCheckerConfig {
+  /** Paths to clean (relative to app root). Used when pathsByMode doesn't define the mode. */
   paths: string[];
+  /** Optional paths per mode. full = full cleanup (node_modules, outDir, etc.). dist = generated output only. */
+  pathsByMode?: Partial<Record<CleanMode, string[]>>;
   includeTsBuildInfo?: boolean;
 }
 

@@ -241,6 +241,30 @@ Example:
 }
 ```
 
+## Clean paths from config (no hardcoding)
+
+Paths are defined in `maintain.config.json`. Each app (DSL, design system, etc.) declares its own outDir and paths:
+
+```json
+{
+  "checkers": {
+    "clean": {
+      "paths": ["../react-design", "node_modules/.vite"],
+      "pathsByMode": {
+        "full": ["node_modules", "../react-design"],
+        "dist": ["../react-design", "node_modules/.vite"]
+      },
+      "includeTsBuildInfo": true
+    }
+  }
+}
+```
+
+- `paths` — fallback when `pathsByMode` doesn't define the mode
+- `pathsByMode.full` — full cleanup (node_modules, outDir)
+- `pathsByMode.dist` — dist-only (generated output, .vite cache)
+- Use `--paths` to override on the fly
+
 ---
 
 ## 7) Recommended team workflow

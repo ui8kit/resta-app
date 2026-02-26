@@ -13,8 +13,8 @@ Reference for all scripts in the `scripts/` directory. Describes what each scrip
 | `contract-tests.ts` | `bun run test:contracts` | Blueprint-driven contract checks between fixtures, types, views, and routes |
 | `refactor-audit.ts` | `bun run audit:refactor` | Scan for residual old brand terms after a brand refactor |
 | `build-props-classlist.ts` | `bun run build:props` | Extract all prop→class combinations from `utility-props.map.ts` |
-| `clean-workspace.sh` | `bun run clean` | Full cleanup: `node_modules`, `dist`, `*.tsbuildinfo` |
-| `clean-engine.sh` | `bun run clean:dist` | Clean only `dist/react/` before re-generation |
+| `maintain clean` | `bun run clean` | Full cleanup (paths from maintain.config.json) |
+| `maintain clean` | `bun run clean:dist` | Dist-only cleanup (paths from maintain.config.json) |
 | `scaffold-app.ts` | _(manual)_ | Scaffold a new app directory (monorepo-style, kept for reference) |
 | `scaffold-config.ts` | _(manual)_ | Read scaffold config fields from `app-scaffold.config.json` |
 | `installer.sh` | _(manual)_ | Orchestrate full scaffold + install + generate + sync pipeline |
@@ -139,33 +139,28 @@ Parses `src/lib/utility-props.map.ts` and extracts every valid prop→Tailwind c
 
 ## Cleanup Scripts
 
-### `clean-workspace.sh`
+### `maintain clean` (config-driven)
 
-**Command:** `bun run clean`
+**Commands:** `bun run clean` (full) | `bun run clean:dist` (dist-only)
 
-Full project cleanup. Removes all generated and installed artifacts.
+Paths are defined in `maintain.config.json` under `checkers.clean`. No hardcoded paths — each app declares its own outDir (e.g. `../react`, `../react-design`).
 
-**Removes:**
+**Full cleanup** (`--mode full`):
 - `node_modules/`
-- `dist/`
+- `../react` (or app-specific outDir)
 - `**/*.tsbuildinfo`
 
-**Use when:** Starting fresh, switching branches with dependency changes, or troubleshooting stale build artifacts.
-
----
-
-### `clean-engine.sh`
-
-**Command:** `bun run clean:dist`
-
-Removes only the generated `dist/react/` output. Useful when you need to re-run `generate` + `finalize` without reinstalling dependencies.
-
-**Removes:**
-- `dist/react/`
-- `node_modules/.vite` (Vite cache)
+**Dist-only** (`--mode dist`):
+- `../react` (or app-specific outDir)
+- `node_modules/.vite`
 - `**/*.tsbuildinfo`
 
-**Typical usage:**
+**Preview (dry-run):**
+```bash
+maintain clean --config maintain.config.json --mode dist
+```
+
+**Execute:**
 ```bash
 bun run clean:dist
 bun run generate

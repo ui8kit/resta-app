@@ -78,11 +78,11 @@
       "appFile": "src/App.tsx"
     },
     "clean": {
-      "paths": [
-        "node_modules",
-        "../react",
-        "node_modules/.vite"
-      ],
+      "paths": ["../react", "node_modules/.vite"],
+      "pathsByMode": {
+        "full": ["node_modules", "../react"],
+        "dist": ["../react", "node_modules/.vite"]
+      },
       "includeTsBuildInfo": true
     }
   }

@@ -1,13 +1,6 @@
 import type { Command } from 'commander';
-import type { CleanCheckerConfig } from '../core/interfaces';
+import type { CleanCheckerConfig, CleanMode } from '../core/interfaces';
 import { executeMaintainRun } from './shared';
-
-type CleanMode = 'full' | 'dist';
-
-const PRESET_PATHS: Record<CleanMode, string[]> = {
-  full: ['node_modules', '../react'],
-  dist: ['../react', 'node_modules/.vite'],
-};
 
 function parsePaths(value?: string): string[] | undefined {
   if (!value) {
@@ -27,11 +20,11 @@ function parseMode(value: string | undefined): CleanMode {
 export function registerCleanCommand(program: Command): void {
   program
     .command('clean')
-    .description('Run clean checker in dry-run or execute mode')
+    .description('Run clean checker in dry-run or execute mode. Paths from maintain.config.json checkers.clean.')
     .option('--cwd <dir>', 'Working directory', '.')
     .option('--config <path>', 'Maintain config file path', 'maintain.config.json')
-    .option('--mode <mode>', 'Clean mode: full|dist', 'dist')
-    .option('--paths <paths>', 'Comma-separated paths override')
+    .option('--mode <mode>', 'Clean mode: full|dist (uses pathsByMode when defined)', 'dist')
+    .option('--paths <paths>', 'Comma-separated paths override (overrides config)')
     .option('--execute', 'Apply deletion (default is dry-run)', false)
     .action(
       async (options: {
@@ -51,16 +44,21 @@ export function registerCleanCommand(program: Command): void {
           mode: 'clean',
           dryRun: !options.execute,
           mutateConfig: (config) => {
-            const preset = PRESET_PATHS[mode];
-            const currentConfig: CleanCheckerConfig = config.checkers.clean ?? {
-              paths: preset,
-              includeTsBuildInfo: true,
-            };
+            const currentConfig: CleanCheckerConfig | undefined = config.checkers.clean;
+            const configPaths =
+              currentConfig?.pathsByMode?.[mode] ?? currentConfig?.paths ?? [];
+            const resolvedPaths = overridePaths ?? configPaths;
+
+            if (resolvedPaths.length === 0) {
+              throw new Error(
+                'No paths to clean. Add checkers.clean.paths (or pathsByMode) in maintain.config.json, or use --paths.'
+              );
+            }
 
             config.checkers.clean = {
               ...currentConfig,
-              paths: overridePaths ?? preset,
-              includeTsBuildInfo: currentConfig.includeTsBuildInfo ?? true,
+              paths: resolvedPaths,
+              includeTsBuildInfo: currentConfig?.includeTsBuildInfo ?? true,
             };
           },
         });

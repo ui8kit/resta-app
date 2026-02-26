@@ -1,0 +1,190 @@
+{
+  "runId": "maintain_1772097978752",
+  "generatedAt": "2026-02-26T09:26:18.752Z",
+  "duration": 145,
+  "success": false,
+  "results": [
+    {
+      "checker": "invariants",
+      "description": "Validate route, fixture, block, and context invariants",
+      "success": true,
+      "startedAt": "2026-02-26T09:26:18.755Z",
+      "finishedAt": "2026-02-26T09:26:18.769Z",
+      "duration": 14,
+      "issues": [
+        {
+          "level": "warn",
+          "code": "BLOCK_NOT_EXPORTED",
+          "message": "Block \"MenuDetailPreview\" is not exported from src/blocks/index.ts.",
+          "checker": "invariants",
+          "file": "src/blocks/index.ts"
+        },
+        {
+          "level": "warn",
+          "code": "BLOCK_NOT_EXPORTED",
+          "message": "Block \"PromotionDetailPreview\" is not exported from src/blocks/index.ts.",
+          "checker": "invariants",
+          "file": "src/blocks/index.ts"
+        },
+        {
+          "level": "warn",
+          "code": "BLOCK_NOT_EXPORTED",
+          "message": "Block \"RecipeDetailPreview\" is not exported from src/blocks/index.ts.",
+          "checker": "invariants",
+          "file": "src/blocks/index.ts"
+        }
+      ],
+      "stats": {
+        "errorCount": 0,
+        "warningCount": 3
+      }
+    },
+    {
+      "checker": "fixtures",
+      "description": "Validate fixture JSON against schema targets",
+      "success": false,
+      "startedAt": "2026-02-26T09:26:18.767Z",
+      "finishedAt": "2026-02-26T09:26:18.770Z",
+      "duration": 3,
+      "issues": [
+        {
+          "level": "error",
+          "code": "CHECKER_EXECUTION_FAILED",
+          "message": "Checker \"fixtures\" requires configuration.",
+          "checker": "fixtures",
+          "hint": "Inspect checker \"fixtures\" configuration and retry."
+        }
+      ],
+      "hint": "Inspect checker \"fixtures\" configuration and retry."
+    },
+    {
+      "checker": "view-exports",
+      "description": "Validate that View files export one interface and one function",
+      "success": true,
+      "startedAt": "2026-02-26T09:26:18.771Z",
+      "finishedAt": "2026-02-26T09:26:18.896Z",
+      "duration": 125,
+      "issues": [],
+      "stats": {
+        "filesScanned": 8,
+        "errorCount": 0
+      }
+    },
+    {
+      "checker": "contracts",
+      "description": "Run blueprint contract checks for fixtures, types, routes, and views",
+      "success": false,
+      "startedAt": "2026-02-26T09:26:18.889Z",
+      "finishedAt": "2026-02-26T09:26:18.896Z",
+      "duration": 7,
+      "issues": [
+        {
+          "level": "error",
+          "code": "CONTRACT_SINGULAR_TYPE_MISSING",
+          "message": "Type \"Page\" was not found in \"src/types/pages.ts\".",
+          "checker": "contracts",
+          "file": "src/types/pages.ts"
+        },
+        {
+          "level": "error",
+          "code": "CONTRACT_SINGULAR_TYPE_MISSING",
+          "message": "Type \"Primitive\" was not found in \"src/types/primitives.ts\".",
+          "checker": "contracts",
+          "file": "src/types/primitives.ts"
+        },
+        {
+          "level": "error",
+          "code": "CONTRACT_SINGULAR_TYPE_MISSING",
+          "message": "Type \"Token\" was not found in \"src/types/tokens.ts\".",
+          "checker": "contracts",
+          "file": "src/types/tokens.ts"
+        },
+        {
+          "level": "error",
+          "code": "CONTRACT_SINGULAR_TYPE_MISSING",
+          "message": "Type \"Typography\" was not found in \"src/types/typography.ts\".",
+          "checker": "contracts",
+          "file": "src/types/typography.ts"
+        },
+        {
+          "level": "error",
+          "code": "CONTRACT_SINGULAR_TYPE_MISSING",
+          "message": "Type \"Widget\" was not found in \"src/types/widgets.ts\".",
+          "checker": "contracts",
+          "file": "src/types/widgets.ts"
+        }
+      ],
+      "stats": {
+        "entitiesChecked": 5,
+        "errorCount": 5
+      }
+    }
+  ],
+  "errors": [
+    {
+      "level": "error",
+      "code": "CHECKER_EXECUTION_FAILED",
+      "message": "Checker \"fixtures\" requires configuration.",
+      "checker": "fixtures",
+      "hint": "Inspect checker \"fixtures\" configuration and retry."
+    },
+    {
+      "level": "error",
+      "code": "CONTRACT_SINGULAR_TYPE_MISSING",
+      "message": "Type \"Page\" was not found in \"src/types/pages.ts\".",
+      "checker": "contracts",
+      "file": "src/types/pages.ts"
+    },
+    {
+      "level": "error",
+      "code": "CONTRACT_SINGULAR_TYPE_MISSING",
+      "message": "Type \"Primitive\" was not found in \"src/types/primitives.ts\".",
+      "checker": "contracts",
+      "file": "src/types/primitives.ts"
+    },
+    {
+      "level": "error",
+      "code": "CONTRACT_SINGULAR_TYPE_MISSING",
+      "message": "Type \"Token\" was not found in \"src/types/tokens.ts\".",
+      "checker": "contracts",
+      "file": "src/types/tokens.ts"
+    },
+    {
+      "level": "error",
+      "code": "CONTRACT_SINGULAR_TYPE_MISSING",
+      "message": "Type \"Typography\" was not found in \"src/types/typography.ts\".",
+      "checker": "contracts",
+      "file": "src/types/typography.ts"
+    },
+    {
+      "level": "error",
+      "code": "CONTRACT_SINGULAR_TYPE_MISSING",
+      "message": "Type \"Widget\" was not found in \"src/types/widgets.ts\".",
+      "checker": "contracts",
+      "file": "src/types/widgets.ts"
+    }
+  ],
+  "warnings": [
+    {
+      "level": "warn",
+      "code": "BLOCK_NOT_EXPORTED",
+      "message": "Block \"MenuDetailPreview\" is not exported from src/blocks/index.ts.",
+      "checker": "invariants",
+      "file": "src/blocks/index.ts"
+    },
+    {
+      "level": "warn",
+      "code": "BLOCK_NOT_EXPORTED",
+      "message": "Block \"PromotionDetailPreview\" is not exported from src/blocks/index.ts.",
+      "checker": "invariants",
+      "file": "src/blocks/index.ts"
+    },
+    {
+      "level": "warn",
+      "code": "BLOCK_NOT_EXPORTED",
+      "message": "Block \"RecipeDetailPreview\" is not exported from src/blocks/index.ts.",
+      "checker": "invariants",
+      "file": "src/blocks/index.ts"
+    }
+  ]
+}

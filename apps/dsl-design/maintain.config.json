@@ -1,0 +1,54 @@
+{
+  "$schema": "../../packages/maintain/schemas/maintain.config.schema.json",
+  "root": ".",
+  "reportsDir": ".cursor/reports",
+  "continueOnError": true,
+  "maxParallel": 2,
+  "checkers": {
+    "invariants": {
+      "routes": {
+        "appFile": "src/App.tsx",
+        "required": [
+          "/",
+          "/colors",
+          "/tokens",
+          "/typography",
+          "/components",
+          "/primitives",
+          "/widgets",
+          "/pages"
+        ]
+      },
+      "fixtures": {
+        "pageFile": "fixtures/shared/page.json",
+        "requiredPageDomains": ["website"]
+      },
+      "blocks": {
+        "dir": "src/blocks",
+        "indexFile": "src/blocks/index.ts",
+        "recursive": true
+      },
+      "context": {
+        "file": "src/data/adapters/fixtures.adapter.ts",
+        "requiredSymbols": ["loadFixturesContextInput"]
+      }
+    },
+    "viewExports": {
+      "pattern": "src/**/*View.tsx",
+      "exportShape": "interface+function"
+    },
+    "contracts": {
+      "blueprint": "blueprint.json",
+      "appFile": "src/App.tsx",
+      "entityTypeRequireInlineBody": false
+    },
+    "clean": {
+      "paths": ["../react-design", "node_modules/.vite"],
+      "pathsByMode": {
+        "full": ["node_modules", "../react-design"],
+        "dist": ["../react-design", "node_modules/.vite"]
+      },
+      "includeTsBuildInfo": true
+    }
+  }
+}

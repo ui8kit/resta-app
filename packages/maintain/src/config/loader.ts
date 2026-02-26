@@ -50,10 +50,17 @@ const viewExportsSchema = z.object({
 const contractsSchema = z.object({
   blueprint: z.string().min(1),
   appFile: z.string().min(1).optional(),
+  entityTypeRequireInlineBody: z.boolean().optional(),
 });
 
 const cleanSchema = z.object({
   paths: z.array(z.string().min(1)).min(1),
+  pathsByMode: z
+    .object({
+      full: z.array(z.string().min(1)).optional(),
+      dist: z.array(z.string().min(1)).optional(),
+    })
+    .optional(),
   includeTsBuildInfo: z.boolean().optional(),
 });
 

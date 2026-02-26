@@ -123,34 +123,52 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
       }
 
       const typeSource = this.readText(typePath);
+      const requireInlineBody = config.entityTypeRequireInlineBody !== false;
       const typeBody = this.extractTypeBody(typeSource, entity.singular);
-      if (!typeBody) {
-        issues.push(
-          this.createIssue(
-            'error',
-            'CONTRACT_SINGULAR_TYPE_MISSING',
-            `Type "${entity.singular}" was not found in "${entity.types}".`,
-            {
-              file: entity.types,
+      const hasExportedType = this.hasExportedType(typeSource, entity.singular);
+
+      if (requireInlineBody) {
+        if (!typeBody) {
+          issues.push(
+            this.createIssue(
+              'error',
+              'CONTRACT_SINGULAR_TYPE_MISSING',
+              `Type "${entity.singular}" was not found in "${entity.types}". Expected inline object or interface (strict shape applies to entity types when entityTypeRequireInlineBody is true).`,
+              {
+                file: entity.types,
+              }
+            )
+          );
+        } else {
+          const requiredFields = this.extractRequiredTypeFields(typeBody);
+          const firstRecord = firstItem as Record<string, unknown>;
+          for (const field of requiredFields) {
+            if (!(field in firstRecord)) {
+              issues.push(
+                this.createIssue(
+                  'error',
+                  'CONTRACT_REQUIRED_FIELD_MISSING',
+                  `Fixture "${entity.fixture}" is missing required field "${field}" from "${entity.singular}".`,
+                  {
+                    file: entity.fixture,
+                  }
+                )
+              );
             }
-          )
-        );
-      } else {
-        const requiredFields = this.extractRequiredTypeFields(typeBody);
-        const firstRecord = firstItem as Record<string, unknown>;
-        for (const field of requiredFields) {
-          if (!(field in firstRecord)) {
-            issues.push(
-              this.createIssue(
-                'error',
-                'CONTRACT_REQUIRED_FIELD_MISSING',
-                `Fixture "${entity.fixture}" is missing required field "${field}" from "${entity.singular}".`,
-                {
-                  file: entity.fixture,
-                }
-              )
-            );
           }
+        }
+      } else {
+        if (!hasExportedType) {
+          issues.push(
+            this.createIssue(
+              'error',
+              'CONTRACT_SINGULAR_TYPE_MISSING',
+              `Type "${entity.singular}" was not found in "${entity.types}".`,
+              {
+                file: entity.types,
+              }
+            )
+          );
         }
       }
 
@@ -221,6 +239,22 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
     return routes;
   }
 
+  /**
+   * Returns true if the type is exported in any form (alias, inline object, or interface).
+   * Used when entityTypeRequireInlineBody is false to accept type aliases.
+   */
+  private hasExportedType(source: string, typeName: string): boolean {
+    const escapedTypeName = typeName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return (
+      new RegExp(`export\\s+type\\s+${escapedTypeName}\\s*=`).test(source) ||
+      new RegExp(`export\\s+interface\\s+${escapedTypeName}\\s*[<{]`).test(source)
+    );
+  }
+
+  /**
+   * Extracts inline object body from `export type X = { ... }` or `export interface X { ... }`.
+   * Returns undefined for type aliases (e.g. `export type X = OtherType`).
+   */
   private extractTypeBody(source: string, typeName: string): string | undefined {
     const escapedTypeName = typeName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const typeMatch = source.match(

@@ -206,6 +206,10 @@
             },
             "appFile": {
               "type": "string"
+            },
+            "entityTypeRequireInlineBody": {
+              "type": "boolean",
+              "description": "When false, entity types may be aliases; required-fields check skipped. Strict shape applies only to *View.tsx."
             }
           }
         },
@@ -221,7 +225,24 @@
               "minItems": 1,
               "items": {
                 "type": "string"
-              }
+              },
+              "description": "Paths to clean (relative to app root). Fallback when pathsByMode doesn't define the mode."
+            },
+            "pathsByMode": {
+              "type": "object",
+              "properties": {
+                "full": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "Paths for full cleanup (node_modules, outDir, etc.)"
+                },
+                "dist": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "Paths for dist-only cleanup (generated output, .vite cache)"
+                }
+              },
+              "description": "Optional paths per mode. Overrides paths when mode matches."
             },
             "includeTsBuildInfo": {
               "type": "boolean",
