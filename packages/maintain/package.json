@@ -15,7 +15,9 @@
   "files": [
     "src",
     "schemas",
-    "bin"
+    "bin",
+    "README.md",
+    "GUIDE.md"
   ],
   "bin": {
     "maintain": "./src/cli.ts"
