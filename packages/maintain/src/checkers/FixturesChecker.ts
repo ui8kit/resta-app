@@ -24,7 +24,7 @@ export class FixturesChecker extends BaseChecker<FixturesCheckerConfig> {
     );
     for (const schemaFile of schemaFiles) {
       try {
-        const schema = this.readJson(schemaFile);
+        const schema = this.readJsonObject(schemaFile);
         ajv.addSchema(schema);
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
@@ -61,9 +61,11 @@ export class FixturesChecker extends BaseChecker<FixturesCheckerConfig> {
       }
 
       try {
-        const schema = this.readJson(schemaPath);
-        const data = this.readJson(dataPath);
-        const validate = ajv.compile(schema);
+        const schema = this.readJsonObject(schemaPath);
+        const data = this.readJsonData(dataPath);
+        const schemaId = typeof schema.$id === 'string' ? schema.$id : undefined;
+        const existingValidator = schemaId ? ajv.getSchema(schemaId) : undefined;
+        const validate = existingValidator ?? ajv.compile(schema);
         const valid = validate(data);
         if (!valid) {
           for (const validationError of validate.errors ?? []) {
@@ -126,7 +128,11 @@ export class FixturesChecker extends BaseChecker<FixturesCheckerConfig> {
     return Array.from(files);
   }
 
-  private readJson(targetPath: string): unknown {
+  private readJsonObject(targetPath: string): Record<string, unknown> {
+    return JSON.parse(readFileSync(targetPath, 'utf-8')) as Record<string, unknown>;
+  }
+
+  private readJsonData(targetPath: string): unknown {
     return JSON.parse(readFileSync(targetPath, 'utf-8')) as unknown;
   }
 
