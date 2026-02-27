@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { DesignLayout } from '@/layouts';
 import {
   Block,
@@ -19,7 +18,6 @@ import {
   AccordionTrigger,
   AccordionContent,
   Sheet,
-  Toast,
 } from '@ui8kit/core';
 import { If, Loop, Var } from '@ui8kit/dsl';
 import { HeroBlock } from '@/blocks/HeroBlock';
@@ -41,17 +39,7 @@ export function WidgetsPageView({
   headerSubtitle,
   widgetsDemo,
 }: WidgetsPageViewProps) {
-  const [showToast, setShowToast] = useState(false);
   const { hero, menuItems, accordionItems } = widgetsDemo;
-
-  function handleOrderClick(e: React.MouseEvent) {
-    e.preventDefault();
-    setShowToast(true);
-  }
-
-  function handleCloseToast() {
-    setShowToast(false);
-  }
 
   return (
     <DesignLayout
@@ -66,7 +54,7 @@ export function WidgetsPageView({
             Widgets
           </Title>
 
-          <Block data-class="design-widgets-hero">
+          <Stack data-class="design-widgets-hero">
             <Text fontSize="sm" fontWeight="semibold" mb="2" textColor="muted-foreground">
               Hero
             </Text>
@@ -78,9 +66,9 @@ export function WidgetsPageView({
               secondaryCtaText={hero.secondaryCtaText}
               secondaryCtaUrl={hero.secondaryCtaUrl}
             />
-          </Block>
+          </Stack>
 
-          <Block data-class="design-widgets-menu-cards">
+          <Stack data-class="design-widgets-menu-cards">
             <Text fontSize="sm" fontWeight="semibold" mb="2" textColor="muted-foreground">
               Menu cards
             </Text>
@@ -133,19 +121,19 @@ export function WidgetsPageView({
                           )}
                         </Loop>
                       </Group>
-                      <Block mt="2">
-                        <DomainNavButton href="#" size="sm" onClick={handleOrderClick}>
+                      <Stack mt="2">
+                        <DomainNavButton href="#" size="sm">
                           View / Order
                         </DomainNavButton>
-                      </Block>
+                      </Stack>
                     </CardContent>
                   </Card>
                 )}
               </Loop>
             </Grid>
-          </Block>
+          </Stack>
 
-          <Block data-class="design-widgets-menu-card">
+          <Stack data-class="design-widgets-menu-card">
             <Text fontSize="sm" fontWeight="semibold" mb="2" textColor="muted-foreground">
               Menu item card (single)
             </Text>
@@ -167,16 +155,16 @@ export function WidgetsPageView({
                   <Button variant="outline" size="sm">200g</Button>
                   <Button variant="outline" size="sm">300g +200 ₽</Button>
                 </Group>
-                <Block mt="2">
-                  <DomainNavButton href="#" size="sm" onClick={handleOrderClick}>
+                <Stack mt="2">
+                  <DomainNavButton href="#" size="sm">
                     View / Order
                   </DomainNavButton>
-                </Block>
+                </Stack>
               </CardContent>
             </Card>
-          </Block>
+          </Stack>
 
-          <Block data-class="design-widgets-recipe-card">
+          <Stack data-class="design-widgets-recipe-card">
             <Text fontSize="sm" fontWeight="semibold" mb="2" textColor="muted-foreground">
               Recipe card
             </Text>
@@ -193,14 +181,14 @@ export function WidgetsPageView({
                 </Text>
               </CardHeader>
               <CardContent>
-                <DomainNavButton href="#" size="sm" onClick={handleOrderClick}>
+                <DomainNavButton href="#" size="sm">
                   View Recipe
                 </DomainNavButton>
               </CardContent>
             </Card>
-          </Block>
+          </Stack>
 
-          <Block data-class="design-widgets-promo-card">
+          <Stack data-class="design-widgets-promo-card">
             <Text fontSize="sm" fontWeight="semibold" mb="2" textColor="muted-foreground">
               Promotion card
             </Text>
@@ -214,14 +202,14 @@ export function WidgetsPageView({
                 </Text>
               </CardHeader>
               <CardContent>
-                <DomainNavButton href="#" size="sm" onClick={handleOrderClick}>
+                <DomainNavButton href="#" size="sm">
                   View Promotion
                 </DomainNavButton>
               </CardContent>
             </Card>
-          </Block>
+          </Stack>
 
-          <Block data-class="design-widgets-blog-card">
+          <Stack data-class="design-widgets-blog-card">
             <Text fontSize="sm" fontWeight="semibold" mb="2" textColor="muted-foreground">
               Blog post card
             </Text>
@@ -234,14 +222,14 @@ export function WidgetsPageView({
                 </Text>
               </CardHeader>
               <CardContent>
-                <DomainNavButton href="#" size="sm" onClick={handleOrderClick}>
+                <DomainNavButton href="#" size="sm">
                   Read More
                 </DomainNavButton>
               </CardContent>
             </Card>
-          </Block>
+          </Stack>
 
-          <Block data-class="design-widgets-accordion">
+          <Stack data-class="design-widgets-accordion">
             <Text fontSize="sm" fontWeight="semibold" mb="2" textColor="muted-foreground">
               Accordion
             </Text>
@@ -265,9 +253,9 @@ export function WidgetsPageView({
                 )}
               </Loop>
             </Accordion>
-          </Block>
+          </Stack>
 
-          <Block data-class="design-widgets-sheet">
+          <Stack data-class="design-widgets-sheet">
             <Text fontSize="sm" fontWeight="semibold" mb="2" textColor="muted-foreground">
               Sheet
             </Text>
@@ -278,9 +266,7 @@ export function WidgetsPageView({
                 </Text>
               </Stack>
             </Sheet>
-          </Block>
-
-          <Toast visible={showToast} onClose={handleCloseToast} duration={9000} />
+          </Stack>
         </Stack>
       </Block>
     </DesignLayout>

@@ -388,8 +388,13 @@ bun run typecheck     # TypeScript
 
 ```bash
 bun run maintain:check      # Все чекеры из maintain.config.json
-bun run maintain:validate   # Только validate-чекеры (invariants, fixtures, view-exports, contracts)
+bun run maintain:validate   # Только validate-чекеры, заданные в package.json приложения
 ```
+
+`maintain:validate` отличается по приложениям:
+
+- **apps/dsl:** `invariants,fixtures,view-exports,contracts`
+- **apps/dsl-design:** `invariants,view-exports,contracts`
 
 **Maintain checkers** (включаются секциями в `checkers` в `maintain.config.json`):
 - **invariants** — роуты, fixtures, blocks, context;
@@ -401,7 +406,17 @@ bun run maintain:validate   # Только validate-чекеры (invariants, fi
 - **componentTag** — допустимые теги для компонентов (scope, pattern, tagMapPath);
 - **colorTokens** — использование только токенов цветов (scope, pattern, utilityPropsMapPath);
 - **genLint** — правила GEN001–GEN008 для блоков/лейаутов/partials (scope, pattern, rules);
+- **lockedDirs** — запрет изменений в защищённых директориях (dirs, pattern);
+- **viewHooks** — запрет React hooks в `*View.tsx` (pattern, allowedHooks);
+- **utilityPropLiterals** — только статические литералы для utility props (scope, pattern, utilityPropsMapPath, `allowDynamicInLoop`);
+- **orphanFiles** — поиск неиспользуемых файлов (scope, pattern, ignore, aliases);
+- **blockNesting** — запрет nested `Block` и нескольких root `Block` в View;
 - **clean** — очистка dist/node_modules (paths, pathsByMode).
+
+Типичный текущий набор:
+
+- **apps/dsl:** `invariants`, `fixtures`, `viewExports`, `contracts`, `dataClassConflicts`, `componentTag`, `colorTokens`, `genLint`, `lockedDirs`, `viewHooks`, `utilityPropLiterals`, `orphanFiles`, `blockNesting`, `clean`.
+- **apps/dsl-design:** `invariants`, `viewExports`, `contracts`, `clean`, `lockedDirs`, `viewHooks`, `utilityPropLiterals`, `orphanFiles`, `blockNesting`.
 
 Скрипты валидации/линтинга в `apps/dsl/scripts/` (validate-fixtures, validate-invariants, validate-view-exports, lint-gen) приводятся в соответствие с конфигом maintain; основная логика проверок — в пакете `@ui8kit/maintain`.
 
@@ -665,7 +680,7 @@ bun run typecheck
 
 - [ ] `bun run lint:dsl` — проверка DSL
 - [ ] `bun run validate` — проверка конфига, пропсов и component+tag
-- [ ] `bun run maintain:validate` — invariants, fixtures, view-exports, contracts
+- [ ] `bun run maintain:validate` — validate-набор из `package.json` текущего приложения
 - [ ] `bun run typecheck` — TypeScript
 - [ ] Если менял блоки — `bun run generate` (и при необходимости `bun run finalize`)
 - [ ] Нет хардкода — все данные из context или props
@@ -685,7 +700,7 @@ bun run typecheck
 - `.cursor/rules/ui8kit-architecture.mdc` — архитектура UI8Kit
 - `packages/maintain/GUIDE.md` — работа с maintain (checkers, validate, audit, clean)
 - `packages/maintain/schemas/maintain.config.schema.json` — схема конфига maintain
-- `apps/dsl/maintain.config.json` — пример конфига со всеми чекерами (invariants, fixtures, viewExports, contracts, dataClassConflicts, componentTag, colorTokens, genLint, clean)
+- `apps/dsl/maintain.config.json` и `apps/dsl-design/maintain.config.json` — актуальные наборы чекеров проекта
 - `packages/generator/docs/rebrand-automation-101.md` — Blueprint и rebrand
 - `packages/generator/src/lib/component-tag-map.json` — карта component→теги для валидации
 - `@ui8kit/generator/lib` — API валидации (`isTagAllowedForComponent`, `validateComponentTag`)

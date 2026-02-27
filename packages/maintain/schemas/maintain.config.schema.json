@@ -372,6 +372,125 @@
               }
             }
           }
+        },
+        "lockedDirs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dirs",
+            "pattern"
+          ],
+          "properties": {
+            "dirs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "pattern": {
+              "type": "string"
+            }
+          }
+        },
+        "viewHooks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "pattern"
+          ],
+          "properties": {
+            "pattern": {
+              "type": "string"
+            },
+            "allowedHooks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "utilityPropLiterals": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope",
+            "pattern",
+            "utilityPropsMapPath"
+          ],
+          "properties": {
+            "scope": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "pattern": {
+              "type": "string"
+            },
+            "utilityPropsMapPath": {
+              "type": "string"
+            },
+            "allowDynamicInLoop": {
+              "type": "boolean",
+              "default": false,
+              "description": "When true, dynamic utility prop expressions inside DSL <Loop> are demoted from error to info."
+            }
+          }
+        },
+        "orphanFiles": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope",
+            "pattern"
+          ],
+          "properties": {
+            "scope": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "pattern": {
+              "type": "string"
+            },
+            "ignore": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "aliases": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "blockNesting": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope",
+            "pattern"
+          ],
+          "properties": {
+            "scope": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "pattern": {
+              "type": "string"
+            }
+          }
         }
       }
     }

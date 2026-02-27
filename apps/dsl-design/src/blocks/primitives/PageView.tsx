@@ -1,6 +1,7 @@
 import { DesignLayout } from '@/layouts';
 import {
   Block,
+  Stack,
   Grid,
   Card,
   CardHeader,
@@ -38,7 +39,7 @@ export function PrimitivesPageView({
       headerSubtitle={headerSubtitle}
     >
       <Block component="section" flex="col" gap="6" data-class="primitives-page-section">
-        <Block component="header" flex="col" gap="2" data-class="primitives-page-header">
+        <Stack component="header" flex="col" gap="2" data-class="primitives-page-header">
           <If test="section.title" value={!!section.title}>
             <CardTitle order={2} data-class="primitives-page-title">
               <Var name="section.title" value={section.title} />
@@ -49,7 +50,7 @@ export function PrimitivesPageView({
               <Var name="section.subtitle" value={section.subtitle} />
             </CardDescription>
           </If>
-        </Block>
+        </Stack>
 
         <Grid grid="cols-1" gap="4" data-class="primitives-page-grid">
           <Loop each="items" as="item" data={items}>

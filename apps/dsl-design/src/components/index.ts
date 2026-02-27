@@ -24,3 +24,4 @@ export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, 
 export { Sheet, type SheetProps } from "./Sheet";
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent, type AccordionProps, type AccordionItemProps, type AccordionTriggerProps, type AccordionContentProps } from "./Accordion";
 export { Toast, UI_DESIGN_TOAST_MESSAGE, type ToastProps } from "./Toast";
+export { ColorTokenSwatch, type ColorTokenSwatchProps } from "./ColorTokenSwatch";

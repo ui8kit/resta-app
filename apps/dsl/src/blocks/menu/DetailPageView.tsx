@@ -161,7 +161,7 @@ export function MenuDetailPageView({
               >
                 Add to order
               </Button>
-              <Toast visible={showToast} onClose={() => setShowToast(false)} duration={9000} />
+              <Toast {...{ visible: showToast }} onClose={() => setShowToast(false)} duration={9000} />
             </Block>
           </If>
         </Container>

@@ -2,7 +2,6 @@
 @import "./shadcn.css";
 
 @source "../../**/*.{ts,tsx}";
-@source "./safelist-colors.txt";
 
 @layer base {
   body {

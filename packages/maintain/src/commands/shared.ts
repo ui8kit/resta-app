@@ -1,5 +1,6 @@
 import { resolve } from 'node:path';
 import {
+  BlockNestingChecker,
   CleanChecker,
   ColorTokenChecker,
   ComponentTagChecker,
@@ -8,8 +9,12 @@ import {
   FixturesChecker,
   GenLintChecker,
   InvariantsChecker,
+  LockedDirsChecker,
+  OrphanFilesChecker,
   RefactorAuditChecker,
+  UtilityPropLiteralsChecker,
   ViewExportsChecker,
+  ViewHooksChecker,
 } from '../checkers';
 import { loadMaintainConfig } from '../config/loader';
 import { MaintainOrchestrator } from '../core/orchestrator/MaintainOrchestrator';
@@ -54,6 +59,11 @@ export async function executeMaintainRun(
     new ColorTokenChecker(),
     new GenLintChecker(),
     new CleanChecker(),
+    new LockedDirsChecker(),
+    new ViewHooksChecker(),
+    new UtilityPropLiteralsChecker(),
+    new OrphanFilesChecker(),
+    new BlockNestingChecker(),
   ] as const;
 
   const orchestrator = new MaintainOrchestrator({

@@ -53,7 +53,7 @@ export function ComponentsPageView({
     >
       <Block component="section" py="8" data-class="design-components-section">
         <Stack gap="8" max="w-4xl" mx="auto" items="stretch" data-class="design-components-stack">
-          <Block flex="col" gap="2" data-class="design-components-header">
+          <Stack flex="col" gap="2" data-class="design-components-header">
             <If test="components.title" value={!!components.title}>
               <Title fontSize="2xl" fontWeight="bold" data-class="design-components-title">
                 <Var name="components.title" value={components.title} />
@@ -64,7 +64,7 @@ export function ComponentsPageView({
                 <Var name="components.subtitle" value={components.subtitle} />
               </Text>
             </If>
-          </Block>
+          </Stack>
 
           <Card data-class="design-components-card">
             <CardHeader>
@@ -158,7 +158,7 @@ export function ComponentsPageView({
               <Stack gap="4" max="w-md" data-class="design-components-fields">
                 <Loop each="fieldTypes" as="f" data={fieldTypes}>
                   {(f) => (
-                    <Block key={f.type} data-class="design-components-field-row">
+                    <Stack key={f.type} data-class="design-components-field-row">
                       <If test="f.label" value={!!f.label}>
                         <Text fontSize="xs" textColor="muted-foreground" mb="1">
                           <Var name="f.label" value={f.label} />
@@ -215,7 +215,7 @@ export function ComponentsPageView({
                           </Loop>
                         </Field>
                       </If>
-                    </Block>
+                    </Stack>
                   )}
                 </Loop>
               </Stack>
@@ -234,7 +234,7 @@ export function ComponentsPageView({
                     const IconComponent = getIconByName(sample.icon);
                     if (!IconComponent) return null;
                     return (
-                      <Block key={sample.label} data-class="design-components-icon-row">
+                      <Stack key={sample.label} data-class="design-components-icon-row">
                         <Group gap="2" items="center" data-class="design-components-icon-group">
                           <Icon lucideIcon={IconComponent} size="xs" />
                           <Icon lucideIcon={IconComponent} size="sm" />
@@ -247,7 +247,7 @@ export function ComponentsPageView({
                             <Var name="sample.label" value={sample.label} />
                           </Text>
                         </If>
-                      </Block>
+                      </Stack>
                     );
                   }}
                 </Loop>

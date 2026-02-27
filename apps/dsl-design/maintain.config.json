@@ -40,6 +40,30 @@
         "dist": ["../react-design", "node_modules/.vite"]
       },
       "includeTsBuildInfo": true
+    },
+    "lockedDirs": {
+      "dirs": ["src/assets", "src/components", "src/variants"],
+      "pattern": "**/*.{ts,tsx,css,json}"
+    },
+    "viewHooks": {
+      "pattern": "src/**/*View.tsx",
+      "allowedHooks": []
+    },
+    "utilityPropLiterals": {
+      "scope": ["src/blocks", "src/layouts", "src/partials"],
+      "pattern": "**/*.tsx",
+      "utilityPropsMapPath": "./src/lib/utility-props.map.ts",
+      "allowDynamicInLoop": true
+    },
+    "orphanFiles": {
+      "scope": ["src"],
+      "pattern": "**/*.{ts,tsx}",
+      "ignore": ["src/main.tsx", "src/vite-env.d.ts", "src/App.tsx"],
+      "aliases": { "@": "./src" }
+    },
+    "blockNesting": {
+      "scope": ["src/blocks", "src/layouts", "src/partials"],
+      "pattern": "**/*View.tsx"
     }
   }
 }

@@ -46,7 +46,7 @@ export function TypographyPageView({
     >
       <Block component="section" py="8" data-class="design-typography-section">
         <Stack gap="8" max="w-4xl" mx="auto" items="stretch" data-class="design-typography-stack">
-          <Block flex="col" gap="2" data-class="design-typography-header">
+          <Stack flex="col" gap="2" data-class="design-typography-header">
             <If test="typographyScale.title" value={!!typographyScale.title}>
               <Title fontSize="2xl" fontWeight="bold" data-class="design-typography-title">
                 <Var name="typographyScale.title" value={typographyScale.title} />
@@ -57,7 +57,7 @@ export function TypographyPageView({
                 <Var name="typographyScale.subtitle" value={typographyScale.subtitle} />
               </Text>
             </If>
-          </Block>
+          </Stack>
 
           <Card data-class="design-typography-card">
             <CardHeader>
@@ -68,13 +68,13 @@ export function TypographyPageView({
               <Stack gap="2" data-class="design-typography-sizes">
                 <Loop each="fontSizes" as="size" data={fontSizes}>
                   {(size) => (
-                    <Block data-class="design-typography-size-row">
+                    <Stack data-class="design-typography-size-row">
                       <If test="size" value={!!size}>
                         <Text fontSize={size as never} data-class="design-typography-sample">
                           <Var name="size" value={size} /> — <Var name="sampleText" value={sampleText} />
                         </Text>
                       </If>
-                    </Block>
+                    </Stack>
                   )}
                 </Loop>
               </Stack>
@@ -110,7 +110,7 @@ export function TypographyPageView({
               <Stack gap="4" data-class="design-typography-line-heights">
                 <Loop each="lineHeights" as="lh" data={lineHeights}>
                   {(lh) => (
-                    <Block data-class="design-typography-lh-row">
+                    <Stack data-class="design-typography-lh-row">
                       <If test="lh" value={!!lh}>
                         <Text fontSize="xs" textColor="muted-foreground" mb="1">
                           <Var name="lh" value={lh} />
@@ -121,7 +121,7 @@ export function TypographyPageView({
                           <Var name="sampleText" value={sampleText} /> <Var name="sampleText" value={sampleText} /> <Var name="sampleText" value={sampleText} />
                         </Text>
                       </If>
-                    </Block>
+                    </Stack>
                   )}
                 </Loop>
               </Stack>
@@ -158,9 +158,38 @@ export function TypographyPageView({
                 <Loop each="titleOrders" as="order" data={titleOrders}>
                   {(order) => (
                     <If test="order" value={!!order}>
-                      <Title order={order as 1 | 2 | 3 | 4 | 5 | 6} data-class="design-typography-title-sample">
-                        Heading <Var name="order" value={String(order)} />
-                      </Title>
+                      <>
+                        <If test="order === 1" value={order === 1}>
+                          <Title order={1} data-class="design-typography-title-sample">
+                            Heading <Var name="order" value={String(order)} />
+                          </Title>
+                        </If>
+                        <If test="order === 2" value={order === 2}>
+                          <Title order={2} data-class="design-typography-title-sample">
+                            Heading <Var name="order" value={String(order)} />
+                          </Title>
+                        </If>
+                        <If test="order === 3" value={order === 3}>
+                          <Title order={3} data-class="design-typography-title-sample">
+                            Heading <Var name="order" value={String(order)} />
+                          </Title>
+                        </If>
+                        <If test="order === 4" value={order === 4}>
+                          <Title order={4} data-class="design-typography-title-sample">
+                            Heading <Var name="order" value={String(order)} />
+                          </Title>
+                        </If>
+                        <If test="order === 5" value={order === 5}>
+                          <Title order={5} data-class="design-typography-title-sample">
+                            Heading <Var name="order" value={String(order)} />
+                          </Title>
+                        </If>
+                        <If test="order === 6" value={order === 6}>
+                          <Title order={6} data-class="design-typography-title-sample">
+                            Heading <Var name="order" value={String(order)} />
+                          </Title>
+                        </If>
+                      </>
                     </If>
                   )}
                 </Loop>

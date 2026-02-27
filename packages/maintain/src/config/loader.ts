@@ -103,6 +103,35 @@ const genLintSchema = z.object({
     .optional(),
 });
 
+const lockedDirsSchema = z.object({
+  dirs: z.array(z.string().min(1)).min(1),
+  pattern: z.string().min(1),
+});
+
+const viewHooksSchema = z.object({
+  pattern: z.string().min(1),
+  allowedHooks: z.array(z.string().min(1)).optional(),
+});
+
+const utilityPropLiteralsSchema = z.object({
+  scope: z.array(z.string().min(1)).min(1),
+  pattern: z.string().min(1),
+  utilityPropsMapPath: z.string().min(1),
+  allowDynamicInLoop: z.boolean().optional(),
+});
+
+const orphanFilesSchema = z.object({
+  scope: z.array(z.string().min(1)).min(1),
+  pattern: z.string().min(1),
+  ignore: z.array(z.string().min(1)).optional(),
+  aliases: z.record(z.string().min(1), z.string().min(1)).optional(),
+});
+
+const blockNestingSchema = z.object({
+  scope: z.array(z.string().min(1)).min(1),
+  pattern: z.string().min(1),
+});
+
 const checkersSchema = z
   .object({
     refactorAudit: refactorAuditSchema.optional(),
@@ -115,8 +144,13 @@ const checkersSchema = z
     componentTag: componentTagSchema.optional(),
     colorTokens: colorTokensSchema.optional(),
     genLint: genLintSchema.optional(),
+    lockedDirs: lockedDirsSchema.optional(),
+    viewHooks: viewHooksSchema.optional(),
+    utilityPropLiterals: utilityPropLiteralsSchema.optional(),
+    orphanFiles: orphanFilesSchema.optional(),
+    blockNesting: blockNestingSchema.optional(),
   })
-  .catchall(z.unknown());
+  .strict();
 
 export const maintainConfigSchema = z.object({
   root: z.string().min(1).optional(),

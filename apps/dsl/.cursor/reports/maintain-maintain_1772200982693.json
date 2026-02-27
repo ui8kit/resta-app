@@ -1,0 +1,37 @@
+{
+  "runId": "maintain_1772200982693",
+  "generatedAt": "2026-02-27T14:03:02.693Z",
+  "duration": 583,
+  "success": true,
+  "results": [
+    {
+      "checker": "color-tokens",
+      "description": "Validate utility color props against token whitelist",
+      "success": true,
+      "startedAt": "2026-02-27T14:03:02.696Z",
+      "finishedAt": "2026-02-27T14:03:03.275Z",
+      "duration": 579,
+      "issues": [],
+      "stats": {
+        "filesScanned": 54,
+        "tokenSource": "src/lib/utility-props.map.ts",
+        "errorCount": 0
+      }
+    },
+    {
+      "checker": "utility-prop-literals",
+      "description": "Validate that utility props use static literal values from the whitelist",
+      "success": true,
+      "startedAt": "2026-02-27T14:03:03.137Z",
+      "finishedAt": "2026-02-27T14:03:03.275Z",
+      "duration": 138,
+      "issues": [],
+      "stats": {
+        "filesScanned": 22,
+        "errorCount": 0
+      }
+    }
+  ],
+  "errors": [],
+  "warnings": []
+}

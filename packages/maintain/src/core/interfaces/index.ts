@@ -17,6 +17,11 @@ export type {
   GenLintCheckerConfig,
   GenLintRuleCode,
   GenLintRulesConfig,
+  LockedDirsCheckerConfig,
+  ViewHooksCheckerConfig,
+  UtilityPropLiteralsCheckerConfig,
+  OrphanFilesCheckerConfig,
+  BlockNestingCheckerConfig,
   MaintainCheckerConfigMap,
   KnownCheckerConfigs,
 } from './IMaintainConfig';

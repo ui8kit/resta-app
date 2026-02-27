@@ -101,6 +101,36 @@ export interface GenLintCheckerConfig {
   rules?: GenLintRulesConfig;
 }
 
+export interface LockedDirsCheckerConfig {
+  dirs: string[];
+  pattern: string;
+}
+
+export interface ViewHooksCheckerConfig {
+  pattern: string;
+  allowedHooks?: string[];
+}
+
+export interface UtilityPropLiteralsCheckerConfig {
+  scope: string[];
+  pattern: string;
+  utilityPropsMapPath: string;
+  /** When true, dynamic expressions inside DSL <Loop> are allowed (demoted to info instead of error). */
+  allowDynamicInLoop?: boolean;
+}
+
+export interface OrphanFilesCheckerConfig {
+  scope: string[];
+  pattern: string;
+  ignore?: string[];
+  aliases?: Record<string, string>;
+}
+
+export interface BlockNestingCheckerConfig {
+  scope: string[];
+  pattern: string;
+}
+
 export interface KnownCheckerConfigs {
   refactorAudit?: RefactorAuditConfig;
   invariants?: InvariantsCheckerConfig;
@@ -112,6 +142,11 @@ export interface KnownCheckerConfigs {
   componentTag?: ComponentTagCheckerConfig;
   colorTokens?: ColorTokenCheckerConfig;
   genLint?: GenLintCheckerConfig;
+  lockedDirs?: LockedDirsCheckerConfig;
+  viewHooks?: ViewHooksCheckerConfig;
+  utilityPropLiterals?: UtilityPropLiteralsCheckerConfig;
+  orphanFiles?: OrphanFilesCheckerConfig;
+  blockNesting?: BlockNestingCheckerConfig;
 }
 
 export type MaintainCheckerConfigMap = Record<string, unknown> & KnownCheckerConfigs;

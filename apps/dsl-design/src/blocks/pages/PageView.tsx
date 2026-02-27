@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import { DesignLayout } from '@/layouts';
-import { Block, Stack, Title, Text, Toast } from '@ui8kit/core';
+import { Block, Stack, Title, Text } from '@ui8kit/core';
 import { MenuDetailPreview, RecipeDetailPreview, PromotionDetailPreview } from '@/blocks/previews';
 import type { PagesPreviewFixture, NavItem, SidebarLink } from '@/types';
 
@@ -19,18 +18,8 @@ export function PagesPageView({
   headerSubtitle,
   pagesPreview,
 }: PagesPageViewProps) {
-  const [showToast, setShowToast] = useState(false);
   const { menuDetail, recipeDetail, promotionDetail } = pagesPreview;
   const promotionBadge = '-15%';
-
-  function handleOrderClick(e: React.MouseEvent) {
-    e.preventDefault();
-    setShowToast(true);
-  }
-
-  function handleCloseToast() {
-    setShowToast(false);
-  }
 
   return (
     <DesignLayout
@@ -45,44 +34,42 @@ export function PagesPageView({
             Pages
           </Title>
 
-          <Block data-class="design-pages-preview-section">
+          <Stack data-class="design-pages-preview-section">
             <Stack gap="2" mb="4">
               <Title order={4} data-class="design-pages-preview-title">Menu Page</Title>
               <Text fontSize="sm" textColor="muted-foreground">Menu item detail</Text>
             </Stack>
-            <Block rounded="md" border="" overflow="hidden" data-class="design-pages-preview">
+            <Stack rounded="md" border="" overflow="hidden" data-class="design-pages-preview">
               <MenuDetailPreview
                 item={menuDetail as never}
                 promotionBadge={promotionBadge}
-                onOrderClick={handleOrderClick}
+                onOrderClick={() => {}}
               />
-            </Block>
-          </Block>
+            </Stack>
+          </Stack>
 
-          <Block data-class="design-pages-preview-section">
+          <Stack data-class="design-pages-preview-section">
             <Stack gap="2" mb="4">
               <Title order={4} data-class="design-pages-preview-title">Recipe Page</Title>
               <Text fontSize="sm" textColor="muted-foreground">Recipe detail with ingredients and steps</Text>
             </Stack>
-            <Block rounded="md" border="" overflow="hidden" data-class="design-pages-preview">
+            <Stack rounded="md" border="" overflow="hidden" data-class="design-pages-preview">
               <RecipeDetailPreview
                 recipe={recipeDetail as never}
-                onOrderClick={handleOrderClick}
+                onOrderClick={() => {}}
               />
-            </Block>
-          </Block>
+            </Stack>
+          </Stack>
 
-          <Block data-class="design-pages-preview-section">
+          <Stack data-class="design-pages-preview-section">
             <Stack gap="2" mb="4">
               <Title order={4} data-class="design-pages-preview-title">Promotion Page</Title>
               <Text fontSize="sm" textColor="muted-foreground">Promo detail with discount and validity</Text>
             </Stack>
-            <Block rounded="md" border="" overflow="hidden" data-class="design-pages-preview">
+            <Stack rounded="md" border="" overflow="hidden" data-class="design-pages-preview">
               <PromotionDetailPreview item={promotionDetail as never} />
-            </Block>
-          </Block>
-
-          <Toast visible={showToast} onClose={handleCloseToast} duration={9000} />
+            </Stack>
+          </Stack>
         </Stack>
       </Block>
     </DesignLayout>

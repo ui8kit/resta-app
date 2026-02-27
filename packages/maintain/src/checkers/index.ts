@@ -10,3 +10,8 @@ export { DataClassConflictChecker } from './DataClassConflictChecker';
 export { ComponentTagChecker } from './ComponentTagChecker';
 export { ColorTokenChecker } from './ColorTokenChecker';
 export { GenLintChecker } from './GenLintChecker';
+export { LockedDirsChecker } from './LockedDirsChecker';
+export { ViewHooksChecker } from './ViewHooksChecker';
+export { UtilityPropLiteralsChecker } from './UtilityPropLiteralsChecker';
+export { OrphanFilesChecker } from './OrphanFilesChecker';
+export { BlockNestingChecker } from './BlockNestingChecker';

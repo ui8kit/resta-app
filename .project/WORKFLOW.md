@@ -27,7 +27,8 @@
 
 ## 3. Проверки перед коммитом
 
-Все команды ниже выполняются **из каталога приложения**: `apps/dsl` или `apps/dsl-design`. В **apps/dsl-design** нет скрипта `lint:gen` и нет test:contracts; в `maintain.config.json` включены только invariants, viewExports, contracts, clean (без dataClassConflicts, componentTag, colorTokens, genLint).
+Все команды ниже выполняются **из каталога приложения**: `apps/dsl` или `apps/dsl-design`. В **apps/dsl-design** нет скрипта `lint:gen` и нет `test:contracts`.  
+По `maintain`: в `apps/dsl-design` сейчас включены `invariants`, `viewExports`, `contracts`, `clean`, `lockedDirs`, `viewHooks`, `utilityPropLiterals`, `orphanFiles`, `blockNesting` (чекеры `dataClassConflicts`, `componentTag`, `colorTokens`, `genLint` не включены).
 
 ### 3.1 Порядок обязательных проверок
 
@@ -58,7 +59,9 @@
 - `bun run dist:app`
 
 - **apps/dsl:** lint:dsl, lint:gen, validate, blueprint:scan, blueprint:validate, test:contracts, generate, finalize, typecheck в `../react`.
-**apps/dsl-design** использует сокращённый набор чекеров maintain (invariants, viewExports, contracts, clean); чекеры dataClassConflicts, componentTag, colorTokens и genLint можно включить в `maintain.config.json` после приведения кода к правилам.
+- **apps/dsl-design:** lint:dsl, validate, blueprint:scan, blueprint:validate, maintain:check, generate, finalize, typecheck в `../react-design`.
+
+Новых CLI-команд в `maintain`/`generator` не добавлялось; актуализация выше касается текущего набора включённых чекеров в `maintain.config.json`.
 
 ### 3.3 Все чекеры maintain (перед мержем)
 

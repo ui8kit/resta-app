@@ -131,10 +131,11 @@ export class ColorTokenChecker extends BaseChecker<ColorTokenCheckerConfig> {
         if (!ts.isIdentifier(declaration.name) || declaration.name.text !== 'utilityPropsMap') {
           continue;
         }
-        if (!declaration.initializer || !ts.isObjectLiteralExpression(declaration.initializer)) {
+        const objectLiteral = this.unwrapObjectLiteral(declaration.initializer);
+        if (!objectLiteral) {
           continue;
         }
-        for (const property of declaration.initializer.properties) {
+        for (const property of objectLiteral.properties) {
           if (!ts.isPropertyAssignment(property)) {
             continue;
           }
@@ -155,6 +156,18 @@ export class ColorTokenChecker extends BaseChecker<ColorTokenCheckerConfig> {
     }
 
     return result;
+  }
+
+  private unwrapObjectLiteral(node: ts.Expression | undefined): ts.ObjectLiteralExpression | undefined {
+    if (!node) return undefined;
+    if (ts.isObjectLiteralExpression(node)) return node;
+    if (ts.isAsExpression(node) || ts.isSatisfiesExpression(node)) {
+      return this.unwrapObjectLiteral(node.expression);
+    }
+    if (ts.isParenthesizedExpression(node)) {
+      return this.unwrapObjectLiteral(node.expression);
+    }
+    return undefined;
   }
 
   private readPropertyName(name: ts.PropertyName): string | undefined {

@@ -1,0 +1,23 @@
+{
+  "runId": "maintain_1772201828049",
+  "generatedAt": "2026-02-27T14:17:08.049Z",
+  "duration": 440,
+  "success": true,
+  "results": [
+    {
+      "checker": "utility-prop-literals",
+      "description": "Validate that utility props use static literal values from the whitelist",
+      "success": true,
+      "startedAt": "2026-02-27T14:17:08.050Z",
+      "finishedAt": "2026-02-27T14:17:08.488Z",
+      "duration": 438,
+      "issues": [],
+      "stats": {
+        "filesScanned": 18,
+        "errorCount": 0
+      }
+    }
+  ],
+  "errors": [],
+  "warnings": []
+}
