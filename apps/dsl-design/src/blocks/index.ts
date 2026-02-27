@@ -1,5 +1,6 @@
 export { DashSidebar } from './DashSidebar';
 export { HeroBlock } from './HeroBlock';
+export { MenuDetailPreview, RecipeDetailPreview, PromotionDetailPreview } from './previews';
 export { OverviewPageView } from './overview/PageView';
 export { ColorsPageView } from './colors/PageView';
 export { TokensPageView } from './tokens/PageView';

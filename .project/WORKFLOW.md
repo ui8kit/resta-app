@@ -16,10 +16,10 @@
 
 ## 2. Разработка
 
-Перейти в приложение (DSL или design):
+Перейти в нужное приложение и запустить dev-сервер:
 
-- `cd apps/dsl`
-- `bun run dev`
+- **Основное приложение (ресторан):** `cd apps/dsl` → `bun run dev`
+- **Design system (превью токенов/компонентов):** `cd apps/dsl-design` → `bun run dev`
 
 Сервер поднимается по адресу из конфига (например, localhost:3020).
 
@@ -27,7 +27,7 @@
 
 ## 3. Проверки перед коммитом
 
-Все команды ниже выполняются из каталога приложения (например, `apps/dsl`).
+Все команды ниже выполняются **из каталога приложения**: `apps/dsl` или `apps/dsl-design`. В **apps/dsl-design** нет скрипта `lint:gen` и нет test:contracts; в `maintain.config.json` включены только invariants, viewExports, contracts, clean (без dataClassConflicts, componentTag, colorTokens, genLint).
 
 ### 3.1 Порядок обязательных проверок
 
@@ -49,15 +49,16 @@
 6. **Если менялись блоки, шаблоны или фикстуры** — пересобрать вывод и при необходимости проверить React-приложение:  
    - `bun run generate`  
    - при необходимости: `bun run finalize`  
-   - проверка сгенерированного приложения: `cd ../react && bun run typecheck` (или `bun run typecheck:react` из корня app)
+   - проверка сгенерированного приложения: из `apps/dsl` — `bun run typecheck:react` (проверяет `../react`); из `apps/dsl-design` — `bun run typecheck:react` (проверяет `../react-design`)
 
 ### 3.2 Одной командой (полный пайплайн)
 
-Полный пайплайн линта, валидации, blueprint, контрактов, генерации и проверки React:
+Полный пайплайн линта, валидации, blueprint, генерации и проверки React:
 
 - `bun run dist:app`
 
-Включает по порядку: lint:dsl, lint:gen, validate, blueprint:scan, blueprint:validate, test:contracts, generate, finalize, typecheck в сгенерированном приложении.
+- **apps/dsl:** lint:dsl, lint:gen, validate, blueprint:scan, blueprint:validate, test:contracts, generate, finalize, typecheck в `../react`.
+**apps/dsl-design** использует сокращённый набор чекеров maintain (invariants, viewExports, contracts, clean); чекеры dataClassConflicts, componentTag, colorTokens и genLint можно включить в `maintain.config.json` после приведения кода к правилам.
 
 ### 3.3 Все чекеры maintain (перед мержем)
 
@@ -70,7 +71,7 @@
 ## 4. Дополнительные команды
 
 - **Blueprint:** `bun run blueprint:scan`, `bun run blueprint:validate`, `bun run blueprint:graph`
-- **Контракты:** `bun run test:contracts`
+- **Контракты:** `bun run test:contracts` (только в **apps/dsl**; в dsl-design нет этого скрипта)
 - **Общий линт:** `bun run lint` (ui8kit-lint)
 - **Аудит рефакторинга:** `bun run audit:refactor`
 - **Очистка сгенерированного вывода:** `bun run clean:dist`

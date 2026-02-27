@@ -26,10 +26,16 @@ export function MenuDetailPreview({ item, promotionBadge, onOrderClick }: MenuDe
         <If test="item.category.title" value={!!item.category?.title}>
           <Text fontSize="xs" textColor="muted-foreground"><Var name="item.category.title" value={item.category?.title} /></Text>
         </If>
-        <Title order={2}><Var name="item.title" value={item.title} /></Title>
-        <Text fontSize="sm" textColor="muted-foreground"><Var name="item.description" value={item.description} /></Text>
+        <If test="item.title" value={!!item.title}>
+          <Title order={2}><Var name="item.title" value={item.title} /></Title>
+        </If>
+        <If test="item.description" value={!!item.description}>
+          <Text fontSize="sm" textColor="muted-foreground"><Var name="item.description" value={item.description} /></Text>
+        </If>
         <Group items="baseline" gap="2">
-          <Text fontSize="lg" fontWeight="semibold" textColor="primary"><Var name="item.price.display" value={item.price?.display} /></Text>
+          <If test="item.price.display" value={!!item.price?.display}>
+            <Text fontSize="lg" fontWeight="semibold" textColor="primary"><Var name="item.price.display" value={item.price?.display} /></Text>
+          </If>
           <If test="item.compareAtPrice.display" value={!!item.compareAtPrice?.display}>
             <Text fontSize="sm" textColor="muted-foreground"><Var name="item.compareAtPrice.display" value={item.compareAtPrice?.display} /></Text>
           </If>
@@ -38,9 +44,11 @@ export function MenuDetailPreview({ item, promotionBadge, onOrderClick }: MenuDe
           <Loop each="variants" as="v" data={variants}>
             {(v) => (
               <Button key={v.id} variant="outline" size="sm">
-                <Var name="v.title" value={v.title} />
+                <If test="v.title" value={!!v.title}>
+                  <Text component="span"><Var name="v.title" value={v.title} /></Text>
+                </If>
                 <If test="v.priceModifier.display" value={!!v.priceModifier?.display}>
-                  {' '}<Var name="v.priceModifier.display" value={v.priceModifier?.display} />
+                  <Text component="span" fontSize="sm"><Var name="v.priceModifier.display" value={v.priceModifier?.display} /></Text>
                 </If>
               </Button>
             )}

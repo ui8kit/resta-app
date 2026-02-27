@@ -17,8 +17,12 @@ export function PromotionDetailPreview({ item }: PromotionDetailPreviewProps) {
         <If test="item.discount" value={!!item.discount}>
           <Text fontSize="sm" fontWeight="semibold"><Var name="item.discount" value={item.discount} /></Text>
         </If>
-        <Title order={2}><Var name="item.title" value={item.title} /></Title>
-        <Text fontSize="sm" textColor="muted-foreground"><Var name="item.description" value={item.description} /></Text>
+        <If test="item.title" value={!!item.title}>
+          <Title order={2}><Var name="item.title" value={item.title} /></Title>
+        </If>
+        <If test="item.description" value={!!item.description}>
+          <Text fontSize="sm" textColor="muted-foreground"><Var name="item.description" value={item.description} /></Text>
+        </If>
         <If test="item.validity" value={!!item.validity}>
           <Text fontSize="xs" textColor="muted-foreground"><Var name="item.validity" value={item.validity} /></Text>
         </If>

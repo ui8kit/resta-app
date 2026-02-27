@@ -39,12 +39,16 @@ export function TokensPageView({
     >
       <Block component="section" flex="col" gap="6" data-class="tokens-page-section">
         <Block component="header" flex="col" gap="2" data-class="tokens-page-header">
-          <CardTitle order={2} data-class="tokens-page-title">
-            <Var name="section.title" value={section.title} />
-          </CardTitle>
-          <CardDescription data-class="tokens-page-subtitle">
-            <Var name="section.subtitle" value={section.subtitle} />
-          </CardDescription>
+          <If test="section.title" value={!!section.title}>
+            <CardTitle order={2} data-class="tokens-page-title">
+              <Var name="section.title" value={section.title} />
+            </CardTitle>
+          </If>
+          <If test="section.subtitle" value={!!section.subtitle}>
+            <CardDescription data-class="tokens-page-subtitle">
+              <Var name="section.subtitle" value={section.subtitle} />
+            </CardDescription>
+          </If>
         </Block>
 
         <Grid grid="cols-1" gap="4" data-class="tokens-page-grid">
@@ -52,12 +56,16 @@ export function TokensPageView({
             {(item: DesignSectionItem) => (
               <Card data-class="tokens-item-card">
                 <CardHeader>
-                  <CardTitle order={4} data-class="tokens-item-title">
-                    <Var name="item.title" value={item.title} />
-                  </CardTitle>
-                  <CardDescription data-class="tokens-item-description">
-                    <Var name="item.description" value={item.description} />
-                  </CardDescription>
+                  <If test="item.title" value={!!item.title}>
+                    <CardTitle order={4} data-class="tokens-item-title">
+                      <Var name="item.title" value={item.title} />
+                    </CardTitle>
+                  </If>
+                  <If test="item.description" value={!!item.description}>
+                    <CardDescription data-class="tokens-item-description">
+                      <Var name="item.description" value={item.description} />
+                    </CardDescription>
+                  </If>
                 </CardHeader>
                 <CardContent>
                   <If test="item.badge" value={!!item.badge}>
@@ -65,9 +73,11 @@ export function TokensPageView({
                       <Var name="item.badge" value={item.badge ?? ''} />
                     </Badge>
                   </If>
-                  <Text fontSize="sm" textColor="muted-foreground" data-class="tokens-item-slug">
-                    <Var name="item.slug" value={item.slug} />
-                  </Text>
+                  <If test="item.slug" value={!!item.slug}>
+                    <Text fontSize="sm" textColor="muted-foreground" data-class="tokens-item-slug">
+                      <Var name="item.slug" value={item.slug} />
+                    </Text>
+                  </If>
                 </CardContent>
               </Card>
             )}

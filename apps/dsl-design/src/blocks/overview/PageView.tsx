@@ -42,9 +42,11 @@ export function OverviewPageView({
       <Block component="section" py="8" data-class="design-overview-section">
         <Stack gap="8" max="w-4xl" mx="auto" items="stretch" data-class="design-overview-stack">
           <Stack gap="2" data-class="design-overview-header">
-            <Title fontSize="2xl" fontWeight="bold" data-class="design-overview-title">
-              <Var name="overview.title" value={overview.title} />
-            </Title>
+            <If test="overview.title" value={!!overview.title}>
+              <Title fontSize="2xl" fontWeight="bold" data-class="design-overview-title">
+                <Var name="overview.title" value={overview.title} />
+              </Title>
+            </If>
             <If test="overview.intro" value={!!overview.intro}>
               <Text fontSize="sm" textColor="muted-foreground" data-class="design-overview-intro">
                 <Var name="overview.intro" value={overview.intro} />
@@ -57,12 +59,16 @@ export function OverviewPageView({
               {(s) => (
                 <Card data-class="design-overview-card">
                   <CardHeader>
-                    <CardTitle order={4} data-class="design-overview-card-title">
-                      <Var name="s.title" value={s.title} />
-                    </CardTitle>
-                    <CardDescription data-class="design-overview-card-description">
-                      <Var name="s.description" value={s.description} />
-                    </CardDescription>
+                    <If test="s.title" value={!!s.title}>
+                      <CardTitle order={4} data-class="design-overview-card-title">
+                        <Var name="s.title" value={s.title} />
+                      </CardTitle>
+                    </If>
+                    <If test="s.description" value={!!s.description}>
+                      <CardDescription data-class="design-overview-card-description">
+                        <Var name="s.description" value={s.description} />
+                      </CardDescription>
+                    </If>
                   </CardHeader>
                   <CardContent data-class="design-overview-card-actions">
                     <DomainNavButton

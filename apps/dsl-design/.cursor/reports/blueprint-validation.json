@@ -1,0 +1,97 @@
+{
+  "generatedAt": "2026-02-27T09:11:05.058Z",
+  "blueprintPath": "blueprint.json",
+  "errors": [
+    {
+      "level": "error",
+      "code": "ENTITY_TYPES_FILE_MISSING",
+      "message": "Type file does not exist for entity \"colors\".",
+      "file": "src/types/colors.ts"
+    },
+    {
+      "level": "error",
+      "code": "ENTITY_ITEM_ID_MISSING",
+      "message": "Fixture item #0 for \"components\" is missing \"id\".",
+      "file": "fixtures/components.json"
+    },
+    {
+      "level": "error",
+      "code": "ENTITY_ITEM_ID_MISSING",
+      "message": "Fixture item #1 for \"components\" is missing \"id\".",
+      "file": "fixtures/components.json"
+    },
+    {
+      "level": "error",
+      "code": "ENTITY_ITEM_ID_MISSING",
+      "message": "Fixture item #2 for \"components\" is missing \"id\".",
+      "file": "fixtures/components.json"
+    },
+    {
+      "level": "error",
+      "code": "ENTITY_ITEM_ID_MISSING",
+      "message": "Fixture item #3 for \"components\" is missing \"id\".",
+      "file": "fixtures/components.json"
+    },
+    {
+      "level": "error",
+      "code": "ENTITY_ITEM_ID_MISSING",
+      "message": "Fixture item #4 for \"components\" is missing \"id\".",
+      "file": "fixtures/components.json"
+    },
+    {
+      "level": "error",
+      "code": "ENTITY_ITEM_ID_MISSING",
+      "message": "Fixture item #5 for \"components\" is missing \"id\".",
+      "file": "fixtures/components.json"
+    },
+    {
+      "level": "error",
+      "code": "ENTITY_ITEM_ID_MISSING",
+      "message": "Fixture item #6 for \"components\" is missing \"id\".",
+      "file": "fixtures/components.json"
+    },
+    {
+      "level": "error",
+      "code": "ENTITY_ITEM_ID_MISSING",
+      "message": "Fixture item #7 for \"components\" is missing \"id\".",
+      "file": "fixtures/components.json"
+    },
+    {
+      "level": "error",
+      "code": "ENTITY_ITEM_ID_MISSING",
+      "message": "Fixture item #8 for \"components\" is missing \"id\".",
+      "file": "fixtures/components.json"
+    },
+    {
+      "level": "error",
+      "code": "ENTITY_ITEM_ID_MISSING",
+      "message": "Fixture item #9 for \"components\" is missing \"id\".",
+      "file": "fixtures/components.json"
+    },
+    {
+      "level": "error",
+      "code": "ENTITY_TYPES_FILE_MISSING",
+      "message": "Type file does not exist for entity \"components\".",
+      "file": "src/types/components.ts"
+    },
+    {
+      "level": "error",
+      "code": "ORPHAN_FIXTURE",
+      "message": "Fixture \"fixtures/overview.json\" has collection \"sections\" but is not declared in blueprint entities.",
+      "file": "fixtures/overview.json"
+    },
+    {
+      "level": "error",
+      "code": "ORPHAN_FIXTURE",
+      "message": "Fixture \"fixtures/typography-scale.json\" has collection \"fontSizes\" but is not declared in blueprint entities.",
+      "file": "fixtures/typography-scale.json"
+    },
+    {
+      "level": "error",
+      "code": "ORPHAN_FIXTURE",
+      "message": "Fixture \"fixtures/widgets-demo.json\" has collection \"menuItems\" but is not declared in blueprint entities.",
+      "file": "fixtures/widgets-demo.json"
+    }
+  ],
+  "warnings": []
+}

@@ -33,7 +33,7 @@ export function DesignLayout({
         data-class="design-layout-header"
       />
 
-      <Block flex="row" data-class="design-layout-body">
+      <Block flex="row" gap="6" data-class="design-layout-body">
         <If test="links.length > 0" value={links.length > 0}>
           <Block
             component="aside"
@@ -42,6 +42,7 @@ export function DesignLayout({
             bg="card"
             w="64"
             shrink="0"
+            py="4"
           >
             <Box w="full" h="full" data-class="design-sidebar-content">
               <DashSidebar

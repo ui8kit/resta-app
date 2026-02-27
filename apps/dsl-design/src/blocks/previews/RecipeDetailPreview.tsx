@@ -24,8 +24,12 @@ export function RecipeDetailPreview({ recipe, onOrderClick }: RecipeDetailPrevie
         <If test="recipe.category.title" value={!!recipe.category?.title}>
           <Text fontSize="xs" textColor="muted-foreground"><Var name="recipe.category.title" value={recipe.category?.title} /></Text>
         </If>
-        <Title order={2}><Var name="recipe.title" value={recipe.title} /></Title>
-        <Text fontSize="sm" textColor="muted-foreground"><Var name="recipe.description" value={recipe.description} /></Text>
+        <If test="recipe.title" value={!!recipe.title}>
+          <Title order={2}><Var name="recipe.title" value={recipe.title} /></Title>
+        </If>
+        <If test="recipe.description" value={!!recipe.description}>
+          <Text fontSize="sm" textColor="muted-foreground"><Var name="recipe.description" value={recipe.description} /></Text>
+        </If>
         <Group gap="2" items="center">
           <If test="recipe.time" value={!!recipe.time}>
             <Text fontSize="sm"><Var name="recipe.time" value={recipe.time} /></Text>

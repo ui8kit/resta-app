@@ -13,6 +13,42 @@
   },
   "entities": [
     {
+      "name": "colors",
+      "singular": "Color",
+      "fixture": "fixtures/colors.json",
+      "fixtureType": "ColorsFixture",
+      "itemsKey": "groups",
+      "slugField": "id",
+      "types": "src/types/colors.ts",
+      "routes": [
+        "/colors"
+      ],
+      "views": [
+        "src/blocks/colors/PageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/colors/Page.tsx"
+      ]
+    },
+    {
+      "name": "components",
+      "singular": "Component",
+      "fixture": "fixtures/components.json",
+      "fixtureType": "ComponentsFixture",
+      "itemsKey": "iconSamples",
+      "slugField": "icon",
+      "types": "src/types/components.ts",
+      "routes": [
+        "/components"
+      ],
+      "views": [
+        "src/blocks/components/PageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/components/Page.tsx"
+      ]
+    },
+    {
       "name": "pages",
       "singular": "Page",
       "fixture": "fixtures/pages.json",
@@ -109,7 +145,24 @@
       "file": "src/layouts/DesignLayout.tsx"
     }
   ],
-  "partials": [],
+  "partials": [
+    {
+      "name": "DesignHeader",
+      "file": "src/partials/DesignHeader.tsx"
+    },
+    {
+      "name": "DomainNavButton",
+      "file": "src/partials/DomainNavButton.tsx"
+    },
+    {
+      "name": "Sidebar",
+      "file": "src/partials/Sidebar.tsx"
+    },
+    {
+      "name": "ThemeToggle",
+      "file": "src/partials/ThemeToggle.tsx"
+    }
+  ],
   "components": {
     "index": "src/components/index.ts",
     "count": 17

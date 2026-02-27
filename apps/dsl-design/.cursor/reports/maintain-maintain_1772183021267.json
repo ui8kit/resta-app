@@ -1,0 +1,66 @@
+{
+  "runId": "maintain_1772183021267",
+  "generatedAt": "2026-02-27T09:03:41.267Z",
+  "duration": 102,
+  "success": true,
+  "results": [
+    {
+      "checker": "invariants",
+      "description": "Validate route, fixture, block, and context invariants",
+      "success": true,
+      "startedAt": "2026-02-27T09:03:41.268Z",
+      "finishedAt": "2026-02-27T09:03:41.359Z",
+      "duration": 91,
+      "issues": [],
+      "stats": {
+        "errorCount": 0,
+        "warningCount": 0
+      }
+    },
+    {
+      "checker": "view-exports",
+      "description": "Validate that View files export one interface and one function",
+      "success": true,
+      "startedAt": "2026-02-27T09:03:41.277Z",
+      "finishedAt": "2026-02-27T09:03:41.359Z",
+      "duration": 82,
+      "issues": [],
+      "stats": {
+        "filesScanned": 8,
+        "errorCount": 0
+      }
+    },
+    {
+      "checker": "contracts",
+      "description": "Run blueprint contract checks for fixtures, types, routes, and views",
+      "success": true,
+      "startedAt": "2026-02-27T09:03:41.359Z",
+      "finishedAt": "2026-02-27T09:03:41.369Z",
+      "duration": 10,
+      "issues": [],
+      "stats": {
+        "entitiesChecked": 5,
+        "errorCount": 0
+      }
+    },
+    {
+      "checker": "clean",
+      "description": "Clean generated artifacts and caches",
+      "success": true,
+      "startedAt": "2026-02-27T09:03:41.365Z",
+      "finishedAt": "2026-02-27T09:03:41.369Z",
+      "duration": 4,
+      "issues": [],
+      "stats": {
+        "dryRun": true,
+        "removedCount": 0
+      },
+      "output": {
+        "removed": []
+      },
+      "hint": "Dry-run only. Use --execute to apply deletion."
+    }
+  ],
+  "errors": [],
+  "warnings": []
+}

@@ -44,10 +44,14 @@ export function WidgetsPageView({
   const [showToast, setShowToast] = useState(false);
   const { hero, menuItems, accordionItems } = widgetsDemo;
 
-  const handleOrderClick = (e: React.MouseEvent) => {
+  function handleOrderClick(e: React.MouseEvent) {
     e.preventDefault();
     setShowToast(true);
-  };
+  }
+
+  function handleCloseToast() {
+    setShowToast(false);
+  }
 
   return (
     <DesignLayout
@@ -90,15 +94,23 @@ export function WidgetsPageView({
                           -15%
                         </Badge>
                       </If>
-                      <Text fontSize="xs" textColor="muted-foreground">
-                        <Var name="item.category.title" value={item.category?.title} />
-                      </Text>
-                      <CardTitle order={4}><Var name="item.title" value={item.title} /></CardTitle>
-                      <CardDescription><Var name="item.description" value={item.description} /></CardDescription>
-                      <Group items="baseline" gap="2" mt="2">
-                        <Text fontSize="lg" fontWeight="semibold" textColor="primary">
-                          <Var name="item.price.display" value={item.price?.display} />
+                      <If test="item.category.title" value={!!item.category?.title}>
+                        <Text fontSize="xs" textColor="muted-foreground">
+                          <Var name="item.category.title" value={item.category?.title} />
                         </Text>
+                      </If>
+                      <If test="item.title" value={!!item.title}>
+                        <CardTitle order={4}><Var name="item.title" value={item.title} /></CardTitle>
+                      </If>
+                      <If test="item.description" value={!!item.description}>
+                        <CardDescription><Var name="item.description" value={item.description} /></CardDescription>
+                      </If>
+                      <Group items="baseline" gap="2" mt="2">
+                        <If test="item.price.display" value={!!item.price?.display}>
+                          <Text fontSize="lg" fontWeight="semibold" textColor="primary">
+                            <Var name="item.price.display" value={item.price?.display} />
+                          </Text>
+                        </If>
                         <If test="item.compareAtPrice.display" value={!!item.compareAtPrice?.display}>
                           <Text fontSize="sm" textColor="muted-foreground">
                             <Var name="item.compareAtPrice.display" value={item.compareAtPrice?.display} />
@@ -111,9 +123,11 @@ export function WidgetsPageView({
                         <Loop each="item.variants" as="v" data={item.variants ?? []}>
                           {(v) => (
                             <Button variant="outline" size="sm">
-                              <Var name="v.title" value={v.title} />
+                              <If test="v.title" value={!!v.title}>
+                                <Text component="span"><Var name="v.title" value={v.title} /></Text>
+                              </If>
                               <If test="v.priceModifier.display" value={!!v.priceModifier?.display}>
-                                {' '}<Var name="v.priceModifier.display" value={v.priceModifier?.display} />
+                                <Text component="span" fontSize="sm"><Var name="v.priceModifier.display" value={v.priceModifier?.display} /></Text>
                               </If>
                             </Button>
                           )}
@@ -234,14 +248,20 @@ export function WidgetsPageView({
             <Accordion type="single" collapsible defaultValue="faq-1" max="w-md">
               <Loop each="accordionItems" as="item" data={accordionItems}>
                 {(item) => (
-                  <AccordionItem key={item.id} value={item.id}>
-                    <AccordionTrigger><Var name="item.trigger" value={item.trigger} /></AccordionTrigger>
-                    <AccordionContent>
-                      <Text fontSize="sm" textColor="muted-foreground">
-                        <Var name="item.content" value={item.content} />
-                      </Text>
-                    </AccordionContent>
-                  </AccordionItem>
+                    <AccordionItem key={item.id} value={item.id}>
+                      <AccordionTrigger>
+                        <If test="item.trigger" value={!!item.trigger}>
+                          <Text component="span"><Var name="item.trigger" value={item.trigger} /></Text>
+                        </If>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <If test="item.content" value={!!item.content}>
+                          <Text fontSize="sm" textColor="muted-foreground">
+                            <Var name="item.content" value={item.content} />
+                          </Text>
+                        </If>
+                      </AccordionContent>
+                    </AccordionItem>
                 )}
               </Loop>
             </Accordion>
@@ -260,7 +280,7 @@ export function WidgetsPageView({
             </Sheet>
           </Block>
 
-          <Toast visible={showToast} onClose={() => setShowToast(false)} duration={9000} />
+          <Toast visible={showToast} onClose={handleCloseToast} duration={9000} />
         </Stack>
       </Block>
     </DesignLayout>

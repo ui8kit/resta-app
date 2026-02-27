@@ -23,10 +23,14 @@ export function PagesPageView({
   const { menuDetail, recipeDetail, promotionDetail } = pagesPreview;
   const promotionBadge = '-15%';
 
-  const handleOrderClick = (e: React.MouseEvent) => {
+  function handleOrderClick(e: React.MouseEvent) {
     e.preventDefault();
     setShowToast(true);
-  };
+  }
+
+  function handleCloseToast() {
+    setShowToast(false);
+  }
 
   return (
     <DesignLayout
@@ -78,7 +82,7 @@ export function PagesPageView({
             </Block>
           </Block>
 
-          <Toast visible={showToast} onClose={() => setShowToast(false)} duration={9000} />
+          <Toast visible={showToast} onClose={handleCloseToast} duration={9000} />
         </Stack>
       </Block>
     </DesignLayout>

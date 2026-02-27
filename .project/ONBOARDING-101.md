@@ -360,8 +360,10 @@ fixtures/*.json
 
 ### 9.1 Разработка
 
+Команды выполняются из корня приложения. Для основного приложения — `apps/dsl`, для дизайн-системы — `apps/dsl-design`.
+
 ```bash
-cd apps/dsl
+cd apps/dsl          # или cd apps/dsl-design
 bun run dev
 ```
 
@@ -382,7 +384,7 @@ bun run typecheck     # TypeScript
 
 ### 9.3 Maintain (проверки проекта)
 
-Конфиг живёт в корне приложения: **`apps/dsl/maintain.config.json`** (или в корне другого app). Схема: `packages/maintain/schemas/maintain.config.schema.json`.
+Конфиг живёт в корне приложения: **`apps/dsl/maintain.config.json`** или **`apps/dsl-design/maintain.config.json`**. Схема: `packages/maintain/schemas/maintain.config.schema.json`.
 
 ```bash
 bun run maintain:check      # Все чекеры из maintain.config.json
@@ -406,9 +408,9 @@ bun run maintain:validate   # Только validate-чекеры (invariants, fi
 ### 9.4 Генерация
 
 ```bash
-bun run generate      # Генерирует React в ../react
+bun run generate      # Генерирует React: в dsl → ../react, в dsl-design → ../react-design
 bun run finalize      # Собирает финальное приложение
-bun run dist:app      # Полный пайплайн (lint + validate + generate + finalize)
+bun run dist:app     # Полный пайплайн (lint + validate + generate + finalize)
 ```
 
 ### 9.5 Blueprint (структура приложения)

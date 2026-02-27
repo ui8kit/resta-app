@@ -1,12 +1,15 @@
 # .project — Документация проекта
 
-## Возвращение в проект
+В монорепозитории два рабочих DSL-приложения с одинаковым уровнем качества и проверок:
 
-**[CURSOR-AND-PROJECT-REFRESHER.md](./CURSOR-AND-PROJECT-REFRESHER.md)** — быстрый вводный курс: режимы Cursor (Chat, Agent, Plan, Debug), как общаться с AI, напоминание о структуре проекта и первых командах. Начни с него, если давно не заходил в репозиторий.
+| Приложение | Назначение | Сгенерированный вывод |
+|------------|------------|------------------------|
+| **apps/dsl** | Основное приложение (ресторан: лендинг, меню, блог и т.д.) | apps/react |
+| **apps/dsl-design** | Design system (превью токенов, типографики, компонентов, виджетов) | apps/react-design |
 
-## Backlog
+В **apps/dsl-design** включён сокращённый набор maintain-чекеров (invariants, viewExports, contracts, clean); при необходимости в `maintain.config.json` можно добавить dataClassConflicts, componentTag, colorTokens, genLint после приведения кода к правилам. Перед полным запуском `bun run dist:app` в dsl-design нужно устранить предупреждения `bun run lint:dsl` (обёртка `<Var>` в `<If>`, семантические обёртки); до этого минимальный чек перед коммитом: `bun run maintain:validate` и `bun run typecheck`.
 
-**[BACKLOG.md](./BACKLOG.md)** — идеи, технические проверки и рекомендации. Добавляй идеи, проверяй на реализуемость.
+Оба приложения используют один и тот же рабочий процесс: основные команды (lint:dsl, validate, maintain:validate, typecheck, generate); в **apps/dsl** дополнительно — lint:gen и test:contracts. Конфиги maintain.config.json и ui8kit.config.json в корне каждого app. Подробности — в [WORKFLOW.md](./WORKFLOW.md).
 
 ## Для стажёров
 
@@ -15,7 +18,7 @@
 Начни с него, если ты новый в проекте. Гайд покрывает:
 
 - Окружение и первые команды
-- Структуру монорепозитория
+- Структуру монорепозитория (в т.ч. dsl и dsl-design)
 - DSL-компоненты (If, Var, Loop, Slot)
 - Семантические пропсы и data-class
 - Поток данных (fixtures → context → routes → blocks)

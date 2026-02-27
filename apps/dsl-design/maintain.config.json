@@ -8,16 +8,7 @@
     "invariants": {
       "routes": {
         "appFile": "src/App.tsx",
-        "required": [
-          "/",
-          "/colors",
-          "/tokens",
-          "/typography",
-          "/components",
-          "/primitives",
-          "/widgets",
-          "/pages"
-        ]
+        "required": ["/", "/colors", "/tokens", "/typography", "/components", "/primitives", "/widgets", "/pages"]
       },
       "fixtures": {
         "pageFile": "fixtures/shared/page.json",

@@ -54,12 +54,16 @@ export function ComponentsPageView({
       <Block component="section" py="8" data-class="design-components-section">
         <Stack gap="8" max="w-4xl" mx="auto" items="stretch" data-class="design-components-stack">
           <Block flex="col" gap="2" data-class="design-components-header">
-            <Title fontSize="2xl" fontWeight="bold" data-class="design-components-title">
-              <Var name="components.title" value={components.title} />
-            </Title>
-            <Text fontSize="sm" textColor="muted-foreground" data-class="design-components-subtitle">
-              <Var name="components.subtitle" value={components.subtitle} />
-            </Text>
+            <If test="components.title" value={!!components.title}>
+              <Title fontSize="2xl" fontWeight="bold" data-class="design-components-title">
+                <Var name="components.title" value={components.title} />
+              </Title>
+            </If>
+            <If test="components.subtitle" value={!!components.subtitle}>
+              <Text fontSize="sm" textColor="muted-foreground" data-class="design-components-subtitle">
+                <Var name="components.subtitle" value={components.subtitle} />
+              </Text>
+            </If>
           </Block>
 
           <Card data-class="design-components-card">
@@ -71,9 +75,11 @@ export function ComponentsPageView({
               <Group gap="2" flex="wrap" data-class="design-components-button-variants">
                 <Loop each="buttonVariants" as="v" data={buttonVariants}>
                   {(v) => (
-                    <Button variant={v as never} size="sm" data-class="design-components-button">
-                      <Var name="v" value={v} />
-                    </Button>
+                    <If test="v" value={!!v}>
+                      <Button variant={v as never} size="sm" data-class="design-components-button">
+                        <Var name="v" value={v} />
+                      </Button>
+                    </If>
                   )}
                 </Loop>
               </Group>
@@ -92,10 +98,10 @@ export function ComponentsPageView({
                     <Button variant="outline" size={s as never} data-class="design-components-button">
                       <If test="s === 'icon'" value={s === 'icon'}>
                         <Icon lucideIcon={getIconByName('Settings')!} size="sm" />
+                        <Else>
+                          <Text component="span"><Var name="s" value={s} /></Text>
+                        </Else>
                       </If>
-                      <Else>
-                        <Var name="s" value={s} />
-                      </Else>
                     </Button>
                   )}
                 </Loop>
@@ -112,9 +118,11 @@ export function ComponentsPageView({
               <Group gap="2" flex="wrap" data-class="design-components-badge-variants">
                 <Loop each="badgeVariants" as="v" data={badgeVariants}>
                   {(v) => (
-                    <Badge variant={v as never} data-class="design-components-badge">
-                      <Var name="v" value={v} />
-                    </Badge>
+                    <If test="v" value={!!v}>
+                      <Badge variant={v as never} data-class="design-components-badge">
+                        <Var name="v" value={v} />
+                      </Badge>
+                    </If>
                   )}
                 </Loop>
               </Group>
@@ -130,9 +138,11 @@ export function ComponentsPageView({
               <Group gap="2" items="center" flex="wrap" data-class="design-components-badge-sizes">
                 <Loop each="badgeSizes" as="s" data={badgeSizes}>
                   {(s) => (
-                    <Badge variant="secondary" size={s as never} data-class="design-components-badge">
-                      <Var name="s" value={s} />
-                    </Badge>
+                    <If test="s" value={!!s}>
+                      <Badge variant="secondary" size={s as never} data-class="design-components-badge">
+                        <Var name="s" value={s} />
+                      </Badge>
+                    </If>
                   )}
                 </Loop>
               </Group>
@@ -149,9 +159,11 @@ export function ComponentsPageView({
                 <Loop each="fieldTypes" as="f" data={fieldTypes}>
                   {(f) => (
                     <Block key={f.type} data-class="design-components-field-row">
-                      <Text fontSize="xs" textColor="muted-foreground" mb="1">
-                        <Var name="f.label" value={f.label} />
-                      </Text>
+                      <If test="f.label" value={!!f.label}>
+                        <Text fontSize="xs" textColor="muted-foreground" mb="1">
+                          <Var name="f.label" value={f.label} />
+                        </Text>
+                      </If>
                       <If test="f.type === 'text'" value={f.type === 'text'}>
                         <Field type="text" placeholder={f.placeholder} data-class="design-components-field" />
                       </If>
@@ -167,9 +179,11 @@ export function ComponentsPageView({
                       <If test="f.type === 'checkbox'" value={f.type === 'checkbox'}>
                         <Group gap="2" items="center">
                           <Field type="checkbox" id={`cb-${f.type}`} data-class="design-components-field" />
-                          <Text component="label" fontSize="sm" htmlFor={`cb-${f.type}`}>
-                            <Var name="f.optionLabel" value={f.optionLabel ?? 'Label'} />
-                          </Text>
+                          <If test="f.optionLabel" value={!!f.optionLabel}>
+                            <Text component="label" fontSize="sm" htmlFor={`cb-${f.type}`}>
+                              <Var name="f.optionLabel" value={f.optionLabel ?? 'Label'} />
+                            </Text>
+                          </If>
                         </Group>
                       </If>
                       <If test="f.type === 'radio'" value={f.type === 'radio'}>
@@ -178,9 +192,11 @@ export function ComponentsPageView({
                             {(opt) => (
                               <Group gap="2" items="center">
                                 <Field type="radio" name={`choice-${f.type}`} value={opt.value} id={`ra-${f.type}-${opt.value}`} data-class="design-components-field" />
-                                <Text component="label" fontSize="sm" htmlFor={`ra-${f.type}-${opt.value}`}>
-                                  <Var name="opt.label" value={opt.label} />
-                                </Text>
+                                <If test="opt.label" value={!!opt.label}>
+                                  <Text component="label" fontSize="sm" htmlFor={`ra-${f.type}-${opt.value}`}>
+                                    <Var name="opt.label" value={opt.label} />
+                                  </Text>
+                                </If>
                               </Group>
                             )}
                           </Loop>
@@ -189,7 +205,13 @@ export function ComponentsPageView({
                       <If test="f.type === 'select'" value={f.type === 'select'}>
                         <Field component="select" data-class="design-components-field">
                           <Loop each="f.options" as="opt" data={f.options ?? []}>
-                            {(opt) => <option value={opt.value}><Var name="opt.label" value={opt.label} /></option>}
+                            {(opt) => (
+                              <option value={opt.value}>
+                                <If test="opt.label" value={!!opt.label}>
+                                  <Text component="span"><Var name="opt.label" value={opt.label} /></Text>
+                                </If>
+                              </option>
+                            )}
                           </Loop>
                         </Field>
                       </If>
@@ -220,9 +242,11 @@ export function ComponentsPageView({
                           <Icon lucideIcon={IconComponent} size="lg" />
                           <Icon lucideIcon={IconComponent} size="xl" />
                         </Group>
-                        <Text fontSize="xs" textColor="muted-foreground" mt="1">
-                          <Var name="sample.label" value={sample.label} />
-                        </Text>
+                        <If test="sample.label" value={!!sample.label}>
+                          <Text fontSize="xs" textColor="muted-foreground" mt="1">
+                            <Var name="sample.label" value={sample.label} />
+                          </Text>
+                        </If>
                       </Block>
                     );
                   }}
