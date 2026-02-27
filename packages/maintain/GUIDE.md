@@ -31,7 +31,7 @@ What you get:
 Think in three layers:
 
 1. **Config** (`maintain.config.json`)  
-   Decides which checkers are enabled and their parameters.
+   Decides which checkers are enabled and their parameters. Config file lives in the app root (e.g. `apps/dsl/maintain.config.json`). Schema: `schemas/maintain.config.schema.json`.
 2. **Run command** (`maintain run/validate/audit/clean`)  
    Chooses a checker set and runtime options.
 3. **Report** (`.cursor/reports/maintain-*.json`)  
@@ -185,6 +185,54 @@ This is CI-friendly by default.
 
 ---
 
+## Scenario F: “I want to check data-class conflicts”
+
+Enable the **dataClassConflicts** checker in config (scope, pattern, optional ignoreDataClasses). Then:
+
+```bash
+maintain run --config maintain.config.json --check dataClassConflicts
+```
+
+Use when you need to avoid duplicate or conflicting `data-class` values in TSX.
+
+---
+
+## Scenario G: “I want to validate component tags (semantic HTML)”
+
+Enable the **componentTag** checker (scope, pattern, optional tagMapPath). Then:
+
+```bash
+maintain run --config maintain.config.json --check componentTag
+```
+
+Uses the generator’s component–tag map (or custom `tagMapPath`) to ensure allowed tags per component.
+
+---
+
+## Scenario H: “I want to enforce color tokens only”
+
+Enable the **colorTokens** checker (scope, pattern, utilityPropsMapPath, optional tokenSource). Then:
+
+```bash
+maintain run --config maintain.config.json --check colorTokens
+```
+
+Ensures only defined design tokens are used for colors (e.g. from `utility-props.map`).
+
+---
+
+## Scenario I: “I want DSL/lint rules on blocks and layouts (GEN001–GEN008)”
+
+Enable the **genLint** checker (scope, pattern, rules with severity per GEN001–GEN008). Then:
+
+```bash
+maintain run --config maintain.config.json --check genLint
+```
+
+Runs generator-backed lint rules on blocks, layouts, and partials.
+
+---
+
 ## 5) How to read failures
 
 Sample output:
@@ -208,9 +256,20 @@ Recommended workflow:
 
 ## Enable only what you need
 
-A checker runs only if its section exists under `checkers`.
+A checker runs only if its section exists under `checkers`. Available checker keys:
 
-Example:
+- **refactorAudit** — mapping, scope, maxMatchesPerEntry
+- **invariants** — routes, fixtures, blocks, context
+- **fixtures** — targets (file + schema per target)
+- **viewExports** — pattern, exportShape
+- **contracts** — blueprint, appFile, entityTypeRequireInlineBody
+- **dataClassConflicts** — scope, pattern, ignoreDataClasses (optional)
+- **componentTag** — scope, pattern, tagMapPath (optional, null = use generator default)
+- **colorTokens** — scope, pattern, utilityPropsMapPath, tokenSource (optional, e.g. `utility-props.map`)
+- **genLint** — scope, pattern, rules (GEN001–GEN008 with severity: error/warn/info)
+- **clean** — paths, pathsByMode (full/dist), includeTsBuildInfo
+
+Example (minimal):
 
 ```json
 {
@@ -307,5 +366,5 @@ For day-to-day development:
 ## 9) What to read next
 
 - `README.md` — high-level package overview
-- `schemas/maintain.config.schema.json` — exact config contract
-- `apps/dsl/maintain.config.json` (in this repo) — real project example
+- `schemas/maintain.config.schema.json` — exact config contract (includes all checker configs: invariants, fixtures, viewExports, contracts, dataClassConflicts, componentTag, colorTokens, genLint, clean, refactorAudit)
+- `apps/dsl/maintain.config.json` (in this repo) — real project example with all checkers enabled

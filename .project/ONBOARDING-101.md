@@ -382,20 +382,26 @@ bun run typecheck     # TypeScript
 
 ### 9.3 Maintain (проверки проекта)
 
+Конфиг живёт в корне приложения: **`apps/dsl/maintain.config.json`** (или в корне другого app). Схема: `packages/maintain/schemas/maintain.config.schema.json`.
+
 ```bash
 bun run maintain:check      # Все чекеры из maintain.config.json
-bun run maintain:validate   # Только validate-чекеры (invariants, view-exports, contracts)
+bun run maintain:validate   # Только validate-чекеры (invariants, fixtures, view-exports, contracts)
 ```
 
-**Maintain checkers** (настраиваются в `maintain.config.json`):
+**Maintain checkers** (включаются секциями в `checkers` в `maintain.config.json`):
 - **invariants** — роуты, fixtures, blocks, context;
 - **fixtures** — соответствие JSON схемам;
-- **viewExports** — экспорт View-компонентов;
+- **viewExports** — экспорт View-компонентов (pattern, exportShape);
 - **contracts** — соответствие blueprint и App;
-- **refactorAudit** — аудит для рефакторинга;
-- **clean** — очистка dist/node_modules.
+- **refactorAudit** — аудит для рефакторинга (mapping, scope);
+- **dataClassConflicts** — конфликты `data-class` в scope (pattern, ignoreDataClasses);
+- **componentTag** — допустимые теги для компонентов (scope, pattern, tagMapPath);
+- **colorTokens** — использование только токенов цветов (scope, pattern, utilityPropsMapPath);
+- **genLint** — правила GEN001–GEN008 для блоков/лейаутов/partials (scope, pattern, rules);
+- **clean** — очистка dist/node_modules (paths, pathsByMode).
 
-Maintain может использовать `@ui8kit/generator/lib` для проверки component+tag (интеграция с ui8kit-validate).
+Скрипты валидации/линтинга в `apps/dsl/scripts/` (validate-fixtures, validate-invariants, validate-view-exports, lint-gen) приводятся в соответствие с конфигом maintain; основная логика проверок — в пакете `@ui8kit/maintain`.
 
 ### 9.4 Генерация
 
@@ -449,7 +455,7 @@ bun run clean         # Полная очистка (node_modules, outDir)
 
 - **HtmlConverterService** — при генерации HTML→CSS проверяет data-class + тег;
 - **ui8kit-validate** — при проверке TSX;
-- **Maintain** — через `@ui8kit/generator/lib`.
+- **Maintain** — чекер **componentTag** (в `maintain.config.json`) проверяет соответствие тегов; при необходимости задаётся `tagMapPath` или используется встроенная карта из generator.
 
 Импорт для своих чекеров:
 
@@ -676,6 +682,8 @@ bun run typecheck
 - `.cursor/rules/project-structure.mdc` — структура проекта
 - `.cursor/rules/ui8kit-architecture.mdc` — архитектура UI8Kit
 - `packages/maintain/GUIDE.md` — работа с maintain (checkers, validate, audit, clean)
+- `packages/maintain/schemas/maintain.config.schema.json` — схема конфига maintain
+- `apps/dsl/maintain.config.json` — пример конфига со всеми чекерами (invariants, fixtures, viewExports, contracts, dataClassConflicts, componentTag, colorTokens, genLint, clean)
 - `packages/generator/docs/rebrand-automation-101.md` — Blueprint и rebrand
 - `packages/generator/src/lib/component-tag-map.json` — карта component→теги для валидации
 - `@ui8kit/generator/lib` — API валидации (`isTagAllowedForComponent`, `validateComponentTag`)
