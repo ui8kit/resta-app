@@ -183,7 +183,7 @@ export class TsxParser {
         if (!ts.isJsxAttribute(attribute)) {
           continue;
         }
-        const propName = attribute.name.text;
+        const propName = this.readJsxAttributeName(attribute.name);
         const value = this.readJsxAttributeValue(attribute.initializer);
         if (value !== undefined) {
           props[propName] = value;
@@ -242,10 +242,14 @@ export class TsxParser {
     if (ts.isPropertyAccessExpression(name)) {
       return name.name.text;
     }
-    if (ts.isThis(name)) {
-      return 'this';
-    }
     return undefined;
+  }
+
+  private readJsxAttributeName(name: ts.JsxAttributeName): string {
+    if (ts.isIdentifier(name)) {
+      return name.text;
+    }
+    return `${name.namespace.text}:${name.name.text}`;
   }
 
   private readJsxAttributeValue(

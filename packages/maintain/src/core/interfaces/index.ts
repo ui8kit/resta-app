@@ -9,6 +9,7 @@ export type {
   ViewExportsCheckerConfig,
   ViewExportShape,
   ContractTestsCheckerConfig,
+  CleanMode,
   CleanCheckerConfig,
   DataClassConflictCheckerConfig,
   ComponentTagCheckerConfig,
