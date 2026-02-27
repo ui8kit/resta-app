@@ -1,5 +1,5 @@
 import type { IService, IServiceContext, RouteConfig } from '../../core/interfaces';
-import { HtmlConverterService } from '../html-converter';
+import { HtmlConverterService, type HtmlConverterWarning } from '../html-converter';
 import { join } from 'node:path';
 import { emitVariantsApplyCss } from '../../scripts/emit-variants-apply.js';
 import { createNodeFileSystem } from '../../core/filesystem';
@@ -34,6 +34,7 @@ export interface CssServiceOutput {
     size: number;
     type: 'apply' | 'pure' | 'variants';
   }>;
+  warnings: HtmlConverterWarning[];
 }
 
 export interface CssFileSystem {
@@ -88,6 +89,7 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
     const allApplyCss: string[] = [];
     const allPureCss: string[] = [];
     const generatedFiles: CssServiceOutput['files'] = [];
+    const warnings: HtmlConverterWarning[] = [];
 
     let variantsCss = '';
     try {
@@ -117,6 +119,12 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
         if (pureCss) {
           allPureCss.push(result.pureCss);
         }
+        for (const warning of result.warnings ?? []) {
+          warnings.push({
+            ...warning,
+            file: warning.file ?? htmlPath,
+          });
+        }
 
         this.context.logger.debug(`Processed CSS for route: ${routePath}`);
       } catch (error) {
@@ -140,7 +148,7 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
       this.context.logger.info(`Generated ${pureCssPath} (${mergedPureCss.length} bytes)`);
     }
 
-    return { files: generatedFiles };
+    return { files: generatedFiles, warnings };
   }
 
   async dispose(): Promise<void> {}

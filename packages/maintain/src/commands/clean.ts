@@ -26,6 +26,7 @@ export function registerCleanCommand(program: Command): void {
     .option('--mode <mode>', 'Clean mode: full|dist (uses pathsByMode when defined)', 'dist')
     .option('--paths <paths>', 'Comma-separated paths override (overrides config)')
     .option('--execute', 'Apply deletion (default is dry-run)', false)
+    .option('--verbose', 'Print every issue with full details', false)
     .action(
       async (options: {
         cwd: string;
@@ -33,6 +34,7 @@ export function registerCleanCommand(program: Command): void {
         mode?: string;
         paths?: string;
         execute?: boolean;
+        verbose?: boolean;
       }) => {
         const mode = parseMode(options.mode);
         const overridePaths = parsePaths(options.paths);
@@ -43,6 +45,7 @@ export function registerCleanCommand(program: Command): void {
           checkerNames: ['clean'],
           mode: 'clean',
           dryRun: !options.execute,
+          verbose: options.verbose,
           mutateConfig: (config) => {
             const currentConfig: CleanCheckerConfig | undefined = config.checkers.clean;
             const configPaths =

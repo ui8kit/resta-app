@@ -42,6 +42,7 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
             `Blueprint file not found: ${this.relative(context.root, blueprintPath)}`,
             {
               hint: 'Run `bun run blueprint:scan` to generate blueprint.json.',
+              suggestion: 'Generate blueprint.json before running contract validation.',
             }
           ),
         ],
@@ -52,7 +53,10 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
     const appPath = resolve(context.root, config.appFile ?? 'src/App.tsx');
     if (!existsSync(appPath)) {
       issues.push(
-        this.createIssue('error', 'APP_FILE_MISSING', `App file not found: ${this.relative(context.root, appPath)}`)
+        this.createIssue('error', 'APP_FILE_MISSING', `App file not found: ${this.relative(context.root, appPath)}`, {
+          file: this.relative(context.root, appPath),
+          hint: 'Ensure App.tsx exists or set checkers.contracts.appFile.',
+        })
       );
       return { success: false, issues };
     }
@@ -70,6 +74,7 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
             `Fixture is missing for entity "${entity.name}".`,
             {
               file: entity.fixture,
+              hint: 'Create the fixture file referenced by blueprint.json.',
             }
           )
         );
@@ -86,6 +91,9 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
             `Fixture "${entity.fixture}" has no "${entity.itemsKey}" items.`,
             {
               file: entity.fixture,
+              expected: `Non-empty array "${entity.itemsKey}"`,
+              received: 'Missing/empty/non-array value',
+              hint: 'Populate fixture items with at least one entity record.',
             }
           )
         );
@@ -101,6 +109,9 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
             `First item in fixture "${entity.fixture}" must be an object.`,
             {
               file: entity.fixture,
+              expected: 'Object item',
+              received: 'Non-object first array element',
+              hint: 'Ensure fixture items are objects with typed fields.',
             }
           )
         );
@@ -116,6 +127,7 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
             `Type file missing for entity "${entity.name}".`,
             {
               file: entity.types,
+              hint: 'Generate or restore the type file declared in blueprint.json.',
             }
           )
         );
@@ -136,6 +148,8 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
               `Type "${entity.singular}" was not found in "${entity.types}". Expected inline object or interface (strict shape applies to entity types when entityTypeRequireInlineBody is true).`,
               {
                 file: entity.types,
+                hint: `Export ${entity.singular} as interface or inline type in ${entity.types}.`,
+                suggestion: `Add: export interface ${entity.singular} { ... }`,
               }
             )
           );
@@ -151,6 +165,9 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
                   `Fixture "${entity.fixture}" is missing required field "${field}" from "${entity.singular}".`,
                   {
                     file: entity.fixture,
+                    expected: field,
+                    received: 'Missing field in fixture item',
+                    hint: `Add required field "${field}" to fixture records for ${entity.name}.`,
                   }
                 )
               );
@@ -166,6 +183,7 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
               `Type "${entity.singular}" was not found in "${entity.types}".`,
               {
                 file: entity.types,
+                hint: `Export ${entity.singular} type in ${entity.types}.`,
               }
             )
           );
@@ -181,6 +199,7 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
               `Route "${route}" is not registered in App.tsx.`,
               {
                 file: this.relative(context.root, appPath),
+                hint: `Add route "${route}" to App.tsx Route declarations.`,
               }
             )
           );
@@ -193,6 +212,7 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
           issues.push(
             this.createIssue('error', 'CONTRACT_ROUTE_FILE_MISSING', `Route file "${routeFile}" is missing.`, {
               file: routeFile,
+              hint: 'Create the missing route component file or update blueprint routes.',
             })
           );
         }
@@ -204,6 +224,7 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
           issues.push(
             this.createIssue('error', 'CONTRACT_VIEW_FILE_MISSING', `View file "${viewFile}" is missing.`, {
               file: viewFile,
+              hint: 'Create the missing View component or update blueprint entity.views.',
             })
           );
         }

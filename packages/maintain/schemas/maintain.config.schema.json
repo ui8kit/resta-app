@@ -26,7 +26,7 @@
     },
     "checkers": {
       "type": "object",
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "refactorAudit": {
           "type": "object",
@@ -247,6 +247,129 @@
             "includeTsBuildInfo": {
               "type": "boolean",
               "default": true
+            }
+          }
+        },
+        "dataClassConflicts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope",
+            "pattern"
+          ],
+          "properties": {
+            "scope": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "pattern": {
+              "type": "string"
+            },
+            "ignoreDataClasses": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "componentTag": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope",
+            "pattern"
+          ],
+          "properties": {
+            "scope": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "pattern": {
+              "type": "string"
+            },
+            "tagMapPath": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "colorTokens": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope",
+            "pattern",
+            "utilityPropsMapPath"
+          ],
+          "properties": {
+            "scope": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "pattern": {
+              "type": "string"
+            },
+            "tokenSource": {
+              "type": "string",
+              "enum": [
+                "utility-props.map"
+              ]
+            },
+            "utilityPropsMapPath": {
+              "type": "string"
+            }
+          }
+        },
+        "genLint": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope",
+            "pattern"
+          ],
+          "properties": {
+            "scope": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "pattern": {
+              "type": "string"
+            },
+            "rules": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string",
+                "enum": [
+                  "error",
+                  "warn",
+                  "info"
+                ]
+              },
+              "properties": {
+                "GEN001": { "type": "string", "enum": ["error", "warn", "info"] },
+                "GEN002": { "type": "string", "enum": ["error", "warn", "info"] },
+                "GEN003": { "type": "string", "enum": ["error", "warn", "info"] },
+                "GEN004": { "type": "string", "enum": ["error", "warn", "info"] },
+                "GEN005": { "type": "string", "enum": ["error", "warn", "info"] },
+                "GEN006": { "type": "string", "enum": ["error", "warn", "info"] },
+                "GEN007": { "type": "string", "enum": ["error", "warn", "info"] },
+                "GEN008": { "type": "string", "enum": ["error", "warn", "info"] }
+              }
             }
           }
         }

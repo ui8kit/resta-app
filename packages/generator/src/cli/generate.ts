@@ -430,6 +430,16 @@ async function runPipeline(
     if (stages.includes('css') && g.cssFiles > 0) console.log(`  CSS files: ${g.cssFiles}`);
     if (stages.includes('html') && g.htmlPages > 0) console.log(`  HTML pages: ${g.htmlPages}`);
     if (stages.includes('postcss') && g.postcssFiles > 0) console.log(`  PostCSS: styles.css generated`);
+    if (result.warnings.length > 0) {
+      console.log(chalk.yellow('\n  Warnings:'));
+      for (const warning of result.warnings) {
+        const location = warning.file ? ` (${warning.file})` : '';
+        console.log(`    [${warning.stage}] [${warning.code}] ${warning.message}${location}`);
+        if (warning.hint) {
+          console.log(`      hint: ${warning.hint}`);
+        }
+      }
+    }
     console.log();
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);

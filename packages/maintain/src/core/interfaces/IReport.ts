@@ -7,8 +7,13 @@ export interface Issue {
   checker?: string;
   file?: string;
   line?: number;
+  column?: number;
   hint?: string;
+  suggestion?: string;
+  expected?: string;
+  received?: string;
   details?: unknown;
+  docs?: string;
 }
 
 export interface CheckResult {

@@ -77,6 +77,36 @@
       "blueprint": "blueprint.json",
       "appFile": "src/App.tsx"
     },
+    "dataClassConflicts": {
+      "scope": ["src"],
+      "pattern": "**/*.tsx",
+      "ignoreDataClasses": ["wrapper"]
+    },
+    "componentTag": {
+      "scope": ["src"],
+      "pattern": "**/*.tsx",
+      "tagMapPath": null
+    },
+    "colorTokens": {
+      "scope": ["src"],
+      "pattern": "**/*.tsx",
+      "tokenSource": "utility-props.map",
+      "utilityPropsMapPath": "./src/lib/utility-props.map.ts"
+    },
+    "genLint": {
+      "scope": ["src/blocks", "src/layouts", "src/partials"],
+      "pattern": "**/*.tsx",
+      "rules": {
+        "GEN001": "error",
+        "GEN002": "error",
+        "GEN003": "warn",
+        "GEN004": "error",
+        "GEN005": "warn",
+        "GEN006": "error",
+        "GEN007": "error",
+        "GEN008": "warn"
+      }
+    },
     "clean": {
       "paths": ["../react", "node_modules/.vite"],
       "pathsByMode": {

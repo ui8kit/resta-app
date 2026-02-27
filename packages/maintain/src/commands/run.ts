@@ -20,24 +20,34 @@ export function registerRunCommand(program: Command): void {
     .option('--config <path>', 'Maintain config file path', 'maintain.config.json')
     .option('--check <names>', 'Comma-separated checker names')
     .option('--max-parallel <number>', 'Override max parallel checker count')
-    .action(async (options: { cwd: string; config: string; check?: string; maxParallel?: string }) => {
-      const maxParallel = options.maxParallel ? Number(options.maxParallel) : undefined;
-      const checkerNames = parseCheckerList(options.check);
+    .option('--verbose', 'Print every issue with full details', false)
+    .action(
+      async (options: {
+        cwd: string;
+        config: string;
+        check?: string;
+        maxParallel?: string;
+        verbose?: boolean;
+      }) => {
+        const maxParallel = options.maxParallel ? Number(options.maxParallel) : undefined;
+        const checkerNames = parseCheckerList(options.check);
 
-      const { report } = await executeMaintainRun({
-        cwd: options.cwd,
-        configPath: options.config,
-        checkerNames,
-        mode: 'run',
-        mutateConfig: (config) => {
-          if (maxParallel && Number.isFinite(maxParallel) && maxParallel > 0) {
-            config.maxParallel = Math.floor(maxParallel);
-          }
-        },
-      });
+        const { report } = await executeMaintainRun({
+          cwd: options.cwd,
+          configPath: options.config,
+          checkerNames,
+          mode: 'run',
+          verbose: options.verbose,
+          mutateConfig: (config) => {
+            if (maxParallel && Number.isFinite(maxParallel) && maxParallel > 0) {
+              config.maxParallel = Math.floor(maxParallel);
+            }
+          },
+        });
 
-      if (!report.success) {
-        process.exit(1);
+        if (!report.success) {
+          process.exit(1);
+        }
       }
-    });
+    );
 }

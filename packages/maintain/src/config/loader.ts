@@ -64,21 +64,66 @@ const cleanSchema = z.object({
   includeTsBuildInfo: z.boolean().optional(),
 });
 
+const dataClassConflictsSchema = z.object({
+  scope: z.array(z.string().min(1)).min(1),
+  pattern: z.string().min(1),
+  ignoreDataClasses: z.array(z.string().min(1)).optional(),
+});
+
+const componentTagSchema = z.object({
+  scope: z.array(z.string().min(1)).min(1),
+  pattern: z.string().min(1),
+  tagMapPath: z.union([z.string().min(1), z.null()]).optional(),
+});
+
+const colorTokensSchema = z.object({
+  scope: z.array(z.string().min(1)).min(1),
+  pattern: z.string().min(1),
+  tokenSource: z.enum(['utility-props.map']).optional(),
+  utilityPropsMapPath: z.string().min(1),
+});
+
+const severitySchema = z.enum(['error', 'warn', 'info']);
+
+const genLintSchema = z.object({
+  scope: z.array(z.string().min(1)).min(1),
+  pattern: z.string().min(1),
+  rules: z
+    .object({
+      GEN001: severitySchema.optional(),
+      GEN002: severitySchema.optional(),
+      GEN003: severitySchema.optional(),
+      GEN004: severitySchema.optional(),
+      GEN005: severitySchema.optional(),
+      GEN006: severitySchema.optional(),
+      GEN007: severitySchema.optional(),
+      GEN008: severitySchema.optional(),
+    })
+    .catchall(severitySchema)
+    .optional(),
+});
+
+const checkersSchema = z
+  .object({
+    refactorAudit: refactorAuditSchema.optional(),
+    invariants: invariantsSchema.optional(),
+    fixtures: fixturesSchema.optional(),
+    viewExports: viewExportsSchema.optional(),
+    contracts: contractsSchema.optional(),
+    clean: cleanSchema.optional(),
+    dataClassConflicts: dataClassConflictsSchema.optional(),
+    componentTag: componentTagSchema.optional(),
+    colorTokens: colorTokensSchema.optional(),
+    genLint: genLintSchema.optional(),
+  })
+  .catchall(z.unknown());
+
 export const maintainConfigSchema = z.object({
   root: z.string().min(1).optional(),
   reportsDir: z.string().min(1).optional(),
   continueOnError: z.boolean().optional(),
   maxParallel: z.number().int().min(1).optional(),
-  checkers: z
-    .object({
-      refactorAudit: refactorAuditSchema.optional(),
-      invariants: invariantsSchema.optional(),
-      fixtures: fixturesSchema.optional(),
-      viewExports: viewExportsSchema.optional(),
-      contracts: contractsSchema.optional(),
-      clean: cleanSchema.optional(),
-    })
-    .default({}),
+  checkers: checkersSchema.default({}),
 });
 
 export type MaintainConfigInput = z.infer<typeof maintainConfigSchema>;

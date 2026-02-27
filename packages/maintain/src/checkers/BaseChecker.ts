@@ -3,7 +3,6 @@ import type {
   CheckResult,
   IChecker,
   ILogger,
-  IMaintainConfig,
   Issue,
   IssueLevel,
 } from '../core/interfaces';
@@ -25,7 +24,7 @@ export abstract class BaseChecker<TConfig>
   constructor(
     public readonly name: string,
     public readonly description: string,
-    public readonly configKey: keyof IMaintainConfig['checkers']
+    public readonly configKey: string
   ) {}
 
   get enabled(): boolean {
@@ -63,6 +62,7 @@ export abstract class BaseChecker<TConfig>
       const message = error instanceof Error ? error.message : String(error);
       const issue = this.createIssue('error', 'CHECKER_EXECUTION_FAILED', message, {
         hint: `Inspect checker "${this.name}" configuration and retry.`,
+        suggestion: 'Fix checker configuration or runtime assumptions, then re-run maintain.',
       });
       return {
         checker: this.name,
@@ -82,6 +82,17 @@ export abstract class BaseChecker<TConfig>
       throw new Error(`Checker "${this.name}" requires configuration.`);
     }
     return this.config;
+  }
+
+  /**
+   * Reads any checker config key from the open checkers map.
+   * Useful for cross-checker integrations while keeping runtime typing explicit.
+   */
+  protected getConfigValue<TValue = unknown>(
+    context: CheckContext,
+    key: string
+  ): TValue | undefined {
+    return context.config.checkers[key] as TValue | undefined;
   }
 
   protected createIssue(

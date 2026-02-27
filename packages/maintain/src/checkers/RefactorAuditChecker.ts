@@ -68,7 +68,11 @@ export class RefactorAuditChecker extends BaseChecker<RefactorAuditConfig> {
           this.createIssue(
             'error',
             'MAPPING_FILE_MISSING',
-            `Mapping file not found: ${this.relative(context.root, mappingPath)}`
+            `Mapping file not found: ${this.relative(context.root, mappingPath)}`,
+            {
+              file: this.relative(context.root, mappingPath),
+              hint: 'Provide a valid mapping JSON for refactor audit.',
+            }
           ),
         ],
         hint: 'Set checkers.refactorAudit.mapping to a valid JSON mapping file.',
@@ -122,6 +126,10 @@ export class RefactorAuditChecker extends BaseChecker<RefactorAuditConfig> {
         {
           file: match.file,
           line: match.line,
+          expected: match.replacement,
+          received: match.term,
+          hint: 'Replace legacy term with mapped replacement.',
+          suggestion: `Replace "${match.term}" with "${match.replacement}".`,
           details: { replacement: match.replacement, excerpt: match.excerpt },
         }
       )

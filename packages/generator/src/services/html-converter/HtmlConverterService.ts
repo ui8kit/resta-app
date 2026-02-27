@@ -29,6 +29,15 @@ export interface HtmlConverterOutput {
   elementsCount: number;
   /** Number of unique selectors */
   selectorsCount: number;
+  /** Conversion warnings (validation, selector conflicts, etc.) */
+  warnings: HtmlConverterWarning[];
+}
+
+export interface HtmlConverterWarning {
+  code: string;
+  message: string;
+  file?: string;
+  hint?: string;
 }
 
 /**
@@ -108,6 +117,7 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
   
   async execute(input: HtmlConverterInput): Promise<HtmlConverterOutput> {
     const { htmlPath, ignoreSelectors = [], verbose = false } = input;
+    const warnings: HtmlConverterWarning[] = [];
     
     if (verbose) {
       this.context.logger.info(`Converting HTML to CSS: ${htmlPath}`);
@@ -126,6 +136,12 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
         if (component) {
           const err = validateComponentTag(component, el.tag);
           if (err) {
+            warnings.push({
+              code: 'COMPONENT_TAG_INVALID',
+              message: err,
+              file: htmlPath,
+              hint: 'Use one of the allowed tags from component-tag-map.json.',
+            });
             this.context.logger.warn(`[${htmlPath}] ${err}`);
           }
         }
@@ -137,7 +153,7 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
     }
     
     // Group by selectors
-    const groupedElements = this.groupBySelectors(elements);
+    const groupedElements = this.groupBySelectors(elements, warnings);
     
     // Merge duplicate class sets
     const mergedSelectors = this.mergeDuplicateClassSets(groupedElements);
@@ -158,6 +174,7 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
       pureCss,
       elementsCount: elements.length,
       selectorsCount: mergedSelectors.size,
+      warnings,
     };
   }
   
@@ -360,13 +377,32 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
   /**
    * Group elements by selectors
    */
-  private groupBySelectors(elements: ElementData[]): Map<string, string[]> {
+  private groupBySelectors(
+    elements: ElementData[],
+    warnings: HtmlConverterWarning[]
+  ): Map<string, string[]> {
     const selectorMap = new Map<string, string[]>();
+    const reportedConflicts = new Set<string>();
     
     for (const element of elements) {
       if (element.classes.length === 0) continue;
       
       const existingClasses = selectorMap.get(element.selector) || [];
+      if (
+        existingClasses.length > 0 &&
+        !this.sameClassSet(existingClasses, element.classes)
+      ) {
+        const conflictKey = `${element.sourceFile}:${element.selector}`;
+        if (!reportedConflicts.has(conflictKey)) {
+          reportedConflicts.add(conflictKey);
+          warnings.push({
+            code: 'DATA_CLASS_CONFLICT',
+            message: `Selector "${element.selector}" has conflicting class sets in ${element.sourceFile}.`,
+            file: element.sourceFile,
+            hint: 'Keep each data-class mapped to one canonical utility set.',
+          });
+        }
+      }
       const allClasses = [...existingClasses, ...element.classes];
       const uniqueClasses = [...new Set(allClasses)];
       
@@ -374,6 +410,15 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
     }
     
     return selectorMap;
+  }
+
+  private sameClassSet(left: string[], right: string[]): boolean {
+    const leftSet = [...new Set(left)].sort();
+    const rightSet = [...new Set(right)].sort();
+    if (leftSet.length !== rightSet.length) {
+      return false;
+    }
+    return leftSet.every((value, index) => value === rightSet[index]);
   }
   
   /**

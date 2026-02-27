@@ -1,10 +1,13 @@
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { dirname, extname, join, relative, resolve } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { basename, dirname, join, relative, resolve } from 'node:path';
 import type { CheckContext, InvariantsCheckerConfig } from '../core/interfaces';
+import { FileScanner } from '../utils';
 import type { CheckerExecutionResult } from './BaseChecker';
 import { BaseChecker } from './BaseChecker';
 
 export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
+  private readonly scanner = new FileScanner();
+
   constructor() {
     super(
       'invariants',
@@ -41,7 +44,12 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
         this.createIssue(
           'error',
           'PAGE_FIXTURE_MISSING',
-          `Fixture not found: ${this.relative(root, fixturePath)}`
+          `Fixture not found: ${this.relative(root, fixturePath)}`,
+          {
+            file: this.relative(root, fixturePath),
+            hint: 'Add the missing fixture file or update checkers.invariants.fixtures.pageFile.',
+            suggestion: 'Create fixtures/shared/page.json with required page domains.',
+          }
         )
       );
       return issues;
@@ -55,6 +63,8 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
       issues.push(
         this.createIssue('error', 'PAGE_FIXTURE_INVALID_JSON', message, {
           file: this.relative(root, fixturePath),
+          hint: 'Fix JSON syntax in the fixture file.',
+          suggestion: 'Run a JSON formatter/linter and ensure commas/quotes are valid.',
         })
       );
       return issues;
@@ -66,7 +76,12 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
         this.createIssue(
           'error',
           'PAGE_FIXTURE_INVALID_SHAPE',
-          `Fixture "${this.relative(root, fixturePath)}" must contain object key "page".`
+          `Fixture "${this.relative(root, fixturePath)}" must contain object key "page".`,
+          {
+            expected: 'Object with key "page"',
+            received: 'Missing or non-object "page"',
+            hint: 'Ensure fixture root has a "page" object with required domain arrays.',
+          }
         )
       );
       return issues;
@@ -79,7 +94,12 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
           this.createIssue(
             'error',
             'PAGE_DOMAIN_MISSING',
-            `Fixture "${this.relative(root, fixturePath)}" is missing array "page.${key}".`
+            `Fixture "${this.relative(root, fixturePath)}" is missing array "page.${key}".`,
+            {
+              expected: `page.${key} to be an array`,
+              received: 'Missing or non-array value',
+              hint: `Add "page.${key}": [] to ${this.relative(root, fixturePath)}.`,
+            }
           )
         );
       }
@@ -93,7 +113,10 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
     const appPath = resolve(root, config.routes.appFile);
     if (!existsSync(appPath)) {
       issues.push(
-        this.createIssue('error', 'APP_FILE_MISSING', `App file not found: ${this.relative(root, appPath)}`)
+        this.createIssue('error', 'APP_FILE_MISSING', `App file not found: ${this.relative(root, appPath)}`, {
+          file: this.relative(root, appPath),
+          hint: 'Ensure routes entry point exists or update checkers.invariants.routes.appFile.',
+        })
       );
       return issues;
     }
@@ -105,6 +128,9 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
         issues.push(
           this.createIssue('error', 'ROUTE_MISSING', `Required route not found in App file: ${route}`, {
             file: this.relative(root, appPath),
+            expected: route,
+            received: 'Route not registered',
+            hint: `Add <Route path="${route}" element={...} /> to App.tsx.`,
           })
         );
       }
@@ -124,6 +150,8 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
             `Route import does not resolve to a file: ${importPath}`,
             {
               file: this.relative(root, appPath),
+              hint: 'Fix route import path or create the missing route module.',
+              suggestion: `Ensure import "${importPath}" resolves to an existing file.`,
             }
           )
         );
@@ -143,7 +171,11 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
         this.createIssue(
           'error',
           'BLOCKS_INDEX_MISSING',
-          `Blocks index file not found: ${this.relative(root, indexPath)}`
+          `Blocks index file not found: ${this.relative(root, indexPath)}`,
+          {
+            file: this.relative(root, indexPath),
+            hint: 'Create index.ts and export all block components from it.',
+          }
         )
       );
       return issues;
@@ -151,7 +183,10 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
 
     if (!existsSync(blocksDir)) {
       issues.push(
-        this.createIssue('error', 'BLOCKS_DIR_MISSING', `Blocks directory not found: ${this.relative(root, blocksDir)}`)
+        this.createIssue('error', 'BLOCKS_DIR_MISSING', `Blocks directory not found: ${this.relative(root, blocksDir)}`, {
+          file: this.relative(root, blocksDir),
+          hint: 'Create the blocks directory or adjust checkers.invariants.blocks.dir.',
+        })
       );
       return issues;
     }
@@ -167,6 +202,8 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
             `Block "${block}" is not exported from ${this.relative(root, indexPath)}.`,
             {
               file: this.relative(root, indexPath),
+              hint: `Add export for "${block}" in ${this.relative(root, indexPath)}.`,
+              suggestion: `Add: export { ${block} } from './${block}';`,
             }
           )
         );
@@ -184,7 +221,11 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
         this.createIssue(
           'error',
           'CONTEXT_FILE_MISSING',
-          `Context file not found: ${this.relative(root, contextFile)}`
+          `Context file not found: ${this.relative(root, contextFile)}`,
+          {
+            file: this.relative(root, contextFile),
+            hint: 'Create the context adapter file or update checkers.invariants.context.file.',
+          }
         )
       );
       return issues;
@@ -199,7 +240,12 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
             'warn',
             'CONTEXT_SYMBOL_MISSING',
             `Expected symbol "${symbol}" was not found in context file.`,
-            { file: this.relative(root, contextFile) }
+            {
+              file: this.relative(root, contextFile),
+              expected: symbol,
+              received: 'Symbol not found',
+              hint: `Export "${symbol}" from ${this.relative(root, contextFile)}.`,
+            }
           )
         );
       }
@@ -218,7 +264,10 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
             'error',
             'FIXTURE_IMPORT_MISSING',
             `Fixture import not found: ${importPath}`,
-            { file: this.relative(root, contextFile) }
+            {
+              file: this.relative(root, contextFile),
+              hint: 'Fix the fixture import path or create the missing JSON fixture file.',
+            }
           )
         );
       }
@@ -228,22 +277,9 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
   }
 
   private listBlockFiles(dirPath: string, recursive: boolean): string[] {
-    const blockNames: string[] = [];
-    const entries = readdirSync(dirPath, { withFileTypes: true });
-    for (const entry of entries) {
-      const fullPath = join(dirPath, entry.name);
-      if (entry.isDirectory()) {
-        if (recursive) {
-          blockNames.push(...this.listBlockFiles(fullPath, true));
-        }
-        continue;
-      }
-      if (!entry.isFile() || extname(entry.name) !== '.tsx') {
-        continue;
-      }
-      blockNames.push(entry.name.replace('.tsx', ''));
-    }
-    return blockNames;
+    const pattern = recursive ? '**/*.tsx' : '*.tsx';
+    const files = this.scanner.scan(dirPath, pattern, { useCache: true });
+    return Array.from(new Set(files.map((file) => basename(file.relativePath, '.tsx'))));
   }
 
   private extractRoutePaths(content: string): Set<string> {

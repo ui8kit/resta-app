@@ -6,3 +6,7 @@ export { FixturesChecker } from './FixturesChecker';
 export { ViewExportsChecker } from './ViewExportsChecker';
 export { ContractTestsChecker } from './ContractTestsChecker';
 export { CleanChecker } from './CleanChecker';
+export { DataClassConflictChecker } from './DataClassConflictChecker';
+export { ComponentTagChecker } from './ComponentTagChecker';
+export { ColorTokenChecker } from './ColorTokenChecker';
+export { GenLintChecker } from './GenLintChecker';

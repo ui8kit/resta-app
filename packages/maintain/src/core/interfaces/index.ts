@@ -10,6 +10,14 @@ export type {
   ViewExportShape,
   ContractTestsCheckerConfig,
   CleanCheckerConfig,
+  DataClassConflictCheckerConfig,
+  ComponentTagCheckerConfig,
+  ColorTokenCheckerConfig,
+  GenLintCheckerConfig,
+  GenLintRuleCode,
+  GenLintRulesConfig,
+  MaintainCheckerConfigMap,
+  KnownCheckerConfigs,
 } from './IMaintainConfig';
 export type { ILogger, LogLevel, LoggerOptions } from './ILogger';
 export type { CheckResult, Issue, IssueLevel, MaintainReport } from './IReport';

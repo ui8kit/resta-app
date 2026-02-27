@@ -83,6 +83,7 @@ export class CheckPipeline {
         checker: checker.name,
         message,
         hint: 'Inspect checker runtime logs and rerun the command.',
+        suggestion: 'Fix the checker runtime error and execute maintain again.',
       };
       const finishedAt = new Date();
       return {

@@ -32,6 +32,7 @@ export class FixturesChecker extends BaseChecker<FixturesCheckerConfig> {
           issues.push(
             this.createIssue('warn', 'SCHEMA_LOAD_WARNING', message, {
               file: this.relative(context.root, schemaFile),
+              hint: 'Check schema references and duplicate $id values.',
             })
           );
         }
@@ -46,6 +47,7 @@ export class FixturesChecker extends BaseChecker<FixturesCheckerConfig> {
         issues.push(
           this.createIssue('error', 'FIXTURE_FILE_MISSING', `Fixture file not found: ${target.file}`, {
             file: target.file,
+            hint: 'Create the fixture file or remove it from checkers.fixtures.targets.',
           })
         );
         continue;
@@ -55,6 +57,7 @@ export class FixturesChecker extends BaseChecker<FixturesCheckerConfig> {
         issues.push(
           this.createIssue('error', 'SCHEMA_FILE_MISSING', `Schema file not found: ${target.schema}`, {
             file: target.schema,
+            hint: 'Create the schema file or fix the schema path in maintain.config.json.',
           })
         );
         continue;
@@ -77,6 +80,7 @@ export class FixturesChecker extends BaseChecker<FixturesCheckerConfig> {
         issues.push(
           this.createIssue('error', 'FIXTURE_VALIDATION_ERROR', message, {
             file: target.file,
+            hint: 'Inspect schema references and fixture JSON structure.',
           })
         );
       }
@@ -100,7 +104,13 @@ export class FixturesChecker extends BaseChecker<FixturesCheckerConfig> {
     return this.createIssue(
       'error',
       'FIXTURE_SCHEMA_INVALID',
-      `${targetFile} ${instancePath}: ${message}`
+      `${targetFile} ${instancePath}: ${message}`,
+      {
+        file: targetFile,
+        expected: error.schemaPath,
+        received: `${error.keyword} violation`,
+        hint: 'Update fixture data to satisfy the referenced schema constraints.',
+      }
     );
   }
 

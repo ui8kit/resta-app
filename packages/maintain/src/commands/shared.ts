@@ -1,5 +1,16 @@
 import { resolve } from 'node:path';
-import { CleanChecker, ContractTestsChecker, FixturesChecker, InvariantsChecker, RefactorAuditChecker, ViewExportsChecker } from '../checkers';
+import {
+  CleanChecker,
+  ColorTokenChecker,
+  ComponentTagChecker,
+  ContractTestsChecker,
+  DataClassConflictChecker,
+  FixturesChecker,
+  GenLintChecker,
+  InvariantsChecker,
+  RefactorAuditChecker,
+  ViewExportsChecker,
+} from '../checkers';
 import { loadMaintainConfig } from '../config/loader';
 import { MaintainOrchestrator } from '../core/orchestrator/MaintainOrchestrator';
 import type { CheckerMode, IMaintainConfig, MaintainReport } from '../core/interfaces';
@@ -12,6 +23,7 @@ export interface ExecuteMaintainRunOptions {
   checkerNames?: string[];
   mode?: CheckerMode;
   dryRun?: boolean;
+  verbose?: boolean;
   mutateConfig?: (config: IMaintainConfig) => void;
 }
 
@@ -31,16 +43,26 @@ export async function executeMaintainRun(
 
   options.mutateConfig?.(config);
 
+  const builtinCheckers = [
+    new RefactorAuditChecker(),
+    new InvariantsChecker(),
+    new FixturesChecker(),
+    new ViewExportsChecker(),
+    new ContractTestsChecker(),
+    new DataClassConflictChecker(),
+    new ComponentTagChecker(),
+    new ColorTokenChecker(),
+    new GenLintChecker(),
+    new CleanChecker(),
+  ] as const;
+
   const orchestrator = new MaintainOrchestrator({
     continueOnError: config.continueOnError,
     maxParallel: config.maxParallel,
-  })
-    .use(new RefactorAuditChecker())
-    .use(new InvariantsChecker())
-    .use(new FixturesChecker())
-    .use(new ViewExportsChecker())
-    .use(new ContractTestsChecker())
-    .use(new CleanChecker());
+  });
+  for (const checker of builtinCheckers) {
+    orchestrator.use(checker);
+  }
 
   const report = await orchestrator.run(config, {
     checkerNames: options.checkerNames,
@@ -53,7 +75,7 @@ export async function executeMaintainRun(
   const reportPath = writer.write(report, absoluteReportsDir, config.root);
 
   const printer = new ConsolePrinter();
-  printer.print(report, { reportPath });
+  printer.print(report, { reportPath, verbose: options.verbose });
 
   return {
     report,

@@ -18,7 +18,7 @@ export interface CheckContext {
 export interface IChecker<TConfig = unknown> {
   readonly name: string;
   readonly description: string;
-  readonly configKey: keyof IMaintainConfig['checkers'];
+  readonly configKey: string;
   readonly enabled: boolean;
   configure(config: TConfig | undefined): void;
   run(context: CheckContext): Promise<CheckResult>;

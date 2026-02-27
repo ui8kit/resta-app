@@ -1,5 +1,6 @@
 export * from './core';
 export * from './checkers';
+export * from './utils';
 export { loadMaintainConfig, maintainConfigSchema } from './config/loader';
 export { createDefaultMaintainConfig } from './config/defaults';
 export {

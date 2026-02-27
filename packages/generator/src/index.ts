@@ -91,6 +91,7 @@ export type {
   HtmlServiceOutput,
   HtmlConverterInput,
   HtmlConverterOutput,
+  HtmlConverterWarning,
   PostCssServiceInput,
   PostCssServiceOutput,
 } from './services';

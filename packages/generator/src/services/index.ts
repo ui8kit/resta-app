@@ -19,6 +19,7 @@ export { HtmlConverterService } from './html-converter';
 export type {
   HtmlConverterInput,
   HtmlConverterOutput,
+  HtmlConverterWarning,
   HtmlConverterServiceOptions,
   HtmlConverterFileSystem,
 } from './html-converter';

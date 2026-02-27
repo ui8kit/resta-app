@@ -16,6 +16,7 @@ import { Logger } from './core/logger';
 import type { GeneratorConfig, RouteConfig } from './core/interfaces';
 import { runGenerateSitePipeline, type GenerateStageName } from './pipelines/generate-site';
 import { runUncssPostprocess, type UncssStepConfig } from './steps/postprocess-uncss';
+import type { HtmlConverterWarning } from './services/html-converter';
 
 export type { GeneratorConfig, RouteConfig };
 
@@ -131,6 +132,7 @@ export interface GenerateResult {
   success: boolean;
   duration: number;
   errors: Array<{ stage: string; error: Error }>;
+  warnings: Array<HtmlConverterWarning & { stage: string }>;
   generated: {
     cssFiles: number;
     htmlPages: number;
@@ -145,6 +147,7 @@ export async function generate(
   const startTime = performance.now();
   const logger = new Logger({ level: 'info' });
   const errors: Array<{ stage: string; error: Error }> = [];
+  const warnings: Array<HtmlConverterWarning & { stage: string }> = [];
   const requestedStages = new Set<GenerateStageName>(stages ?? ['render', 'css', 'html', 'postcss']);
   const generated: GenerateResult['generated'] = {
     cssFiles: 0,
@@ -162,8 +165,14 @@ export async function generate(
     for (const stage of pipelineResult.stages) {
       if (!stage.success || !stage.output) continue;
       if (stage.stage === 'css' && requestedStages.has('css')) {
-        const out = stage.output as { files?: Array<unknown> };
+        const out = stage.output as { files?: Array<unknown>; warnings?: HtmlConverterWarning[] };
         generated.cssFiles = out.files?.length ?? 0;
+        for (const warning of out.warnings ?? []) {
+          warnings.push({
+            stage: 'css',
+            ...warning,
+          });
+        }
       }
       if (stage.stage === 'html' && requestedStages.has('html')) {
         const out = stage.output as { pages?: Array<unknown> };
@@ -186,6 +195,7 @@ export async function generate(
       success: errors.length === 0,
       duration,
       errors,
+      warnings,
       generated,
     };
   } catch (error) {
@@ -197,6 +207,7 @@ export async function generate(
       success: false,
       duration,
       errors,
+      warnings,
       generated,
     };
   }

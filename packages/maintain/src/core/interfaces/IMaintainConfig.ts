@@ -64,17 +64,62 @@ export interface CleanCheckerConfig {
   includeTsBuildInfo?: boolean;
 }
 
+export interface DataClassConflictCheckerConfig {
+  scope: string[];
+  pattern: string;
+  ignoreDataClasses?: string[];
+}
+
+export interface ComponentTagCheckerConfig {
+  scope: string[];
+  pattern: string;
+  tagMapPath?: string | null;
+}
+
+export interface ColorTokenCheckerConfig {
+  scope: string[];
+  pattern: string;
+  tokenSource?: 'utility-props.map';
+  utilityPropsMapPath: string;
+}
+
+export type GenLintRuleCode =
+  | 'GEN001'
+  | 'GEN002'
+  | 'GEN003'
+  | 'GEN004'
+  | 'GEN005'
+  | 'GEN006'
+  | 'GEN007'
+  | 'GEN008';
+
+export type GenLintRulesConfig = Partial<Record<GenLintRuleCode, Severity>>;
+
+export interface GenLintCheckerConfig {
+  scope: string[];
+  pattern: string;
+  rules?: GenLintRulesConfig;
+}
+
+export interface KnownCheckerConfigs {
+  refactorAudit?: RefactorAuditConfig;
+  invariants?: InvariantsCheckerConfig;
+  fixtures?: FixturesCheckerConfig;
+  viewExports?: ViewExportsCheckerConfig;
+  contracts?: ContractTestsCheckerConfig;
+  clean?: CleanCheckerConfig;
+  dataClassConflicts?: DataClassConflictCheckerConfig;
+  componentTag?: ComponentTagCheckerConfig;
+  colorTokens?: ColorTokenCheckerConfig;
+  genLint?: GenLintCheckerConfig;
+}
+
+export type MaintainCheckerConfigMap = Record<string, unknown> & KnownCheckerConfigs;
+
 export interface IMaintainConfig {
   root: string;
   reportsDir?: string;
   continueOnError?: boolean;
   maxParallel?: number;
-  checkers: {
-    refactorAudit?: RefactorAuditConfig;
-    invariants?: InvariantsCheckerConfig;
-    fixtures?: FixturesCheckerConfig;
-    viewExports?: ViewExportsCheckerConfig;
-    contracts?: ContractTestsCheckerConfig;
-    clean?: CleanCheckerConfig;
-  };
+  checkers: MaintainCheckerConfigMap;
 }
