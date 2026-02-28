@@ -52,6 +52,8 @@
    - при необходимости: `bun run finalize`  
    - проверка сгенерированного приложения: из `apps/dsl` — `bun run typecheck:react` (проверяет `../react`); из `apps/dsl-design` — `bun run typecheck:react` (проверяет `../react-design`)
 
+7. **Если менялся `src/lib/utility-props.map.ts`** — пересобрать карту классов: `bun run build:map` (или из корня репо: `bun run packages/generator/src/cli/generate.ts uikit-map --cwd apps/dsl` / `--cwd apps/dsl-design`).
+
 ### 3.2 Одной командой (полный пайплайн)
 
 Полный пайплайн линта, валидации, blueprint, генерации и проверки React:
@@ -77,6 +79,10 @@
 - **Контракты:** `bun run test:contracts` (только в **apps/dsl**; в dsl-design нет этого скрипта)
 - **Общий линт:** `bun run lint` (ui8kit-lint)
 - **Аудит рефакторинга:** `bun run audit:refactor`
+- **Генерация карты пропсов (ui8kit.map.json):** `bun run build:map` — из каталога приложения (`apps/dsl` или `apps/dsl-design`). Синхронизирует `src/ui8kit.map.json` с `src/lib/utility-props.map.ts` (UiKitMapService).
+- **Из корня репо** (общий корень, для скриптов/CI):
+  - `bun run packages/generator/src/cli/generate.ts uikit-map --cwd apps/dsl`
+  - `bun run packages/generator/src/cli/generate.ts uikit-map --cwd apps/dsl-design`
 - **Очистка сгенерированного вывода:** `bun run clean:dist`
 - **Полная очистка (в т.ч. node_modules):** `bun run clean`
 
@@ -90,5 +96,6 @@
 - `bun run maintain:validate`
 - `bun run typecheck`
 - При изменении блоков/фикстур — `bun run generate` (и при необходимости `bun run finalize`)
+- При изменении `utility-props.map.ts` — `bun run build:map`
 
 Либо один раз: `bun run dist:app` (если нужен полный пайплайн до сгенерированного React).

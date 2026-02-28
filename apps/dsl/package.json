@@ -33,7 +33,8 @@
     "typecheck:react": "cd ../react && bun run typecheck",
     "lint:all": "bun run typecheck && bun run lint",
     "audit:refactor": "bun run scripts/refactor-audit.ts",
-    "build:props": "bun run scripts/build-props-classlist.ts"
+    "build:props": "bun run scripts/build-props-classlist.ts",
+    "build:map": "bun run ../../packages/generator/src/cli/generate.ts uikit-map --cwd ."
   },
   "dependencies": {
     "@ui8kit/contracts": "^0.1.0",

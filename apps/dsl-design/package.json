@@ -21,6 +21,7 @@
     "blueprint:graph": "bunx ui8kit-generate blueprint:graph --cwd .",
     "scaffold:entity": "bunx ui8kit-generate scaffold entity --cwd .",
     "inspect": "bunx ui8kit-inspect",
+    "build:map": "bun run ../../packages/generator/src/cli/generate.ts uikit-map --cwd .",
     "lint:dsl": "bunx ui8kit-lint-dsl \"$PWD/src\"",
     "lint": "bunx ui8kit-lint",
     "lint:all": "bun run typecheck && bun run lint",

@@ -428,6 +428,27 @@ bun run finalize      # Собирает финальное приложение
 bun run dist:app     # Полный пайплайн (lint + validate + generate + finalize)
 ```
 
+### 9.4.1 Генерация карты пропсов (ui8kit.map.json)
+
+Карта классов `src/ui8kit.map.json` синхронизируется с `src/lib/utility-props.map.ts` через **UiKitMapService** (пакет `@ui8kit/generator`). После изменений в `utility-props.map.ts` пересобери карту:
+
+**Из каталога приложения:**
+
+```bash
+cd apps/dsl          # или cd apps/dsl-design
+bun run build:map
+```
+
+**Из корня монорепозитория** (удобно для скриптов и CI):
+
+```bash
+# из корня @ui8kit-resta-app/
+bun run packages/generator/src/cli/generate.ts uikit-map --cwd apps/dsl
+bun run packages/generator/src/cli/generate.ts uikit-map --cwd apps/dsl-design
+```
+
+Опции команды `uikit-map`: `--props-map`, `--output`, `--tailwind-map`, `--shadcn-map`, `--grid-map`, `--log-level`. По умолчанию используются карты из `packages/generator` (tw-css-extended, shadcn, grid).
+
 ### 9.5 Blueprint (структура приложения)
 
 ```bash
@@ -683,6 +704,7 @@ bun run typecheck
 - [ ] `bun run maintain:validate` — validate-набор из `package.json` текущего приложения
 - [ ] `bun run typecheck` — TypeScript
 - [ ] Если менял блоки — `bun run generate` (и при необходимости `bun run finalize`)
+- [ ] Если менял `src/lib/utility-props.map.ts` — `bun run build:map`
 - [ ] Нет хардкода — все данные из context или props
 - [ ] Нет `className` и `style`
 - [ ] У всех семантических элементов есть `data-class`
