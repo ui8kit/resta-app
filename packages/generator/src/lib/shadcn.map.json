@@ -26,7 +26,6 @@
   "bg-sidebar-accent-foreground": "background-color: var(--sidebar-accent-foreground);",
   "bg-sidebar-border": "background-color: var(--sidebar-border);",
   "bg-sidebar-ring": "background-color: var(--sidebar-ring);",
-
   "text-foreground": "color: var(--foreground);",
   "text-primary-foreground": "color: var(--primary-foreground);",
   "text-primary": "color: var(--primary);",
@@ -39,7 +38,6 @@
   "text-sidebar-foreground": "color: var(--sidebar-foreground);",
   "text-sidebar-primary-foreground": "color: var(--sidebar-primary-foreground);",
   "text-sidebar-accent-foreground": "color: var(--sidebar-accent-foreground);",
-
   "border-border": "border-color: var(--border);",
   "border-input": "border-color: var(--input);",
   "border-sidebar-border": "border-color: var(--sidebar-border);",
@@ -50,12 +48,10 @@
   "border-primary": "border-color: var(--primary);",
   "border-ring": "border-color: var(--ring);",
   "border-secondary": "border-color: var(--secondary);",
-
   "caret-accent": "caret-color: var(--accent);",
   "caret-foreground": "caret-color: var(--foreground);",
   "caret-primary": "caret-color: var(--primary);",
   "caret-secondary": "caret-color: var(--secondary);",
-
   "shadow-2xs": "box-shadow: var(--shadow-2xs);",
   "shadow-xs": "box-shadow: var(--shadow-xs);",
   "shadow-sm": "box-shadow: var(--shadow-sm);",
@@ -64,11 +60,30 @@
   "shadow-lg": "box-shadow: var(--shadow-lg);",
   "shadow-xl": "box-shadow: var(--shadow-xl);",
   "shadow-2xl": "box-shadow: var(--shadow-2xl);",
-
   "tracking-tighter": "letter-spacing: var(--tracking-tighter);",
   "tracking-tight": "letter-spacing: var(--tracking-tight);",
   "tracking-normal": "letter-spacing: var(--tracking-normal);",
   "tracking-wide": "letter-spacing: var(--tracking-wide);",
   "tracking-wider": "letter-spacing: var(--tracking-wider);",
-  "tracking-widest": "letter-spacing: var(--tracking-widest);"
+  "tracking-widest": "letter-spacing: var(--tracking-widest);",
+  "bg-chart-1": "background-color: var(--chart-1);",
+  "bg-chart-2": "background-color: var(--chart-2);",
+  "bg-chart-3": "background-color: var(--chart-3);",
+  "bg-chart-4": "background-color: var(--chart-4);",
+  "bg-chart-5": "background-color: var(--chart-5);",
+  "text-chart-1": "color: var(--chart-1);",
+  "text-chart-2": "color: var(--chart-2);",
+  "text-chart-3": "color: var(--chart-3);",
+  "text-chart-4": "color: var(--chart-4);",
+  "text-chart-5": "color: var(--chart-5);",
+  "border-chart-1": "border-color: var(--chart-1);",
+  "border-chart-2": "border-color: var(--chart-2);",
+  "border-chart-3": "border-color: var(--chart-3);",
+  "border-chart-4": "border-color: var(--chart-4);",
+  "border-chart-5": "border-color: var(--chart-5);",
+  "caret-chart-1": "caret-color: var(--chart-1);",
+  "caret-chart-2": "caret-color: var(--chart-2);",
+  "caret-chart-3": "caret-color: var(--chart-3);",
+  "caret-chart-4": "caret-color: var(--chart-4);",
+  "caret-chart-5": "caret-color: var(--chart-5);"
 }

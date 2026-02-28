@@ -13,6 +13,7 @@ import {
   OrphanFilesChecker,
   RefactorAuditChecker,
   UtilityPropLiteralsChecker,
+  UtilityPropsWhitelistChecker,
   ViewExportsChecker,
   ViewHooksChecker,
 } from '../checkers';
@@ -62,6 +63,7 @@ export async function executeMaintainRun(
     new LockedDirsChecker(),
     new ViewHooksChecker(),
     new UtilityPropLiteralsChecker(),
+    new UtilityPropsWhitelistChecker(),
     new OrphanFilesChecker(),
     new BlockNestingChecker(),
   ] as const;

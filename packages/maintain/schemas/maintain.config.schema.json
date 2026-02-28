@@ -440,6 +440,34 @@
             }
           }
         },
+        "utilityPropsWhitelist": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "utilityPropsMapPath",
+            "tailwindMapPath"
+          ],
+          "properties": {
+            "utilityPropsMapPath": {
+              "type": "string"
+            },
+            "tailwindMapPath": {
+              "type": "string"
+            },
+            "additionalMapPaths": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "maxSuggestions": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5,
+              "default": 2
+            }
+          }
+        },
         "orphanFiles": {
           "type": "object",
           "additionalProperties": false,

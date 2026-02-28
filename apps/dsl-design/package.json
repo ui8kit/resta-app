@@ -16,6 +16,7 @@
     "maintain": "bun run maintain:check",
     "maintain:check": "maintain run --config maintain.config.json",
     "maintain:validate": "maintain validate --config maintain.config.json --check invariants,view-exports,contracts",
+    "maintain:props": "maintain run --config maintain.config.json --check utility-props-whitelist --verbose",
     "blueprint:scan": "bunx ui8kit-generate blueprint:scan --cwd .",
     "blueprint:validate": "bunx ui8kit-generate blueprint:validate --cwd .",
     "blueprint:graph": "bunx ui8kit-generate blueprint:graph --cwd .",

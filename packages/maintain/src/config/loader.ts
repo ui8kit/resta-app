@@ -120,6 +120,13 @@ const utilityPropLiteralsSchema = z.object({
   allowDynamicInLoop: z.boolean().optional(),
 });
 
+const utilityPropsWhitelistSchema = z.object({
+  utilityPropsMapPath: z.string().min(1),
+  tailwindMapPath: z.string().min(1),
+  additionalMapPaths: z.array(z.string().min(1)).optional(),
+  maxSuggestions: z.number().int().min(1).max(5).optional(),
+});
+
 const orphanFilesSchema = z.object({
   scope: z.array(z.string().min(1)).min(1),
   pattern: z.string().min(1),
@@ -147,6 +154,7 @@ const checkersSchema = z
     lockedDirs: lockedDirsSchema.optional(),
     viewHooks: viewHooksSchema.optional(),
     utilityPropLiterals: utilityPropLiteralsSchema.optional(),
+    utilityPropsWhitelist: utilityPropsWhitelistSchema.optional(),
     orphanFiles: orphanFilesSchema.optional(),
     blockNesting: blockNestingSchema.optional(),
   })

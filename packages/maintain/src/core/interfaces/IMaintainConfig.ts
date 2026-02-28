@@ -119,6 +119,13 @@ export interface UtilityPropLiteralsCheckerConfig {
   allowDynamicInLoop?: boolean;
 }
 
+export interface UtilityPropsWhitelistCheckerConfig {
+  utilityPropsMapPath: string;
+  tailwindMapPath: string;
+  additionalMapPaths?: string[];
+  maxSuggestions?: number;
+}
+
 export interface OrphanFilesCheckerConfig {
   scope: string[];
   pattern: string;
@@ -145,6 +152,7 @@ export interface KnownCheckerConfigs {
   lockedDirs?: LockedDirsCheckerConfig;
   viewHooks?: ViewHooksCheckerConfig;
   utilityPropLiterals?: UtilityPropLiteralsCheckerConfig;
+  utilityPropsWhitelist?: UtilityPropsWhitelistCheckerConfig;
   orphanFiles?: OrphanFilesCheckerConfig;
   blockNesting?: BlockNestingCheckerConfig;
 }

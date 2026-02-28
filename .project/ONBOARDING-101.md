@@ -389,6 +389,7 @@ bun run typecheck     # TypeScript
 ```bash
 bun run maintain:check      # Все чекеры из maintain.config.json
 bun run maintain:validate   # Только validate-чекеры, заданные в package.json приложения
+bun run maintain:props      # Только utility-props-whitelist (карта пропсов vs tw-css-extended + shadcn + grid)
 ```
 
 `maintain:validate` отличается по приложениям:
@@ -409,6 +410,7 @@ bun run maintain:validate   # Только validate-чекеры, заданны
 - **lockedDirs** — запрет изменений в защищённых директориях (dirs, pattern);
 - **viewHooks** — запрет React hooks в `*View.tsx` (pattern, allowedHooks);
 - **utilityPropLiterals** — только статические литералы для utility props (scope, pattern, utilityPropsMapPath, `allowDynamicInLoop`);
+- **utilityPropsWhitelist** — значения в `utility-props.map.ts` должны быть в whitelist (tw-css-extended + shadcn + grid); подсказки по ближайшим классам. Запуск: `bun run maintain:props`;
 - **orphanFiles** — поиск неиспользуемых файлов (scope, pattern, ignore, aliases);
 - **blockNesting** — запрет nested `Block` и нескольких root `Block` в View;
 - **clean** — очистка dist/node_modules (paths, pathsByMode).
@@ -704,7 +706,7 @@ bun run typecheck
 - [ ] `bun run maintain:validate` — validate-набор из `package.json` текущего приложения
 - [ ] `bun run typecheck` — TypeScript
 - [ ] Если менял блоки — `bun run generate` (и при необходимости `bun run finalize`)
-- [ ] Если менял `src/lib/utility-props.map.ts` — `bun run build:map`
+- [ ] Если менял `src/lib/utility-props.map.ts` — `bun run build:map` и `bun run maintain:props`
 - [ ] Нет хардкода — все данные из context или props
 - [ ] Нет `className` и `style`
 - [ ] У всех семантических элементов есть `data-class`

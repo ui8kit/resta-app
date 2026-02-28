@@ -1,0 +1,99 @@
+{
+  "runId": "maintain_1772272230312",
+  "generatedAt": "2026-02-28T09:50:30.312Z",
+  "duration": 36,
+  "success": false,
+  "results": [
+    {
+      "checker": "utility-props-whitelist",
+      "description": "Validate utility-props.map.ts values against Tailwind whitelist",
+      "success": false,
+      "startedAt": "2026-02-28T09:50:30.313Z",
+      "finishedAt": "2026-02-28T09:50:30.348Z",
+      "duration": 35,
+      "issues": [
+        {
+          "level": "error",
+          "code": "UTILITY_PROP_NOT_IN_CLASS_WHITELIST",
+          "message": "Class \"max-w-7xl\" is not available in configured class whitelist",
+          "checker": "utility-props-whitelist",
+          "file": "src/lib/utility-props.map.ts",
+          "line": 328,
+          "column": 5,
+          "received": "max-w-7xl",
+          "expected": "max-w-6xl | max-w-full",
+          "hint": "Keep design consistency. Try: max-w-6xl, max-w-full."
+        },
+        {
+          "level": "error",
+          "code": "UTILITY_PROP_NOT_IN_CLASS_WHITELIST",
+          "message": "Class \"w-64\" is not available in configured class whitelist",
+          "checker": "utility-props-whitelist",
+          "file": "src/lib/utility-props.map.ts",
+          "line": 684,
+          "column": 5,
+          "received": "w-64",
+          "expected": "w-4 | w-6",
+          "hint": "Keep design consistency. Try: w-4, w-6."
+        },
+        {
+          "level": "error",
+          "code": "UTILITY_PROP_NOT_IN_CLASS_WHITELIST",
+          "message": "Class \"w-72\" is not available in configured class whitelist",
+          "checker": "utility-props-whitelist",
+          "file": "src/lib/utility-props.map.ts",
+          "line": 685,
+          "column": 5,
+          "received": "w-72",
+          "expected": "w-12 | w-2",
+          "hint": "Keep design consistency. Try: w-12, w-2."
+        }
+      ],
+      "stats": {
+        "entriesScanned": 554,
+        "allowedCount": 5468,
+        "errorCount": 3
+      },
+      "hint": "Update utility-props.map.ts to Tailwind-supported values for consistent design scale."
+    }
+  ],
+  "errors": [
+    {
+      "level": "error",
+      "code": "UTILITY_PROP_NOT_IN_CLASS_WHITELIST",
+      "message": "Class \"max-w-7xl\" is not available in configured class whitelist",
+      "checker": "utility-props-whitelist",
+      "file": "src/lib/utility-props.map.ts",
+      "line": 328,
+      "column": 5,
+      "received": "max-w-7xl",
+      "expected": "max-w-6xl | max-w-full",
+      "hint": "Keep design consistency. Try: max-w-6xl, max-w-full."
+    },
+    {
+      "level": "error",
+      "code": "UTILITY_PROP_NOT_IN_CLASS_WHITELIST",
+      "message": "Class \"w-64\" is not available in configured class whitelist",
+      "checker": "utility-props-whitelist",
+      "file": "src/lib/utility-props.map.ts",
+      "line": 684,
+      "column": 5,
+      "received": "w-64",
+      "expected": "w-4 | w-6",
+      "hint": "Keep design consistency. Try: w-4, w-6."
+    },
+    {
+      "level": "error",
+      "code": "UTILITY_PROP_NOT_IN_CLASS_WHITELIST",
+      "message": "Class \"w-72\" is not available in configured class whitelist",
+      "checker": "utility-props-whitelist",
+      "file": "src/lib/utility-props.map.ts",
+      "line": 685,
+      "column": 5,
+      "received": "w-72",
+      "expected": "w-12 | w-2",
+      "hint": "Keep design consistency. Try: w-12, w-2."
+    }
+  ],
+  "warnings": []
+}

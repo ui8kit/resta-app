@@ -52,7 +52,7 @@
    - при необходимости: `bun run finalize`  
    - проверка сгенерированного приложения: из `apps/dsl` — `bun run typecheck:react` (проверяет `../react`); из `apps/dsl-design` — `bun run typecheck:react` (проверяет `../react-design`)
 
-7. **Если менялся `src/lib/utility-props.map.ts`** — пересобрать карту классов: `bun run build:map` (или из корня репо: `bun run packages/generator/src/cli/generate.ts uikit-map --cwd apps/dsl` / `--cwd apps/dsl-design`).
+7. **Если менялся `src/lib/utility-props.map.ts`** — пересобрать карту классов: `bun run build:map` (или из корня репо: `bun run packages/generator/src/cli/generate.ts uikit-map --cwd apps/dsl` / `--cwd apps/dsl-design`). Проверить соответствие whitelist: `bun run maintain:props`.
 
 ### 3.2 Одной командой (полный пайплайн)
 
@@ -80,6 +80,7 @@
 - **Общий линт:** `bun run lint` (ui8kit-lint)
 - **Аудит рефакторинга:** `bun run audit:refactor`
 - **Генерация карты пропсов (ui8kit.map.json):** `bun run build:map` — из каталога приложения (`apps/dsl` или `apps/dsl-design`). Синхронизирует `src/ui8kit.map.json` с `src/lib/utility-props.map.ts` (UiKitMapService).
+- **Проверка карты пропсов по whitelist:** `bun run maintain:props` — только чекер `utility-props-whitelist` (значения в `utility-props.map.ts` должны быть в tw-css-extended + shadcn + grid). Подсказки по ближайшим допустимым классам.
 - **Из корня репо** (общий корень, для скриптов/CI):
   - `bun run packages/generator/src/cli/generate.ts uikit-map --cwd apps/dsl`
   - `bun run packages/generator/src/cli/generate.ts uikit-map --cwd apps/dsl-design`
@@ -96,6 +97,6 @@
 - `bun run maintain:validate`
 - `bun run typecheck`
 - При изменении блоков/фикстур — `bun run generate` (и при необходимости `bun run finalize`)
-- При изменении `utility-props.map.ts` — `bun run build:map`
+- При изменении `utility-props.map.ts` — `bun run build:map` и `bun run maintain:props`
 
 Либо один раз: `bun run dist:app` (если нужен полный пайплайн до сгенерированного React).
