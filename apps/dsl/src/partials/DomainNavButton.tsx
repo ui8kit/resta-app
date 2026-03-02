@@ -2,8 +2,9 @@ import type { ReactNode } from 'react';
 import { Button } from '@ui8kit/core';
 import type { ButtonProps } from '@/components';
 
-export type DomainNavButtonProps = Omit<ButtonProps, 'href' | 'children' | 'data-class'> & {
-  href: string;
+type AnchorButtonProps = Extract<ButtonProps, { href: string }>;
+
+export type DomainNavButtonProps = Omit<AnchorButtonProps, 'children' | 'data-class'> & {
   children: ReactNode;
   'data-class'?: string;
 };
