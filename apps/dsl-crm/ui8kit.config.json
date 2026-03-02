@@ -1,0 +1,40 @@
+{
+  "$schema": "https://ui.buildy.tw/schema.json",
+  "configVersion": "1",
+  "brand": "crm-app",
+  "framework": "vite-react",
+  "typescript": true,
+  "target": "react",
+  "platform": "shopify",
+  "platformDomain": "catalog",
+  "outDir": "../react-crm",
+  "dist": {
+    "static": true,
+    "render": { "appEntry": "src/App.tsx", "skipRoutes": ["/admin/dashboard"] },
+    "html": { "mode": "tailwind" },
+    "postcss": { "enabled": true, "uncss": { "enabled": true } }
+  },
+  "aliases": {
+    "@": "./src",
+    "@/components": "./src/components",
+    "@/ui": "./src/components/ui",
+    "@/layouts": "./src/layouts",
+    "@/blocks": "./src/blocks",
+    "@/lib": "./src/lib",
+    "@/variants": "./src/variants"
+  },
+  "fixtures": "./fixtures",
+  "tokens": "./src/assets/css/shadcn.css",
+  "componentsDir": "./src/components",
+  "blocksDir": "./src/blocks",
+  "layoutsDir": "./src/layouts",
+  "partialsDir": "./src/partials",
+  "libDir": "./src/lib",
+  "registry": "@ui8kit",
+  "lint": {
+    "strict": true,
+    "dsl": true,
+    "ui8kitMapPath": "./src/ui8kit.map.json",
+    "utilityPropsMapPath": "./src/lib/utility-props.map.ts"
+  }
+}

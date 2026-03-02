@@ -21,6 +21,7 @@
   "dependencies": {
     "@ui8kit/generator": "workspace:*",
     "@ui8kit/resta-dsl": "workspace:*",
+    "@ui8kit/resta-dsl-crm": "workspace:*",
     "@ui8kit/resta-dsl-design": "workspace:*"
   },
   "devDependencies": {
