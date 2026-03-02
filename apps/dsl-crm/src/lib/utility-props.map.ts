@@ -325,6 +325,7 @@ export const utilityPropsMap = {
     "w-2xl",
     "w-4xl",
     "w-6xl",
+    "w-7xl",
     "w-full",
     "w-lg",
     "w-md",

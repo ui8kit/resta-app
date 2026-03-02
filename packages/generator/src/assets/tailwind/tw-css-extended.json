@@ -3503,6 +3503,7 @@
   "max-w-6": "max-width: calc(var(--spacing) * 6);",
   "max-w-6xl": "max-width: var(--container-6xl); /* 72rem (1152px) */",
   "max-w-7": "max-width: calc(var(--spacing) * 7);",
+  "max-w-7xl": "max-width: var(--container-7xl); /* 84rem (1344px) */",
   "max-w-7/12": "max-width: calc(7/12 * 100%);",
   "max-w-8": "max-width: calc(var(--spacing) * 8);",
   "max-w-9": "max-width: calc(var(--spacing) * 9);",
