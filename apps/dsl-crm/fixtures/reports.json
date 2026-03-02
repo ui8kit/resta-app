@@ -1,0 +1,35 @@
+{
+  "title": "Reports",
+  "subtitle": "Aggregated data and performance summaries",
+  "sections": [
+    {
+      "id": "pipeline",
+      "title": "Pipeline Summary",
+      "items": [
+        { "id": "rp-1", "label": "Total Pipeline Value", "value": "$103,000" },
+        { "id": "rp-2", "label": "Deals Closed (YTD)", "value": "23" },
+        { "id": "rp-3", "label": "Average Deal Size", "value": "$4,478" },
+        { "id": "rp-4", "label": "Win Rate", "value": "62%" }
+      ]
+    },
+    {
+      "id": "activity",
+      "title": "Activity Summary",
+      "items": [
+        { "id": "ra-1", "label": "Calls Made", "value": "184" },
+        { "id": "ra-2", "label": "Emails Sent", "value": "412" },
+        { "id": "ra-3", "label": "Meetings Held", "value": "67" },
+        { "id": "ra-4", "label": "Tasks Completed", "value": "138" }
+      ]
+    },
+    {
+      "id": "team",
+      "title": "Team Performance",
+      "items": [
+        { "id": "rt-1", "label": "Alice Johnson", "value": "$38,200 closed" },
+        { "id": "rt-2", "label": "Bob Smith", "value": "$29,700 closed" },
+        { "id": "rt-3", "label": "Carol White", "value": "$35,100 closed" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "version": "1",
+  "app": "@ui8kit/resta-dsl-crm",
+  "routes": [
+    { "path": "/", "component": "DashboardPage", "view": "DashboardPageView" },
+    { "path": "/tasks", "component": "TasksPage", "view": "TasksPageView" },
+    { "path": "/kanban", "component": "KanbanPage", "view": "KanbanPageView" },
+    { "path": "/reports", "component": "ReportsPage", "view": "ReportsPageView" },
+    { "path": "/admin", "component": "LoginPage", "view": "AdminLoginPageView" },
+    { "path": "/admin/dashboard", "component": "DashboardPage", "view": "AdminDashboardPageView" }
+  ],
+  "fixtures": [
+    { "domain": "crm", "file": "fixtures/dashboard.json" },
+    { "domain": "crm", "file": "fixtures/tasks.json" },
+    { "domain": "crm", "file": "fixtures/kanban.json" },
+    { "domain": "crm", "file": "fixtures/reports.json" },
+    { "domain": "admin", "file": "fixtures/admin.json" },
+    { "domain": "shared", "file": "fixtures/shared/site.json" },
+    { "domain": "shared", "file": "fixtures/shared/navigation.json" },
+    { "domain": "shared", "file": "fixtures/shared/page.json" }
+  ]
+}

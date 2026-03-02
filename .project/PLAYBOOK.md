@@ -1,164 +1,330 @@
-# CRM Visual Playbook
+# App Playbook — Universal Template Guide
 
-End-to-end onboarding for building `apps/dsl-crm` with full UI8Kit quality coverage and no skipped gates.
+End-to-end onboarding for building any app with UI8Kit, with full quality gate coverage and no skipped steps.
 
 Use this together with:
 
-- `ONBOARDING.md` for architecture and DSL rules
-- `WORKFLOW.md` for ordered command flow
-- `CLI_COMMANDS.md` for CLI command/options details
+- `ONBOARDING.md` — architecture and DSL rules
+- `WORKFLOW.md` — ordered command flow
+- `CLI_COMMANDS.md` — CLI command/option details
+
+**Live example:** `apps/dsl-crm` (CRM — Dashboard / Tasks / Kanban / Reports + Admin auth)
 
 ---
 
-## 1) Release Journey
+## Section 0 — What Stays Locked vs. What You Define
+
+```mermaid
+flowchart LR
+  subgraph locked [Locked — copy as-is]
+    components[src/components/]
+    variants[src/variants/]
+    lib[src/lib/]
+    css[src/assets/css/]
+  end
+  subgraph domain [Your Domain — define per app]
+    fixtures[fixtures/*.json]
+    types[src/types/]
+    adapters[src/data/adapters/]
+    context[src/data/context.ts]
+  end
+  subgraph ui [Your UI — build per app]
+    blocks[src/blocks/]
+    routes[src/routes/]
+    layouts[src/layouts/]
+    partials[src/partials/]
+    providers[src/providers/]
+  end
+  locked --> domain --> ui
+```
+
+| Layer | Files | Rule |
+|---|---|---|
+| **Locked** | `src/components/`, `src/variants/`, `src/lib/`, `src/assets/css/` | Copy verbatim from `apps/dsl`. **Never modify.** |
+| **Domain** | `fixtures/*.json`, `src/types/`, `src/data/adapters/`, `src/data/context.ts` | Define once per app. Shape determines all downstream UI. |
+| **UI** | `src/blocks/`, `src/routes/`, `src/layouts/`, `src/partials/`, `src/providers/` | Build per app. Follow DSL rules, use locked layer components. |
+
+---
+
+## Section 1 — Quick Start Journey
 
 ```mermaid
 journey
-    title CRM_Release_Journey
+    title App_Release_Journey
     section Bootstrap
-      Fork_and_install: 5: User
-      Run_reference_apps: 5: User
+      Fork_reference_app: 5: Dev
+      Run_bun_install: 5: Dev
+      Verify_reference_apps_run: 5: Dev
     section Design
-      Model_crm_entities_and_routes: 4: User
-      Define_fixtures_and_context: 4: User
+      Define_domain_entities: 4: Dev
+      Write_fixtures_JSON: 4: Dev
+      Define_TS_types_and_adapter: 4: Dev
     section Build
-      Implement_blocks_routes_layout: 4: User
-      Validate_dsl_and_types: 4: User
+      Copy_locked_layer: 5: Dev
+      Implement_blocks_routes_layouts: 4: Dev
+      Validate_DSL_and_types: 4: Dev
+    section Gates
+      Run_full_gate_chain: 5: Dev
+      Fix_all_errors: 5: Dev
     section Release
-      Generate_and_verify_react: 5: User
-      Generate_and_verify_html_css: 5: User
-      Ship_when_both_pass: 5: User
+      Generate_React_output: 5: Dev
+      Verify_generated_app: 5: Dev
+      Ship_when_gates_pass: 5: Dev
 ```
 
 ### Stage checklist
 
 | Stage | Required outputs | Definition of done |
 |---|---|---|
-| Bootstrap | Local fork builds and both reference apps run | `apps/dsl` and `apps/dsl-design` run with `bun run dev` |
-| Design | CRM entities, routes, fixture schema plan | Draft for `fixtures`, `context`, `routes`, `blocks` exists |
-| Build | `apps/dsl-crm` skeleton + initial pages/components | DSL rules respected, no hardcode in JSX |
-| Release | React and HTML/CSS outputs validated | Both release tracks pass all hard gates |
+| Bootstrap | Local install succeeds | `bun install` exits 0; reference apps (`apps/dsl`, `apps/dsl-design`) run with `bun run dev` |
+| Design | Entity plan written | `fixtures/*.json` schema drafted; `src/types/` defined; adapter wired |
+| Build | App skeleton built | Blocks render, routes registered, DSL rules respected, no hardcode in JSX |
+| Gates | All gate commands pass | Exit code 0 for every gate in order |
+| Release | Generated output verified | React app typecheck passes; HTML/CSS artifacts generated |
 
 ---
 
-## 2) Quality Gates Journey (All Mandatory)
+## Section 2 — Entity Design Guide
 
-```mermaid
-journey
-    title CRM_Quality_Gates_Journey
-    section DslGate
-      Run_lint_dsl: 5: User
-      Confirm_no_js_control_flow: 5: User
-    section SemanticGate
-      Check_semantic_props: 5: User
-      Check_data_class_coverage: 5: User
-    section MaintainGate
-      Run_maintain_validate: 5: User
-      Run_maintain_check: 5: User
-      Run_maintain_props_if_needed: 4: User
-    section BlueprintGate
-      Run_blueprint_scan: 5: User
-      Run_blueprint_validate: 5: User
-      Run_blueprint_graph: 4: User
-    section ReleaseGate
-      Verify_react_release: 5: User
-      Verify_html_css_release: 5: User
+How to define your domain and wire it to the UI layer. The CRM app (`apps/dsl-crm`) is used as a worked example throughout.
+
+### Step 1 — Choose your entities
+
+List the pages/domains your app needs. Each entity maps to:
+- A fixture JSON file
+- A set of TypeScript types
+- A PageView block
+- A route in `App.tsx`
+
+**CRM example entities:**
+| Entity | Route | Fixture | PageView |
+|---|---|---|---|
+| Dashboard | `/` | `fixtures/dashboard.json` | `DashboardPageView` |
+| Tasks | `/tasks` | `fixtures/tasks.json` | `TasksPageView` |
+| Kanban | `/kanban` | `fixtures/kanban.json` | `KanbanPageView` |
+| Reports | `/reports` | `fixtures/reports.json` | `ReportsPageView` |
+| Admin Login | `/admin` | (shared) | `AdminLoginPageView` |
+| Admin Dashboard | `/admin/dashboard` | `fixtures/admin.json` | `AdminDashboardPageView` |
+
+### Step 2 — Write fixture JSON
+
+Each fixture file is plain JSON consumed by the adapter. Keep it flat and serializable.
+
+```json
+// fixtures/dashboard.json (CRM example)
+{
+  "title": "CRM Dashboard",
+  "subtitle": "Overview of your pipeline",
+  "metrics": [
+    { "id": "leads", "label": "Total Leads", "value": "142", "trend": "+12%" },
+    { "id": "deals", "label": "Open Deals", "value": "38", "trend": "+5%" }
+  ]
+}
 ```
 
-### Hard-gate command set for `apps/dsl-crm`
+Shared fixtures always required:
+- `fixtures/shared/site.json` — `{ title, subtitle, description }`
+- `fixtures/shared/navigation.json` — `{ navItems[], sidebarLinks[], adminSidebarLinks[], labels }`
+- `fixtures/shared/page.json` — `{ page: { <domain>: PageEntry[] } }`
 
-Run from `apps/dsl-crm` (create scripts by referencing `apps/dsl` + `apps/dsl-design`):
+### Step 3 — Define TypeScript types
 
-1. `bun run lint:dsl`
-2. `bun run lint:gen` (if your CRM app includes this script/rule set)
-3. `bun run validate`
-4. `bun run maintain:validate`
-5. `bun run maintain:check`
-6. `bun run typecheck`
-7. `bun run blueprint:scan`
-8. `bun run blueprint:validate`
-9. `bun run blueprint:graph`
-10. If `src/lib/utility-props.map.ts` changed: `bun run build:map` and `bun run maintain:props`
-11. `bun run generate`
-12. `bun run finalize`
-13. Verify generated React app (`../react-crm`) with `bun run typecheck` (inside generated app)
-14. Verify HTML/CSS output via generator static pipeline (see `CLI_COMMANDS.md` for `static`, `html`, `render`, `styles`)
+Create `src/types/` files mirroring the fixture shape. One file per entity domain.
 
-If any gate fails, stop and fix before continuing.
+```typescript
+// src/types/tasks.ts (CRM example)
+export type TaskPriority = 'low' | 'medium' | 'high';
+export type TaskStatus = 'todo' | 'in-progress' | 'done';
 
----
+export type Task = {
+  id: string;
+  title: string;
+  status: TaskStatus;
+  priority: TaskPriority;
+  assignee?: string;
+  dueDate?: string;
+};
 
-## 3) Docs Sync Journey (Mandatory)
-
-```mermaid
-journey
-    title CRM_Docs_Sync_Journey
-    section CliDocs
-      Check_cli_commands_matches_help: 5: User
-    section ProcessDocs
-      Check_workflow_order: 5: User
-      Check_onboarding_references: 5: User
-    section FinalSync
-      Confirm_playbook_consistency: 5: User
+export type TasksFixture = {
+  title: string;
+  subtitle: string;
+  items: Task[];
+};
 ```
 
-### Required docs sync checks
+Export everything from `src/types/index.ts`.
 
-- `CLI_COMMANDS.md` matches real CLI help (`bunx maintain --help`, `bunx ui8kit-generate --help`)
-- `WORKFLOW.md` still reflects actual gate order and scripts
-- `ONBOARDING.md` references this playbook and command sources
-- `.project/CRM_PLAYBOOK.md` remains consistent with all three docs
+### Step 4 — Define the canonical adapter type
+
+In `src/data/adapters/types.ts`, define `CanonicalContextInput` — the shape that all adapters must return:
+
+```typescript
+export type CanonicalContextInput = {
+  site: SiteInfo;
+  page: PageFixture['page'];
+  navigation: NavigationFixture;
+  fixtures: {
+    dashboard: DashboardFixture;
+    tasks: TasksFixture;
+    kanban: KanbanFixture;
+    reports: ReportsFixture;
+    admin: AdminFixture;
+  };
+};
+```
+
+### Step 5 — Implement the fixtures adapter
+
+`src/data/adapters/fixtures.adapter.ts` imports all JSON and returns `CanonicalContextInput`:
+
+```typescript
+export function loadFixturesContextInput(): CanonicalContextInput {
+  return {
+    site: siteData as SiteInfo,
+    page: (pageData as PageFixture).page,
+    navigation: navigationData as CanonicalContextInput['navigation'],
+    fixtures: {
+      dashboard: dashboardData as DashboardFixture,
+      tasks: tasksData as TasksFixture,
+      // ...
+    },
+  };
+}
+```
+
+### Step 6 — Wire the context
+
+`src/data/context.ts` calls the adapter and exposes frozen domain objects:
+
+```typescript
+const crmDomain = Object.freeze({
+  page: page.crm ?? [],
+  dashboard: baseContext.fixtures.dashboard,
+  tasks: baseContext.fixtures.tasks,
+  // ...
+});
+
+export const context = Object.freeze({
+  ...baseContext,
+  domains: Object.freeze({ crm: crmDomain, admin: adminDomain }),
+});
+```
+
+### Step 7 — Build blocks and routes
+
+Follow the pattern from `apps/dsl`:
+1. Create `src/blocks/<domain>/<Entity>PageView.tsx` — accepts typed props, uses `<Var>`, `<If>`, `<Loop>`
+2. Create `src/routes/<domain>/<Entity>Page.tsx` — reads from `context.domains.<domain>`, renders the PageView
+3. Register the route in `src/App.tsx`
+4. Export the block from `src/blocks/index.ts`
 
 ---
 
-## 4) Coverage Matrix (Miss-Nothing Control)
+## Section 3 — Quality Gates (Mandatory, All Apps)
 
-| Stage | Tool | Command/source | Expected result | Pass criteria |
-|---|---|---|---|---|
-| Bootstrap | Bun/workspace | `bun install`, `bun run dev` | Local app runs | No startup errors |
-| Reference | Existing apps | `apps/dsl`, `apps/dsl-design` | Patterns understood | Structure/scripts copied intentionally |
-| DSL gate | `@ui8kit/lint` | `bun run lint:dsl` | No DSL violations | No `.map`, `&&`, ternary in JSX |
-| Semantic gate | UI8Kit rules | `ONBOARDING.md` + validate output | Semantic props only | No `className`/`style`, `data-class` coverage |
-| Validate gate | `@ui8kit/sdk` | `bun run validate` | Config/props/tag checks pass | Exit code 0 |
-| Maintain validate | `@ui8kit/maintain` | `bun run maintain:validate` | Core invariants pass | Exit code 0 |
-| Maintain full | `@ui8kit/maintain` | `bun run maintain:check` | Enabled checker set passes | Exit code 0 |
-| Props map gate | generator+maintain | `bun run build:map`, `bun run maintain:props` | Map and whitelist in sync | No whitelist violations |
-| Blueprint gate | `@ui8kit/generator` | `blueprint:scan/validate/graph` | Blueprint updated and valid | Validate passes, graph produced |
-| React release | generator | `bun run generate`, `bun run finalize` | `../react-crm` generated | Generated app typecheck passes |
-| HTML release | generator | `ui8kit-generate static/html/render/styles` | HTML/CSS artifacts generated | Static output verified |
-| Docs sync | project docs | `CLI_COMMANDS.md`, `WORKFLOW.md`, `ONBOARDING.md` | No doc drift | Commands and order match reality |
+Run from the app directory. All gates must pass before release.
 
----
+| # | Gate | Command | Pass criteria |
+|---|---|---|---|
+| 1 | DSL lint | `bun run lint:dsl` | No `.map`, `&&`, ternary in JSX; use `<If>`, `<Loop>`, `<Var>` |
+| 2 | Semantic validate | `bun run validate` | No `className`/`style`; `data-class` coverage; allowed prop values |
+| 3 | Maintain validate | `bun run maintain:validate` | Invariants, fixtures, view exports, contracts pass |
+| 4 | Maintain check | `bun run maintain:check` | All enabled checkers pass |
+| 5 | TypeScript | `bun run typecheck` | `tsc --noEmit` exits 0 |
+| 6 | Blueprint scan | `bun run blueprint:scan` | Blueprint updated |
+| 7 | Blueprint validate | `bun run blueprint:validate` | Blueprint is consistent |
+| 8 | Generate | `bun run generate` | React output generated |
+| 9 | Finalize | `bun run finalize` | Generated app assembled |
+| 10 | Verify generated | `cd ../react-crm && bun run typecheck` | Generated app passes TS |
 
-## 5) No-Skip Checklist (Copy/Paste)
+If any gate fails, **stop and fix before continuing**. Log every error and fix in `JOURNAL.md`.
 
-- [ ] I used `apps/dsl` and `apps/dsl-design` as implementation references.
-- [ ] `apps/dsl-crm` scripts were aligned with real workflow gates.
-- [ ] DSL gate passed (`lint:dsl`).
-- [ ] Semantic gate passed (no `className`/`style`, `data-class` coverage).
-- [ ] Validate gate passed (`validate`).
-- [ ] Maintain gates passed (`maintain:validate`, `maintain:check`).
-- [ ] Blueprint gates passed (`scan`, `validate`, `graph`).
-- [ ] Props map gate passed when utility-props map changed.
-- [ ] React release gate passed (`generate`, `finalize`, generated app verification).
-- [ ] HTML/CSS release gate passed (static pipeline verified).
-- [ ] Docs sync gate passed across `CLI_COMMANDS.md`, `WORKFLOW.md`, `ONBOARDING.md`, and this playbook.
-
----
-
-## 6) Quick Rescue Paths
+### Quick rescue paths
 
 | Problem | Immediate action |
 |---|---|
-| `lint:dsl` fails | Replace JS control-flow with `<If>`, `<Var>`, `<Loop>` patterns from `ONBOARDING.md`. |
-| `validate` fails on tags/props | Check semantic props and allowed `component` tags (`component-tag-map`). |
-| `maintain:validate` fails | Fix invariants/fixtures/view exports/contracts first, then re-run. |
-| `maintain:props` fails | Rebuild map with `build:map`, then resolve whitelist mismatches. |
-| `blueprint:validate` fails | Re-run `blueprint:scan`, inspect changes, validate again. |
-| React output breaks | Re-run gate chain from validate → maintain → generate/finalize. |
-| HTML/CSS output missing | Run static pipeline commands and verify config/routes/fixtures inputs. |
-| Docs drift | Refresh CLI help and sync `CLI_COMMANDS.md`, `WORKFLOW.md`, `ONBOARDING.md`. |
+| `lint:dsl` fails | Replace JS control-flow with `<If>`, `<Var>`, `<Loop>` from `@ui8kit/dsl` |
+| `validate` fails on tags/props | Check semantic props; verify allowed `component` values in architecture rules |
+| `maintain:validate` fails | Fix invariants/fixtures/view-exports/contracts first |
+| `typecheck` fails | Fix TS errors; check import paths and prop types |
+| `blueprint:validate` fails | Re-run `blueprint:scan`, inspect changes, validate again |
+| Generated app breaks | Re-run gate chain from `validate` → `maintain` → `generate/finalize` |
 
 ---
 
-Last update: 2026-02
+## Section 4 — JOURNAL.md Format
+
+Append one entry per significant event. The agent appends automatically during implementation.
+
+### Entry template
+
+```md
+## YYYY-MM-DD — <Stage>: <Title>
+
+**What happened:** Brief description of what was done or attempted.
+
+**Obstacle / Error:** Error message or blocker encountered (if any). Write "none" if clean.
+
+**Resolution:** How the obstacle was resolved or worked around.
+
+**Gap / LLM pause:** Any knowledge gap encountered (e.g. "unsure how X works"). Write "none" if clear.
+```
+
+### When to log
+
+- Stage start and end (Bootstrap, Design, Build, Gates, Release)
+- Any gate failure + fix (copy the error and the resolution)
+- Any structural decision (e.g. "chose 3-column Grid for Kanban")
+- Any LLM knowledge gap or uncertainty
+- Gate pass confirmations (with command and exit code)
+
+---
+
+## Section 5 — Coverage Matrix
+
+| Stage | Tool | Command | Expected result | Pass criteria |
+|---|---|---|---|---|
+| Bootstrap | Bun | `bun install` | Dependencies resolved | No install errors |
+| Reference | Existing apps | `bun run dev` in `apps/dsl` | App runs | No startup errors |
+| DSL gate | `@ui8kit/lint` | `bun run lint:dsl` | No DSL violations | Exit code 0 |
+| Semantic gate | `@ui8kit/sdk` | `bun run validate` | Config/props/tag checks pass | Exit code 0 |
+| Maintain validate | `@ui8kit/maintain` | `bun run maintain:validate` | Core invariants pass | Exit code 0 |
+| Maintain full | `@ui8kit/maintain` | `bun run maintain:check` | All enabled checkers pass | Exit code 0 |
+| TypeScript | TypeScript | `bun run typecheck` | No type errors | Exit code 0 |
+| Blueprint gate | generator | `blueprint:scan/validate` | Blueprint valid | Exit code 0 |
+| React release | generator | `bun run generate && bun run finalize` | `../react-{app}` generated | Generated app typecheck passes |
+| Docs sync | project docs | Manual review | No doc drift | Commands match reality |
+
+---
+
+## Section 6 — No-Skip Checklist
+
+Replace `{APP_NAME}` with your app name (e.g. `dsl-crm`).
+
+- [ ] Locked layer copied verbatim from `apps/dsl` — not modified.
+- [ ] `apps/{APP_NAME}` scripts aligned with gate workflow.
+- [ ] DSL gate passed (`lint:dsl`).
+- [ ] Semantic gate passed (`validate`).
+- [ ] Maintain gates passed (`maintain:validate`, `maintain:check`).
+- [ ] TypeScript gate passed (`typecheck`).
+- [ ] Blueprint gates passed (`blueprint:scan`, `blueprint:validate`).
+- [ ] React release gate passed (`generate`, `finalize`, generated app verification).
+- [ ] All gate results logged in `JOURNAL.md`.
+
+---
+
+## Section 7 — Quick Rescue Paths
+
+| Problem | Immediate action |
+|---|---|
+| `lint:dsl` fails | Replace JS control-flow with `<If>`, `<Var>`, `<Loop>` from `ONBOARDING.md` patterns |
+| `validate` fails on tags/props | Check semantic props and allowed `component` tags in architecture rules |
+| `maintain:validate` fails | Fix invariants/fixtures/view exports/contracts first, then re-run |
+| `typecheck` fails | Check import paths, prop types, missing exports |
+| `blueprint:validate` fails | Re-run `blueprint:scan`, inspect diff, validate again |
+| React output breaks | Re-run gate chain from validate → maintain → generate/finalize |
+| Docs drift | Refresh CLI help and sync `CLI_COMMANDS.md`, `WORKFLOW.md`, `ONBOARDING.md` |
+
+---
+
+Last update: 2026-03-02
