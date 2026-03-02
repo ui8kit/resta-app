@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Block, Box, Sheet } from '@ui8kit/core';
+import { Block, Box, Stack, Group, Sheet, Container } from '@ui8kit/core';
 import { DashSidebar } from '@/blocks';
 import { context } from '@/data/context';
 import { Sidebar } from '@/partials/Sidebar';
@@ -21,7 +21,7 @@ export function CrmLayout({ children, sidebar }: CrmLayoutProps) {
   const resolvedSidebar = sidebar ?? <DashSidebar links={links} />;
 
   const mobileMenu = (
-    <Block className="flex md:hidden shrink-0" data-class="crm-mobile-menu-trigger">
+    <Box flex="" shrink="0" className="md:hidden" data-class="crm-mobile-menu-trigger">
       <Sheet
         id="crm-mobile-sheet"
         side="left"
@@ -33,20 +33,21 @@ export function CrmLayout({ children, sidebar }: CrmLayoutProps) {
         triggerSize="sm"
         showTrigger
       >
-        <Block
-          data-class="crm-mobile-sheet-content"
-          className="mt-4"
-          onClick={(e) => {
-            if ((e.target as HTMLElement).closest('a')) {
-              const cb = document.getElementById('crm-mobile-sheet') as HTMLInputElement | null;
-              if (cb) cb.checked = false;
-            }
-          }}
-        >
-          <Sidebar>{resolvedSidebar}</Sidebar>
-        </Block>
+        <Stack gap="4" data-class="crm-mobile-sheet-content">
+          <Box
+            data-class="crm-mobile-sheet-inner"
+            onClick={(e) => {
+              if ((e.target as HTMLElement).closest('a')) {
+                const cb = document.getElementById('crm-mobile-sheet') as HTMLInputElement | null;
+                if (cb) cb.checked = false;
+              }
+            }}
+          >
+            <Sidebar>{resolvedSidebar}</Sidebar>
+          </Box>
+        </Stack>
       </Sheet>
-    </Block>
+    </Box>
   );
 
   return (
@@ -58,20 +59,26 @@ export function CrmLayout({ children, sidebar }: CrmLayoutProps) {
         dataClass="crm-layout-header"
         beforeThemeToggle={mobileMenu}
       />
-      <Block flex="" data-class="crm-layout-body" className="flex-1">
-        <Block
-          component="aside"
+      <Group flex="" grow items="stretch" data-class="crm-layout-body">
+        <Sidebar
+          position="left"
+          className="hidden md:flex"
+          border="r"
+          bg="card"
+          w="64"
+          shrink="0"
+          py="4"
+          overflow="auto"
           data-class="crm-sidebar"
-          className="hidden md:flex w-64 shrink-0 border-r border-border"
         >
-          <Box w="full" h="full" data-class="crm-sidebar-content" className="overflow-auto">
-            <Sidebar>{resolvedSidebar}</Sidebar>
-          </Box>
-        </Block>
-        <Block component="main" flex="col" data-class="crm-main" className="flex-1 overflow-auto">
-          {children}
-        </Block>
-      </Block>
+          {resolvedSidebar}
+        </Sidebar>
+        <Group component="main" flex="col" grow overflow="auto" data-class="crm-main">
+          <Container>
+            {children}
+          </Container>
+        </Group>
+      </Group>
     </Block>
   );
 }

@@ -680,6 +680,8 @@ export const utilityPropsMap = {
     "5",
     "6",
     "8",
+    "48",
+    "64",
     "auto",
     "fit",
     "full",
