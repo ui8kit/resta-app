@@ -1,8 +1,8 @@
 # Workflow (commands)
 
-Short sequence of commands from setup to pre-commit checks. No code examples.
+Short sequence of commands from setup to release. No code examples.
 
-For a no-skip CRM onboarding and release path (`apps/dsl-crm`), use **[.project/CRM_PLAYBOOK.md](.project/CRM_PLAYBOOK.md)** together with this file.
+For the full stage-by-stage pipeline tracker with checklists, use **[.project/PLAYBOOK.md](.project/PLAYBOOK.md)** — paste it into an agent chat to check what is not yet done.
 
 ---
 
@@ -10,7 +10,9 @@ For a no-skip CRM onboarding and release path (`apps/dsl-crm`), use **[.project/
 
 From the monorepo root:
 
-- `bun install`
+```bash
+bun install
+```
 
 Run once after cloning or after `git pull` when dependencies have changed.
 
@@ -20,87 +22,118 @@ Run once after cloning or after `git pull` when dependencies have changed.
 
 Switch to the target app and start the dev server:
 
-- **Main app (restaurant):** `cd apps/dsl` → `bun run dev`
-- **Design system (token/component preview):** `cd apps/dsl-design` → `bun run dev`
+```bash
+cd apps/dsl          # or apps/dsl-crm, apps/dsl-design
+bun run dev
+```
 
-The server runs at the URL from the config (e.g. localhost:3020).
-
----
-
-## 3. Pre-commit checks
-
-All commands below are run **from the app directory**: `apps/dsl` or `apps/dsl-design`. **apps/dsl-design** has no `lint:gen` or `test:contracts` scripts.
-For **maintain**: in `apps/dsl-design` the enabled checkers are `invariants`, `viewExports`, `contracts`, `clean`, `lockedDirs`, `viewHooks`, `utilityPropLiterals`, `orphanFiles`, `blockNesting` (checkers `dataClassConflicts`, `componentTag`, `colorTokens`, `genLint` are not enabled).
-
-### 3.1 Required check order
-
-1. **DSL lint** — If/Var/Loop instead of JS conditionals and loops
-   - `bun run lint:dsl`
-
-2. **Generator lint** — rules for blocks/layouts (genLint)
-   - `bun run lint:gen`
-
-3. **App validation** — config, props, component+tag (ui8kit-validate)
-   - `bun run validate`
-
-4. **Maintain: validate** — invariants, fixtures, view-exports, contracts
-   - `bun run maintain:validate`
-
-5. **TypeScript**
-   - `bun run typecheck`
-
-6. **If blocks, templates, or fixtures changed** — rebuild output and optionally verify the React app:
-   - `bun run generate`
-   - if needed: `bun run finalize`
-   - verify generated app: from `apps/dsl` — `bun run typecheck:react` (checks `../react`); from `apps/dsl-design` — `bun run typecheck:react` (checks `../react-design`)
-
-7. **If `src/lib/utility-props.map.ts` changed** — rebuild the class map: `bun run build:map` (or from repo root: `bun run packages/generator/src/cli/generate.ts uikit-map --cwd apps/dsl` / `--cwd apps/dsl-design`). Then verify whitelist: `bun run maintain:props`.
-
-### 3.2 Single command (full pipeline)
-
-Full pipeline of lint, validation, blueprint, generation, and React checks:
-
-- `bun run dist:app`
-
-- **apps/dsl:** lint:dsl, lint:gen, validate, blueprint:scan, blueprint:validate, test:contracts, generate, finalize, typecheck in `../react`.
-- **apps/dsl-design:** lint:dsl, validate, blueprint:scan, blueprint:validate, maintain:check, generate, finalize, typecheck in `../react-design`.
-
-No new CLI commands were added to `maintain`/`generator`; the above reflects the current set of enabled checkers in `maintain.config.json`.
-
-### 3.3 All maintain checkers (before merge)
-
-Run all checkers from `maintain.config.json` (including dataClassConflicts, componentTag, colorTokens, genLint):
-
-- `bun run maintain:check`
+The server runs at the URL from the Vite config (e.g. `localhost:3020`).
 
 ---
 
-## 4. Additional commands
+## 3. Config files (new app only)
 
-- **Blueprint:** `bun run blueprint:scan`, `bun run blueprint:validate`, `bun run blueprint:graph`
-- **Contracts:** `bun run test:contracts` (only in **apps/dsl**; dsl-design has no such script)
-- **General lint:** `bun run lint` (ui8kit-lint)
-- **Refactor audit:** `bun run audit:refactor`
-- **Props map generation (ui8kit.map.json):** `bun run build:map` — from the app directory (`apps/dsl` or `apps/dsl-design`). Syncs `src/ui8kit.map.json` with `src/lib/utility-props.map.ts` (UiKitMapService).
-- **Props map whitelist check:** `bun run maintain:props` — runs only the `utility-props-whitelist` checker (values in `utility-props.map.ts` must exist in tw-css-extended + shadcn + grid). Suggests nearest allowed classes.
-- **From repo root** (for scripts/CI):
-  - `bun run packages/generator/src/cli/generate.ts uikit-map --cwd apps/dsl`
-  - `bun run packages/generator/src/cli/generate.ts uikit-map --cwd apps/dsl-design`
-- **Clean generated output:** `bun run clean:dist`
-- **Full clean (including node_modules):** `bun run clean`
+Before running gates on a new app, ensure three config files exist in the app root:
+
+| File | Purpose | Source |
+|---|---|---|
+| `ui8kit.config.json` | Generator, validate, lint config | Copy from `apps/dsl`, update `brand`, `outDir` |
+| `maintain.config.json` | Checker config (routes, fixtures, dirs) | Copy from `apps/dsl`, update routes and domain names |
+| `blueprint.json` | Entity/route contract | Write seed manually, then run `blueprint:scan` |
+
+See **[ONBOARDING.md § 9](ONBOARDING.md)** for full config structure and annotated examples.
 
 ---
 
-## 5. Pre-commit checklist (short)
+## 4. Gate chain (pre-commit / pre-release)
 
-- `bun run lint:dsl`
-- `bun run lint:gen`
-- `bun run validate`
-- `bun run maintain:validate`
-- `bun run typecheck`
-- If blocks/fixtures changed — `bun run generate` (and if needed `bun run finalize`)
-- If `utility-props.map.ts` changed — `bun run build:map` and `bun run maintain:props`
+All commands run **from the app directory**. Run in order — stop and fix on any failure.
 
-Or run once: `bun run dist:app` (when you need the full pipeline up to generated React).
+### Stage 3 — Critical gates
 
-For full command options and CLI references, see **[CLI_COMMANDS.md](CLI_COMMANDS.md)**.
+```bash
+bun run lint:dsl           # DSL rules: no .map()/.&&/ternary; every <Var> in <If>
+bun run lint:gen           # Generator lint for blocks/layouts (skip in dsl-design)
+bun run validate           # ui8kit.config.json, props, component+tag
+bun run maintain:validate  # Invariants, fixtures, view-exports, contracts
+bun run maintain:check     # Full checker set (data-class, colorTokens, genLint, orphans...)
+bun run typecheck          # TypeScript
+bun run blueprint:scan     # Scan code → update blueprint.json
+bun run blueprint:validate # Validate project against blueprint
+```
+
+### Stage 4 — High gates (run when relevant)
+
+```bash
+# When utility-props.map.ts changes:
+bun run build:map          # Regenerate ui8kit.map.json from utility-props.map.ts
+bun run maintain:props     # Verify all prop values exist in Tailwind/shadcn whitelist
+
+# Optional — for structure inspection:
+bun run blueprint:graph    # Build dependency graph from blueprint
+bun run lint               # General lint (ui8kit-lint, overlaps with maintain)
+```
+
+### Stage 5 — Release
+
+```bash
+bun run generate           # DSL → React (output: ../react-{APP_NAME})
+bun run finalize           # Assemble final generated app
+
+# Verify generated React app:
+cd ../react-{APP_NAME}
+bun run typecheck
+
+# HTML/CSS pipeline (requires dist.config.json or ui8kit.config.json dist section):
+cd apps/{APP_NAME}
+bunx ui8kit-generate static --cwd .   # Full: render + CSS + HTML + PostCSS
+bunx ui8kit-generate html --cwd .     # Render + HTML only
+bunx ui8kit-generate styles --cwd .   # CSS extraction only
+```
+
+### Single command (full pipeline)
+
+```bash
+bun run dist:app
+```
+
+**apps/dsl:** lint:dsl, lint:gen, validate, blueprint:scan, blueprint:validate, test:contracts, generate, finalize, typecheck:react.
+**apps/dsl-design:** lint:dsl, validate, blueprint:scan, blueprint:validate, maintain:check, generate, finalize, typecheck:react.
+
+---
+
+## 5. Additional commands
+
+| Command | Purpose |
+|---|---|
+| `bun run maintain:validate` | Fast validate-only run (invariants, fixtures, view-exports, contracts) |
+| `bun run maintain:check` | Full checker set from maintain.config.json |
+| `bun run maintain:props` | Props whitelist check only |
+| `bun run blueprint:scan` | Scan → update blueprint.json |
+| `bun run blueprint:validate` | Validate project vs blueprint |
+| `bun run blueprint:graph` | Dependency graph |
+| `bun run build:map` | Regenerate ui8kit.map.json |
+| `bun run test:contracts` | Contract tests (apps/dsl only) |
+| `bun run audit:refactor` | Refactor/branding audit |
+| `bun run inspect` | ui8kit-inspect (config debug) |
+| `bun run clean:dist` | Remove generated output |
+| `bun run clean` | Full clean including node_modules |
+
+---
+
+## 6. Pre-commit checklist (short)
+
+- [ ] `bun run lint:dsl`
+- [ ] `bun run lint:gen` (skip in dsl-design)
+- [ ] `bun run validate`
+- [ ] `bun run maintain:validate`
+- [ ] `bun run maintain:check`
+- [ ] `bun run typecheck`
+- [ ] `bun run blueprint:scan`
+- [ ] `bun run blueprint:validate`
+- [ ] If blocks/fixtures changed — `bun run generate` then `bun run finalize`
+- [ ] If blocks changed — `cd ../react-{APP_NAME} && bun run typecheck`
+- [ ] If `utility-props.map.ts` changed — `bun run build:map` then `bun run maintain:props`
+
+For full CLI options, see **[CLI_COMMANDS.md](CLI_COMMANDS.md)**.
+For the stage-by-stage pipeline with `[ ]` trackers, see **[.project/PLAYBOOK.md](.project/PLAYBOOK.md)**.

@@ -14,12 +14,13 @@ Complete introduction to building valid DSL applications with UI8Kit. After read
 6. [DSL components: If, Var, Loop, Slot](#6-dsl-components-if-var-loop-slot)
 7. [Semantic props and data-class](#7-semantic-props-and-data-class)
 8. [Where to put new code](#8-where-to-put-new-code)
-9. [Commands and workflow](#9-commands-and-workflow)
-10. [Validation and linting](#10-validation-and-linting)
-11. [React and HTML+CSS generation](#11-react-and-htmlcss-generation)
-12. [Anti-patterns — what to avoid](#12-anti-patterns--what-to-avoid)
-13. [First task step by step](#13-first-task-step-by-step)
-14. [Pre-commit checklist](#14-pre-commit-checklist)
+9. [Config files: ui8kit, maintain, blueprint](#9-config-files-ui8kit-maintain-blueprint)
+10. [Commands and workflow](#10-commands-and-workflow)
+11. [Validation and linting](#11-validation-and-linting)
+12. [React and HTML+CSS generation](#12-react-and-htmlcss-generation)
+13. [Anti-patterns — what to avoid](#13-anti-patterns--what-to-avoid)
+14. [First task step by step](#14-first-task-step-by-step)
+15. [Pre-commit checklist](#15-pre-commit-checklist)
 
 ---
 
@@ -252,6 +253,38 @@ If a value can be `undefined` or `null`, wrap `<Var>` in `<If>`:
 </If>
 ```
 
+### 6.6 UNWRAPPED_VAR — every `<Var>` must be inside `<If>`
+
+The DSL linter (`lint:dsl`) enforces rule **UNWRAPPED_VAR**: **every** `<Var>` — including inside `<Loop>` and for non-optional fields — must be wrapped in `<If>`. This is required for the static HTML generator to emit safe, conditional output.
+
+```tsx
+// ❌ Wrong — even inside Loop, even if field is required
+<Loop each="items" as="item" data={items}>
+  {(item) => (
+    <Card key={item.id} data-class="item-card">
+      <CardTitle order={4}>
+        <Var name="item.title" value={item.title} />
+      </CardTitle>
+    </Card>
+  )}
+</Loop>
+
+// ✅ Correct — wrap in If even for required fields
+<Loop each="items" as="item" data={items}>
+  {(item) => (
+    <Card key={item.id} data-class="item-card">
+      <CardTitle order={4}>
+        <If test="item.title" value={!!item.title}>
+          <Var name="item.title" value={item.title} />
+        </If>
+      </CardTitle>
+    </Card>
+  )}
+</Loop>
+```
+
+This rule applies to: page props, loop item fields, badge/badge-variant values, all other `<Var>` usages.
+
 ---
 
 ## 7. Semantic props and data-class
@@ -337,6 +370,197 @@ Full map: `packages/generator/src/lib/component-tag-map.json`.
 
 ---
 
+## 9. Config files: ui8kit, maintain, blueprint
+
+Every app needs three config files in its root directory. Copy them from `apps/dsl` and adapt.
+
+### 9.1 ui8kit.config.json — main app config
+
+Consumed by `ui8kit-validate`, `ui8kit-generate`, and `ui8kit-lint`. Controls generation output, aliases, lint settings.
+
+```json
+{
+  "$schema": "https://ui.buildy.tw/schema.json",
+  "configVersion": "1",
+  "brand": "my-app",
+  "framework": "vite-react",
+  "typescript": true,
+  "target": "react",
+  "platform": "shopify",
+  "platformDomain": "catalog",
+  "outDir": "../react-{APP_NAME}",
+  "dist": {
+    "static": true,
+    "render": { "appEntry": "src/App.tsx", "skipRoutes": ["/admin/dashboard"] },
+    "html": { "mode": "tailwind" },
+    "postcss": { "enabled": true, "uncss": { "enabled": true } }
+  },
+  "aliases": {
+    "@": "./src",
+    "@/components": "./src/components",
+    "@/ui": "./src/components/ui",
+    "@/layouts": "./src/layouts",
+    "@/blocks": "./src/blocks",
+    "@/lib": "./src/lib",
+    "@/variants": "./src/variants"
+  },
+  "fixtures": "./fixtures",
+  "tokens": "./src/assets/css/shadcn.css",
+  "componentsDir": "./src/components",
+  "blocksDir": "./src/blocks",
+  "layoutsDir": "./src/layouts",
+  "partialsDir": "./src/partials",
+  "libDir": "./src/lib",
+  "registry": "@ui8kit",
+  "lint": {
+    "strict": true,
+    "dsl": true,
+    "ui8kitMapPath": "./src/ui8kit.map.json",
+    "utilityPropsMapPath": "./src/lib/utility-props.map.ts"
+  }
+}
+```
+
+**What to change per app:**
+- `brand` — your app name (kebab-case)
+- `outDir` — `"../react-{APP_NAME}"` (matches generated app folder)
+- `skipRoutes` — routes to skip in HTML render (e.g. authenticated admin pages)
+
+### 9.2 maintain.config.json — project checkers
+
+Consumed by `maintain run`, `maintain validate`, `maintain clean`. Schema: `packages/maintain/schemas/maintain.config.schema.json`.
+
+```json
+{
+  "$schema": "../../packages/maintain/schemas/maintain.config.schema.json",
+  "root": ".",
+  "reportsDir": ".cursor/reports",
+  "continueOnError": true,
+  "maxParallel": 2,
+  "checkers": {
+    "invariants": {
+      "routes": {
+        "appFile": "src/App.tsx",
+        "required": ["/", "/admin", "/admin/dashboard"]
+      },
+      "fixtures": {
+        "pageFile": "fixtures/shared/page.json",
+        "requiredPageDomains": ["website", "admin"]
+      },
+      "blocks": {
+        "dir": "src/blocks",
+        "indexFile": "src/blocks/index.ts",
+        "recursive": true
+      },
+      "context": {
+        "file": "src/data/adapters/fixtures.adapter.ts",
+        "requiredSymbols": ["loadFixturesContextInput"]
+      }
+    },
+    "viewExports": { "pattern": "src/**/*View.tsx", "exportShape": "interface+function" },
+    "dataClassConflicts": { "scope": ["src"], "pattern": "**/*.tsx", "ignoreDataClasses": ["wrapper"] },
+    "componentTag": { "scope": ["src"], "pattern": "**/*.tsx", "tagMapPath": null },
+    "colorTokens": {
+      "scope": ["src"], "pattern": "**/*.tsx",
+      "tokenSource": "utility-props.map",
+      "utilityPropsMapPath": "./src/lib/utility-props.map.ts"
+    },
+    "genLint": {
+      "scope": ["src/blocks", "src/layouts", "src/partials"],
+      "pattern": "**/*.tsx",
+      "rules": { "GEN001": "error", "GEN002": "error", "GEN003": "warn", "GEN004": "error", "GEN005": "warn", "GEN006": "error", "GEN007": "error", "GEN008": "warn" }
+    },
+    "clean": {
+      "paths": ["../react-{APP_NAME}", "node_modules/.vite"],
+      "pathsByMode": {
+        "full": ["node_modules", "../react-{APP_NAME}"],
+        "dist": ["../react-{APP_NAME}", "node_modules/.vite"]
+      },
+      "includeTsBuildInfo": true
+    },
+    "lockedDirs": { "dirs": ["src/assets", "src/components", "src/variants"], "pattern": "**/*.{ts,tsx,css,json}" },
+    "viewHooks": { "pattern": "src/**/*View.tsx", "allowedHooks": [] },
+    "utilityPropLiterals": {
+      "scope": ["src/blocks", "src/layouts", "src/partials"],
+      "pattern": "**/*.tsx",
+      "utilityPropsMapPath": "./src/lib/utility-props.map.ts",
+      "allowDynamicInLoop": true
+    },
+    "utilityPropsWhitelist": {
+      "utilityPropsMapPath": "./src/lib/utility-props.map.ts",
+      "tailwindMapPath": "../../packages/generator/src/assets/tailwind/tw-css-extended.json",
+      "additionalMapPaths": [
+        "../../packages/generator/src/lib/shadcn.map.json",
+        "../../packages/generator/src/lib/grid.map.json"
+      ],
+      "maxSuggestions": 2
+    },
+    "orphanFiles": {
+      "scope": ["src"], "pattern": "**/*.{ts,tsx}",
+      "ignore": ["src/main.tsx", "src/vite-env.d.ts", "src/App.tsx"],
+      "aliases": { "@": "./src" }
+    },
+    "blockNesting": { "scope": ["src/blocks", "src/layouts", "src/partials"], "pattern": "**/*View.tsx" }
+  }
+}
+```
+
+**What to change per app:**
+- `invariants.routes.required` — list all your routes (must match `src/App.tsx`)
+- `invariants.fixtures.requiredPageDomains` — your domain names from `fixtures/shared/page.json`
+- `clean.paths` / `clean.pathsByMode` — replace `react-{APP_NAME}` with your generated folder name
+
+**What `maintain:validate` checks (fast, run always):**
+- `invariants` — routes in App.tsx match required list; fixture schema domains present; blocks exported from index; adapter function exists
+- `viewExports` — every `*View.tsx` exports both `interface` and `function`
+- `contracts` — blueprint.json matches App.tsx routes
+
+**What `maintain:check` checks additionally (full run):**
+- `dataClassConflicts` — duplicate `data-class` values across files
+- `componentTag` — `component` prop value is in allowed tag map
+- `colorTokens` — bg/textColor values exist in utility-props.map
+- `genLint` — GEN001–GEN008 rules in blocks/layouts/partials
+- `lockedDirs` — files in locked dirs were not modified
+- `viewHooks` — no React hooks inside `*View.tsx`
+- `utilityPropLiterals` — no invalid prop literals in UI files
+- `orphanFiles` — no unused `.ts`/`.tsx` files
+
+### 9.3 blueprint.json — entity contract
+
+Consumed by `blueprint:scan`, `blueprint:validate`, `blueprint:graph`, and the `contracts` checker in maintain.
+
+**Start with a seed file, then run `bun run blueprint:scan` to fill it from code:**
+
+```json
+{
+  "version": "1",
+  "app": "@ui8kit/resta-dsl-{APP_NAME}",
+  "routes": [
+    { "path": "/", "component": "HomePage", "view": "HomePageView" },
+    { "path": "/admin", "component": "LoginPage", "view": "AdminLoginPageView" },
+    { "path": "/admin/dashboard", "component": "DashboardPage", "view": "AdminDashboardPageView" }
+  ],
+  "fixtures": [
+    { "domain": "website", "file": "fixtures/home.json" },
+    { "domain": "admin", "file": "fixtures/admin.json" },
+    { "domain": "shared", "file": "fixtures/shared/site.json" },
+    { "domain": "shared", "file": "fixtures/shared/navigation.json" },
+    { "domain": "shared", "file": "fixtures/shared/page.json" }
+  ]
+}
+```
+
+**Lifecycle:**
+1. Write seed `blueprint.json` with routes and fixtures matching your plan.
+2. Build all blocks and routes.
+3. `bun run blueprint:scan` — scans code and updates blueprint.
+4. `bun run blueprint:validate` — validates project matches blueprint.
+5. `bun run blueprint:graph` — produces dependency graph (optional, for inspection).
+
+After `blueprint:scan`, the file grows to include `entities`, `layouts`, `partials`, `components`, `context`, `domains`. You can also use `apps/dsl/blueprint.json` as a reference for the full shape.
+
+---
+
 ## 8. Where to put new code
 
 | Question | Answer | Folder |
@@ -356,20 +580,20 @@ If `Card` exists in `src/components/`, do not build `FeatureCard` or `EventCard`
 
 ---
 
-## 9. Commands and workflow
+## 10. Commands and workflow
 
-All commands below are run **from the app directory**: `apps/dsl` or `apps/dsl-design`. **apps/dsl-design** has no `lint:gen` or `test:contracts` scripts.
+All commands below are run **from the app directory** (e.g. `apps/dsl`, `apps/dsl-crm`). **apps/dsl-design** has no `lint:gen` or `test:contracts` scripts.
 
-For a **full list of CLI commands and options** (maintain, ui8kit-generate), see **[CLI_COMMANDS.md](CLI_COMMANDS.md)**. For a **short workflow sequence**, see **[WORKFLOW.md](WORKFLOW.md)**. For a **no-skip CRM implementation path** (`apps/dsl-crm`), use **[.project/CRM_PLAYBOOK.md](.project/CRM_PLAYBOOK.md)**.
+For a **full list of CLI commands and options** (maintain, ui8kit-generate), see **[CLI_COMMANDS.md](CLI_COMMANDS.md)**. For a **short workflow sequence**, see **[WORKFLOW.md](WORKFLOW.md)**. For a **no-skip pipeline from Bootstrap to Release**, use **[.project/PLAYBOOK.md](.project/PLAYBOOK.md)**.
 
-### 9.1 Development
+### 10.1 Development
 
 ```bash
 cd apps/dsl          # or cd apps/dsl-design
 bun run dev
 ```
 
-### 9.2 Validation and linting
+### 10.2 Validation and linting
 
 | Command | Purpose |
 |---------|---------|
@@ -381,9 +605,9 @@ bun run dev
 
 **ui8kit-validate** checks: app config, DSL rules, props (utility-props, color tokens), and that `component` values are allowed tags (see `component-tag-map.json`).
 
-### 9.3 Maintain (project checkers)
+### 10.3 Maintain (project checkers)
 
-Config: **`apps/dsl/maintain.config.json`** or **`apps/dsl-design/maintain.config.json`**. Schema: `packages/maintain/schemas/maintain.config.schema.json`.
+Config: **`maintain.config.json`** in the app root. Schema: `packages/maintain/schemas/maintain.config.schema.json`. See [Section 9.2](#92-maintainconfigjson--project-checkers) for the full config structure.
 
 | Script | Purpose |
 |--------|---------|
@@ -393,7 +617,7 @@ Config: **`apps/dsl/maintain.config.json`** or **`apps/dsl-design/maintain.confi
 
 For **maintain** CLI options (`--cwd`, `--config`, `--check`, etc.), run `bunx maintain --help` or see [CLI_COMMANDS.md](CLI_COMMANDS.md).
 
-### 9.4 Generation
+### 10.4 Generation
 
 | Command | Purpose |
 |---------|---------|
@@ -401,7 +625,7 @@ For **maintain** CLI options (`--cwd`, `--config`, `--check`, etc.), run `bunx m
 | `bun run finalize` | Build final app |
 | `bun run dist:app` | Full pipeline (lint + validate + generate + finalize) |
 
-### 9.5 Props map (ui8kit.map.json)
+### 10.5 Props map (ui8kit.map.json)
 
 After changing `src/lib/utility-props.map.ts`, rebuild the class map:
 
@@ -421,7 +645,7 @@ bunx ui8kit-generate uikit-map --cwd apps/dsl-design
 
 Options: `--props-map`, `--output`, `--tailwind-map`, `--shadcn-map`, `--grid-map`, `--log-level`. See [CLI_COMMANDS.md](CLI_COMMANDS.md) or `bunx ui8kit-generate uikit-map --help`.
 
-### 9.6 Blueprint
+### 10.6 Blueprint
 
 | Command | Purpose |
 |---------|---------|
@@ -429,7 +653,7 @@ Options: `--props-map`, `--output`, `--tailwind-map`, `--shadcn-map`, `--grid-ma
 | `bun run blueprint:validate` | Check project against blueprint |
 | `bun run blueprint:graph` | Build dependency graph |
 
-### 9.7 Clean
+### 10.7 Clean
 
 | Command | Purpose |
 |---------|---------|
@@ -438,21 +662,27 @@ Options: `--props-map`, `--output`, `--tailwind-map`, `--shadcn-map`, `--grid-ma
 
 ---
 
-## 10. Validation and linting
+## 11. Validation and linting
 
-### 10.1 Required checks before commit
+### 11.1 Required checks before commit
+
+Run in this order from the app directory:
 
 1. `bun run lint:dsl` — DSL (If, Var, Loop instead of JS)
-2. `bun run lint:gen` — generator rules (apps/dsl only)
-3. `bun run validate` — config and props
-4. `bun run maintain:validate` — invariants, fixtures, view-exports, contracts
-5. `bun run typecheck` — TypeScript
-6. If blocks/templates/fixtures changed — `bun run generate` (and `bun run finalize` if needed)
-7. If `utility-props.map.ts` changed — `bun run build:map` and `bun run maintain:props`
+2. `bun run lint:gen` — generator rules (apps/dsl only; skip in dsl-design)
+3. `bun run validate` — config and props (ui8kit.config.json must be present)
+4. `bun run maintain:validate` — invariants, fixtures, view-exports, contracts (maintain.config.json must be present)
+5. `bun run maintain:check` — full checker set
+6. `bun run typecheck` — TypeScript
+7. `bun run blueprint:scan` — update blueprint.json from code
+8. `bun run blueprint:validate` — verify project matches blueprint
+9. If blocks/templates/fixtures changed — `bun run generate` then `bun run finalize`
+10. Verify generated app — `cd ../react-{APP_NAME} && bun run typecheck`
+11. If `utility-props.map.ts` changed — `bun run build:map` then `bun run maintain:props`
 
-Or run the full pipeline once: `bun run dist:app`. See [WORKFLOW.md](WORKFLOW.md).
+Or run the full pipeline at once: `bun run dist:app`. See [WORKFLOW.md](WORKFLOW.md) and [.project/PLAYBOOK.md](.project/PLAYBOOK.md) for the stage-by-stage tracker.
 
-### 10.2 Common errors
+### 11.2 Common errors
 
 | Error | Fix |
 |-------|-----|
@@ -465,13 +695,13 @@ Or run the full pipeline once: `bun run dist:app`. See [WORKFLOW.md](WORKFLOW.md
 | Text does not allow tag "div" | Text — only p, h1–h6, span, label, cite, q, etc. (see component-tag-map) |
 | Box/Stack/Group + form control | input, textarea, select, button — only in Field |
 
-### 10.3 component+tag validation
+### 11.3 component+tag validation
 
 Allowed tags map: `packages/generator/src/lib/component-tag-map.json`. Used by HtmlConverterService (HTML generation), ui8kit-validate, and Maintain checker **componentTag**.
 
 ---
 
-## 11. React and HTML+CSS generation
+## 12. React and HTML+CSS generation
 
 The generator turns DSL components into:
 
@@ -488,7 +718,7 @@ bun run dev
 
 ---
 
-## 12. Anti-patterns — what to avoid
+## 13. Anti-patterns — what to avoid
 
 ### ❌ Hardcoded data
 
@@ -565,7 +795,7 @@ bun run dev
 
 ---
 
-## 13. First task step by step
+## 14. First task step by step
 
 **Task:** Add a new “Featured Items” block to the landing page.
 
@@ -658,12 +888,15 @@ Ensure `landing` in context includes `featuredItems`. Check `fixtures.adapter.ts
 bun run lint:dsl
 bun run validate
 bun run maintain:validate
+bun run maintain:check
 bun run typecheck
+bun run blueprint:scan
+bun run blueprint:validate
 ```
 
 ---
 
-## 14. Pre-commit checklist
+## 15. Pre-commit checklist
 
 - [ ] `bun run lint:dsl` — DSL check
 - [ ] `bun run lint:gen` — generator lint (apps/dsl only)
@@ -683,18 +916,18 @@ bun run typecheck
 
 ## Additional resources
 
-- **[WORKFLOW.md](WORKFLOW.md)** — command sequence (setup → pre-commit)
-- **[CLI_COMMANDS.md](CLI_COMMANDS.md)** — CLI commands and options (maintain, ui8kit-generate)
-- **[UI8KIT_CLI.md](UI8KIT_CLI.md)** — NPM CLIs (ui8kit-validate, ui8kit-lint-dsl, ui8kit-lint, ui8kit-inspect)
-- **[.project/CRM_PLAYBOOK.md](.project/CRM_PLAYBOOK.md)** — no-skip CRM journey, hard quality gates, and release checklist
+- **[WORKFLOW.md](WORKFLOW.md)** — short command sequence (setup → pre-commit)
+- **[CLI_COMMANDS.md](CLI_COMMANDS.md)** — full CLI reference (maintain, ui8kit-generate)
+- **[.project/PLAYBOOK.md](.project/PLAYBOOK.md)** — universal pipeline tracker (Bootstrap → Release); paste into agent chat to check progress
 - `.cursor/rules/best-practices.mdc` — code rules
 - `.cursor/rules/engine-dsl-enforcement.mdc` — DSL rules
 - `.cursor/rules/project-structure.mdc` — project structure
 - `.cursor/rules/ui8kit-architecture.mdc` — UI8Kit architecture
-- `packages/maintain/schemas/maintain.config.schema.json` — maintain config schema
-- `apps/dsl/maintain.config.json`, `apps/dsl-design/maintain.config.json` — enabled checkers
-- `packages/generator/src/lib/component-tag-map.json` — component → tag map for validation
+- `packages/maintain/schemas/maintain.config.schema.json` — maintain.config.json schema
+- `apps/dsl/maintain.config.json` — reference maintain config with all checkers
+- `apps/dsl/blueprint.json` — reference blueprint with full entity/layout/partial shape
+- `packages/generator/src/lib/component-tag-map.json` — component → allowed tag map
 
 ---
 
-*Document: ONBOARDING-101. International (EN). Last updated: 2025-02.*
+*Document: ONBOARDING-101. International (EN). Last updated: 2026-03.*
