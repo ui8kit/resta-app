@@ -27,7 +27,7 @@ export function HeroBlock({
       bg="background"
       data-class="hero-section"
     >
-      <Container max="w-7xl" flex="col" gap="8" items="center">
+      <Container max="w-6xl" flex="col" gap="8" items="center">
         <Stack gap="4" items="center" max="w-2xl">
           <If test="title" value={!!title}>
             <Title

@@ -10,24 +10,24 @@ export function ThemeToggle() {
     <>
       <If test="isDarkMode" value={isDarkMode}>
         <Button
-          variant="link"
+          variant="ghost"
           size="icon"
           onClick={toggleDarkMode}
           title="Switch to light mode"
           aria-label="Switch to light mode"
-          data-class="theme-toggle"
+          data-class="theme-toggle-light"
         >
           <Icon lucideIcon={Sun} size="sm" data-class="theme-toggle-icon" />
         </Button>
       </If>
       <If test="!isDarkMode" value={!isDarkMode}>
         <Button
-          variant="link"
+          variant="ghost"
           size="sm"
           onClick={toggleDarkMode}
           title="Switch to dark mode"
           aria-label="Switch to dark mode"
-          data-class="theme-toggle"
+          data-class="theme-toggle-dark"
         >
           <Icon lucideIcon={Moon} size="sm" data-class="theme-toggle-icon" />
         </Button>

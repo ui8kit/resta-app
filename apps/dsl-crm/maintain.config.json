@@ -36,9 +36,26 @@
         ]
       }
     },
+    "fixtures": {
+      "targets": [
+        {
+          "file": "fixtures/shared/site.json",
+          "schema": "../dsl/schemas/canonical/site.schema.json"
+        },
+        {
+          "file": "fixtures/shared/navigation.json",
+          "schema": "../dsl/schemas/canonical/navigation.schema.json"
+        }
+      ]
+    },
     "viewExports": {
       "pattern": "src/**/*View.tsx",
       "exportShape": "interface+function"
+    },
+    "contracts": {
+      "blueprint": "blueprint.json",
+      "appFile": "src/App.tsx",
+      "entityTypeRequireInlineBody": false
     },
     "dataClassConflicts": {
       "scope": ["src"],
@@ -84,7 +101,10 @@
     },
     "viewHooks": {
       "pattern": "src/**/*View.tsx",
-      "allowedHooks": []
+      "allowedHooks": [
+        "useAdminActions",
+        "useLoginForm"
+      ]
     },
     "utilityPropLiterals": {
       "scope": ["src/blocks", "src/layouts", "src/partials"],

@@ -31,7 +31,7 @@ export function AdminLoginPageView({ headerTitle: _headerTitle }: AdminLoginPage
                   value={username}
                   onChange={(e) => setUsername((e.target as HTMLInputElement).value)}
                   placeholder="admin"
-                  data-class="admin-login-input"
+                  data-class="admin-login-input-username"
                 />
               </Stack>
               <Stack gap="2" data-class="admin-login-field">
@@ -43,7 +43,7 @@ export function AdminLoginPageView({ headerTitle: _headerTitle }: AdminLoginPage
                   value={password}
                   onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
                   placeholder="••••••••"
-                  data-class="admin-login-input"
+                  data-class="admin-login-input-password"
                 />
               </Stack>
               <If test="error" value={!!error}>

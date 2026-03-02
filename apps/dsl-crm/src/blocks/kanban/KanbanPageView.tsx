@@ -1,4 +1,4 @@
-import { MainLayout } from '@/layouts';
+import { CrmLayout } from '@/layouts';
 import { Block, Stack, Grid, Title, Text, Card, CardHeader, CardTitle, CardContent, Group } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { context } from '@/data/context';
@@ -16,10 +16,7 @@ export function KanbanPageView({ title, subtitle }: KanbanPageViewProps) {
   const columns = data.columns;
 
   return (
-    <MainLayout
-      navItems={context.navItems}
-      mode="full"
-    >
+    <CrmLayout>
       <Block component="section" data-class="kanban-section">
         <Stack gap="8" data-class="kanban-stack">
           <Stack gap="2" data-class="kanban-header">
@@ -84,6 +81,6 @@ export function KanbanPageView({ title, subtitle }: KanbanPageViewProps) {
           </Grid>
         </Stack>
       </Block>
-    </MainLayout>
+    </CrmLayout>
   );
 }

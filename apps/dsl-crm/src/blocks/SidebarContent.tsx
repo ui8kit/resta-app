@@ -1,4 +1,4 @@
-import { Stack, Text } from '@ui8kit/core';
+import { Block, Stack, Text } from '@ui8kit/core';
 import { If, Loop, Var } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
 import type { SidebarLink } from '@/types';
@@ -18,7 +18,7 @@ export function SidebarContent({
 
   return (
     <Stack gap="4" data-class={dataClass ?? 'sidebar-widgets'}>
-      <Stack component="nav" data-class="sidebar-widget">
+      <Block component="nav" data-class="sidebar-widget">
         <If test="title" value={!!(title ?? '')}>
           <Text component="h3" fontSize="sm" fontWeight="semibold" data-class="sidebar-widget-title">
             <Var name="title" value={title ?? ''} />
@@ -41,7 +41,7 @@ export function SidebarContent({
             </Loop>
           </Stack>
         </If>
-      </Stack>
+      </Block>
     </Stack>
   );
 }

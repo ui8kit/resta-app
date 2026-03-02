@@ -62,7 +62,7 @@ export function MainLayoutView({
                       col="span-2"
                       gap="6"
                       order="2"
-                      data-class="main-layout-main"
+                      data-class="main-layout-main-left"
                     >
                       {children}
                     </Stack>
@@ -70,7 +70,7 @@ export function MainLayoutView({
                     <Stack
                       col="span-1"
                       order="1"
-                      data-class="main-layout-sidebar-wrapper"
+                      data-class="main-layout-sidebar-wrapper-left"
                     >
                       <Sidebar position="left">
                         {sidebar}
@@ -85,7 +85,7 @@ export function MainLayoutView({
                       col="span-2"
                       gap="6"
                       order="1"
-                      data-class="main-layout-main"
+                      data-class="main-layout-main-right"
                     >
                       {children}
                     </Stack>
@@ -93,7 +93,7 @@ export function MainLayoutView({
                     <Stack
                       col="span-1"
                       order="2"
-                      data-class="main-layout-sidebar-wrapper"
+                      data-class="main-layout-sidebar-wrapper-right"
                     >
                       <Sidebar position="right">
                         {sidebar}

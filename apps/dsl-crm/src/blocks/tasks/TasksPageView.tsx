@@ -1,4 +1,4 @@
-import { MainLayout } from '@/layouts';
+import { CrmLayout } from '@/layouts';
 import { Block, Stack, Grid, Title, Text, Card, CardHeader, CardTitle, CardContent, Group, Badge } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { context } from '@/data/context';
@@ -28,10 +28,7 @@ export function TasksPageView({ title, subtitle }: TasksPageViewProps) {
   const items = data.items;
 
   return (
-    <MainLayout
-      navItems={context.navItems}
-      mode="full"
-    >
+    <CrmLayout>
       <Block component="section" data-class="tasks-section">
         <Stack gap="8" data-class="tasks-stack">
           <Stack gap="2" data-class="tasks-header">
@@ -92,6 +89,6 @@ export function TasksPageView({ title, subtitle }: TasksPageViewProps) {
           </Grid>
         </Stack>
       </Block>
-    </MainLayout>
+    </CrmLayout>
   );
 }

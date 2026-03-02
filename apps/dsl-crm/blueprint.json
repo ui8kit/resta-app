@@ -1,22 +1,141 @@
 {
+  "$schema": "./schemas/blueprint.schema.json",
   "version": "1",
-  "app": "@ui8kit/resta-dsl-crm",
-  "routes": [
-    { "path": "/", "component": "DashboardPage", "view": "DashboardPageView" },
-    { "path": "/tasks", "component": "TasksPage", "view": "TasksPageView" },
-    { "path": "/kanban", "component": "KanbanPage", "view": "KanbanPageView" },
-    { "path": "/reports", "component": "ReportsPage", "view": "ReportsPageView" },
-    { "path": "/admin", "component": "LoginPage", "view": "AdminLoginPageView" },
-    { "path": "/admin/dashboard", "component": "DashboardPage", "view": "AdminDashboardPageView" }
+  "app": {
+    "name": "CRM",
+    "domain": "catalog",
+    "lang": "en"
+  },
+  "brand": {
+    "primary": "hsl(346 77% 50%)",
+    "accent": "hsl(346 80% 92%)",
+    "font": "var(--font-nunito)"
+  },
+  "entities": [
+    {
+      "name": "dashboard",
+      "singular": "DashboardMetric",
+      "fixture": "fixtures/dashboard.json",
+      "fixtureType": "DashboardFixture",
+      "itemsKey": "metrics",
+      "slugField": "id",
+      "types": "src/types/dashboard.ts",
+      "routes": [
+        "/"
+      ],
+      "views": [
+        "src/blocks/landing/DashboardPageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/landing/DashboardPage.tsx"
+      ]
+    },
+    {
+      "name": "kanban",
+      "singular": "KanbanCard",
+      "fixture": "fixtures/kanban.json",
+      "fixtureType": "KanbanFixture",
+      "itemsKey": "columns",
+      "slugField": "id",
+      "types": "src/types/kanban.ts",
+      "routes": [
+        "/kanban"
+      ],
+      "views": [
+        "src/blocks/kanban/KanbanPageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/kanban/KanbanPage.tsx"
+      ]
+    },
+    {
+      "name": "reports",
+      "singular": "ReportItem",
+      "fixture": "fixtures/reports.json",
+      "fixtureType": "ReportsFixture",
+      "itemsKey": "sections",
+      "slugField": "id",
+      "types": "src/types/reports.ts",
+      "routes": [
+        "/reports"
+      ],
+      "views": [
+        "src/blocks/reports/ReportsPageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/reports/ReportsPage.tsx"
+      ]
+    },
+    {
+      "name": "tasks",
+      "singular": "Task",
+      "fixture": "fixtures/tasks.json",
+      "fixtureType": "TasksFixture",
+      "itemsKey": "items",
+      "slugField": "id",
+      "types": "src/types/tasks.ts",
+      "routes": [
+        "/tasks"
+      ],
+      "views": [
+        "src/blocks/tasks/TasksPageView.tsx"
+      ],
+      "routeFiles": [
+        "src/routes/tasks/TasksPage.tsx"
+      ]
+    }
   ],
-  "fixtures": [
-    { "domain": "crm", "file": "fixtures/dashboard.json" },
-    { "domain": "crm", "file": "fixtures/tasks.json" },
-    { "domain": "crm", "file": "fixtures/kanban.json" },
-    { "domain": "crm", "file": "fixtures/reports.json" },
-    { "domain": "admin", "file": "fixtures/admin.json" },
-    { "domain": "shared", "file": "fixtures/shared/site.json" },
-    { "domain": "shared", "file": "fixtures/shared/navigation.json" },
-    { "domain": "shared", "file": "fixtures/shared/page.json" }
+  "layouts": [
+    {
+      "name": "AdminLayout",
+      "file": "src/layouts/AdminLayout.tsx"
+    },
+    {
+      "name": "CrmLayout",
+      "file": "src/layouts/CrmLayout.tsx"
+    },
+    {
+      "name": "MainLayout",
+      "file": "src/layouts/MainLayout.tsx",
+      "view": "src/layouts/views/MainLayoutView.tsx"
+    }
+  ],
+  "partials": [
+    {
+      "name": "DomainNavButton",
+      "file": "src/partials/DomainNavButton.tsx"
+    },
+    {
+      "name": "Footer",
+      "file": "src/partials/Footer.tsx"
+    },
+    {
+      "name": "Header",
+      "file": "src/partials/Header.tsx"
+    },
+    {
+      "name": "Sidebar",
+      "file": "src/partials/Sidebar.tsx"
+    },
+    {
+      "name": "ThemeToggle",
+      "file": "src/partials/ThemeToggle.tsx"
+    }
+  ],
+  "components": {
+    "index": "src/components/index.ts",
+    "count": 17
+  },
+  "navigation": {
+    "source": "fixtures/shared/navigation.json",
+    "type": "src/types/navigation.ts"
+  },
+  "context": {
+    "file": "src/data/context.ts",
+    "adapter": "src/data/adapters/fixtures.adapter.ts"
+  },
+  "domains": [
+    "admin",
+    "crm"
   ]
 }

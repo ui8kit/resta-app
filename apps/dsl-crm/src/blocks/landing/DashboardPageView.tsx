@@ -1,4 +1,4 @@
-import { MainLayout } from '@/layouts';
+import { CrmLayout } from '@/layouts';
 import { Block, Stack, Grid, Title, Text, Card, CardHeader, CardTitle, CardContent, Group, Badge } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { context } from '@/data/context';
@@ -17,10 +17,7 @@ export function DashboardPageView({ title, subtitle }: DashboardPageViewProps) {
   const activity = data.recentActivity;
 
   return (
-    <MainLayout
-      navItems={context.navItems}
-      mode="full"
-    >
+    <CrmLayout>
       <Block component="section" data-class="dashboard-section">
         <Stack gap="8" data-class="dashboard-stack">
           <Stack gap="2" data-class="dashboard-header">
@@ -55,12 +52,12 @@ export function DashboardPageView({ title, subtitle }: DashboardPageViewProps) {
                         </Text>
                       </If>
                       <If test="metric.trendUp" value={metric.trendUp}>
-                        <Badge variant="default" data-class="dashboard-metric-trend">
+                        <Badge variant="default" data-class="dashboard-metric-trend-up">
                           <Var name="metric.trend" value={metric.trend} />
                         </Badge>
                       </If>
                       <If test="!metric.trendUp" value={!metric.trendUp}>
-                        <Badge variant="destructive" data-class="dashboard-metric-trend">
+                        <Badge variant="destructive" data-class="dashboard-metric-trend-down">
                           <Var name="metric.trend" value={metric.trend} />
                         </Badge>
                       </If>
@@ -100,6 +97,6 @@ export function DashboardPageView({ title, subtitle }: DashboardPageViewProps) {
           </Card>
         </Stack>
       </Block>
-    </MainLayout>
+    </CrmLayout>
   );
 }

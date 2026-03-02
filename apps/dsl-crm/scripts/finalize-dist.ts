@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * Finalize apps/react into a standalone runnable Vite app.
+ * Finalize apps/react-crm into a standalone runnable Vite app.
  *
  * Run after `bun run generate`:
  *   bun run scripts/finalize-dist.ts
@@ -14,12 +14,12 @@
  *   static: true  — Full generator support: generate:html/styles/static scripts, dist.config.json, keep _temp/
  *
  * What this does:
- *   1. Moves generated blocks/layouts/partials from apps/react/ into apps/react/src/
+ *   1. Moves generated blocks/layouts/partials from apps/react-crm/ into apps/react-crm/src/
  *   2. Fixes MainLayout.tsx (generator emits `any` for spread props — replace with ComponentProps)
  *   3. Generates index.ts for blocks, layouts, partials
  *   4. Copies app shell: components, variants, lib, css, routes, providers, data
  *   5. Generates design support files (design/previews, design/fixtures) — DSL-transformed via generator
- *   6. Copies fixtures/ into apps/react/fixtures/
+ *   6. Copies fixtures/ into apps/react-crm/fixtures/
  *   7. Generates project config: package.json, vite.config.ts, tsconfig.json,
  *      postcss.config.js, index.html; when static:true also dist.config.json
  */
@@ -41,7 +41,7 @@ import { getFallbackCoreComponents } from "../../../packages/generator/src/core/
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const DIST_REACT = join(ROOT, "..", "react");
+const DIST_REACT = join(ROOT, "..", "react-crm");
 const SRC = join(ROOT, "src");
 const FIXTURES = join(ROOT, "fixtures");
 
@@ -167,7 +167,7 @@ function buildDistConfig(ui8kit: { dist?: Ui8KitDistConfig; brand?: string }): o
 }
 
 async function main(): Promise<void> {
-  console.log("\n  UI8Kit — Finalize apps/react\n");
+  console.log("\n  UI8Kit — Finalize apps/react-crm\n");
   console.log("  ─────────────────────────────\n");
 
   const ui8kit = loadUi8KitConfig();
@@ -175,7 +175,7 @@ async function main(): Promise<void> {
   log(`Mode: ${staticMode ? "static (generate:html/styles/static)" : "SPA only"}\n`);
 
   if (!existsSync(DIST_REACT)) {
-    console.error("  apps/react/ not found. Run: bun run generate");
+    console.error("  apps/react-crm/ not found. Run: bun run generate");
     process.exit(1);
   }
 
@@ -188,7 +188,7 @@ async function main(): Promise<void> {
   const hasLegacyRootLayout = hasRootBlocks && hasRootLayouts;
   const hasModernSrcLayout = hasSrcBlocks && hasSrcLayouts;
   if (!hasLegacyRootLayout && !hasModernSrcLayout) {
-    console.error("  Generated blocks/layouts not found in apps/react or apps/react/src. Run: bun run generate");
+    console.error("  Generated blocks/layouts not found in apps/react-crm or apps/react-crm/src. Run: bun run generate");
     process.exit(1);
   }
 
@@ -201,7 +201,7 @@ async function main(): Promise<void> {
     if (existsSync(from)) {
       if (existsSync(to)) rmSync(to, { recursive: true, force: true });
       moveDir(from, to);
-      log(`moved: apps/react/${dir} → apps/react/src/${dir}`);
+      log(`moved: apps/react-crm/${dir} → apps/react-crm/src/${dir}`);
     } else if (existsSync(to)) {
       log(`using existing: apps/react/src/${dir}`);
     }
@@ -486,7 +486,7 @@ export default defineConfig({
   Done. Standalone app is ready.
 
   To run:
-    cd apps/react
+    cd apps/react-crm
     bun install
     bun run dev       → http://localhost:3021
 ${staticMode ? `
@@ -497,7 +497,7 @@ ${staticMode ? `
 ` : ""}
 
   Structure:
-    apps/react/
+    apps/react-crm/
     ├── src/
     │   ├── blocks/       ← generated (no DSL)
     │   ├── layouts/      ← generated

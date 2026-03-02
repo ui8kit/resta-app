@@ -1,0 +1,570 @@
+{
+  "generatedAt": "2026-03-02T11:18:11.052Z",
+  "blueprintPath": "blueprint.json",
+  "nodes": [
+    {
+      "id": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "type": "adapter",
+      "label": "fixtures.adapter.ts",
+      "file": "src/data/adapters/fixtures.adapter.ts"
+    },
+    {
+      "id": "component:Badge",
+      "type": "component",
+      "label": "Badge",
+      "entity": "dashboard"
+    },
+    {
+      "id": "component:Block",
+      "type": "component",
+      "label": "Block",
+      "entity": "dashboard"
+    },
+    {
+      "id": "component:Card",
+      "type": "component",
+      "label": "Card",
+      "entity": "dashboard"
+    },
+    {
+      "id": "component:CardContent",
+      "type": "component",
+      "label": "CardContent",
+      "entity": "dashboard"
+    },
+    {
+      "id": "component:CardHeader",
+      "type": "component",
+      "label": "CardHeader",
+      "entity": "dashboard"
+    },
+    {
+      "id": "component:CardTitle",
+      "type": "component",
+      "label": "CardTitle",
+      "entity": "dashboard"
+    },
+    {
+      "id": "component:Grid",
+      "type": "component",
+      "label": "Grid",
+      "entity": "dashboard"
+    },
+    {
+      "id": "component:Group",
+      "type": "component",
+      "label": "Group",
+      "entity": "dashboard"
+    },
+    {
+      "id": "component:Stack",
+      "type": "component",
+      "label": "Stack",
+      "entity": "dashboard"
+    },
+    {
+      "id": "component:Text",
+      "type": "component",
+      "label": "Text",
+      "entity": "dashboard"
+    },
+    {
+      "id": "component:Title",
+      "type": "component",
+      "label": "Title",
+      "entity": "dashboard"
+    },
+    {
+      "id": "context:src/data/context.ts",
+      "type": "context",
+      "label": "context.ts",
+      "file": "src/data/context.ts"
+    },
+    {
+      "id": "fixture:fixtures/dashboard.json",
+      "type": "fixture",
+      "label": "dashboard.json",
+      "file": "fixtures/dashboard.json",
+      "entity": "dashboard"
+    },
+    {
+      "id": "fixture:fixtures/kanban.json",
+      "type": "fixture",
+      "label": "kanban.json",
+      "file": "fixtures/kanban.json",
+      "entity": "kanban"
+    },
+    {
+      "id": "fixture:fixtures/reports.json",
+      "type": "fixture",
+      "label": "reports.json",
+      "file": "fixtures/reports.json",
+      "entity": "reports"
+    },
+    {
+      "id": "fixture:fixtures/tasks.json",
+      "type": "fixture",
+      "label": "tasks.json",
+      "file": "fixtures/tasks.json",
+      "entity": "tasks"
+    },
+    {
+      "id": "navigation:fixtures/shared/navigation.json",
+      "type": "navigation",
+      "label": "navigation.json",
+      "file": "fixtures/shared/navigation.json"
+    },
+    {
+      "id": "partial:src/partials/Header.tsx",
+      "type": "partial",
+      "label": "Header",
+      "file": "src/partials/Header.tsx"
+    },
+    {
+      "id": "route:src/routes/kanban/KanbanPage.tsx",
+      "type": "route",
+      "label": "KanbanPage.tsx",
+      "file": "src/routes/kanban/KanbanPage.tsx",
+      "entity": "kanban"
+    },
+    {
+      "id": "route:src/routes/landing/DashboardPage.tsx",
+      "type": "route",
+      "label": "DashboardPage.tsx",
+      "file": "src/routes/landing/DashboardPage.tsx",
+      "entity": "dashboard"
+    },
+    {
+      "id": "route:src/routes/reports/ReportsPage.tsx",
+      "type": "route",
+      "label": "ReportsPage.tsx",
+      "file": "src/routes/reports/ReportsPage.tsx",
+      "entity": "reports"
+    },
+    {
+      "id": "route:src/routes/tasks/TasksPage.tsx",
+      "type": "route",
+      "label": "TasksPage.tsx",
+      "file": "src/routes/tasks/TasksPage.tsx",
+      "entity": "tasks"
+    },
+    {
+      "id": "type:src/types/dashboard.ts",
+      "type": "type",
+      "label": "dashboard.ts",
+      "file": "src/types/dashboard.ts",
+      "entity": "dashboard"
+    },
+    {
+      "id": "type:src/types/kanban.ts",
+      "type": "type",
+      "label": "kanban.ts",
+      "file": "src/types/kanban.ts",
+      "entity": "kanban"
+    },
+    {
+      "id": "type:src/types/reports.ts",
+      "type": "type",
+      "label": "reports.ts",
+      "file": "src/types/reports.ts",
+      "entity": "reports"
+    },
+    {
+      "id": "type:src/types/tasks.ts",
+      "type": "type",
+      "label": "tasks.ts",
+      "file": "src/types/tasks.ts",
+      "entity": "tasks"
+    },
+    {
+      "id": "view:src/blocks/kanban/KanbanPageView.tsx",
+      "type": "view",
+      "label": "KanbanPageView.tsx",
+      "file": "src/blocks/kanban/KanbanPageView.tsx",
+      "entity": "kanban"
+    },
+    {
+      "id": "view:src/blocks/landing/DashboardPageView.tsx",
+      "type": "view",
+      "label": "DashboardPageView.tsx",
+      "file": "src/blocks/landing/DashboardPageView.tsx",
+      "entity": "dashboard"
+    },
+    {
+      "id": "view:src/blocks/reports/ReportsPageView.tsx",
+      "type": "view",
+      "label": "ReportsPageView.tsx",
+      "file": "src/blocks/reports/ReportsPageView.tsx",
+      "entity": "reports"
+    },
+    {
+      "id": "view:src/blocks/tasks/TasksPageView.tsx",
+      "type": "view",
+      "label": "TasksPageView.tsx",
+      "file": "src/blocks/tasks/TasksPageView.tsx",
+      "entity": "tasks"
+    }
+  ],
+  "edges": [
+    {
+      "from": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "to": "context:src/data/context.ts",
+      "relation": "loads-context",
+      "entity": "dashboard"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/kanban/KanbanPage.tsx",
+      "relation": "registers-route",
+      "entity": "kanban"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/landing/DashboardPage.tsx",
+      "relation": "registers-route",
+      "entity": "dashboard"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/reports/ReportsPage.tsx",
+      "relation": "registers-route",
+      "entity": "reports"
+    },
+    {
+      "from": "context:src/data/context.ts",
+      "to": "route:src/routes/tasks/TasksPage.tsx",
+      "relation": "registers-route",
+      "entity": "tasks"
+    },
+    {
+      "from": "fixture:fixtures/dashboard.json",
+      "to": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "relation": "uses-adapter",
+      "entity": "dashboard"
+    },
+    {
+      "from": "fixture:fixtures/kanban.json",
+      "to": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "relation": "uses-adapter",
+      "entity": "kanban"
+    },
+    {
+      "from": "fixture:fixtures/reports.json",
+      "to": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "relation": "uses-adapter",
+      "entity": "reports"
+    },
+    {
+      "from": "fixture:fixtures/tasks.json",
+      "to": "adapter:src/data/adapters/fixtures.adapter.ts",
+      "relation": "uses-adapter",
+      "entity": "tasks"
+    },
+    {
+      "from": "navigation:fixtures/shared/navigation.json",
+      "to": "partial:src/partials/Header.tsx",
+      "relation": "drives-partial"
+    },
+    {
+      "from": "route:src/routes/kanban/KanbanPage.tsx",
+      "to": "view:src/blocks/kanban/KanbanPageView.tsx",
+      "relation": "renders-view",
+      "entity": "kanban"
+    },
+    {
+      "from": "route:src/routes/landing/DashboardPage.tsx",
+      "to": "view:src/blocks/landing/DashboardPageView.tsx",
+      "relation": "renders-view",
+      "entity": "dashboard"
+    },
+    {
+      "from": "route:src/routes/reports/ReportsPage.tsx",
+      "to": "view:src/blocks/reports/ReportsPageView.tsx",
+      "relation": "renders-view",
+      "entity": "reports"
+    },
+    {
+      "from": "route:src/routes/tasks/TasksPage.tsx",
+      "to": "view:src/blocks/tasks/TasksPageView.tsx",
+      "relation": "renders-view",
+      "entity": "tasks"
+    },
+    {
+      "from": "view:src/blocks/kanban/KanbanPageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "kanban"
+    },
+    {
+      "from": "view:src/blocks/kanban/KanbanPageView.tsx",
+      "to": "component:Card",
+      "relation": "imports-component",
+      "entity": "kanban"
+    },
+    {
+      "from": "view:src/blocks/kanban/KanbanPageView.tsx",
+      "to": "component:CardContent",
+      "relation": "imports-component",
+      "entity": "kanban"
+    },
+    {
+      "from": "view:src/blocks/kanban/KanbanPageView.tsx",
+      "to": "component:CardHeader",
+      "relation": "imports-component",
+      "entity": "kanban"
+    },
+    {
+      "from": "view:src/blocks/kanban/KanbanPageView.tsx",
+      "to": "component:CardTitle",
+      "relation": "imports-component",
+      "entity": "kanban"
+    },
+    {
+      "from": "view:src/blocks/kanban/KanbanPageView.tsx",
+      "to": "component:Grid",
+      "relation": "imports-component",
+      "entity": "kanban"
+    },
+    {
+      "from": "view:src/blocks/kanban/KanbanPageView.tsx",
+      "to": "component:Group",
+      "relation": "imports-component",
+      "entity": "kanban"
+    },
+    {
+      "from": "view:src/blocks/kanban/KanbanPageView.tsx",
+      "to": "component:Stack",
+      "relation": "imports-component",
+      "entity": "kanban"
+    },
+    {
+      "from": "view:src/blocks/kanban/KanbanPageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "kanban"
+    },
+    {
+      "from": "view:src/blocks/kanban/KanbanPageView.tsx",
+      "to": "component:Title",
+      "relation": "imports-component",
+      "entity": "kanban"
+    },
+    {
+      "from": "view:src/blocks/kanban/KanbanPageView.tsx",
+      "to": "type:src/types/kanban.ts",
+      "relation": "uses-type",
+      "entity": "kanban"
+    },
+    {
+      "from": "view:src/blocks/landing/DashboardPageView.tsx",
+      "to": "component:Badge",
+      "relation": "imports-component",
+      "entity": "dashboard"
+    },
+    {
+      "from": "view:src/blocks/landing/DashboardPageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "dashboard"
+    },
+    {
+      "from": "view:src/blocks/landing/DashboardPageView.tsx",
+      "to": "component:Card",
+      "relation": "imports-component",
+      "entity": "dashboard"
+    },
+    {
+      "from": "view:src/blocks/landing/DashboardPageView.tsx",
+      "to": "component:CardContent",
+      "relation": "imports-component",
+      "entity": "dashboard"
+    },
+    {
+      "from": "view:src/blocks/landing/DashboardPageView.tsx",
+      "to": "component:CardHeader",
+      "relation": "imports-component",
+      "entity": "dashboard"
+    },
+    {
+      "from": "view:src/blocks/landing/DashboardPageView.tsx",
+      "to": "component:CardTitle",
+      "relation": "imports-component",
+      "entity": "dashboard"
+    },
+    {
+      "from": "view:src/blocks/landing/DashboardPageView.tsx",
+      "to": "component:Grid",
+      "relation": "imports-component",
+      "entity": "dashboard"
+    },
+    {
+      "from": "view:src/blocks/landing/DashboardPageView.tsx",
+      "to": "component:Group",
+      "relation": "imports-component",
+      "entity": "dashboard"
+    },
+    {
+      "from": "view:src/blocks/landing/DashboardPageView.tsx",
+      "to": "component:Stack",
+      "relation": "imports-component",
+      "entity": "dashboard"
+    },
+    {
+      "from": "view:src/blocks/landing/DashboardPageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "dashboard"
+    },
+    {
+      "from": "view:src/blocks/landing/DashboardPageView.tsx",
+      "to": "component:Title",
+      "relation": "imports-component",
+      "entity": "dashboard"
+    },
+    {
+      "from": "view:src/blocks/landing/DashboardPageView.tsx",
+      "to": "type:src/types/dashboard.ts",
+      "relation": "uses-type",
+      "entity": "dashboard"
+    },
+    {
+      "from": "view:src/blocks/reports/ReportsPageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "reports"
+    },
+    {
+      "from": "view:src/blocks/reports/ReportsPageView.tsx",
+      "to": "component:Card",
+      "relation": "imports-component",
+      "entity": "reports"
+    },
+    {
+      "from": "view:src/blocks/reports/ReportsPageView.tsx",
+      "to": "component:CardContent",
+      "relation": "imports-component",
+      "entity": "reports"
+    },
+    {
+      "from": "view:src/blocks/reports/ReportsPageView.tsx",
+      "to": "component:CardHeader",
+      "relation": "imports-component",
+      "entity": "reports"
+    },
+    {
+      "from": "view:src/blocks/reports/ReportsPageView.tsx",
+      "to": "component:CardTitle",
+      "relation": "imports-component",
+      "entity": "reports"
+    },
+    {
+      "from": "view:src/blocks/reports/ReportsPageView.tsx",
+      "to": "component:Grid",
+      "relation": "imports-component",
+      "entity": "reports"
+    },
+    {
+      "from": "view:src/blocks/reports/ReportsPageView.tsx",
+      "to": "component:Group",
+      "relation": "imports-component",
+      "entity": "reports"
+    },
+    {
+      "from": "view:src/blocks/reports/ReportsPageView.tsx",
+      "to": "component:Stack",
+      "relation": "imports-component",
+      "entity": "reports"
+    },
+    {
+      "from": "view:src/blocks/reports/ReportsPageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "reports"
+    },
+    {
+      "from": "view:src/blocks/reports/ReportsPageView.tsx",
+      "to": "component:Title",
+      "relation": "imports-component",
+      "entity": "reports"
+    },
+    {
+      "from": "view:src/blocks/reports/ReportsPageView.tsx",
+      "to": "type:src/types/reports.ts",
+      "relation": "uses-type",
+      "entity": "reports"
+    },
+    {
+      "from": "view:src/blocks/tasks/TasksPageView.tsx",
+      "to": "component:Badge",
+      "relation": "imports-component",
+      "entity": "tasks"
+    },
+    {
+      "from": "view:src/blocks/tasks/TasksPageView.tsx",
+      "to": "component:Block",
+      "relation": "imports-component",
+      "entity": "tasks"
+    },
+    {
+      "from": "view:src/blocks/tasks/TasksPageView.tsx",
+      "to": "component:Card",
+      "relation": "imports-component",
+      "entity": "tasks"
+    },
+    {
+      "from": "view:src/blocks/tasks/TasksPageView.tsx",
+      "to": "component:CardContent",
+      "relation": "imports-component",
+      "entity": "tasks"
+    },
+    {
+      "from": "view:src/blocks/tasks/TasksPageView.tsx",
+      "to": "component:CardHeader",
+      "relation": "imports-component",
+      "entity": "tasks"
+    },
+    {
+      "from": "view:src/blocks/tasks/TasksPageView.tsx",
+      "to": "component:CardTitle",
+      "relation": "imports-component",
+      "entity": "tasks"
+    },
+    {
+      "from": "view:src/blocks/tasks/TasksPageView.tsx",
+      "to": "component:Grid",
+      "relation": "imports-component",
+      "entity": "tasks"
+    },
+    {
+      "from": "view:src/blocks/tasks/TasksPageView.tsx",
+      "to": "component:Group",
+      "relation": "imports-component",
+      "entity": "tasks"
+    },
+    {
+      "from": "view:src/blocks/tasks/TasksPageView.tsx",
+      "to": "component:Stack",
+      "relation": "imports-component",
+      "entity": "tasks"
+    },
+    {
+      "from": "view:src/blocks/tasks/TasksPageView.tsx",
+      "to": "component:Text",
+      "relation": "imports-component",
+      "entity": "tasks"
+    },
+    {
+      "from": "view:src/blocks/tasks/TasksPageView.tsx",
+      "to": "component:Title",
+      "relation": "imports-component",
+      "entity": "tasks"
+    },
+    {
+      "from": "view:src/blocks/tasks/TasksPageView.tsx",
+      "to": "type:src/types/tasks.ts",
+      "relation": "uses-type",
+      "entity": "tasks"
+    }
+  ],
+  "mermaid": "flowchart LR\n  adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"] --> context_src_data_context_ts[\"context.ts\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_kanban_KanbanPage_tsx[\"KanbanPage.tsx\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_landing_DashboardPage_tsx[\"DashboardPage.tsx\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_reports_ReportsPage_tsx[\"ReportsPage.tsx\"]\n  context_src_data_context_ts[\"context.ts\"] --> route_src_routes_tasks_TasksPage_tsx[\"TasksPage.tsx\"]\n  fixture_fixtures_dashboard_json[\"dashboard.json\"] --> adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"]\n  fixture_fixtures_kanban_json[\"kanban.json\"] --> adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"]\n  fixture_fixtures_reports_json[\"reports.json\"] --> adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"]\n  fixture_fixtures_tasks_json[\"tasks.json\"] --> adapter_src_data_adapters_fixtures_adapter_ts[\"fixtures.adapter.ts\"]\n  navigation_fixtures_shared_navigation_json[\"navigation.json\"] --> partial_src_partials_Header_tsx[\"Header\"]\n  route_src_routes_kanban_KanbanPage_tsx[\"KanbanPage.tsx\"] --> view_src_blocks_kanban_KanbanPageView_tsx[\"KanbanPageView.tsx\"]\n  route_src_routes_landing_DashboardPage_tsx[\"DashboardPage.tsx\"] --> view_src_blocks_landing_DashboardPageView_tsx[\"DashboardPageView.tsx\"]\n  route_src_routes_reports_ReportsPage_tsx[\"ReportsPage.tsx\"] --> view_src_blocks_reports_ReportsPageView_tsx[\"ReportsPageView.tsx\"]\n  route_src_routes_tasks_TasksPage_tsx[\"TasksPage.tsx\"] --> view_src_blocks_tasks_TasksPageView_tsx[\"TasksPageView.tsx\"]\n  view_src_blocks_kanban_KanbanPageView_tsx[\"KanbanPageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_kanban_KanbanPageView_tsx[\"KanbanPageView.tsx\"] --> component_Card[\"Card\"]\n  view_src_blocks_kanban_KanbanPageView_tsx[\"KanbanPageView.tsx\"] --> component_CardContent[\"CardContent\"]\n  view_src_blocks_kanban_KanbanPageView_tsx[\"KanbanPageView.tsx\"] --> component_CardHeader[\"CardHeader\"]\n  view_src_blocks_kanban_KanbanPageView_tsx[\"KanbanPageView.tsx\"] --> component_CardTitle[\"CardTitle\"]\n  view_src_blocks_kanban_KanbanPageView_tsx[\"KanbanPageView.tsx\"] --> component_Grid[\"Grid\"]\n  view_src_blocks_kanban_KanbanPageView_tsx[\"KanbanPageView.tsx\"] --> component_Group[\"Group\"]\n  view_src_blocks_kanban_KanbanPageView_tsx[\"KanbanPageView.tsx\"] --> component_Stack[\"Stack\"]\n  view_src_blocks_kanban_KanbanPageView_tsx[\"KanbanPageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_kanban_KanbanPageView_tsx[\"KanbanPageView.tsx\"] --> component_Title[\"Title\"]\n  view_src_blocks_kanban_KanbanPageView_tsx[\"KanbanPageView.tsx\"] --> type_src_types_kanban_ts[\"kanban.ts\"]\n  view_src_blocks_landing_DashboardPageView_tsx[\"DashboardPageView.tsx\"] --> component_Badge[\"Badge\"]\n  view_src_blocks_landing_DashboardPageView_tsx[\"DashboardPageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_landing_DashboardPageView_tsx[\"DashboardPageView.tsx\"] --> component_Card[\"Card\"]\n  view_src_blocks_landing_DashboardPageView_tsx[\"DashboardPageView.tsx\"] --> component_CardContent[\"CardContent\"]\n  view_src_blocks_landing_DashboardPageView_tsx[\"DashboardPageView.tsx\"] --> component_CardHeader[\"CardHeader\"]\n  view_src_blocks_landing_DashboardPageView_tsx[\"DashboardPageView.tsx\"] --> component_CardTitle[\"CardTitle\"]\n  view_src_blocks_landing_DashboardPageView_tsx[\"DashboardPageView.tsx\"] --> component_Grid[\"Grid\"]\n  view_src_blocks_landing_DashboardPageView_tsx[\"DashboardPageView.tsx\"] --> component_Group[\"Group\"]\n  view_src_blocks_landing_DashboardPageView_tsx[\"DashboardPageView.tsx\"] --> component_Stack[\"Stack\"]\n  view_src_blocks_landing_DashboardPageView_tsx[\"DashboardPageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_landing_DashboardPageView_tsx[\"DashboardPageView.tsx\"] --> component_Title[\"Title\"]\n  view_src_blocks_landing_DashboardPageView_tsx[\"DashboardPageView.tsx\"] --> type_src_types_dashboard_ts[\"dashboard.ts\"]\n  view_src_blocks_reports_ReportsPageView_tsx[\"ReportsPageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_reports_ReportsPageView_tsx[\"ReportsPageView.tsx\"] --> component_Card[\"Card\"]\n  view_src_blocks_reports_ReportsPageView_tsx[\"ReportsPageView.tsx\"] --> component_CardContent[\"CardContent\"]\n  view_src_blocks_reports_ReportsPageView_tsx[\"ReportsPageView.tsx\"] --> component_CardHeader[\"CardHeader\"]\n  view_src_blocks_reports_ReportsPageView_tsx[\"ReportsPageView.tsx\"] --> component_CardTitle[\"CardTitle\"]\n  view_src_blocks_reports_ReportsPageView_tsx[\"ReportsPageView.tsx\"] --> component_Grid[\"Grid\"]\n  view_src_blocks_reports_ReportsPageView_tsx[\"ReportsPageView.tsx\"] --> component_Group[\"Group\"]\n  view_src_blocks_reports_ReportsPageView_tsx[\"ReportsPageView.tsx\"] --> component_Stack[\"Stack\"]\n  view_src_blocks_reports_ReportsPageView_tsx[\"ReportsPageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_reports_ReportsPageView_tsx[\"ReportsPageView.tsx\"] --> component_Title[\"Title\"]\n  view_src_blocks_reports_ReportsPageView_tsx[\"ReportsPageView.tsx\"] --> type_src_types_reports_ts[\"reports.ts\"]\n  view_src_blocks_tasks_TasksPageView_tsx[\"TasksPageView.tsx\"] --> component_Badge[\"Badge\"]\n  view_src_blocks_tasks_TasksPageView_tsx[\"TasksPageView.tsx\"] --> component_Block[\"Block\"]\n  view_src_blocks_tasks_TasksPageView_tsx[\"TasksPageView.tsx\"] --> component_Card[\"Card\"]\n  view_src_blocks_tasks_TasksPageView_tsx[\"TasksPageView.tsx\"] --> component_CardContent[\"CardContent\"]\n  view_src_blocks_tasks_TasksPageView_tsx[\"TasksPageView.tsx\"] --> component_CardHeader[\"CardHeader\"]\n  view_src_blocks_tasks_TasksPageView_tsx[\"TasksPageView.tsx\"] --> component_CardTitle[\"CardTitle\"]\n  view_src_blocks_tasks_TasksPageView_tsx[\"TasksPageView.tsx\"] --> component_Grid[\"Grid\"]\n  view_src_blocks_tasks_TasksPageView_tsx[\"TasksPageView.tsx\"] --> component_Group[\"Group\"]\n  view_src_blocks_tasks_TasksPageView_tsx[\"TasksPageView.tsx\"] --> component_Stack[\"Stack\"]\n  view_src_blocks_tasks_TasksPageView_tsx[\"TasksPageView.tsx\"] --> component_Text[\"Text\"]\n  view_src_blocks_tasks_TasksPageView_tsx[\"TasksPageView.tsx\"] --> component_Title[\"Title\"]\n  view_src_blocks_tasks_TasksPageView_tsx[\"TasksPageView.tsx\"] --> type_src_types_tasks_ts[\"tasks.ts\"]"
+}
