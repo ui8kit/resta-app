@@ -255,6 +255,7 @@
   "max-w-2xl": "max-width: var(--container-2xl); /* 42rem (672px) */",
   "max-w-4xl": "max-width: var(--container-4xl); /* 56rem (896px) */",
   "max-w-6xl": "max-width: var(--container-6xl); /* 72rem (1152px) */",
+  "max-w-7xl": "max-width: var(--container-7xl); /* 84rem (1344px) */",
   "max-w-full": "max-width: 100%;",
   "max-w-lg": "max-width: var(--container-lg); /* 32rem (512px) */",
   "max-w-md": "max-width: var(--container-md); /* 28rem (448px) */",

@@ -28,6 +28,25 @@ Your new app can be anything: `apps/dsl-blog`, `apps/dsl-shop`, `apps/dsl-crm`, 
 
 ---
 
+## How to Refactor an Existing App to New Entities
+
+If you already have an app (for example `apps/dsl-crm`) and want to change its domain
+(for example from Dashboard/Tasks/Kanban/Reports to Leads/Deals/Clients/Companies):
+
+1. Start at **Stage 1** and redefine your entity map.
+2. For every old entity, replace all coupled pieces together:
+   fixture JSON, TS type, adapter key, context domain key, PageView block, route, and `App.tsx` route registration.
+3. Update all three configs:
+   - `maintain.config.json` (required routes + fixture targets + contracts),
+   - `blueprint.json` (entities, routes, fixtures),
+   - `ui8kit.config.json` (`outDir`, `skipRoutes`, app brand).
+4. Run **Stage 3 → Stage 5** gates in order.
+5. Log every significant change and gate result in `.project/JOURNAL.md`.
+
+The locked layer (`src/components`, `src/variants`, `src/lib`, `src/assets/css`) stays unchanged during refactoring.
+
+---
+
 ## Section 0 — What Stays Locked vs. What You Define
 
 ```mermaid
@@ -69,7 +88,8 @@ flowchart LR
 ```mermaid
 flowchart TD
   S0[Stage 0: Bootstrap] --> S1[Stage 1: Entity Design]
-  S1 --> S2[Stage 2: Build]
+  S1 --> S1B[Stage 1B: Config and Tooling]
+  S1B --> S2[Stage 2: Build]
   S2 --> S3[Stage 3: Critical Gates]
   S3 --> S4[Stage 4: High Gates]
   S4 --> S5[Stage 5: Release]
@@ -120,6 +140,51 @@ flowchart TD
 | _(e.g. Home)_ | `/` | `fixtures/home.json` | `HomePageView` |
 | Admin Login | `/admin` | (shared) | `AdminLoginPageView` |
 | Admin Dashboard | `/admin/dashboard` | `fixtures/admin.json` | `AdminDashboardPageView` |
+
+---
+
+### Stage 1B — Config & Tooling Setup
+
+**Goal:** Config files and scripts are complete before UI implementation and gates.
+
+| Step | Action | Done? |
+|---|---|---|
+| 1B.1 | `ui8kit.config.json` — `brand` set to app name and `outDir` points to `../react-{APP_NAME}` | [ ] |
+| 1B.2 | `maintain.config.json` — `invariants.routes.required` lists all routes | [ ] |
+| 1B.3 | `maintain.config.json` — `invariants.fixtures.requiredPageDomains` matches app domains | [ ] |
+| 1B.4 | `maintain.config.json` — `fixtures.targets` includes required shared schemas | [ ] |
+| 1B.5 | `maintain.config.json` — `contracts.blueprint` points to `blueprint.json` | [ ] |
+| 1B.6 | `blueprint.json` seeded with all entities, fixtures, routes, and route files | [ ] |
+| 1B.7 | `bun run build:map` executed to generate `src/ui8kit.map.json` | [ ] |
+| 1B.8 | `scripts/finalize-dist.ts` exists and resolves output from `ui8kit.config.json` `outDir` | [ ] |
+| 1B.9 | All canonical scripts below exist in `package.json` | [ ] |
+
+**Canonical script set (required):**
+
+| Script | Command |
+|---|---|
+| `dev` | `vite` |
+| `build` | `vite build` |
+| `generate` | `bun run ../../packages/generator/src/cli/generate.ts react --cwd .` |
+| `finalize` | `bun run scripts/finalize-dist.ts` |
+| `dist:app` | full gate chain (lint/validate/maintain/blueprint/generate/finalize/typecheck) |
+| `clean` | `maintain clean --config maintain.config.json --mode full --execute` |
+| `clean:dist` | `maintain clean --config maintain.config.json --mode dist --execute` |
+| `validate` | `bunx ui8kit-validate` |
+| `maintain` | alias to `bun run maintain:check` |
+| `maintain:check` | `maintain run --config maintain.config.json` |
+| `maintain:validate` | `maintain validate --config maintain.config.json` |
+| `maintain:props` | `maintain run --config maintain.config.json --check utility-props-whitelist --verbose` |
+| `blueprint:scan` | `bunx ui8kit-generate blueprint:scan --cwd .` |
+| `blueprint:validate` | `bunx ui8kit-generate blueprint:validate --cwd .` |
+| `blueprint:graph` | `bunx ui8kit-generate blueprint:graph --cwd .` |
+| `scaffold:entity` | `bunx ui8kit-generate scaffold entity --cwd .` |
+| `inspect` | `bunx ui8kit-inspect` |
+| `lint:dsl` | `bunx ui8kit-lint-dsl "$PWD/src"` |
+| `lint` | `bunx ui8kit-lint` |
+| `typecheck` | `bunx tsc --noEmit` |
+| `typecheck:react` | `cd ../react-{APP_NAME} && bun run typecheck` |
+| `build:map` | `bun run ../../packages/generator/src/cli/generate.ts uikit-map --cwd .` |
 
 ---
 
@@ -325,13 +390,19 @@ Log on: stage start/end, any gate failure + fix, structural decisions, LLM uncer
 |---|---|
 | `lint:dsl` fails | Replace JS control-flow with `<If>`, `<Var>`, `<Loop>`; wrap every `<Var>` in `<If>` |
 | `validate` fails on props/tags | Check semantic props; verify allowed `component` values in architecture rules |
-| `maintain:validate` fails | Fix invariants/fixtures/view-exports/contracts first, then re-run |
+| `maintain:validate` fails on missing checkers | Add `fixtures.targets` and `contracts` block to `maintain.config.json`, then re-run |
+| `maintain:validate` fails (generic) | Fix invariants/fixtures/view-exports/contracts first, then re-run |
 | `maintain:check` fails | Read checker output; fix data-class conflicts, component-tag issues, orphan files |
 | `maintain:props` fails | Run `build:map` first, then resolve whitelist mismatches |
 | `typecheck` fails | Fix TS errors; check import paths, missing exports, prop type mismatches |
-| `blueprint:validate` fails | Re-run `blueprint:scan`, inspect diff, validate again |
+| `blueprint:validate` reports `ORPHAN_FIXTURE` | Add missing fixture entry to `blueprint.json` `entities[].fixture` with correct domain mapping |
+| `blueprint:validate` fails (generic) | Re-run `blueprint:scan`, inspect diff, validate again |
+| Script not found during gate run | Cross-check Stage 1B canonical scripts table and add the missing script to `package.json` |
 | `generate` fails | Ensure validate + maintain gates all pass first |
+| `finalize` writes to wrong directory | Verify `ui8kit.config.json` `outDir`; `finalize-dist.ts` must read `outDir` dynamically |
+| Generated app misses `@ui8kit/dsl` or `@ui8kit/sdk` | Scan generated `src/` imports and keep required dependencies during finalize |
 | Generated app typecheck fails | Re-run gate chain: validate → maintain → generate → finalize |
+| Generated app missing constants/types after transform | Move variant mapping constants (for example `PRIORITY_VARIANT`) to `src/types/` or `src/constants/` |
 | HTML/CSS output missing | Set up `dist.config.json`; run static pipeline commands |
 | Docs drift | Run `--help` on changed CLIs; sync `CLI_COMMANDS.md`, `WORKFLOW.md`, `ONBOARDING.md` |
 

@@ -20,9 +20,12 @@
     "blueprint:scan": "bunx ui8kit-generate blueprint:scan --cwd .",
     "blueprint:validate": "bunx ui8kit-generate blueprint:validate --cwd .",
     "blueprint:graph": "bunx ui8kit-generate blueprint:graph --cwd .",
+    "scaffold:entity": "bunx ui8kit-generate scaffold entity --cwd .",
+    "inspect": "bunx ui8kit-inspect",
     "lint:dsl": "bunx ui8kit-lint-dsl \"$PWD/src\"",
     "lint": "bunx ui8kit-lint",
     "typecheck": "bunx tsc --noEmit",
+    "typecheck:react": "cd ../react-crm && bun run typecheck",
     "build:map": "bun run ../../packages/generator/src/cli/generate.ts uikit-map --cwd ."
   },
   "dependencies": {

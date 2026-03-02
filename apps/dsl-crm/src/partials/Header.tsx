@@ -121,8 +121,6 @@ export function Header({
                           variant="link"
                           size="xs"
                           href={item.url}
-                          justify="start"
-                          w="full"
                           data-class="header-mobile-nav-link"
                           className="h-9 justify-start text-left"
                           onClick={() => {

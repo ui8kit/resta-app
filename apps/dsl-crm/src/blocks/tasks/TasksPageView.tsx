@@ -3,23 +3,12 @@ import { Block, Stack, Grid, Title, Text, Card, CardHeader, CardTitle, CardConte
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { context } from '@/data/context';
 import type { Task } from '@/types';
+import { PRIORITY_VARIANT, STATUS_VARIANT } from '@/constants';
 
 export interface TasksPageViewProps {
   title?: string;
   subtitle?: string;
 }
-
-const PRIORITY_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  high: 'destructive',
-  medium: 'secondary',
-  low: 'outline',
-};
-
-const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  'todo': 'outline',
-  'in-progress': 'secondary',
-  'done': 'default',
-};
 
 export function TasksPageView({ title, subtitle }: TasksPageViewProps) {
   const data = context.domains.crm.tasks;

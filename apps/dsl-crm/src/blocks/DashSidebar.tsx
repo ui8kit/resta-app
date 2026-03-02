@@ -35,8 +35,6 @@ export function DashSidebar({
                   href={link.href}
                   size="sm"
                   variant="secondary"
-                  justify="start"
-                  w="full"
                   data-class="dash-sidebar-link-active"
                 >
                   <Var name="link.label" value={link.label} />
@@ -47,8 +45,6 @@ export function DashSidebar({
                   href={link.href}
                   size="sm"
                   variant="ghost"
-                  justify="start"
-                  w="full"
                   data-class="dash-sidebar-link-inactive"
                 >
                   <Var name="link.label" value={link.label} />

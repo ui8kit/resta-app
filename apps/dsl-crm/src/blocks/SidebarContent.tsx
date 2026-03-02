@@ -32,7 +32,6 @@ export function SidebarContent({
                   href={link.href}
                   variant="link"
                   size="sm"
-                  justify="start"
                   data-class="sidebar-link"
                 >
                   <Var name="link.label" value={link.label} />

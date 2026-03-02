@@ -41,7 +41,10 @@ import { getFallbackCoreComponents } from "../../../packages/generator/src/core/
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const DIST_REACT = join(ROOT, "..", "react");
+const _ui8kitCfg = existsSync(join(ROOT, "ui8kit.config.json"))
+  ? (JSON.parse(readFileSync(join(ROOT, "ui8kit.config.json"), "utf-8")) as { outDir?: string })
+  : {};
+const DIST_REACT = join(ROOT, _ui8kitCfg.outDir ?? "../react");
 const SRC = join(ROOT, "src");
 const FIXTURES = join(ROOT, "fixtures");
 
@@ -70,6 +73,28 @@ function copyDir(srcDir: string, destDir: string, skip?: (name: string) => boole
     const dest = join(destDir, entry.name);
     entry.isDirectory() ? copyDir(src, dest, skip) : copyFile(src, dest);
   }
+}
+
+function hasImportInDir(dir: string, pkg: string): boolean {
+  if (!existsSync(dir)) return false;
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const fullPath = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (hasImportInDir(fullPath, pkg)) return true;
+      continue;
+    }
+    if (!/\.[tj]sx?$/.test(entry.name)) continue;
+    const content = readFileSync(fullPath, "utf-8");
+    if (
+      content.includes(`from '${pkg}'`) ||
+      content.includes(`from "${pkg}"`) ||
+      content.includes(`from '${pkg}/`) ||
+      content.includes(`from "${pkg}/`)
+    ) {
+      return true;
+    }
+  }
+  return false;
 }
 
 
@@ -381,6 +406,11 @@ async function main(): Promise<void> {
   if (staticMode) {
     baseDevDeps["@ui8kit/generator"] = "workspace:*";
   }
+  const alwaysExcludeDeps = ["@ui8kit/generator", "@ui8kit/lint", "@ui8kit/contracts"];
+  const conditionalExcludeDeps = ["@ui8kit/dsl", "@ui8kit/sdk"].filter(
+    (pkg) => !hasImportInDir(join(DIST_REACT, "src"), pkg)
+  );
+  const excludedDeps = new Set([...alwaysExcludeDeps, ...conditionalExcludeDeps]);
 
   writeFile(
     join(DIST_REACT, "package.json"),
@@ -393,7 +423,7 @@ async function main(): Promise<void> {
         scripts: baseScripts,
         dependencies: Object.fromEntries(
           Object.entries(rootPkg.dependencies).filter(([pkg]) =>
-            !['@ui8kit/dsl', '@ui8kit/generator', '@ui8kit/lint', '@ui8kit/sdk', '@ui8kit/contracts'].includes(pkg) &&
+            !excludedDeps.has(pkg) &&
             !pkg.startsWith('file:')
           )
         ),
