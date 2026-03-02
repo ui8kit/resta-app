@@ -1,0 +1,201 @@
+{
+  "title": "Delivery Menu",
+  "subtitle": "Minimal delivery catalog for WooCommerce and Shopify integration.",
+  "categories": [
+    { "id": "grill", "title": "Grill" },
+    { "id": "cold-starters", "title": "Cold Starters" },
+    { "id": "sides", "title": "Sides & Garnish" }
+  ],
+  "items": [
+    {
+      "id": "grill-salmon-steak",
+      "slug": "grill-salmon-steak",
+      "title": "Salmon Steak on the Grill",
+      "description": "Atlantic salmon, herb butter, lemon.",
+      "price": { "amount": 890, "currency": "RUB", "display": "890 ₽" },
+      "compareAtPrice": { "amount": 990, "currency": "RUB", "display": "990 ₽" },
+      "category": { "id": "grill", "title": "Grill" },
+      "image": { "src": "", "alt": "Salmon Steak on the Grill", "width": 0, "height": 0 },
+      "details": "Grilled over charcoal, served with herb butter and seasonal vegetables.",
+      "availability": "available",
+      "variants": [
+        {
+          "id": "grill-salmon-steak-200",
+          "title": "200g",
+          "priceModifier": { "amount": 0, "currency": "RUB", "display": "" }
+        },
+        {
+          "id": "grill-salmon-steak-300",
+          "title": "300g",
+          "priceModifier": { "amount": 200, "currency": "RUB", "display": "+200 ₽" }
+        }
+      ],
+      "modifiers": [
+        {
+          "id": "extra-sauce",
+          "title": "Extra sauce",
+          "price": { "amount": 50, "currency": "RUB", "display": "+50 ₽" },
+          "type": "checkbox"
+        },
+        {
+          "id": "side-salad",
+          "title": "Side salad",
+          "price": { "amount": 150, "currency": "RUB", "display": "+150 ₽" },
+          "type": "checkbox"
+        }
+      ],
+      "promotionIds": ["happy-hour-grill"]
+    },
+    {
+      "id": "grill-beef-ribs",
+      "slug": "grill-beef-ribs",
+      "title": "Beef Ribs BBQ",
+      "description": "Slow-cooked beef ribs, signature BBQ glaze.",
+      "price": { "amount": 1090, "currency": "RUB", "display": "1 090 ₽" },
+      "compareAtPrice": { "amount": 1190, "currency": "RUB", "display": "1 190 ₽" },
+      "category": { "id": "grill", "title": "Grill" },
+      "image": { "src": "", "alt": "Beef Ribs BBQ", "width": 0, "height": 0 },
+      "details": "Tender ribs with smoky flavor and house BBQ sauce.",
+      "availability": "available",
+      "variants": [
+        {
+          "id": "grill-beef-ribs-350",
+          "title": "350g",
+          "priceModifier": { "amount": 0, "currency": "RUB", "display": "" }
+        },
+        {
+          "id": "grill-beef-ribs-500",
+          "title": "500g",
+          "priceModifier": { "amount": 300, "currency": "RUB", "display": "+300 ₽" }
+        }
+      ],
+      "modifiers": [
+        {
+          "id": "extra-bbq",
+          "title": "Extra BBQ sauce",
+          "price": { "amount": 70, "currency": "RUB", "display": "+70 ₽" },
+          "type": "checkbox"
+        }
+      ],
+      "promotionIds": ["grill-combo"]
+    },
+    {
+      "id": "cold-greek-salad",
+      "slug": "cold-greek-salad",
+      "title": "Greek Salad",
+      "description": "Tomato, cucumber, olives, feta cheese.",
+      "price": { "amount": 490, "currency": "RUB", "display": "490 ₽" },
+      "compareAtPrice": { "amount": 550, "currency": "RUB", "display": "550 ₽" },
+      "category": { "id": "cold-starters", "title": "Cold Starters" },
+      "image": { "src": "", "alt": "Greek Salad", "width": 0, "height": 0 },
+      "details": "Fresh vegetables and feta with olive oil dressing.",
+      "availability": "available",
+      "variants": [
+        {
+          "id": "cold-greek-salad-single",
+          "title": "Single",
+          "priceModifier": { "amount": 0, "currency": "RUB", "display": "" }
+        },
+        {
+          "id": "cold-greek-salad-double",
+          "title": "For two",
+          "priceModifier": { "amount": 260, "currency": "RUB", "display": "+260 ₽" }
+        }
+      ],
+      "modifiers": [
+        {
+          "id": "extra-feta",
+          "title": "Extra feta",
+          "price": { "amount": 80, "currency": "RUB", "display": "+80 ₽" },
+          "type": "checkbox"
+        }
+      ],
+      "promotionIds": ["cold-fixed-100"]
+    },
+    {
+      "id": "cold-caesar",
+      "slug": "cold-caesar",
+      "title": "Caesar Salad",
+      "description": "Romaine, parmesan, croutons, house dressing.",
+      "price": { "amount": 520, "currency": "RUB", "display": "520 ₽" },
+      "compareAtPrice": { "amount": 590, "currency": "RUB", "display": "590 ₽" },
+      "category": { "id": "cold-starters", "title": "Cold Starters" },
+      "image": { "src": "", "alt": "Caesar Salad", "width": 0, "height": 0 },
+      "details": "Classic Caesar with crisp romaine and rich dressing.",
+      "availability": "limited",
+      "variants": [
+        {
+          "id": "cold-caesar-single",
+          "title": "Single",
+          "priceModifier": { "amount": 0, "currency": "RUB", "display": "" }
+        },
+        {
+          "id": "cold-caesar-double",
+          "title": "For two",
+          "priceModifier": { "amount": 250, "currency": "RUB", "display": "+250 ₽" }
+        }
+      ],
+      "modifiers": [
+        {
+          "id": "add-chicken",
+          "title": "Add chicken",
+          "price": { "amount": 180, "currency": "RUB", "display": "+180 ₽" },
+          "type": "checkbox"
+        }
+      ],
+      "promotionIds": ["cold-fixed-100"]
+    },
+    {
+      "id": "side-grilled-vegetables",
+      "slug": "side-grilled-vegetables",
+      "title": "Grilled Vegetables",
+      "description": "Zucchini, bell pepper, onion, herbs.",
+      "price": { "amount": 290, "currency": "RUB", "display": "290 ₽" },
+      "compareAtPrice": { "amount": 0, "currency": "RUB", "display": "" },
+      "category": { "id": "sides", "title": "Sides & Garnish" },
+      "image": { "src": "", "alt": "Grilled Vegetables", "width": 0, "height": 0 },
+      "details": "Mixed vegetables charred on open flame.",
+      "availability": "available",
+      "variants": [
+        {
+          "id": "side-grilled-vegetables-plain",
+          "title": "Classic",
+          "priceModifier": { "amount": 0, "currency": "RUB", "display": "" }
+        }
+      ],
+      "modifiers": [],
+      "promotionIds": []
+    },
+    {
+      "id": "side-rice",
+      "slug": "side-rice",
+      "title": "Rice",
+      "description": "Soft steamed rice with flavor choices.",
+      "price": { "amount": 240, "currency": "RUB", "display": "240 ₽" },
+      "compareAtPrice": { "amount": 0, "currency": "RUB", "display": "" },
+      "category": { "id": "sides", "title": "Sides & Garnish" },
+      "image": { "src": "", "alt": "Rice", "width": 0, "height": 0 },
+      "details": "Choose your preferred rice style.",
+      "availability": "available",
+      "variants": [
+        {
+          "id": "side-rice-plain",
+          "title": "Plain",
+          "priceModifier": { "amount": 0, "currency": "RUB", "display": "" }
+        },
+        {
+          "id": "side-rice-herb",
+          "title": "Herb",
+          "priceModifier": { "amount": 0, "currency": "RUB", "display": "" }
+        },
+        {
+          "id": "side-rice-mushroom",
+          "title": "Mushroom",
+          "priceModifier": { "amount": 0, "currency": "RUB", "display": "" }
+        }
+      ],
+      "modifiers": [],
+      "promotionIds": []
+    }
+  ]
+}

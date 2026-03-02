@@ -1,0 +1,38 @@
+---
+description: Keep CLI help and CLI_COMMANDS in sync
+globs: packages/{maintain,generator}/src/**/*.ts
+alwaysApply: false
+---
+
+# CLI Help + GuideMap Sync
+
+When changing CLI commands/options for `maintain` or `ui8kit-generate`:
+
+1. Refresh help output from real binaries:
+   - `bunx maintain --help`
+   - `bunx maintain run --help`
+   - `bunx maintain validate --help`
+   - `bunx maintain audit --help`
+   - `bunx maintain clean --help`
+   - `bunx ui8kit-generate --help`
+   - `bunx ui8kit-generate react --help`
+   - `bunx ui8kit-generate static --help`
+   - `bunx ui8kit-generate html --help`
+   - `bunx ui8kit-generate render --help`
+   - `bunx ui8kit-generate styles --help`
+   - `bunx ui8kit-generate uikit-map --help`
+   - `bunx ui8kit-generate blueprint:scan --help`
+   - `bunx ui8kit-generate blueprint:validate --help`
+   - `bunx ui8kit-generate blueprint:graph --help`
+   - `bunx ui8kit-generate scaffold entity --help`
+
+2. Update `./GUIDEMAP.md` in the same change:
+   - ER diagram commands
+   - Option list/comments
+   - Commands summary table
+
+3. Keep Mermaid syntax valid:
+   - Use fenced block as ` ```mermaid ` + `erDiagram`
+   - Entity fields must keep `type name "comment"` format
+
+Do not leave CLI changes without GuideMap updates.

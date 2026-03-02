@@ -117,8 +117,7 @@ bun run scripts/refactor-audit.ts --mapping .manual/custom-mapping.json
 bun run scripts/refactor-audit.ts --scope src/blocks,fixtures
 ```
 
-**Mapping file:** `scripts/schemas/brand-mapping.json`  
-**Refactor guide:** `.project/REFACTOR.md`
+**Mapping file:** `scripts/schemas/brand-mapping.json`
 
 **Expected result after successful refactor:** all `severity: "error"` entries show `residualCount: 0`.
 
@@ -223,8 +222,6 @@ Brand entity mapping used by `refactor-audit.ts`. Lists all brand-specific terms
 
 Each entry has a `note` field describing which files the term appears in.
 
-See `.project/REFACTOR.md` for the complete brand refactor workflow.
-
 ---
 
 ### `schemas/refactor-audit.schema.json`
@@ -261,8 +258,8 @@ cd dist/react && bun install && bun run dev   # → http://localhost:3021
 
 ### Brand Refactor
 ```bash
-# 1. Fill in .project/REFACTOR.md with new brand values
-# 2. Apply all changes (per REFACTOR.md checklist)
+# 1. Fill in with new brand values
+# 2. Apply all changes
 # 3. Verify:
 bun run lint:dsl
 bun run validate

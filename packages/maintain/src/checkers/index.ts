@@ -13,5 +13,6 @@ export { GenLintChecker } from './GenLintChecker';
 export { LockedDirsChecker } from './LockedDirsChecker';
 export { ViewHooksChecker } from './ViewHooksChecker';
 export { UtilityPropLiteralsChecker } from './UtilityPropLiteralsChecker';
+export { UtilityPropsWhitelistChecker } from './UtilityPropsWhitelistChecker';
 export { OrphanFilesChecker } from './OrphanFilesChecker';
 export { BlockNestingChecker } from './BlockNestingChecker';

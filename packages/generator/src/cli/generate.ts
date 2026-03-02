@@ -8,12 +8,16 @@ import type { AppConfig } from '@ui8kit/sdk';
 import { generate, type GenerateConfig } from '../generate';
 import { buildProject } from '../build-project';
 import { loadFixtureRoutes } from '../utils/load-fixture-routes';
-import type { RouteConfig } from '../core/interfaces';
+import type { LogLevel, RouteConfig, IServiceContext } from '../core/interfaces';
 import type { GenerateStageName } from '../pipelines/generate-site';
 import { scanBlueprint } from '../scripts/scan-blueprint';
 import { validateBlueprint } from '../scripts/validate-blueprint';
 import { buildDependencyGraph } from '../scripts/build-dependency-graph';
 import { scaffoldEntity } from '../scripts/scaffold-entity';
+import { Logger } from '../core/logger';
+import { EventBus } from '../core/events';
+import { ServiceRegistry } from '../core/registry/ServiceRegistry';
+import { UiKitMapService } from '../services/uikit-map';
 
 interface DistConfig {
   app: { name: string; lang?: string };
@@ -56,6 +60,31 @@ interface DistConfig {
   };
   uncss?: Record<string, unknown>;
 }
+
+interface UiKitMapCliOptions {
+  cwd: string;
+  propsMap: string;
+  output: string;
+  tailwindMap?: string;
+  shadcnMap?: string;
+  gridMap?: string;
+  logLevel: LogLevel;
+}
+
+const VALID_LOG_LEVELS: readonly LogLevel[] = ['debug', 'info', 'warn', 'error', 'silent'];
+const COMMAND_OPTIONS_HELP = `
+Command options quick reference:
+  react               --cwd, --out-dir
+  static              --cwd, --config, --fixtures
+  html                --cwd, --config, --fixtures
+  render              --cwd, --config, --fixtures
+  styles              --cwd, --config
+  uikit-map           --cwd, --props-map, --output, --tailwind-map, --shadcn-map, --grid-map, --log-level
+  blueprint:scan      --cwd, --output
+  blueprint:validate  --cwd, --blueprint, --report-dir
+  blueprint:graph     --cwd, --blueprint, --output
+  scaffold entity     --name, --singular, --fields, --routes, --layout, --cwd
+`;
 
 function loadDistConfig(configPath: string): DistConfig {
   if (!existsSync(configPath)) {
@@ -210,6 +239,20 @@ program
   });
 
 program
+  .command('uikit-map')
+  .description('Generate ui8kit.map.json from utility props for any app')
+  .option('--cwd <dir>', 'Working directory', '.')
+  .option('--props-map <path>', 'Path to utility-props.map.ts', 'src/lib/utility-props.map.ts')
+  .option('--output <path>', 'Output path for ui8kit.map.json', 'src/ui8kit.map.json')
+  .option('--tailwind-map <path>', 'Tailwind class map path override')
+  .option('--shadcn-map <path>', 'Shadcn token map path override')
+  .option('--grid-map <path>', 'Grid map path override')
+  .option('--log-level <level>', 'Logger level (debug|info|warn|error|silent)', 'info')
+  .action(async (opts) => {
+    await runUiKitMap(opts as UiKitMapCliOptions);
+  });
+
+program
   .command('blueprint:scan')
   .description('Scan DSL app and generate blueprint.json')
   .option('--cwd <dir>', 'Working directory', '.')
@@ -320,6 +363,7 @@ scaffoldCommand
       process.exit(1);
     }
   });
+program.addHelpText('after', COMMAND_OPTIONS_HELP);
 
 const MODE_STAGES: Record<'static' | 'html' | 'styles' | 'render', readonly GenerateStageName[]> = {
   static: ['render', 'css', 'html', 'postcss'],
@@ -441,6 +485,81 @@ async function runPipeline(
       }
     }
     console.log();
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error(chalk.red(`\n  Error: ${msg}\n`));
+    process.exit(1);
+  }
+}
+
+async function runUiKitMap(opts: UiKitMapCliOptions): Promise<void> {
+  try {
+    const cwd = resolve(opts.cwd);
+    const generatorSrcRoot = resolve(import.meta.dir, '..');
+    const requestedLogLevel = String(opts.logLevel);
+    if (!VALID_LOG_LEVELS.includes(requestedLogLevel as LogLevel)) {
+      throw new Error(`Invalid --log-level "${requestedLogLevel}". Allowed: ${VALID_LOG_LEVELS.join(', ')}`);
+    }
+    const logLevel = requestedLogLevel as LogLevel;
+
+    const propsMapPath = resolve(cwd, opts.propsMap);
+    const outputPath = resolve(cwd, opts.output);
+    const tailwindMapPath = opts.tailwindMap
+      ? resolve(cwd, opts.tailwindMap)
+      : resolve(generatorSrcRoot, 'assets/tailwind/tw-css-extended.json');
+    const shadcnMapPath = opts.shadcnMap
+      ? resolve(cwd, opts.shadcnMap)
+      : resolve(generatorSrcRoot, 'lib/shadcn.map.json');
+    const gridMapPath = opts.gridMap
+      ? resolve(cwd, opts.gridMap)
+      : resolve(generatorSrcRoot, 'lib/grid.map.json');
+
+    const requiredInputs = [
+      { label: 'props map', path: propsMapPath },
+      { label: 'tailwind map', path: tailwindMapPath },
+      { label: 'shadcn map', path: shadcnMapPath },
+      { label: 'grid map', path: gridMapPath },
+    ];
+    const missingInput = requiredInputs.find((entry) => !existsSync(entry.path));
+    if (missingInput) {
+      throw new Error(`Missing ${missingInput.label}: ${missingInput.path}`);
+    }
+
+    console.log(`\n  ${chalk.bold('UI8Kit Generator')} — uikit-map\n`);
+    console.log(`  ${chalk.gray('CWD:')} ${cwd}`);
+    console.log(`  ${chalk.gray('Props map:')} ${propsMapPath}`);
+    console.log(`  ${chalk.gray('Output:')} ${outputPath}\n`);
+
+    const logger = new Logger({ level: logLevel });
+    const eventBus = new EventBus(logger);
+    const registry = new ServiceRegistry(logger);
+    const service = new UiKitMapService();
+    const context: IServiceContext = {
+      config: {} as IServiceContext['config'],
+      logger,
+      eventBus,
+      registry,
+    };
+
+    await service.initialize(context);
+    const result = await service.execute({
+      propsMapPath,
+      tailwindMapPath,
+      shadcnMapPath,
+      gridMapPath,
+      outputPath,
+    });
+    await service.dispose();
+
+    console.log(chalk.green('\n  ui8kit.map.json generated.'));
+    console.log(`  Classes: ${result.totalClasses}`);
+    console.log(`  Tailwind: ${result.tailwindClasses}`);
+    console.log(`  Shadcn: ${result.shadcnClasses}`);
+    console.log(`  Grid: ${result.gridClasses}`);
+    if (result.missingClasses.length > 0) {
+      console.log(chalk.yellow(`  Missing classes: ${result.missingClasses.length}`));
+    }
+    console.log(`  Output: ${result.outputPath}\n`);
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     console.error(chalk.red(`\n  Error: ${msg}\n`));

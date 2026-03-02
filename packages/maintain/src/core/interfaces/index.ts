@@ -20,6 +20,7 @@ export type {
   LockedDirsCheckerConfig,
   ViewHooksCheckerConfig,
   UtilityPropLiteralsCheckerConfig,
+  UtilityPropsWhitelistCheckerConfig,
   OrphanFilesCheckerConfig,
   BlockNestingCheckerConfig,
   MaintainCheckerConfigMap,

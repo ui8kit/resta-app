@@ -1,0 +1,63 @@
+{
+  "runId": "maintain_1772377706749",
+  "generatedAt": "2026-03-01T15:08:26.749Z",
+  "duration": 263,
+  "success": true,
+  "results": [
+    {
+      "checker": "invariants",
+      "description": "Validate route, fixture, block, and context invariants",
+      "success": true,
+      "startedAt": "2026-03-01T15:08:26.750Z",
+      "finishedAt": "2026-03-01T15:08:26.922Z",
+      "duration": 172,
+      "issues": [],
+      "stats": {
+        "errorCount": 0,
+        "warningCount": 0
+      }
+    },
+    {
+      "checker": "fixtures",
+      "description": "Validate fixture JSON against schema targets",
+      "success": true,
+      "startedAt": "2026-03-01T15:08:26.805Z",
+      "finishedAt": "2026-03-01T15:08:26.922Z",
+      "duration": 117,
+      "issues": [],
+      "stats": {
+        "checkedTargets": 4,
+        "errorCount": 0,
+        "warningCount": 0
+      }
+    },
+    {
+      "checker": "view-exports",
+      "description": "Validate that View files export one interface and one function",
+      "success": true,
+      "startedAt": "2026-03-01T15:08:26.922Z",
+      "finishedAt": "2026-03-01T15:08:27.011Z",
+      "duration": 89,
+      "issues": [],
+      "stats": {
+        "filesScanned": 12,
+        "errorCount": 0
+      }
+    },
+    {
+      "checker": "contracts",
+      "description": "Run blueprint contract checks for fixtures, types, routes, and views",
+      "success": true,
+      "startedAt": "2026-03-01T15:08:27.006Z",
+      "finishedAt": "2026-03-01T15:08:27.011Z",
+      "duration": 5,
+      "issues": [],
+      "stats": {
+        "entitiesChecked": 4,
+        "errorCount": 0
+      }
+    }
+  ],
+  "errors": [],
+  "warnings": []
+}

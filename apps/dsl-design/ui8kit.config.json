@@ -31,7 +31,9 @@
   "libDir": "../dsl/src/lib",
   "registry": "@ui8kit",
   "lint": {
-    "strict": false,
-    "dsl": true
+    "strict": true,
+    "dsl": true,
+    "ui8kitMapPath": "./src/ui8kit.map.json",
+    "utilityPropsMapPath": "./src/lib/utility-props.map.ts"
   }
 }
