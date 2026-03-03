@@ -1,42 +1,46 @@
 {
   "name": "@ui8kit/generator",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Static HTML/CSS generator for UI8Kit with orchestrator pipeline",
   "type": "module",
-  "main": "./src/index.ts",
-  "module": "./src/index.ts",
-  "types": "./src/index.ts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ui8kit/generator"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./src/index.ts",
-      "types": "./src/index.ts"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     },
     "./plugins": {
-      "import": "./src/plugins/template/index.ts",
-      "types": "./src/plugins/template/index.ts"
+      "import": "./dist/plugins/template/index.js",
+      "types": "./dist/plugins/template/index.d.ts"
     },
     "./react": {
-      "import": "./src/plugins/template/built-in/ReactPlugin.ts",
-      "types": "./src/plugins/template/built-in/ReactPlugin.ts"
+      "import": "./dist/plugins/template/built-in/ReactPlugin.js",
+      "types": "./dist/plugins/template/built-in/ReactPlugin.d.ts"
     },
     "./source": {
-      "import": "./src/index.ts",
-      "types": "./src/index.ts"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     },
     "./lib": {
-      "import": "./src/lib/index.ts",
-      "types": "./src/lib/index.ts"
+      "import": "./dist/lib/index.js",
+      "types": "./dist/lib/index.d.ts"
     }
   },
   "files": [
     "dist",
-    "src",
     "templates",
     "README.md",
     "GUIDE.md"
   ],
   "bin": {
-    "ui8kit-generate": "./src/cli/generate.ts"
+    "ui8kit-generate": "./dist/cli/generate.js"
   },
   "scripts": {
     "prepublishOnly": "npm run build",
