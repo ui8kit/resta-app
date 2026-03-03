@@ -30,12 +30,7 @@ export function HeroBlock({
             </Title>
           </If>
           <If test="subtitle" value={!!subtitle}>
-            <Text
-              fontSize="xl"
-              textColor="muted-foreground"
-              textAlign="center"
-              data-class="hero-subtitle"
-            >
+            <Text fontSize="xl" textColor="muted-foreground" textAlign="center" data-class="hero-subtitle">
               <Var name="subtitle" value={subtitle} />
             </Text>
           </If>
@@ -47,12 +42,7 @@ export function HeroBlock({
             </Button>
           </If>
           <If test="secondaryCtaText" value={!!secondaryCtaText}>
-            <Button
-              variant="outline"
-              size="lg"
-              href={secondaryCtaUrl}
-              data-class="hero-cta-secondary"
-            >
+            <Button variant="outline" size="lg" href={secondaryCtaUrl} data-class="hero-cta-secondary">
               <Var name="secondaryCtaText" value={secondaryCtaText} />
             </Button>
           </If>

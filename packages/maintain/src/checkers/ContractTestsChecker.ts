@@ -21,11 +21,7 @@ type BlueprintDocument = {
 
 export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig> {
   constructor() {
-    super(
-      'contracts',
-      'Run blueprint contract checks for fixtures, types, routes, and views',
-      'contracts'
-    );
+    super('contracts', 'Run blueprint contract checks for fixtures, types, routes, and views', 'contracts');
   }
 
   protected async execute(context: CheckContext): Promise<CheckerExecutionResult> {
@@ -43,7 +39,7 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
             {
               hint: 'Run `bun run blueprint:scan` to generate blueprint.json.',
               suggestion: 'Generate blueprint.json before running contract validation.',
-            }
+            },
           ),
         ],
       };
@@ -56,7 +52,7 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
         this.createIssue('error', 'APP_FILE_MISSING', `App file not found: ${this.relative(context.root, appPath)}`, {
           file: this.relative(context.root, appPath),
           hint: 'Ensure App.tsx exists or set checkers.contracts.appFile.',
-        })
+        }),
       );
       return { success: false, issues };
     }
@@ -68,15 +64,10 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
       const fixturePath = resolve(context.root, entity.fixture);
       if (!existsSync(fixturePath)) {
         issues.push(
-          this.createIssue(
-            'error',
-            'CONTRACT_FIXTURE_MISSING',
-            `Fixture is missing for entity "${entity.name}".`,
-            {
-              file: entity.fixture,
-              hint: 'Create the fixture file referenced by blueprint.json.',
-            }
-          )
+          this.createIssue('error', 'CONTRACT_FIXTURE_MISSING', `Fixture is missing for entity "${entity.name}".`, {
+            file: entity.fixture,
+            hint: 'Create the fixture file referenced by blueprint.json.',
+          }),
         );
         continue;
       }
@@ -94,8 +85,8 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
               expected: `Non-empty array "${entity.itemsKey}"`,
               received: 'Missing/empty/non-array value',
               hint: 'Populate fixture items with at least one entity record.',
-            }
-          )
+            },
+          ),
         );
         continue;
       }
@@ -112,8 +103,8 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
               expected: 'Object item',
               received: 'Non-object first array element',
               hint: 'Ensure fixture items are objects with typed fields.',
-            }
-          )
+            },
+          ),
         );
         continue;
       }
@@ -121,15 +112,10 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
       const typePath = resolve(context.root, entity.types);
       if (!existsSync(typePath)) {
         issues.push(
-          this.createIssue(
-            'error',
-            'CONTRACT_TYPE_FILE_MISSING',
-            `Type file missing for entity "${entity.name}".`,
-            {
-              file: entity.types,
-              hint: 'Generate or restore the type file declared in blueprint.json.',
-            }
-          )
+          this.createIssue('error', 'CONTRACT_TYPE_FILE_MISSING', `Type file missing for entity "${entity.name}".`, {
+            file: entity.types,
+            hint: 'Generate or restore the type file declared in blueprint.json.',
+          }),
         );
         continue;
       }
@@ -150,8 +136,8 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
                 file: entity.types,
                 hint: `Export ${entity.singular} as interface or inline type in ${entity.types}.`,
                 suggestion: `Add: export interface ${entity.singular} { ... }`,
-              }
-            )
+              },
+            ),
           );
         } else {
           const requiredFields = this.extractRequiredTypeFields(typeBody);
@@ -168,8 +154,8 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
                     expected: field,
                     received: 'Missing field in fixture item',
                     hint: `Add required field "${field}" to fixture records for ${entity.name}.`,
-                  }
-                )
+                  },
+                ),
               );
             }
           }
@@ -184,8 +170,8 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
               {
                 file: entity.types,
                 hint: `Export ${entity.singular} type in ${entity.types}.`,
-              }
-            )
+              },
+            ),
           );
         }
       }
@@ -200,8 +186,8 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
               {
                 file: this.relative(context.root, appPath),
                 hint: `Add route "${route}" to App.tsx Route declarations.`,
-              }
-            )
+              },
+            ),
           );
         }
       }
@@ -213,7 +199,7 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
             this.createIssue('error', 'CONTRACT_ROUTE_FILE_MISSING', `Route file "${routeFile}" is missing.`, {
               file: routeFile,
               hint: 'Create the missing route component file or update blueprint routes.',
-            })
+            }),
           );
         }
       }
@@ -225,7 +211,7 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
             this.createIssue('error', 'CONTRACT_VIEW_FILE_MISSING', `View file "${viewFile}" is missing.`, {
               file: viewFile,
               hint: 'Create the missing View component or update blueprint entity.views.',
-            })
+            }),
           );
         }
       }
@@ -278,15 +264,13 @@ export class ContractTestsChecker extends BaseChecker<ContractTestsCheckerConfig
    */
   private extractTypeBody(source: string, typeName: string): string | undefined {
     const escapedTypeName = typeName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const typeMatch = source.match(
-      new RegExp(`export\\s+type\\s+${escapedTypeName}\\s*=\\s*\\{([\\s\\S]*?)\\n\\};`)
-    );
+    const typeMatch = source.match(new RegExp(`export\\s+type\\s+${escapedTypeName}\\s*=\\s*\\{([\\s\\S]*?)\\n\\};`));
     if (typeMatch) {
       return typeMatch[1];
     }
 
     const interfaceMatch = source.match(
-      new RegExp(`export\\s+interface\\s+${escapedTypeName}\\s*\\{([\\s\\S]*?)\\n\\}`)
+      new RegExp(`export\\s+interface\\s+${escapedTypeName}\\s*\\{([\\s\\S]*?)\\n\\}`),
     );
     return interfaceMatch?.[1];
   }

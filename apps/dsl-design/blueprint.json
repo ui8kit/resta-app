@@ -20,15 +20,9 @@
       "itemsKey": "groups",
       "slugField": "id",
       "types": "src/types/colors.ts",
-      "routes": [
-        "/colors"
-      ],
-      "views": [
-        "src/blocks/colors/PageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/colors/Page.tsx"
-      ]
+      "routes": ["/colors"],
+      "views": ["src/blocks/colors/PageView.tsx"],
+      "routeFiles": ["src/routes/colors/Page.tsx"]
     },
     {
       "name": "components",
@@ -38,15 +32,9 @@
       "itemsKey": "iconSamples",
       "slugField": "icon",
       "types": "src/types/components.ts",
-      "routes": [
-        "/components"
-      ],
-      "views": [
-        "src/blocks/components/PageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/components/Page.tsx"
-      ]
+      "routes": ["/components"],
+      "views": ["src/blocks/components/PageView.tsx"],
+      "routeFiles": ["src/routes/components/Page.tsx"]
     },
     {
       "name": "pages",
@@ -56,15 +44,9 @@
       "itemsKey": "items",
       "slugField": "slug",
       "types": "src/types/pages.ts",
-      "routes": [
-        "/pages"
-      ],
-      "views": [
-        "src/blocks/pages/PageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/pages/Page.tsx"
-      ]
+      "routes": ["/pages"],
+      "views": ["src/blocks/pages/PageView.tsx"],
+      "routeFiles": ["src/routes/pages/Page.tsx"]
     },
     {
       "name": "primitives",
@@ -74,15 +56,9 @@
       "itemsKey": "items",
       "slugField": "slug",
       "types": "src/types/primitives.ts",
-      "routes": [
-        "/primitives"
-      ],
-      "views": [
-        "src/blocks/primitives/PageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/primitives/Page.tsx"
-      ]
+      "routes": ["/primitives"],
+      "views": ["src/blocks/primitives/PageView.tsx"],
+      "routeFiles": ["src/routes/primitives/Page.tsx"]
     },
     {
       "name": "tokens",
@@ -92,15 +68,9 @@
       "itemsKey": "items",
       "slugField": "slug",
       "types": "src/types/tokens.ts",
-      "routes": [
-        "/tokens"
-      ],
-      "views": [
-        "src/blocks/tokens/PageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/tokens/Page.tsx"
-      ]
+      "routes": ["/tokens"],
+      "views": ["src/blocks/tokens/PageView.tsx"],
+      "routeFiles": ["src/routes/tokens/Page.tsx"]
     },
     {
       "name": "typography",
@@ -110,15 +80,9 @@
       "itemsKey": "items",
       "slugField": "slug",
       "types": "src/types/typography.ts",
-      "routes": [
-        "/typography"
-      ],
-      "views": [
-        "src/blocks/typography/PageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/typography/Page.tsx"
-      ]
+      "routes": ["/typography"],
+      "views": ["src/blocks/typography/PageView.tsx"],
+      "routeFiles": ["src/routes/typography/Page.tsx"]
     },
     {
       "name": "widgets",
@@ -128,15 +92,9 @@
       "itemsKey": "items",
       "slugField": "slug",
       "types": "src/types/widgets.ts",
-      "routes": [
-        "/widgets"
-      ],
-      "views": [
-        "src/blocks/widgets/PageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/widgets/Page.tsx"
-      ]
+      "routes": ["/widgets"],
+      "views": ["src/blocks/widgets/PageView.tsx"],
+      "routeFiles": ["src/routes/widgets/Page.tsx"]
     }
   ],
   "layouts": [
@@ -175,7 +133,5 @@
     "file": "src/data/context.ts",
     "adapter": "src/data/adapters/fixtures.adapter.ts"
   },
-  "domains": [
-    "website"
-  ]
+  "domains": ["website"]
 }

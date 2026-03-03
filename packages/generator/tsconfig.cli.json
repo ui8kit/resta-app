@@ -29,12 +29,5 @@
     "src/hast/**/*.ts",
     "src/generate.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "templates",
-    "test",
-    "**/*.test.ts",
-    "**/*.test.tsx"
-  ]
+  "exclude": ["node_modules", "dist", "templates", "test", "**/*.test.ts", "**/*.test.tsx"]
 }

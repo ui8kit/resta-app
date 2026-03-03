@@ -2,14 +2,7 @@ import { resolve } from 'node:path';
 import { Logger } from '../logger/Logger';
 import { CheckPipeline } from '../pipeline/CheckPipeline';
 import { CheckerRegistry } from '../registry/CheckerRegistry';
-import type {
-  CheckContext,
-  CheckerMode,
-  IChecker,
-  ILogger,
-  IMaintainConfig,
-  MaintainReport,
-} from '../interfaces';
+import type { CheckContext, CheckerMode, IChecker, ILogger, IMaintainConfig, MaintainReport } from '../interfaces';
 
 export interface MaintainOrchestratorOptions {
   logger?: ILogger;
@@ -69,12 +62,8 @@ export class MaintainOrchestrator {
     });
 
     const results = await pipeline.execute(checkers, context);
-    const errors = results.flatMap((result) =>
-      result.issues.filter((issue) => issue.level === 'error')
-    );
-    const warnings = results.flatMap((result) =>
-      result.issues.filter((issue) => issue.level === 'warn')
-    );
+    const errors = results.flatMap((result) => result.issues.filter((issue) => issue.level === 'error'));
+    const warnings = results.flatMap((result) => result.issues.filter((issue) => issue.level === 'warn'));
     const duration = Date.now() - startedAt;
 
     return {
@@ -93,9 +82,7 @@ export class MaintainOrchestrator {
       return this.registry.resolveMany(checkerNames);
     }
 
-    return this.registry
-      .list()
-      .filter((checker) => this.getCheckerConfig(config, checker) !== undefined);
+    return this.registry.list().filter((checker) => this.getCheckerConfig(config, checker) !== undefined);
   }
 
   private getCheckerConfig(config: IMaintainConfig, checker: IChecker): unknown {

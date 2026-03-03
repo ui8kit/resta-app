@@ -15,16 +15,24 @@ export function PromotionDetailPreview({ item }: PromotionDetailPreviewProps) {
     <Block p="6" data-class="promotion-detail-preview">
       <Stack gap="4">
         <If test="item.discount" value={!!item.discount}>
-          <Text fontSize="sm" fontWeight="semibold"><Var name="item.discount" value={item.discount} /></Text>
+          <Text fontSize="sm" fontWeight="semibold">
+            <Var name="item.discount" value={item.discount} />
+          </Text>
         </If>
         <If test="item.title" value={!!item.title}>
-          <Title order={2}><Var name="item.title" value={item.title} /></Title>
+          <Title order={2}>
+            <Var name="item.title" value={item.title} />
+          </Title>
         </If>
         <If test="item.description" value={!!item.description}>
-          <Text fontSize="sm" textColor="muted-foreground"><Var name="item.description" value={item.description} /></Text>
+          <Text fontSize="sm" textColor="muted-foreground">
+            <Var name="item.description" value={item.description} />
+          </Text>
         </If>
         <If test="item.validity" value={!!item.validity}>
-          <Text fontSize="xs" textColor="muted-foreground"><Var name="item.validity" value={item.validity} /></Text>
+          <Text fontSize="xs" textColor="muted-foreground">
+            <Var name="item.validity" value={item.validity} />
+          </Text>
         </If>
       </Stack>
     </Block>

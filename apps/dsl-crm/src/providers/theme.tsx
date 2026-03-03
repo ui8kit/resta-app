@@ -52,7 +52,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       toggleDarkMode: () => setIsDarkMode((v) => !v),
       setDarkMode: setIsDarkMode,
     }),
-    [isDarkMode]
+    [isDarkMode],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

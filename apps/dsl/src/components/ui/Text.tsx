@@ -1,8 +1,8 @@
-import type { ElementType, ReactNode } from "react";
-import { forwardRef } from "react";
-import { cn } from "../../lib/utils";
-import { resolveUtilityClassName, type UtilityPropBag, type UtilityPropPrefix } from "../../lib/utility-props";
-import { typographyVariants, type TypographyVariantProps } from "../../variants/typography";
+import type { ElementType, ReactNode } from 'react';
+import { forwardRef } from 'react';
+import { cn } from '../../lib/utils';
+import { resolveUtilityClassName, type UtilityPropBag, type UtilityPropPrefix } from '../../lib/utility-props';
+import { typographyVariants, type TypographyVariantProps } from '../../variants/typography';
 
 type TextDomProps = Omit<React.HTMLAttributes<HTMLElement>, UtilityPropPrefix>;
 
@@ -19,18 +19,18 @@ export const Text = forwardRef<HTMLElement, TextProps>(
     {
       children,
       className,
-      component = "p",
+      component = 'p',
       // Typography variants
-      fontSize = "base",
+      fontSize = 'base',
       textColor,
       textAlign,
-      fontWeight = "normal",
-      lineHeight = "normal",
+      fontWeight = 'normal',
+      lineHeight = 'normal',
       letterSpacing,
       truncate,
       ...props
     },
-    ref
+    ref,
   ) => {
     const { utilityClassName, rest } = resolveUtilityClassName(props);
     const Element = component as ElementType;
@@ -50,14 +50,14 @@ export const Text = forwardRef<HTMLElement, TextProps>(
             truncate,
           }),
           utilityClassName,
-          className
+          className,
         )}
         {...rest}
       >
         {children}
       </Element>
     );
-  }
+  },
 );
 
-Text.displayName = "Text"; 
+Text.displayName = 'Text';

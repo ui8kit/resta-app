@@ -1,6 +1,12 @@
 import type { NavItem, SidebarLink } from '@/types/navigation';
 import type { DesignSectionFixture, OverviewFixture } from '@/types/design';
-import type { ColorsFixture, ComponentsFixture, TypographyScaleFixture, WidgetsDemoFixture, PagesPreviewFixture } from '@/types/fixtures';
+import type {
+  ColorsFixture,
+  ComponentsFixture,
+  TypographyScaleFixture,
+  WidgetsDemoFixture,
+  PagesPreviewFixture,
+} from '@/types/fixtures';
 
 export type SiteInfo = {
   title: string;

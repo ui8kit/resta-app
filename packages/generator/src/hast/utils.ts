@@ -37,18 +37,11 @@ import { isElement, isText, isComment, isRoot, getAnnotations } from './types';
  * });
  * ```
  */
-export function visit(
-  tree: GenRoot | GenElement,
-  visitor: GenVisitor | GenVisitorObject
-): void {
+export function visit(tree: GenRoot | GenElement, visitor: GenVisitor | GenVisitorObject): void {
   const enter = typeof visitor === 'function' ? visitor : visitor.enter;
   const exit = typeof visitor === 'function' ? undefined : visitor.exit;
 
-  function visitNode(
-    node: GenNode,
-    index: number | null,
-    parent: GenElement | GenRoot | null
-  ): boolean {
+  function visitNode(node: GenNode, index: number | null, parent: GenElement | GenRoot | null): boolean {
     // Enter callback
     if (enter) {
       const result = enter(node, index, parent);
@@ -91,11 +84,7 @@ export function visit(
  * });
  * ```
  */
-export function visitMatch(
-  tree: GenRoot | GenElement,
-  predicate: GenNodePredicate,
-  visitor: GenVisitor
-): void {
+export function visitMatch(tree: GenRoot | GenElement, predicate: GenNodePredicate, visitor: GenVisitor): void {
   visit(tree, (node, index, parent) => {
     if (predicate(node)) {
       return visitor(node, index, parent);
@@ -108,7 +97,7 @@ export function visitMatch(
  */
 export function visitElements(
   tree: GenRoot | GenElement,
-  visitor: (node: GenElement, index: number | null, parent: GenElement | GenRoot | null) => void | boolean | 'skip'
+  visitor: (node: GenElement, index: number | null, parent: GenElement | GenRoot | null) => void | boolean | 'skip',
 ): void {
   visitMatch(tree, isElement, visitor as GenVisitor);
 }
@@ -118,7 +107,7 @@ export function visitElements(
  */
 export function visitText(
   tree: GenRoot | GenElement,
-  visitor: (node: GenText, index: number | null, parent: GenElement | GenRoot | null) => void | boolean | 'skip'
+  visitor: (node: GenText, index: number | null, parent: GenElement | GenRoot | null) => void | boolean | 'skip',
 ): void {
   visitMatch(tree, isText, visitor as GenVisitor);
 }
@@ -144,10 +133,7 @@ export function visitText(
  * });
  * ```
  */
-export function map<T extends GenRoot | GenElement>(
-  tree: T,
-  mapper: (node: GenNode) => GenNode
-): T {
+export function map<T extends GenRoot | GenElement>(tree: T, mapper: (node: GenNode) => GenNode): T {
   function mapNode(node: GenNode): GenNode {
     const mapped = mapper(node);
 
@@ -155,7 +141,7 @@ export function map<T extends GenRoot | GenElement>(
       const elem = mapped as GenElement;
       return {
         ...elem,
-        children: elem.children.map(child => mapNode(child) as GenChild),
+        children: elem.children.map((child) => mapNode(child) as GenChild),
       } as GenElement;
     }
 
@@ -163,7 +149,7 @@ export function map<T extends GenRoot | GenElement>(
       const rootNode = mapped as GenRoot;
       return {
         ...rootNode,
-        children: rootNode.children.map(child => mapNode(child) as GenChild),
+        children: rootNode.children.map((child) => mapNode(child) as GenChild),
       } as GenRoot;
     }
 
@@ -180,10 +166,7 @@ export function map<T extends GenRoot | GenElement>(
  * @param predicate - Filter function
  * @returns New tree with filtered nodes
  */
-export function filter<T extends GenRoot | GenElement>(
-  tree: T,
-  predicate: GenNodePredicate
-): T | null {
+export function filter<T extends GenRoot | GenElement>(tree: T, predicate: GenNodePredicate): T | null {
   function filterNode(node: GenNode): GenNode | null {
     if (!predicate(node)) {
       return null;
@@ -192,7 +175,7 @@ export function filter<T extends GenRoot | GenElement>(
     if (isElement(node)) {
       const elem = node as GenElement;
       const filteredChildren = elem.children
-        .map(child => filterNode(child))
+        .map((child) => filterNode(child))
         .filter((child): child is GenChild => child !== null);
 
       return {
@@ -204,7 +187,7 @@ export function filter<T extends GenRoot | GenElement>(
     if (isRoot(node)) {
       const rootNode = node as GenRoot;
       const filteredChildren = rootNode.children
-        .map(child => filterNode(child))
+        .map((child) => filterNode(child))
         .filter((child): child is GenChild => child !== null);
 
       return {
@@ -226,11 +209,8 @@ export function filter<T extends GenRoot | GenElement>(
  * @param predicate - Nodes matching this will be removed
  * @returns New tree without matching nodes
  */
-export function remove<T extends GenRoot | GenElement>(
-  tree: T,
-  predicate: GenNodePredicate
-): T {
-  return filter(tree, node => !predicate(node)) as T;
+export function remove<T extends GenRoot | GenElement>(tree: T, predicate: GenNodePredicate): T {
+  return filter(tree, (node) => !predicate(node)) as T;
 }
 
 // =============================================================================
@@ -244,10 +224,7 @@ export function remove<T extends GenRoot | GenElement>(
  * @param predicate - Search predicate
  * @returns First matching node or undefined
  */
-export function find(
-  tree: GenRoot | GenElement,
-  predicate: GenNodePredicate
-): GenNode | undefined {
+export function find(tree: GenRoot | GenElement, predicate: GenNodePredicate): GenNode | undefined {
   let found: GenNode | undefined;
 
   visit(tree, (node) => {
@@ -267,10 +244,7 @@ export function find(
  * @param predicate - Search predicate
  * @returns Array of matching nodes
  */
-export function findAll(
-  tree: GenRoot | GenElement,
-  predicate: GenNodePredicate
-): GenNode[] {
+export function findAll(tree: GenRoot | GenElement, predicate: GenNodePredicate): GenNode[] {
   const results: GenNode[] = [];
 
   visit(tree, (node) => {
@@ -285,59 +259,39 @@ export function findAll(
 /**
  * Find element by tag name
  */
-export function findByTag(
-  tree: GenRoot | GenElement,
-  tagName: string
-): GenElement | undefined {
-  return find(tree, node =>
-    isElement(node) && node.tagName === tagName
-  ) as GenElement | undefined;
+export function findByTag(tree: GenRoot | GenElement, tagName: string): GenElement | undefined {
+  return find(tree, (node) => isElement(node) && node.tagName === tagName) as GenElement | undefined;
 }
 
 /**
  * Find all elements by tag name
  */
-export function findAllByTag(
-  tree: GenRoot | GenElement,
-  tagName: string
-): GenElement[] {
-  return findAll(tree, node =>
-    isElement(node) && node.tagName === tagName
-  ) as GenElement[];
+export function findAllByTag(tree: GenRoot | GenElement, tagName: string): GenElement[] {
+  return findAll(tree, (node) => isElement(node) && node.tagName === tagName) as GenElement[];
 }
 
 /**
  * Find element by ID
  */
-export function findById(
-  tree: GenRoot | GenElement,
-  id: string
-): GenElement | undefined {
-  return find(tree, node =>
-    isElement(node) && node.properties.id === id
-  ) as GenElement | undefined;
+export function findById(tree: GenRoot | GenElement, id: string): GenElement | undefined {
+  return find(tree, (node) => isElement(node) && node.properties.id === id) as GenElement | undefined;
 }
 
 /**
  * Find elements by class name
  */
-export function findByClass(
-  tree: GenRoot | GenElement,
-  className: string
-): GenElement[] {
-  return findAll(tree, node =>
-    isElement(node) && (node.properties.className?.includes(className) ?? false)
+export function findByClass(tree: GenRoot | GenElement, className: string): GenElement[] {
+  return findAll(
+    tree,
+    (node) => isElement(node) && (node.properties.className?.includes(className) ?? false),
   ) as GenElement[];
 }
 
 /**
  * Find elements with specific annotation
  */
-export function findByAnnotation(
-  tree: GenRoot | GenElement,
-  annotation: keyof GenAnnotations
-): GenElement[] {
-  return findAll(tree, node => {
+export function findByAnnotation(tree: GenRoot | GenElement, annotation: keyof GenAnnotations): GenElement[] {
+  return findAll(tree, (node) => {
     if (!isElement(node)) return false;
     const annotations = getAnnotations(node);
     return annotations?.[annotation] !== undefined;
@@ -353,7 +307,9 @@ export function findByAnnotation(
  */
 export function countNodes(tree: GenRoot | GenElement): number {
   let count = 0;
-  visit(tree, () => { count++; });
+  visit(tree, () => {
+    count++;
+  });
   return count;
 }
 
@@ -403,7 +359,7 @@ export function collectVariables(tree: GenRoot | GenElement): string[] {
 
   visit(tree, (node) => {
     if (!isElement(node)) return;
-    
+
     const annotations = getAnnotations(node);
     if (!annotations) return;
 
@@ -424,7 +380,7 @@ export function collectVariables(tree: GenRoot | GenElement): string[] {
       const expr = annotations.condition.expression;
       const matches = expr.match(/[a-zA-Z_][a-zA-Z0-9_.]*/g);
       if (matches) {
-        matches.forEach(m => {
+        matches.forEach((m) => {
           // Get root variable name (before first dot)
           const rootVar = m.split('.')[0];
           if (!['true', 'false', 'null', 'undefined'].includes(rootVar)) {
@@ -436,7 +392,7 @@ export function collectVariables(tree: GenRoot | GenElement): string[] {
 
     // From include props
     if (annotations.include?.props) {
-      Object.values(annotations.include.props).forEach(value => {
+      Object.values(annotations.include.props).forEach((value) => {
         if (!value.startsWith('"') && !value.startsWith("'")) {
           const rootVar = value.split('.')[0];
           variables.add(rootVar);
@@ -456,7 +412,7 @@ export function collectDependencies(tree: GenRoot | GenElement): string[] {
 
   visit(tree, (node) => {
     if (!isElement(node)) return;
-    
+
     const annotations = getAnnotations(node);
     if (annotations?.include) {
       deps.add(annotations.include.partial);
@@ -483,7 +439,7 @@ export function text(value: string): GenText {
 export function element(
   tagName: string,
   properties: GenElement['properties'] = {},
-  children: GenChild[] = []
+  children: GenChild[] = [],
 ): GenElement {
   return { type: 'element', tagName, properties, children };
 }
@@ -498,10 +454,7 @@ export function root(children: GenChild[] = [], meta?: GenRoot['meta']): GenRoot
 /**
  * Add annotation to an element
  */
-export function annotate(
-  node: GenElement,
-  annotations: Partial<GenAnnotations>
-): GenElement {
+export function annotate(node: GenElement, annotations: Partial<GenAnnotations>): GenElement {
   return {
     ...node,
     properties: {

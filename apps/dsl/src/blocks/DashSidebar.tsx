@@ -7,22 +7,13 @@ export interface DashSidebarProps {
   label?: string | undefined;
   links?: DashboardSidebarLink[];
   'data-class'?: string;
-};
+}
 
-export function DashSidebar({
-  label,
-  links,
-  'data-class': dataClass,
-}: DashSidebarProps) {
+export function DashSidebar({ label, links, 'data-class': dataClass }: DashSidebarProps) {
   return (
     <Stack gap="2" p="4" w="full" items="stretch" data-class={dataClass ?? 'dash-sidebar-nav'}>
       <If test="label" value={!!(label ?? '')}>
-        <Text
-          fontSize="xs"
-          fontWeight="semibold"
-          textColor="muted-foreground"
-          data-class="dash-sidebar-label"
-        >
+        <Text fontSize="xs" fontWeight="semibold" textColor="muted-foreground" data-class="dash-sidebar-label">
           <Var name="label" value={label ?? ''} />
         </Text>
       </If>

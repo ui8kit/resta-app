@@ -1,0 +1,87 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.5/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "includes": [
+      "apps/**",
+      "packages/**",
+      "package.json",
+      "turbo.json",
+      "!**/.turbo/",
+      "!**/dist/**",
+      "!**/node_modules/**",
+      "!**/ui8kit.map.json",
+      "!**/utility-props.map.ts",
+      "!**/tw-css-extended.json"
+    ]
+  },
+  "assist": {
+    "enabled": false,
+    "actions": {
+      "source": {
+        "organizeImports": "off"
+      }
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 120
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "trailingCommas": "all"
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": false
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.json"],
+      "linter": {
+        "enabled": false
+      }
+    },
+    {
+      "includes": ["**/*.test.ts", "**/*.test.tsx"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.graphql"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "useGraphqlNamedOperations": "error"
+          },
+          "suspicious": {
+            "noDuplicateFields": "error"
+          },
+          "style": {
+            "useGraphqlNamingConvention": "warn"
+          }
+        }
+      }
+    }
+  ]
+}

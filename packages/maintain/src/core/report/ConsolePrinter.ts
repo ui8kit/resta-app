@@ -13,7 +13,7 @@ export class ConsolePrinter {
 
     console.log('');
     console.log(
-      `Summary: ${report.errors.length} errors, ${report.warnings.length} warnings (${report.success ? 'PASS' : 'FAIL'})`
+      `Summary: ${report.errors.length} errors, ${report.warnings.length} warnings (${report.success ? 'PASS' : 'FAIL'})`,
     );
     if (options.reportPath) {
       console.log(`Report: ${options.reportPath}`);
@@ -28,7 +28,7 @@ export class ConsolePrinter {
 
     console.log(`  [${result.checker}]  ${result.description}`);
     console.log(
-      `  ${result.success ? '✓ PASS' : '✗ FAIL'}  (${checkCount} checks, ${errorCount} errors, ${warningCount} warnings, ${result.duration}ms)`
+      `  ${result.success ? '✓ PASS' : '✗ FAIL'}  (${checkCount} checks, ${errorCount} errors, ${warningCount} warnings, ${result.duration}ms)`,
     );
 
     if (result.issues.length > 0) {
@@ -57,7 +57,7 @@ export class ConsolePrinter {
 
       if (!verbose && result.issues.length > displayed.length) {
         console.log(
-          `    ... ${result.issues.length - displayed.length} more issue(s). Re-run with --verbose to print all.`
+          `    ... ${result.issues.length - displayed.length} more issue(s). Re-run with --verbose to print all.`,
         );
       }
     }

@@ -35,14 +35,7 @@ export function ComponentsPageView({
   headerSubtitle,
   components,
 }: ComponentsPageViewProps) {
-  const {
-    buttonVariants,
-    buttonSizes,
-    badgeVariants,
-    badgeSizes,
-    iconSamples,
-    fieldTypes,
-  } = components;
+  const { buttonVariants, buttonSizes, badgeVariants, badgeSizes, iconSamples, fieldTypes } = components;
 
   return (
     <DesignLayout
@@ -99,7 +92,9 @@ export function ComponentsPageView({
                       <If test="s === 'icon'" value={s === 'icon'}>
                         <Icon lucideIcon={getIconByName('Settings')!} size="sm" />
                         <Else>
-                          <Text component="span"><Var name="s" value={s} /></Text>
+                          <Text component="span">
+                            <Var name="s" value={s} />
+                          </Text>
                         </Else>
                       </If>
                     </Button>
@@ -174,7 +169,12 @@ export function ComponentsPageView({
                         <Field type="password" placeholder={f.placeholder} data-class="design-components-field" />
                       </If>
                       <If test="f.type === 'textarea'" value={f.type === 'textarea'}>
-                        <Field component="textarea" rows={f.rows ?? 3} placeholder={f.placeholder} data-class="design-components-field" />
+                        <Field
+                          component="textarea"
+                          rows={f.rows ?? 3}
+                          placeholder={f.placeholder}
+                          data-class="design-components-field"
+                        />
                       </If>
                       <If test="f.type === 'checkbox'" value={f.type === 'checkbox'}>
                         <Group gap="2" items="center">
@@ -191,7 +191,13 @@ export function ComponentsPageView({
                           <Loop each="f.options" as="opt" data={f.options ?? []}>
                             {(opt) => (
                               <Group gap="2" items="center">
-                                <Field type="radio" name={`choice-${f.type}`} value={opt.value} id={`ra-${f.type}-${opt.value}`} data-class="design-components-field" />
+                                <Field
+                                  type="radio"
+                                  name={`choice-${f.type}`}
+                                  value={opt.value}
+                                  id={`ra-${f.type}-${opt.value}`}
+                                  data-class="design-components-field"
+                                />
                                 <If test="opt.label" value={!!opt.label}>
                                   <Text component="label" fontSize="sm" htmlFor={`ra-${f.type}-${opt.value}`}>
                                     <Var name="opt.label" value={opt.label} />
@@ -208,7 +214,9 @@ export function ComponentsPageView({
                             {(opt) => (
                               <option value={opt.value}>
                                 <If test="opt.label" value={!!opt.label}>
-                                  <Text component="span"><Var name="opt.label" value={opt.label} /></Text>
+                                  <Text component="span">
+                                    <Var name="opt.label" value={opt.label} />
+                                  </Text>
                                 </If>
                               </option>
                             )}

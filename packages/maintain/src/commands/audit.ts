@@ -25,32 +25,30 @@ export function registerAuditCommand(program: Command): void {
     .option('--mapping <path>', 'Mapping file path override')
     .option('--scope <paths>', 'Comma-separated scope paths override')
     .option('--verbose', 'Print every issue with full details', false)
-    .action(
-      async (options: { cwd: string; config: string; mapping?: string; scope?: string; verbose?: boolean }) => {
-        const scope = parseScope(options.scope);
-        const { report } = await executeMaintainRun({
-          cwd: options.cwd,
-          configPath: options.config,
-          checkerNames: ['refactor-audit'],
-          mode: 'audit',
-          verbose: options.verbose,
-          mutateConfig: (config) => {
-            const currentConfig: RefactorAuditConfig = config.checkers.refactorAudit ?? {
-              mapping: DEFAULT_MAPPING,
-              scope: DEFAULT_REFRACTOR_SCOPE,
-            };
+    .action(async (options: { cwd: string; config: string; mapping?: string; scope?: string; verbose?: boolean }) => {
+      const scope = parseScope(options.scope);
+      const { report } = await executeMaintainRun({
+        cwd: options.cwd,
+        configPath: options.config,
+        checkerNames: ['refactor-audit'],
+        mode: 'audit',
+        verbose: options.verbose,
+        mutateConfig: (config) => {
+          const currentConfig: RefactorAuditConfig = config.checkers.refactorAudit ?? {
+            mapping: DEFAULT_MAPPING,
+            scope: DEFAULT_REFRACTOR_SCOPE,
+          };
 
-            config.checkers.refactorAudit = {
-              ...currentConfig,
-              ...(options.mapping ? { mapping: options.mapping } : {}),
-              ...(scope ? { scope } : {}),
-            };
-          },
-        });
+          config.checkers.refactorAudit = {
+            ...currentConfig,
+            ...(options.mapping ? { mapping: options.mapping } : {}),
+            ...(scope ? { scope } : {}),
+          };
+        },
+      });
 
-        if (!report.success) {
-          process.exit(1);
-        }
+      if (!report.success) {
+        process.exit(1);
       }
-    );
+    });
 }

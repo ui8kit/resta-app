@@ -13,7 +13,7 @@ export class UtilityPropLiteralsChecker extends BaseChecker<UtilityPropLiteralsC
     super(
       'utility-prop-literals',
       'Validate that utility props use static literal values from the whitelist',
-      'utilityPropLiterals'
+      'utilityPropLiterals',
     );
   }
 
@@ -25,9 +25,14 @@ export class UtilityPropLiteralsChecker extends BaseChecker<UtilityPropLiteralsC
       return {
         success: false,
         issues: [
-          this.createIssue('error', 'UTILITY_MAP_MISSING', `Utility props map not found: ${this.rel(context.root, mapPath)}`, {
-            hint: 'Provide a valid path in checkers.utilityPropLiterals.utilityPropsMapPath.',
-          }),
+          this.createIssue(
+            'error',
+            'UTILITY_MAP_MISSING',
+            `Utility props map not found: ${this.rel(context.root, mapPath)}`,
+            {
+              hint: 'Provide a valid path in checkers.utilityPropLiterals.utilityPropsMapPath.',
+            },
+          ),
         ],
       };
     }
@@ -67,7 +72,7 @@ export class UtilityPropLiteralsChecker extends BaseChecker<UtilityPropLiteralsC
     root: string,
     utilityKeys: Set<string>,
     utilityMap: Map<string, Set<string>>,
-    allowDynamicInLoop: boolean
+    allowDynamicInLoop: boolean,
   ): Issue[] {
     const issues: Issue[] = [];
     const sourceFile = ts.createSourceFile(filePath, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
@@ -94,13 +99,18 @@ export class UtilityPropLiteralsChecker extends BaseChecker<UtilityPropLiteralsC
         if (!attr.initializer) {
           if (!allowed.has('')) {
             issues.push(
-              this.createIssue('error', 'UTILITY_PROP_INVALID_VALUE', `Prop "${propName}" bare usage is not in whitelist`, {
-                file: fileRel,
-                line: loc.line + 1,
-                column: loc.character + 1,
-                received: '(bare)',
-                hint: `Allowed values: ${Array.from(allowed).sort().join(', ') || '(none)'}`,
-              })
+              this.createIssue(
+                'error',
+                'UTILITY_PROP_INVALID_VALUE',
+                `Prop "${propName}" bare usage is not in whitelist`,
+                {
+                  file: fileRel,
+                  line: loc.line + 1,
+                  column: loc.character + 1,
+                  received: '(bare)',
+                  hint: `Allowed values: ${Array.from(allowed).sort().join(', ') || '(none)'}`,
+                },
+              ),
             );
           }
           continue;
@@ -110,13 +120,18 @@ export class UtilityPropLiteralsChecker extends BaseChecker<UtilityPropLiteralsC
           const value = attr.initializer.text;
           if (value !== '' && !allowed.has(value)) {
             issues.push(
-              this.createIssue('error', 'UTILITY_PROP_INVALID_VALUE', `Prop "${propName}" value "${value}" is not in whitelist`, {
-                file: fileRel,
-                line: loc.line + 1,
-                column: loc.character + 1,
-                received: value,
-                expected: Array.from(allowed).sort().join(' | '),
-              })
+              this.createIssue(
+                'error',
+                'UTILITY_PROP_INVALID_VALUE',
+                `Prop "${propName}" value "${value}" is not in whitelist`,
+                {
+                  file: fileRel,
+                  line: loc.line + 1,
+                  column: loc.character + 1,
+                  received: value,
+                  expected: Array.from(allowed).sort().join(' | '),
+                },
+              ),
             );
           }
           continue;
@@ -128,18 +143,24 @@ export class UtilityPropLiteralsChecker extends BaseChecker<UtilityPropLiteralsC
           if (ts.isAsExpression(expr)) {
             const typeText = expr.type.getText(sourceFile);
             if (typeText === 'any' || typeText === 'never') {
-              const level: IssueLevel = (allowDynamicInLoop && inLoop) ? 'info' : 'error';
+              const level: IssueLevel = allowDynamicInLoop && inLoop ? 'info' : 'error';
               const suffix = level === 'info' ? ' (inside <Loop>, allowed by allowDynamicInLoop)' : '';
               issues.push(
-                this.createIssue(level, 'UTILITY_PROP_NOT_LITERAL', `Prop "${propName}" uses "as ${typeText}" cast — must be a static literal${suffix}`, {
-                  file: fileRel,
-                  line: loc.line + 1,
-                  column: loc.character + 1,
-                  received: `as ${typeText}`,
-                  hint: level === 'info'
-                    ? 'Dynamic utility prop inside <Loop> — accepted via allowDynamicInLoop.'
-                    : 'Replace with a direct string literal value from the whitelist.',
-                })
+                this.createIssue(
+                  level,
+                  'UTILITY_PROP_NOT_LITERAL',
+                  `Prop "${propName}" uses "as ${typeText}" cast — must be a static literal${suffix}`,
+                  {
+                    file: fileRel,
+                    line: loc.line + 1,
+                    column: loc.character + 1,
+                    received: `as ${typeText}`,
+                    hint:
+                      level === 'info'
+                        ? 'Dynamic utility prop inside <Loop> — accepted via allowDynamicInLoop.'
+                        : 'Replace with a direct string literal value from the whitelist.',
+                  },
+                ),
               );
               continue;
             }
@@ -149,13 +170,18 @@ export class UtilityPropLiteralsChecker extends BaseChecker<UtilityPropLiteralsC
             const value = expr.text;
             if (!allowed.has(value)) {
               issues.push(
-                this.createIssue('error', 'UTILITY_PROP_INVALID_VALUE', `Prop "${propName}" value "${value}" is not in whitelist`, {
-                  file: fileRel,
-                  line: loc.line + 1,
-                  column: loc.character + 1,
-                  received: value,
-                  expected: Array.from(allowed).sort().join(' | '),
-                })
+                this.createIssue(
+                  'error',
+                  'UTILITY_PROP_INVALID_VALUE',
+                  `Prop "${propName}" value "${value}" is not in whitelist`,
+                  {
+                    file: fileRel,
+                    line: loc.line + 1,
+                    column: loc.character + 1,
+                    received: value,
+                    expected: Array.from(allowed).sort().join(' | '),
+                  },
+                ),
               );
             }
             continue;
@@ -165,29 +191,40 @@ export class UtilityPropLiteralsChecker extends BaseChecker<UtilityPropLiteralsC
             const value = expr.text;
             if (!allowed.has(value)) {
               issues.push(
-                this.createIssue('error', 'UTILITY_PROP_INVALID_VALUE', `Prop "${propName}" value ${value} is not in whitelist`, {
-                  file: fileRel,
-                  line: loc.line + 1,
-                  column: loc.character + 1,
-                  received: value,
-                  expected: Array.from(allowed).sort().join(' | '),
-                })
+                this.createIssue(
+                  'error',
+                  'UTILITY_PROP_INVALID_VALUE',
+                  `Prop "${propName}" value ${value} is not in whitelist`,
+                  {
+                    file: fileRel,
+                    line: loc.line + 1,
+                    column: loc.character + 1,
+                    received: value,
+                    expected: Array.from(allowed).sort().join(' | '),
+                  },
+                ),
               );
             }
             continue;
           }
 
-          const level: IssueLevel = (allowDynamicInLoop && inLoop) ? 'info' : 'error';
+          const level: IssueLevel = allowDynamicInLoop && inLoop ? 'info' : 'error';
           const suffix = level === 'info' ? ' (inside <Loop>, allowed by allowDynamicInLoop)' : '';
           issues.push(
-            this.createIssue(level, 'UTILITY_PROP_NOT_LITERAL', `Prop "${propName}" must be a static literal, not a variable or expression${suffix}`, {
-              file: fileRel,
-              line: loc.line + 1,
-              column: loc.character + 1,
-              hint: level === 'info'
-                ? 'Dynamic utility prop inside <Loop> — accepted via allowDynamicInLoop.'
-                : 'Replace with a direct string literal value from the whitelist.',
-            })
+            this.createIssue(
+              level,
+              'UTILITY_PROP_NOT_LITERAL',
+              `Prop "${propName}" must be a static literal, not a variable or expression${suffix}`,
+              {
+                file: fileRel,
+                line: loc.line + 1,
+                column: loc.character + 1,
+                hint:
+                  level === 'info'
+                    ? 'Dynamic utility prop inside <Loop> — accepted via allowDynamicInLoop.'
+                    : 'Replace with a direct string literal value from the whitelist.',
+              },
+            ),
           );
         }
       }
@@ -223,10 +260,7 @@ export class UtilityPropLiteralsChecker extends BaseChecker<UtilityPropLiteralsC
     return false;
   }
 
-  private isCoreComponentOpening(
-    opening: ts.JsxOpeningLikeElement,
-    coreComponentNames: Set<string>
-  ): boolean {
+  private isCoreComponentOpening(opening: ts.JsxOpeningLikeElement, coreComponentNames: Set<string>): boolean {
     const tagName = opening.tagName;
     return ts.isIdentifier(tagName) && coreComponentNames.has(tagName.text);
   }

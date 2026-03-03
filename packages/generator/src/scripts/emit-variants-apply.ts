@@ -1,6 +1,6 @@
-import { readdir, readFile } from "node:fs/promises";
-import { basename, join } from "node:path";
-import ts from "typescript";
+import { readdir, readFile } from 'node:fs/promises';
+import { basename, join } from 'node:path';
+import ts from 'typescript';
 
 export interface EmitVariantsApplyCssOptions {
   /**
@@ -37,8 +37,8 @@ export interface VariantsArtifacts {
  */
 function kebabCase(input: string): string {
   return input
-    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
-    .replace(/_/g, "-")
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/_/g, '-')
     .toLowerCase();
 }
 
@@ -100,8 +100,8 @@ function getObjectProperty(obj: ts.ObjectLiteralExpression, name: string): ts.Ob
 function isCvaCall(expr: ts.Expression): expr is ts.CallExpression {
   if (!ts.isCallExpression(expr)) return false;
   // cva(...) or something.cva(...)
-  if (ts.isIdentifier(expr.expression)) return expr.expression.text === "cva";
-  if (ts.isPropertyAccessExpression(expr.expression)) return expr.expression.name.text === "cva";
+  if (ts.isIdentifier(expr.expression)) return expr.expression.text === 'cva';
+  if (ts.isPropertyAccessExpression(expr.expression)) return expr.expression.name.text === 'cva';
   return false;
 }
 
@@ -117,7 +117,7 @@ function getPropertyKeyName(name: ts.PropertyName): string | undefined {
 
 /**
  * Derive entity name from file prefix and export name.
- * 
+ *
  * Examples:
  * - button.ts, buttonStyleVariants -> button
  * - button.ts, buttonSizeVariants -> button
@@ -126,23 +126,23 @@ function getPropertyKeyName(name: ts.PropertyName): string | undefined {
  */
 function deriveEntityName(filePrefix: string, exportName: string): string {
   // Remove "Variants" suffix
-  let name = exportName.replace(/Variants$/i, "");
-  
+  let name = exportName.replace(/Variants$/i, '');
+
   // If name starts with file prefix, extract the rest
   const prefixLower = filePrefix.toLowerCase();
   const nameLower = name.toLowerCase();
-  
+
   if (nameLower.startsWith(prefixLower)) {
     const rest = name.slice(filePrefix.length);
     // Common aggregator suffixes that collapse to base entity
-    const aggregators = ["style", "size", "base", "variant", "color", "state"];
+    const aggregators = ['style', 'size', 'base', 'variant', 'color', 'state'];
     if (!rest || aggregators.includes(rest.toLowerCase())) {
       return filePrefix;
     }
     // Otherwise it's a sub-entity: cardHeader -> card-header
     return `${filePrefix}-${kebabCase(rest)}`;
   }
-  
+
   // Fallback: just kebab-case the whole name
   return kebabCase(name);
 }
@@ -150,14 +150,10 @@ function deriveEntityName(filePrefix: string, exportName: string): string {
 /**
  * Parse a single cva() call and extract base tokens + variant rules
  */
-function parseCvaCall(
-  call: ts.CallExpression,
-  entityName: string,
-  entity: Entity
-): void {
+function parseCvaCall(call: ts.CallExpression, entityName: string, entity: Entity): void {
   // Base tokens (first argument)
   const baseArg = call.arguments[0];
-  const baseString = getStringLiteral(baseArg) ?? "";
+  const baseString = getStringLiteral(baseArg) ?? '';
   entity.baseTokens.push(...splitTokens(baseString));
 
   // Options object (second argument)
@@ -165,8 +161,8 @@ function parseCvaCall(
   if (!optsArg || !ts.isObjectLiteralExpression(optsArg)) return;
 
   // Get variants and defaultVariants
-  const variantsProp = getObjectProperty(optsArg, "variants");
-  const defaultVariantsProp = getObjectProperty(optsArg, "defaultVariants");
+  const variantsProp = getObjectProperty(optsArg, 'variants');
+  const defaultVariantsProp = getObjectProperty(optsArg, 'defaultVariants');
 
   // Parse defaultVariants: { variant: "primary", size: "default" }
   const defaultVariants: Record<string, string> = {};
@@ -194,23 +190,23 @@ function parseCvaCall(
 
   for (const variantGroup of variantsProp.initializer.properties) {
     if (!ts.isPropertyAssignment(variantGroup)) continue;
-    
+
     const variantKey = getPropertyKeyName(variantGroup.name);
     if (!variantKey) continue;
     if (!ts.isObjectLiteralExpression(variantGroup.initializer)) continue;
 
     for (const valueEntry of variantGroup.initializer.properties) {
       if (!ts.isPropertyAssignment(valueEntry)) continue;
-      
+
       const valueKey = getPropertyKeyName(valueEntry.name);
       if (!valueKey) continue;
 
-      const classString = getStringLiteral(valueEntry.initializer) ?? "";
+      const classString = getStringLiteral(valueEntry.initializer) ?? '';
       const valueTokens = splitTokens(classString);
 
       // Check if this is the default variant value
-      const isDefault = defaultVariants[variantKey] === valueKey || 
-                        (!defaultVariants[variantKey] && valueKey === "default");
+      const isDefault =
+        defaultVariants[variantKey] === valueKey || (!defaultVariants[variantKey] && valueKey === 'default');
 
       if (isDefault) {
         // Default variant tokens go into base entity
@@ -233,38 +229,28 @@ function parseCvaCall(
 /**
  * Parse a single variant file and extract all cva() declarations
  */
-async function parseVariantFile(
-  filePath: string,
-  filePrefix: string,
-  entities: Map<string, Entity>
-): Promise<void> {
-  const code = await readFile(filePath, "utf-8");
-  const sourceFile = ts.createSourceFile(
-    filePath,
-    code,
-    ts.ScriptTarget.Latest,
-    true,
-    ts.ScriptKind.TS
-  );
+async function parseVariantFile(filePath: string, filePrefix: string, entities: Map<string, Entity>): Promise<void> {
+  const code = await readFile(filePath, 'utf-8');
+  const sourceFile = ts.createSourceFile(filePath, code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
 
   for (const stmt of sourceFile.statements) {
     if (!ts.isVariableStatement(stmt)) continue;
-    
+
     // Only process exported declarations
     const isExported = stmt.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
     if (!isExported) continue;
 
     for (const decl of stmt.declarationList.declarations) {
       if (!ts.isIdentifier(decl.name)) continue;
-      
+
       const exportName = decl.name.text;
       const init = decl.initializer;
-      
+
       if (!init || !isCvaCall(init)) continue;
 
       // Derive entity name from file prefix and export name
       const entityName = deriveEntityName(filePrefix, exportName);
-      
+
       // Get or create entity
       const entity = entities.get(entityName) ?? createEntity();
       entities.set(entityName, entity);
@@ -292,8 +278,8 @@ export async function emitVariantsArtifacts(options: EmitVariantsApplyCssOptions
   // Find all .ts files except index.ts
   const entries = await readdir(variantsDir);
   const variantFiles = entries
-    .filter((f) => f.toLowerCase().endsWith(".ts"))
-    .filter((f) => f.toLowerCase() !== "index.ts")
+    .filter((f) => f.toLowerCase().endsWith('.ts'))
+    .filter((f) => f.toLowerCase() !== 'index.ts')
     .sort();
 
   const entities = new Map<string, Entity>();
@@ -301,8 +287,8 @@ export async function emitVariantsArtifacts(options: EmitVariantsApplyCssOptions
   // Parse each variant file
   for (const fileName of variantFiles) {
     const absPath = join(variantsDir, fileName);
-    const filePrefix = basename(fileName).replace(/\.ts$/i, "");
-    
+    const filePrefix = basename(fileName).replace(/\.ts$/i, '');
+
     await parseVariantFile(absPath, filePrefix, entities);
   }
 
@@ -314,11 +300,11 @@ export async function emitVariantsArtifacts(options: EmitVariantsApplyCssOptions
 
   for (const entityName of entityNames) {
     const entity = entities.get(entityName)!;
-    
+
     // Base entity selector
     const baseTokens = stableDedupe(entity.baseTokens);
     if (baseTokens.length) {
-      cssRules.push(`.${entityName} {\n  @apply ${baseTokens.join(" ")};\n}`);
+      cssRules.push(`.${entityName} {\n  @apply ${baseTokens.join(' ')};\n}`);
       selectorsOut.push(entityName);
       selectorToTokens[entityName] = baseTokens;
     }
@@ -328,7 +314,7 @@ export async function emitVariantsArtifacts(options: EmitVariantsApplyCssOptions
     for (const sel of selectors) {
       const tokens = stableDedupe(entity.rules.get(sel)!);
       if (!tokens.length) continue;
-      cssRules.push(`.${sel} {\n  @apply ${tokens.join(" ")};\n}`);
+      cssRules.push(`.${sel} {\n  @apply ${tokens.join(' ')};\n}`);
       selectorsOut.push(sel);
       selectorToTokens[sel] = tokens;
     }
@@ -342,7 +328,7 @@ export async function emitVariantsArtifacts(options: EmitVariantsApplyCssOptions
 
 `;
 
-  const css = header + cssRules.join("\n\n") + "\n";
+  const css = header + cssRules.join('\n\n') + '\n';
   const selectors = Array.from(new Set(selectorsOut)).sort();
 
   return {

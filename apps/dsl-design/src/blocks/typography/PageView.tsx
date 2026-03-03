@@ -1,15 +1,5 @@
 import { DesignLayout } from '@/layouts';
-import {
-  Block,
-  Stack,
-  Title,
-  Text,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from '@ui8kit/core';
+import { Block, Stack, Title, Text, Card, CardHeader, CardTitle, CardDescription, CardContent } from '@ui8kit/core';
 import { If, Loop, Var } from '@ui8kit/dsl';
 import type { TypographyScaleFixture, NavItem, SidebarLink } from '@/types';
 
@@ -28,14 +18,7 @@ export function TypographyPageView({
   headerSubtitle,
   typographyScale,
 }: TypographyPageViewProps) {
-  const {
-    sampleText,
-    fontSizes,
-    fontWeights,
-    lineHeights,
-    letterSpacings,
-    titleOrders,
-  } = typographyScale;
+  const { sampleText, fontSizes, fontWeights, lineHeights, letterSpacings, titleOrders } = typographyScale;
 
   return (
     <DesignLayout
@@ -117,8 +100,14 @@ export function TypographyPageView({
                         </Text>
                       </If>
                       <If test="sampleText" value={!!sampleText}>
-                        <Text fontSize="base" lineHeight={lh as never} max="w-md" data-class="design-typography-lh-sample">
-                          <Var name="sampleText" value={sampleText} /> <Var name="sampleText" value={sampleText} /> <Var name="sampleText" value={sampleText} />
+                        <Text
+                          fontSize="base"
+                          lineHeight={lh as never}
+                          max="w-md"
+                          data-class="design-typography-lh-sample"
+                        >
+                          <Var name="sampleText" value={sampleText} /> <Var name="sampleText" value={sampleText} />{' '}
+                          <Var name="sampleText" value={sampleText} />
                         </Text>
                       </If>
                     </Stack>

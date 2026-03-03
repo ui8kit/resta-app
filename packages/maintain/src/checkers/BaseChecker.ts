@@ -1,11 +1,4 @@
-import type {
-  CheckContext,
-  CheckResult,
-  IChecker,
-  ILogger,
-  Issue,
-  IssueLevel,
-} from '../core/interfaces';
+import type { CheckContext, CheckResult, IChecker, ILogger, Issue, IssueLevel } from '../core/interfaces';
 
 export interface CheckerExecutionResult {
   issues?: Issue[];
@@ -16,15 +9,13 @@ export interface CheckerExecutionResult {
   reportPath?: string;
 }
 
-export abstract class BaseChecker<TConfig>
-  implements IChecker<TConfig>
-{
+export abstract class BaseChecker<TConfig> implements IChecker<TConfig> {
   protected config: TConfig | undefined;
 
   constructor(
     public readonly name: string,
     public readonly description: string,
-    public readonly configKey: string
+    public readonly configKey: string,
   ) {}
 
   get enabled(): boolean {
@@ -88,19 +79,11 @@ export abstract class BaseChecker<TConfig>
    * Reads any checker config key from the open checkers map.
    * Useful for cross-checker integrations while keeping runtime typing explicit.
    */
-  protected getConfigValue<TValue = unknown>(
-    context: CheckContext,
-    key: string
-  ): TValue | undefined {
+  protected getConfigValue<TValue = unknown>(context: CheckContext, key: string): TValue | undefined {
     return context.config.checkers[key] as TValue | undefined;
   }
 
-  protected createIssue(
-    level: IssueLevel,
-    code: string,
-    message: string,
-    extras: Partial<Issue> = {}
-  ): Issue {
+  protected createIssue(level: IssueLevel, code: string, message: string, extras: Partial<Issue> = {}): Issue {
     return {
       level,
       code,
@@ -110,8 +93,5 @@ export abstract class BaseChecker<TConfig>
     };
   }
 
-  protected abstract execute(
-    context: CheckContext,
-    logger: ILogger
-  ): Promise<CheckerExecutionResult>;
+  protected abstract execute(context: CheckContext, logger: ILogger): Promise<CheckerExecutionResult>;
 }

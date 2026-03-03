@@ -20,15 +20,9 @@
       "itemsKey": "metrics",
       "slugField": "id",
       "types": "src/types/dashboard.ts",
-      "routes": [
-        "/"
-      ],
-      "views": [
-        "src/blocks/landing/DashboardPageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/landing/DashboardPage.tsx"
-      ]
+      "routes": ["/"],
+      "views": ["src/blocks/landing/DashboardPageView.tsx"],
+      "routeFiles": ["src/routes/landing/DashboardPage.tsx"]
     },
     {
       "name": "kanban",
@@ -38,15 +32,9 @@
       "itemsKey": "columns",
       "slugField": "id",
       "types": "src/types/kanban.ts",
-      "routes": [
-        "/kanban"
-      ],
-      "views": [
-        "src/blocks/kanban/KanbanPageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/kanban/KanbanPage.tsx"
-      ]
+      "routes": ["/kanban"],
+      "views": ["src/blocks/kanban/KanbanPageView.tsx"],
+      "routeFiles": ["src/routes/kanban/KanbanPage.tsx"]
     },
     {
       "name": "reports",
@@ -56,15 +44,9 @@
       "itemsKey": "sections",
       "slugField": "id",
       "types": "src/types/reports.ts",
-      "routes": [
-        "/reports"
-      ],
-      "views": [
-        "src/blocks/reports/ReportsPageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/reports/ReportsPage.tsx"
-      ]
+      "routes": ["/reports"],
+      "views": ["src/blocks/reports/ReportsPageView.tsx"],
+      "routeFiles": ["src/routes/reports/ReportsPage.tsx"]
     },
     {
       "name": "tasks",
@@ -74,15 +56,9 @@
       "itemsKey": "items",
       "slugField": "id",
       "types": "src/types/tasks.ts",
-      "routes": [
-        "/tasks"
-      ],
-      "views": [
-        "src/blocks/tasks/TasksPageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/tasks/TasksPage.tsx"
-      ]
+      "routes": ["/tasks"],
+      "views": ["src/blocks/tasks/TasksPageView.tsx"],
+      "routeFiles": ["src/routes/tasks/TasksPage.tsx"]
     }
   ],
   "layouts": [
@@ -134,8 +110,5 @@
     "file": "src/data/context.ts",
     "adapter": "src/data/adapters/fixtures.adapter.ts"
   },
-  "domains": [
-    "admin",
-    "crm"
-  ]
+  "domains": ["admin", "crm"]
 }

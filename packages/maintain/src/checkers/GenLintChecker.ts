@@ -1,12 +1,6 @@
 import { relative } from 'node:path';
 import ts from 'typescript';
-import type {
-  CheckContext,
-  GenLintCheckerConfig,
-  GenLintRuleCode,
-  Issue,
-  Severity,
-} from '../core/interfaces';
+import type { CheckContext, GenLintCheckerConfig, GenLintRuleCode, Issue, Severity } from '../core/interfaces';
 import { FileScanner } from '../utils';
 import type { CheckerExecutionResult } from './BaseChecker';
 import { BaseChecker } from './BaseChecker';
@@ -137,13 +131,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
 
   private lintFile(filePath: string, source: string, root: string): GenLintIssue[] {
     const issues: GenLintIssue[] = [];
-    const sourceFile = ts.createSourceFile(
-      filePath,
-      source,
-      ts.ScriptTarget.Latest,
-      true,
-      ts.ScriptKind.TSX
-    );
+    const sourceFile = ts.createSourceFile(filePath, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
 
     const importedFromTypes = new Set<string>();
 
@@ -151,9 +139,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
       if (!ts.isImportDeclaration(statement)) {
         continue;
       }
-      const importPath = statement.moduleSpecifier
-        .getText(sourceFile)
-        .replace(/^['"]|['"]$/g, '');
+      const importPath = statement.moduleSpecifier.getText(sourceFile).replace(/^['"]|['"]$/g, '');
 
       if (importPath === '@ui8kit/sdk' || importPath.startsWith('@ui8kit/sdk/')) {
         this.addIssue(
@@ -162,7 +148,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
           statement,
           'GEN007',
           "Import from '@ui8kit/sdk' is not allowed in generatable files",
-          root
+          root,
         );
       }
 
@@ -186,7 +172,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
               member,
               'GEN005',
               `Props '${propsName}' must not contain index signatures`,
-              root
+              root,
             );
           }
         }
@@ -204,14 +190,12 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
           node,
           'GEN008',
           `Props '${propsName}' uses '${ref}', which should be primitive/inline or imported from '@/types'`,
-          root
+          root,
         );
       }
     };
 
-    const inspectComponentBody = (
-      fn: ts.FunctionDeclaration | ts.FunctionExpression | ts.ArrowFunction
-    ): void => {
+    const inspectComponentBody = (fn: ts.FunctionDeclaration | ts.FunctionExpression | ts.ArrowFunction): void => {
       const body = fn.body;
       if (!body || !ts.isBlock(body)) {
         return;
@@ -225,7 +209,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
             statement,
             'GEN001',
             'Local function declarations are not allowed inside components',
-            root
+            root,
           );
         }
         if (ts.isVariableStatement(statement)) {
@@ -237,7 +221,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
                 declaration,
                 'GEN002',
                 'Arrow function constants are not allowed inside components',
-                root
+                root,
               );
             }
           }
@@ -255,7 +239,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
             node,
             'GEN003',
             `Local type '${name}' is not allowed (extract to '@/types')`,
-            root
+            root,
           );
         } else {
           validatePropsType(node.type, name, node);
@@ -271,7 +255,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
             node,
             'GEN003',
             `Local interface '${name}' is not allowed (extract to '@/types')`,
-            root
+            root,
           );
         } else {
           for (const member of node.members) {
@@ -282,7 +266,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
                 member,
                 'GEN005',
                 `Props '${name}' must not contain index signatures`,
-                root
+                root,
               );
             }
           }
@@ -303,7 +287,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
               node,
               'GEN008',
               `Props '${name}' uses '${ref}', which should be primitive/inline or imported from '@/types'`,
-              root
+              root,
             );
           }
         }
@@ -318,7 +302,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
               param,
               'GEN004',
               'Rest params are not allowed in component signatures',
-              root
+              root,
             );
           }
         }
@@ -330,10 +314,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
           if (!declaration.initializer) {
             continue;
           }
-          if (
-            !ts.isArrowFunction(declaration.initializer) &&
-            !ts.isFunctionExpression(declaration.initializer)
-          ) {
+          if (!ts.isArrowFunction(declaration.initializer) && !ts.isFunctionExpression(declaration.initializer)) {
             continue;
           }
           for (const param of declaration.initializer.parameters) {
@@ -344,7 +325,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
                 param,
                 'GEN004',
                 'Rest params are not allowed in component signatures',
-                root
+                root,
               );
             }
           }
@@ -355,12 +336,10 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
       if (ts.isJsxElement(node)) {
         const tagName = this.getJsxTagName(node.openingElement.tagName);
         if (tagName === 'Else' || tagName === 'ElseIf') {
-          const parentJsx = ts.findAncestor(node.parent, (ancestor) =>
-            ts.isJsxElement(ancestor)
-          ) as ts.JsxElement | undefined;
-          const parentTagName = parentJsx
-            ? this.getJsxTagName(parentJsx.openingElement.tagName)
-            : undefined;
+          const parentJsx = ts.findAncestor(node.parent, (ancestor) => ts.isJsxElement(ancestor)) as
+            | ts.JsxElement
+            | undefined;
+          const parentTagName = parentJsx ? this.getJsxTagName(parentJsx.openingElement.tagName) : undefined;
           if (parentTagName !== 'If') {
             this.addIssue(
               issues,
@@ -368,7 +347,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
               node,
               'GEN006',
               `<${tagName}> must be nested inside <If>, not a sibling`,
-              root
+              root,
             );
           }
         }
@@ -387,7 +366,7 @@ export class GenLintChecker extends BaseChecker<GenLintCheckerConfig> {
     node: ts.Node,
     code: GenLintRuleCode,
     message: string,
-    root: string
+    root: string,
   ): void {
     const location = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile));
     bucket.push({

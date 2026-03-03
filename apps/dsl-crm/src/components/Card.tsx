@@ -1,8 +1,16 @@
-import type { ReactNode } from "react";
-import { forwardRef } from "react";
-import { cn } from "../lib/utils";
-import { resolveUtilityClassName, ux, type UtilityPropBag, type UtilityPropPrefix } from "../lib/utility-props";
-import { cardVariants, cardHeaderVariants, cardTitleVariants, cardDescriptionVariants, cardContentVariants, cardFooterVariants, type CardVariantProps } from "../variants/card";
+import type { ReactNode } from 'react';
+import { forwardRef } from 'react';
+import { cn } from '../lib/utils';
+import { resolveUtilityClassName, ux, type UtilityPropBag, type UtilityPropPrefix } from '../lib/utility-props';
+import {
+  cardVariants,
+  cardHeaderVariants,
+  cardTitleVariants,
+  cardDescriptionVariants,
+  cardContentVariants,
+  cardFooterVariants,
+  type CardVariantProps,
+} from '../variants/card';
 
 type CardDomProps = Omit<React.HTMLAttributes<HTMLDivElement>, UtilityPropPrefix>;
 
@@ -11,100 +19,66 @@ interface CardProps extends CardDomProps, UtilityPropBag, CardVariantProps {
   children: ReactNode;
 }
 
-const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({
-    children,
-    className,
-    variant = "default",
-    ...props
-  }, ref) => {
-    const { utilityClassName, rest } = resolveUtilityClassName(props);
-    const defaultUtilities = ux({
-      p: "4",
-      rounded: "lg",
-      shadow: "sm",
-      bg: "card",
-      // minimal border baseline (no color enforcement here; color comes from tokens/theme)
-      border: "",
-    });
-    return (
-      <div
-        ref={ref}
-        data-class="card"
-        className={cn(
-          cardVariants({ variant }),
-          defaultUtilities,
-          utilityClassName,
-          className
-        )}
-        {...rest}
-      >
-        {children}
-      </div>
-    );
-  }
-);
+const Card = forwardRef<HTMLDivElement, CardProps>(({ children, className, variant = 'default', ...props }, ref) => {
+  const { utilityClassName, rest } = resolveUtilityClassName(props);
+  const defaultUtilities = ux({
+    p: '4',
+    rounded: 'lg',
+    shadow: 'sm',
+    bg: 'card',
+    // minimal border baseline (no color enforcement here; color comes from tokens/theme)
+    border: '',
+  });
+  return (
+    <div
+      ref={ref}
+      data-class="card"
+      className={cn(cardVariants({ variant }), defaultUtilities, utilityClassName, className)}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+});
 
-Card.displayName = "Card";
+Card.displayName = 'Card';
 
 // Card.Header component
-interface CardHeaderProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, UtilityPropPrefix>,
-    UtilityPropBag {
+interface CardHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, UtilityPropPrefix>, UtilityPropBag {
   children: ReactNode;
 }
 
-const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
-  ({
-    children,
-    className,
-    ...props
-  }, ref) => {
-    const { utilityClassName, rest } = resolveUtilityClassName(props);
-    const defaultUtilities = ux({ p: "4" });
-    return (
-      <div
-        ref={ref}
-        data-class="card-header"
-        className={cn(
-          cardHeaderVariants(),
-          defaultUtilities,
-          utilityClassName,
-          className
-        )}
-        {...rest}
-      >
-        {children}
-      </div>
-    );
-  }
-);
+const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(({ children, className, ...props }, ref) => {
+  const { utilityClassName, rest } = resolveUtilityClassName(props);
+  const defaultUtilities = ux({ p: '4' });
+  return (
+    <div
+      ref={ref}
+      data-class="card-header"
+      className={cn(cardHeaderVariants(), defaultUtilities, utilityClassName, className)}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+});
 
-CardHeader.displayName = "CardHeader";
+CardHeader.displayName = 'CardHeader';
 
 // Card.Title component
-interface CardTitleProps
-  extends React.HTMLAttributes<HTMLHeadingElement> {
+interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: ReactNode;
   order?: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
 const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(
-  ({
-    children,
-    className,
-    order = 3,
-    ...props
-  }, ref) => {
+  ({ children, className, order = 3, ...props }, ref) => {
     // Create props for the heading element
     const headingProps = {
       ref,
       'data-class': 'card-title',
-      className: cn(
-        cardTitleVariants(),
-        className
-      ),
-      ...props
+      className: cn(cardTitleVariants(), className),
+      ...props,
     };
 
     // Return the appropriate heading element
@@ -124,104 +98,69 @@ const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(
       default:
         return <h3 {...headingProps}>{children}</h3>;
     }
-  }
+  },
 );
 
-CardTitle.displayName = "CardTitle";
+CardTitle.displayName = 'CardTitle';
 
 // Card.Description component
-interface CardDescriptionProps
-  extends React.HTMLAttributes<HTMLParagraphElement> {
+interface CardDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
   children: ReactNode;
 }
 
 const CardDescription = forwardRef<HTMLParagraphElement, CardDescriptionProps>(
   ({ children, className, ...props }, ref) => (
-    <p
-      ref={ref}
-      data-class="card-description"
-      className={cn(
-        cardDescriptionVariants(),
-        className
-      )}
-      {...props}
-    >
+    <p ref={ref} data-class="card-description" className={cn(cardDescriptionVariants(), className)} {...props}>
       {children}
     </p>
-  )
+  ),
 );
 
-CardDescription.displayName = "CardDescription";
+CardDescription.displayName = 'CardDescription';
 
 // Card.Content component
-interface CardContentProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, UtilityPropPrefix>,
-    UtilityPropBag {
+interface CardContentProps extends Omit<React.HTMLAttributes<HTMLDivElement>, UtilityPropPrefix>, UtilityPropBag {
   children: ReactNode;
 }
 
-const CardContent = forwardRef<HTMLDivElement, CardContentProps>(
-  ({
-    children,
-    className,
-    ...props
-  }, ref) => {
-    const { utilityClassName, rest } = resolveUtilityClassName(props);
-    const defaultUtilities = ux({ p: "4" });
-    return (
-      <div
-        ref={ref}
-        data-class="card-content"
-        className={cn(
-          cardContentVariants(),
-          defaultUtilities,
-          utilityClassName,
-          className
-        )}
-        {...rest}
-      >
-        {children}
-      </div>
-    );
-  }
-);
+const CardContent = forwardRef<HTMLDivElement, CardContentProps>(({ children, className, ...props }, ref) => {
+  const { utilityClassName, rest } = resolveUtilityClassName(props);
+  const defaultUtilities = ux({ p: '4' });
+  return (
+    <div
+      ref={ref}
+      data-class="card-content"
+      className={cn(cardContentVariants(), defaultUtilities, utilityClassName, className)}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+});
 
-CardContent.displayName = "CardContent";
+CardContent.displayName = 'CardContent';
 
 // Card.Footer component
-interface CardFooterProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, UtilityPropPrefix>,
-    UtilityPropBag {
+interface CardFooterProps extends Omit<React.HTMLAttributes<HTMLDivElement>, UtilityPropPrefix>, UtilityPropBag {
   children: ReactNode;
 }
 
-const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
-  ({
-    children,
-    className,
-    ...props
-  }, ref) => {
-    const { utilityClassName, rest } = resolveUtilityClassName(props);
-    const defaultUtilities = ux({ p: "4" });
-    return (
-      <div
-        ref={ref}
-        data-class="card-footer"
-        className={cn(
-          cardFooterVariants(),
-          defaultUtilities,
-          utilityClassName,
-          className
-        )}
-        {...rest}
-      >
-        {children}
-      </div>
-    );
-  }
-);
+const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(({ children, className, ...props }, ref) => {
+  const { utilityClassName, rest } = resolveUtilityClassName(props);
+  const defaultUtilities = ux({ p: '4' });
+  return (
+    <div
+      ref={ref}
+      data-class="card-footer"
+      className={cn(cardFooterVariants(), defaultUtilities, utilityClassName, className)}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+});
 
-CardFooter.displayName = "CardFooter";
+CardFooter.displayName = 'CardFooter';
 
 // Compound Card component
 const CompoundCard = Object.assign(Card, {
@@ -233,12 +172,5 @@ const CompoundCard = Object.assign(Card, {
 });
 
 // Export types and components
-export type {
-  CardProps,
-  CardHeaderProps,
-  CardTitleProps,
-  CardDescriptionProps,
-  CardContentProps,
-  CardFooterProps
-};
+export type { CardProps, CardHeaderProps, CardTitleProps, CardDescriptionProps, CardContentProps, CardFooterProps };
 export { CompoundCard as Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter };

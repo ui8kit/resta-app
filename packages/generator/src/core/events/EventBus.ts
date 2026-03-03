@@ -3,7 +3,7 @@ import type { ILogger } from '../interfaces/ILogger';
 
 /**
  * EventBus implementation for inter-service communication.
- * 
+ *
  * Features:
  * - Subscribe/unsubscribe to events
  * - One-time event handlers
@@ -13,7 +13,7 @@ import type { ILogger } from '../interfaces/ILogger';
 export class EventBus implements IEventBus {
   private listeners = new Map<string, Set<EventHandler>>();
   constructor(private readonly logger?: Pick<ILogger, 'error'>) {}
-  
+
   /**
    * Emit an event to all subscribers
    */
@@ -22,15 +22,15 @@ export class EventBus implements IEventBus {
     if (!handlers || handlers.size === 0) {
       return;
     }
-    
+
     // Create a copy to avoid issues if handlers modify the set
     const handlersCopy = Array.from(handlers);
-    
+
     for (const handler of handlersCopy) {
       try {
         // Fire and forget - async handlers run independently
         const result = handler(payload);
-        
+
         // If handler returns a promise, catch any errors
         if (result && typeof result === 'object' && 'catch' in result) {
           (result as Promise<void>).catch((error) => {
@@ -51,7 +51,7 @@ export class EventBus implements IEventBus {
       }
     }
   }
-  
+
   /**
    * Subscribe to an event
    */
@@ -59,16 +59,16 @@ export class EventBus implements IEventBus {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, new Set());
     }
-    
+
     const handlers = this.listeners.get(event)!;
     handlers.add(handler as EventHandler);
-    
+
     // Return unsubscribe function
     return () => {
       this.off(event, handler);
     };
   }
-  
+
   /**
    * Subscribe to an event once (auto-unsubscribe after first call)
    */
@@ -77,10 +77,10 @@ export class EventBus implements IEventBus {
       this.off(event, wrappedHandler);
       return handler(payload);
     };
-    
+
     this.on(event, wrappedHandler);
   }
-  
+
   /**
    * Remove a specific handler from an event
    */
@@ -89,15 +89,15 @@ export class EventBus implements IEventBus {
     if (!handlers) {
       return;
     }
-    
+
     handlers.delete(handler as EventHandler);
-    
+
     // Clean up empty sets
     if (handlers.size === 0) {
       this.listeners.delete(event);
     }
   }
-  
+
   /**
    * Remove all handlers for an event (or all events if no event specified)
    */
@@ -108,7 +108,7 @@ export class EventBus implements IEventBus {
       this.listeners.clear();
     }
   }
-  
+
   /**
    * Get count of listeners for an event
    */

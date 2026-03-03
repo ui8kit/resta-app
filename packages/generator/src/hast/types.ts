@@ -316,7 +316,7 @@ export interface GenRoot extends GenNode {
 export type GenVisitor = (
   node: GenNode,
   index: number | null,
-  parent: GenElement | GenRoot | null
+  parent: GenElement | GenRoot | null,
 ) => void | boolean | 'skip';
 
 /**
@@ -395,10 +395,7 @@ export function hasAnnotations(node: GenNode): boolean {
 /**
  * Check if element has a specific annotation
  */
-export function hasAnnotation(
-  node: GenNode,
-  annotation: keyof GenAnnotations
-): boolean {
+export function hasAnnotation(node: GenNode, annotation: keyof GenAnnotations): boolean {
   if (!isElement(node)) return false;
   return node.properties._gen?.[annotation] !== undefined;
 }

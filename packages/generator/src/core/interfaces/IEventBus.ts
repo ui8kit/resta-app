@@ -1,6 +1,6 @@
 /**
  * Event Bus interface for loose coupling between services.
- * 
+ *
  * Allows services to communicate without direct dependencies,
  * enabling plugin-style architecture.
  */
@@ -11,7 +11,7 @@ export interface IEventBus {
    * @param payload Event data
    */
   emit<T = unknown>(event: string, payload: T): void;
-  
+
   /**
    * Subscribe to an event
    * @param event Event name
@@ -19,27 +19,27 @@ export interface IEventBus {
    * @returns Unsubscribe function
    */
   on<T = unknown>(event: string, handler: EventHandler<T>): () => void;
-  
+
   /**
    * Subscribe to an event once (auto-unsubscribe after first call)
    * @param event Event name
    * @param handler Event handler
    */
   once<T = unknown>(event: string, handler: EventHandler<T>): void;
-  
+
   /**
    * Remove a specific handler from an event
    * @param event Event name
    * @param handler Event handler to remove
    */
   off<T = unknown>(event: string, handler: EventHandler<T>): void;
-  
+
   /**
    * Remove all handlers for an event (or all events if no event specified)
    * @param event Optional event name
    */
   removeAllListeners(event?: string): void;
-  
+
   /**
    * Get count of listeners for an event
    * @param event Event name
@@ -60,26 +60,25 @@ export interface GeneratorEvents {
   'generator:start': { config: unknown; timestamp: number };
   'generator:complete': { duration: number; result: unknown };
   'generator:error': { error: Error; stage?: string };
-  
+
   // Stage events
   'stage:start': { stage: string; timestamp: number };
   'stage:complete': { stage: string; duration: number; result?: unknown };
   'stage:error': { stage: string; error: Error };
   'stage:skip': { stage: string; reason: string };
-  
+
   // Service events
   'service:registered': { name: string; version: string };
   'service:initialized': { name: string; duration: number };
   'service:disposed': { name: string };
-  
+
   // CSS events
   'css:extracted': { selectors: string[]; classes: string[]; source: string };
   'css:generated': { path: string; size: number };
-  
+
   // HTML events
   'html:generated': { route: string; path: string; size: number };
   'html-converter:complete': { htmlPath: string; elementsCount: number; selectorsCount: number };
-  
 }
 
 /**

@@ -51,11 +51,7 @@ const VALID_EXTENSIONS = new Set([
 
 export class RefactorAuditChecker extends BaseChecker<RefactorAuditConfig> {
   constructor() {
-    super(
-      'refactor-audit',
-      'Audit residual legacy terms after refactors',
-      'refactorAudit'
-    );
+    super('refactor-audit', 'Audit residual legacy terms after refactors', 'refactorAudit');
   }
 
   protected async execute(context: CheckContext): Promise<CheckerExecutionResult> {
@@ -72,7 +68,7 @@ export class RefactorAuditChecker extends BaseChecker<RefactorAuditConfig> {
             {
               file: this.relative(context.root, mappingPath),
               hint: 'Provide a valid mapping JSON for refactor audit.',
-            }
+            },
           ),
         ],
         hint: 'Set checkers.refactorAudit.mapping to a valid JSON mapping file.',
@@ -81,7 +77,7 @@ export class RefactorAuditChecker extends BaseChecker<RefactorAuditConfig> {
 
     const mapping = this.loadMapping(mappingPath);
     const files = Array.from(
-      new Set(config.scope.flatMap((targetPath) => this.listFilesRecursively(context.root, targetPath)))
+      new Set(config.scope.flatMap((targetPath) => this.listFilesRecursively(context.root, targetPath))),
     );
 
     const metricsByEntry: EntryMetrics[] = mapping.entries.map((entry) => ({
@@ -106,13 +102,7 @@ export class RefactorAuditChecker extends BaseChecker<RefactorAuditConfig> {
         metricsByEntry[index]!.expectedCount += oldCount + newCount;
         if (oldCount > 0) {
           residualMatches.push(
-            ...this.collectResidualMatches(
-              content,
-              file,
-              entry,
-              config.maxMatchesPerEntry ?? 10,
-              context.root
-            )
+            ...this.collectResidualMatches(content, file, entry, config.maxMatchesPerEntry ?? 10, context.root),
           );
         }
       });
@@ -131,8 +121,8 @@ export class RefactorAuditChecker extends BaseChecker<RefactorAuditConfig> {
           hint: 'Replace legacy term with mapped replacement.',
           suggestion: `Replace "${match.term}" with "${match.replacement}".`,
           details: { replacement: match.replacement, excerpt: match.excerpt },
-        }
-      )
+        },
+      ),
     );
     const errorCount = issues.filter((issue) => issue.level === 'error').length;
 
@@ -198,7 +188,7 @@ export class RefactorAuditChecker extends BaseChecker<RefactorAuditConfig> {
     file: string,
     entry: MappingEntry,
     maxPerEntry: number,
-    root: string
+    root: string,
   ): ResidualMatch[] {
     const from = entry.from;
     if (!from) {

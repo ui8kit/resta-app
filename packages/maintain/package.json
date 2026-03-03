@@ -24,6 +24,7 @@
   },
   "scripts": {
     "lint": "tsc --noEmit",
+    "lint:boundaries": "oxlint --import-plugin .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -65,7 +65,7 @@ export class LockedDirsChecker extends BaseChecker<LockedDirsCheckerConfig> {
             file,
             hint: 'This directory is locked. New files are not allowed.',
             suggestion: 'Remove the file or update the locked-dirs snapshot if the change is intentional.',
-          })
+          }),
         );
       } else if (baselineHash !== hash) {
         issues.push(
@@ -73,7 +73,7 @@ export class LockedDirsChecker extends BaseChecker<LockedDirsCheckerConfig> {
             file,
             hint: 'This directory is locked. Modifications are not allowed.',
             suggestion: 'Revert the change or update the locked-dirs snapshot if the change is intentional.',
-          })
+          }),
         );
       }
     }
@@ -85,7 +85,7 @@ export class LockedDirsChecker extends BaseChecker<LockedDirsCheckerConfig> {
             file,
             hint: 'This directory is locked. File deletions are not allowed.',
             suggestion: 'Restore the file or update the locked-dirs snapshot if the change is intentional.',
-          })
+          }),
         );
       }
     }
@@ -116,9 +116,7 @@ export class LockedDirsChecker extends BaseChecker<LockedDirsCheckerConfig> {
     if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
     const snapshot: Snapshot = {
       generatedAt: new Date().toISOString(),
-      entries: Array.from(entries, ([file, hash]) => ({ file, hash })).sort((a, b) =>
-        a.file.localeCompare(b.file)
-      ),
+      entries: Array.from(entries, ([file, hash]) => ({ file, hash })).sort((a, b) => a.file.localeCompare(b.file)),
     };
     writeFileSync(path, JSON.stringify(snapshot, null, 2) + '\n', 'utf-8');
   }

@@ -51,53 +51,27 @@ export function MainLayoutView({
         <If test="hasSidebarLayout" value={hasSidebarLayout}>
           <If test="!!sidebar" value={!!sidebar}>
             <Container data-class="main-layout-container">
-              <Grid
-                grid="cols-3"
-                gap="8"
-                data-class="main-layout-grid"
-              >
+              <Grid grid="cols-3" gap="8" data-class="main-layout-grid">
                 <If test="isSidebarLeft" value={isSidebarLeft}>
                   <>
-                    <Stack
-                      col="span-2"
-                      gap="6"
-                      order="2"
-                      data-class="main-layout-main-left"
-                    >
+                    <Stack col="span-2" gap="6" order="2" data-class="main-layout-main-left">
                       {children}
                     </Stack>
 
-                    <Stack
-                      col="span-1"
-                      order="1"
-                      data-class="main-layout-sidebar-wrapper-left"
-                    >
-                      <Sidebar position="left">
-                        {sidebar}
-                      </Sidebar>
+                    <Stack col="span-1" order="1" data-class="main-layout-sidebar-wrapper-left">
+                      <Sidebar position="left">{sidebar}</Sidebar>
                     </Stack>
                   </>
                 </If>
 
                 <If test="!isSidebarLeft" value={!isSidebarLeft}>
                   <>
-                    <Stack
-                      col="span-2"
-                      gap="6"
-                      order="1"
-                      data-class="main-layout-main-right"
-                    >
+                    <Stack col="span-2" gap="6" order="1" data-class="main-layout-main-right">
                       {children}
                     </Stack>
 
-                    <Stack
-                      col="span-1"
-                      order="2"
-                      data-class="main-layout-sidebar-wrapper-right"
-                    >
-                      <Sidebar position="right">
-                        {sidebar}
-                      </Sidebar>
+                    <Stack col="span-1" order="2" data-class="main-layout-sidebar-wrapper-right">
+                      <Sidebar position="right">{sidebar}</Sidebar>
                     </Stack>
                   </>
                 </If>
@@ -107,11 +81,7 @@ export function MainLayoutView({
         </If>
 
         <If test="shouldRenderFull" value={shouldRenderFull}>
-          <Container
-            flex="col"
-            gap="6"
-            data-class="main-layout-container"
-          >
+          <Container flex="col" gap="6" data-class="main-layout-container">
             {children}
           </Container>
         </If>

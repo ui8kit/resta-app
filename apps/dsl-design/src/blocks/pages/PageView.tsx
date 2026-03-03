@@ -36,35 +36,40 @@ export function PagesPageView({
 
           <Stack data-class="design-pages-preview-section">
             <Stack gap="2" mb="4">
-              <Title order={4} data-class="design-pages-preview-title">Menu Page</Title>
-              <Text fontSize="sm" textColor="muted-foreground">Menu item detail</Text>
+              <Title order={4} data-class="design-pages-preview-title">
+                Menu Page
+              </Title>
+              <Text fontSize="sm" textColor="muted-foreground">
+                Menu item detail
+              </Text>
             </Stack>
             <Stack rounded="md" border="" overflow="hidden" data-class="design-pages-preview">
-              <MenuDetailPreview
-                item={menuDetail as never}
-                promotionBadge={promotionBadge}
-                onOrderClick={() => {}}
-              />
+              <MenuDetailPreview item={menuDetail as never} promotionBadge={promotionBadge} onOrderClick={() => {}} />
             </Stack>
           </Stack>
 
           <Stack data-class="design-pages-preview-section">
             <Stack gap="2" mb="4">
-              <Title order={4} data-class="design-pages-preview-title">Recipe Page</Title>
-              <Text fontSize="sm" textColor="muted-foreground">Recipe detail with ingredients and steps</Text>
+              <Title order={4} data-class="design-pages-preview-title">
+                Recipe Page
+              </Title>
+              <Text fontSize="sm" textColor="muted-foreground">
+                Recipe detail with ingredients and steps
+              </Text>
             </Stack>
             <Stack rounded="md" border="" overflow="hidden" data-class="design-pages-preview">
-              <RecipeDetailPreview
-                recipe={recipeDetail as never}
-                onOrderClick={() => {}}
-              />
+              <RecipeDetailPreview recipe={recipeDetail as never} onOrderClick={() => {}} />
             </Stack>
           </Stack>
 
           <Stack data-class="design-pages-preview-section">
             <Stack gap="2" mb="4">
-              <Title order={4} data-class="design-pages-preview-title">Promotion Page</Title>
-              <Text fontSize="sm" textColor="muted-foreground">Promo detail with discount and validity</Text>
+              <Title order={4} data-class="design-pages-preview-title">
+                Promotion Page
+              </Title>
+              <Text fontSize="sm" textColor="muted-foreground">
+                Promo detail with discount and validity
+              </Text>
             </Stack>
             <Stack rounded="md" border="" overflow="hidden" data-class="design-pages-preview">
               <PromotionDetailPreview item={promotionDetail as never} />

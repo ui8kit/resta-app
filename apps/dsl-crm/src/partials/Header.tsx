@@ -49,15 +49,15 @@ export function Header({
       >
         <a href="/" data-class="header-brand">
           <Group component="span" gap="1" items="center" data-class="header-brand-content">
-            <Icon lucideIcon={LayoutDashboard} strokeWidth={1.5} data-class="header-brand-icon" className="w-[38px] h-[38px]" />
+            <Icon
+              lucideIcon={LayoutDashboard}
+              strokeWidth={1.5}
+              data-class="header-brand-icon"
+              className="w-[38px] h-[38px]"
+            />
             <Stack component="span" gap="0" items="start" data-class="header-brand-text">
               <If test="title" value={!!(title ?? '')}>
-                <Text
-                  fontSize="base"
-                  fontWeight="bold"
-                  textColor="primary"
-                  data-class="header-brand-title"
-                >
+                <Text fontSize="base" fontWeight="bold" textColor="primary" data-class="header-brand-title">
                   <Var name="title" value={title ?? 'CRM'} />
                 </Text>
               </If>
@@ -79,22 +79,10 @@ export function Header({
         <Group gap="0" items="center" data-class="header-nav-group">
           <If test="navItems" value={(navItems ?? []).length > 0}>
             <Block flex="" gap="2" items="center" data-class="header-nav-wrapper">
-              <Block
-                component="nav"
-                flex=""
-                gap="2"
-                items="center"
-                data-class="header-nav"
-                className="hidden md:flex"
-              >
+              <Block component="nav" flex="" gap="2" items="center" data-class="header-nav" className="hidden md:flex">
                 <Loop each="navItems" as="item" data={navItems ?? []}>
                   {(item: NavItem) => (
-                    <DomainNavButton
-                      variant="link"
-                      size="xs"
-                      href={item.url}
-                      data-class="header-nav-item"
-                    >
+                    <DomainNavButton variant="link" size="xs" href={item.url} data-class="header-nav-item">
                       <Text fontWeight="bold" fontSize="sm" component="span">
                         <Var name="item.title" value={item.title} />
                       </Text>
@@ -159,18 +147,18 @@ export function Header({
             >
               <Icon lucideIcon={LogOut} size="sm" data-class="header-admin-icon" />
             </Button>
-          <Else>
-            <DomainNavButton
-              variant="link"
-              size="sm"
-              href="/admin"
-              title="Admin / Login"
-              aria-label="Admin / Login"
-              data-class="header-admin-link-login"
-            >
-              <Icon lucideIcon={LogIn} size="sm" data-class="header-admin-icon" />
-            </DomainNavButton>
-          </Else>
+            <Else>
+              <DomainNavButton
+                variant="link"
+                size="sm"
+                href="/admin"
+                title="Admin / Login"
+                aria-label="Admin / Login"
+                data-class="header-admin-link-login"
+              >
+                <Icon lucideIcon={LogIn} size="sm" data-class="header-admin-icon" />
+              </DomainNavButton>
+            </Else>
           </If>
         </Group>
       </Container>

@@ -8,19 +8,8 @@
  */
 
 import { BasePlugin } from '../BasePlugin';
-import type {
-  TemplatePluginFeatures,
-  FilterDefinition,
-  StandardFilter,
-} from '../ITemplatePlugin';
-import type {
-  GenLoop,
-  GenCondition,
-  GenVariable,
-  GenSlot,
-  GenInclude,
-  GenBlock,
-} from '../../../hast';
+import type { TemplatePluginFeatures, FilterDefinition, StandardFilter } from '../ITemplatePlugin';
+import type { GenLoop, GenCondition, GenVariable, GenSlot, GenInclude, GenBlock } from '../../../hast';
 
 // =============================================================================
 // TwigPlugin Implementation
@@ -235,9 +224,7 @@ export class TwigPlugin extends BasePlugin {
     const filterName = mapping?.name || filter;
 
     if (args && args.length > 0) {
-      const formattedArgs = mapping?.formatArgs
-        ? mapping.formatArgs(args)
-        : args.join(', ');
+      const formattedArgs = mapping?.formatArgs ? mapping.formatArgs(args) : args.join(', ');
       return `${expression}|${filterName}(${formattedArgs})`;
     }
 
@@ -281,13 +268,15 @@ export class TwigPlugin extends BasePlugin {
    * Format expression for Twig
    */
   protected override formatExpression(expr: string): string {
-    return expr
-      // Twig uses 'and' and 'or' like Python
-      .replace(/\s*&&\s*/g, ' and ')
-      .replace(/\s*\|\|\s*/g, ' or ')
-      // Twig uses 'not' for negation
-      .replace(/!\s*(?=\w)/g, 'not ')
-      // Keep == and != as-is (Twig supports them)
-      .trim();
+    return (
+      expr
+        // Twig uses 'and' and 'or' like Python
+        .replace(/\s*&&\s*/g, ' and ')
+        .replace(/\s*\|\|\s*/g, ' or ')
+        // Twig uses 'not' for negation
+        .replace(/!\s*(?=\w)/g, 'not ')
+        // Keep == and != as-is (Twig supports them)
+        .trim()
+    );
   }
 }

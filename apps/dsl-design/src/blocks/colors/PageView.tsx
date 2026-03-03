@@ -12,13 +12,7 @@ export interface ColorsPageViewProps {
   colors: ColorsFixture;
 }
 
-export function ColorsPageView({
-  navItems,
-  sidebarLinks,
-  headerTitle,
-  headerSubtitle,
-  colors,
-}: ColorsPageViewProps) {
+export function ColorsPageView({ navItems, sidebarLinks, headerTitle, headerSubtitle, colors }: ColorsPageViewProps) {
   return (
     <DesignLayout
       navItems={navItems}

@@ -1,14 +1,7 @@
 {
   "version": "2.0.0",
   "description": "Brand entity mapping for @ui8kit/resta-app. After cloning and refactoring to a new brand, run `bun run audit:refactor` — all `from` terms must have zero residual matches. Fill in REFACTOR.md first.",
-  "groups": [
-    "identity",
-    "domain:catalog",
-    "domain:guide",
-    "domain:promo",
-    "dev",
-    "legal"
-  ],
+  "groups": ["identity", "domain:catalog", "domain:guide", "domain:promo", "dev", "legal"],
   "entries": [
     {
       "group": "identity",

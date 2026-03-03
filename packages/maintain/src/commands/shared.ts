@@ -38,9 +38,7 @@ export interface ExecuteMaintainRunResult {
   reportPath: string;
 }
 
-export async function executeMaintainRun(
-  options: ExecuteMaintainRunOptions = {}
-): Promise<ExecuteMaintainRunResult> {
+export async function executeMaintainRun(options: ExecuteMaintainRunOptions = {}): Promise<ExecuteMaintainRunResult> {
   const cwd = resolve(options.cwd ?? process.cwd());
   const config = loadMaintainConfig({
     cwd,

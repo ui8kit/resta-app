@@ -9,11 +9,7 @@ export interface SidebarContentProps {
   'data-class'?: string | undefined;
 }
 
-export function SidebarContent({
-  title,
-  links,
-  'data-class': dataClass,
-}: SidebarContentProps) {
+export function SidebarContent({ title, links, 'data-class': dataClass }: SidebarContentProps) {
   const normalizedLinks = (links ?? []) as SidebarLink[];
 
   return (
@@ -28,12 +24,7 @@ export function SidebarContent({
           <Stack gap="1" data-class="sidebar-links">
             <Loop each="links" as="link" data={normalizedLinks}>
               {(link: SidebarLink) => (
-                <DomainNavButton
-                  href={link.href}
-                  variant="link"
-                  size="sm"
-                  data-class="sidebar-link"
-                >
+                <DomainNavButton href={link.href} variant="link" size="sm" data-class="sidebar-link">
                   <Var name="link.label" value={link.label} />
                 </DomainNavButton>
               )}

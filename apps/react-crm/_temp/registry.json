@@ -5,12 +5,7 @@
       "name": "AdminDashboardPageView",
       "type": "registry:block",
       "description": "",
-      "dependencies": [
-        "@/blocks",
-        "@/data",
-        "@/hooks",
-        "@/layouts"
-      ],
+      "dependencies": ["@/blocks", "@/data", "@/hooks", "@/layouts"],
       "devDependencies": [],
       "files": [
         {
@@ -19,22 +14,14 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/blocks/admin/DashboardPageView.tsx",
-      "props": [
-        "onExport",
-        "onImport",
-        "data"
-      ],
+      "props": ["onExport", "onImport", "data"],
       "domain": "admin"
     },
     {
       "name": "AdminLoginPageView",
       "type": "registry:block",
       "description": "",
-      "dependencies": [
-        "@/hooks",
-        "@/layouts",
-        "@ui8kit/core"
-      ],
+      "dependencies": ["@/hooks", "@/layouts", "@ui8kit/core"],
       "devDependencies": [],
       "files": [
         {
@@ -43,21 +30,14 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/blocks/admin/LoginPageView.tsx",
-      "props": [
-        "headerTitle"
-      ],
+      "props": ["headerTitle"],
       "domain": "admin"
     },
     {
       "name": "DashboardPageView",
       "type": "registry:block",
       "description": "",
-      "dependencies": [
-        "@/data",
-        "@/layouts",
-        "@/types",
-        "@ui8kit/core"
-      ],
+      "dependencies": ["@/data", "@/layouts", "@/types", "@ui8kit/core"],
       "devDependencies": [],
       "files": [
         {
@@ -66,21 +46,14 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/blocks/landing/DashboardPageView.tsx",
-      "props": [
-        "title",
-        "subtitle"
-      ],
+      "props": ["title", "subtitle"],
       "domain": "landing"
     },
     {
       "name": "DashSidebar",
       "type": "registry:block",
       "description": "",
-      "dependencies": [
-        "@/partials",
-        "@/types",
-        "@ui8kit/core"
-      ],
+      "dependencies": ["@/partials", "@/types", "@ui8kit/core"],
       "devDependencies": [],
       "files": [
         {
@@ -89,19 +62,13 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/blocks/DashSidebar.tsx",
-      "props": [
-        "label",
-        "links",
-        "class"
-      ]
+      "props": ["label", "links", "class"]
     },
     {
       "name": "HeroBlock",
       "type": "registry:block",
       "description": "",
-      "dependencies": [
-        "@ui8kit/core"
-      ],
+      "dependencies": ["@ui8kit/core"],
       "devDependencies": [],
       "files": [
         {
@@ -110,25 +77,13 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/blocks/HeroBlock.tsx",
-      "props": [
-        "title",
-        "subtitle",
-        "ctaText",
-        "ctaUrl",
-        "secondaryCtaText",
-        "secondaryCtaUrl"
-      ]
+      "props": ["title", "subtitle", "ctaText", "ctaUrl", "secondaryCtaText", "secondaryCtaUrl"]
     },
     {
       "name": "KanbanPageView",
       "type": "registry:block",
       "description": "",
-      "dependencies": [
-        "@/data",
-        "@/layouts",
-        "@/types",
-        "@ui8kit/core"
-      ],
+      "dependencies": ["@/data", "@/layouts", "@/types", "@ui8kit/core"],
       "devDependencies": [],
       "files": [
         {
@@ -137,22 +92,14 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/blocks/kanban/KanbanPageView.tsx",
-      "props": [
-        "title",
-        "subtitle"
-      ],
+      "props": ["title", "subtitle"],
       "domain": "kanban"
     },
     {
       "name": "ReportsPageView",
       "type": "registry:block",
       "description": "",
-      "dependencies": [
-        "@/data",
-        "@/layouts",
-        "@/types",
-        "@ui8kit/core"
-      ],
+      "dependencies": ["@/data", "@/layouts", "@/types", "@ui8kit/core"],
       "devDependencies": [],
       "files": [
         {
@@ -161,21 +108,14 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/blocks/reports/ReportsPageView.tsx",
-      "props": [
-        "title",
-        "subtitle"
-      ],
+      "props": ["title", "subtitle"],
       "domain": "reports"
     },
     {
       "name": "SidebarContent",
       "type": "registry:block",
       "description": "",
-      "dependencies": [
-        "@/partials",
-        "@/types",
-        "@ui8kit/core"
-      ],
+      "dependencies": ["@/partials", "@/types", "@ui8kit/core"],
       "devDependencies": [],
       "files": [
         {
@@ -184,22 +124,13 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/blocks/SidebarContent.tsx",
-      "props": [
-        "title",
-        "links",
-        "class"
-      ]
+      "props": ["title", "links", "class"]
     },
     {
       "name": "TasksPageView",
       "type": "registry:block",
       "description": "",
-      "dependencies": [
-        "@/data",
-        "@/layouts",
-        "@/types",
-        "@ui8kit/core"
-      ],
+      "dependencies": ["@/data", "@/layouts", "@/types", "@ui8kit/core"],
       "devDependencies": [],
       "files": [
         {
@@ -208,21 +139,14 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/blocks/tasks/TasksPageView.tsx",
-      "props": [
-        "title",
-        "subtitle"
-      ],
+      "props": ["title", "subtitle"],
       "domain": "tasks"
     },
     {
       "name": "AdminLayout",
       "type": "registry:layout",
       "description": "",
-      "dependencies": [
-        "@/partials",
-        "@ui8kit/core",
-        "react"
-      ],
+      "dependencies": ["@/partials", "@ui8kit/core", "react"],
       "devDependencies": [],
       "files": [
         {
@@ -231,23 +155,13 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/layouts/AdminLayout.tsx",
-      "props": [
-        "sidebar"
-      ]
+      "props": ["sidebar"]
     },
     {
       "name": "CrmLayout",
       "type": "registry:layout",
       "description": "",
-      "dependencies": [
-        "@/blocks",
-        "@/data",
-        "@/partials",
-        "@/types",
-        "@ui8kit/core",
-        "react",
-        "react-router-dom"
-      ],
+      "dependencies": ["@/blocks", "@/data", "@/partials", "@/types", "@ui8kit/core", "react", "react-router-dom"],
       "devDependencies": [],
       "files": [
         {
@@ -256,18 +170,13 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/layouts/CrmLayout.tsx",
-      "props": [
-        "sidebar"
-      ]
+      "props": ["sidebar"]
     },
     {
       "name": "MainLayout",
       "type": "registry:layout",
       "description": "",
-      "dependencies": [
-        "@/types",
-        "react"
-      ],
+      "dependencies": ["@/types", "react"],
       "devDependencies": [],
       "files": [
         {
@@ -281,11 +190,7 @@
       "name": "MainLayoutView",
       "type": "registry:layout",
       "description": "",
-      "dependencies": [
-        "@/types",
-        "@ui8kit/core",
-        "react"
-      ],
+      "dependencies": ["@/types", "@ui8kit/core", "react"],
       "devDependencies": [],
       "files": [
         {
@@ -299,11 +204,7 @@
       "name": "DomainNavButton",
       "type": "registry:partial",
       "description": "",
-      "dependencies": [
-        "@/components",
-        "@ui8kit/core",
-        "react"
-      ],
+      "dependencies": ["@/components", "@ui8kit/core", "react"],
       "devDependencies": [],
       "files": [
         {
@@ -312,18 +213,13 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/partials/DomainNavButton.tsx",
-      "props": [
-        "class"
-      ]
+      "props": ["class"]
     },
     {
       "name": "Footer",
       "type": "registry:partial",
       "description": "",
-      "dependencies": [
-        "@/types",
-        "@ui8kit/core"
-      ],
+      "dependencies": ["@/types", "@ui8kit/core"],
       "devDependencies": [],
       "files": [
         {
@@ -332,25 +228,13 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/partials/Footer.tsx",
-      "props": [
-        "copyright",
-        "sections",
-        "dataClass",
-        "class"
-      ]
+      "props": ["copyright", "sections", "dataClass", "class"]
     },
     {
       "name": "Header",
       "type": "registry:partial",
       "description": "",
-      "dependencies": [
-        "@/constants",
-        "@/hooks",
-        "@/providers",
-        "@/types",
-        "@ui8kit/core",
-        "lucide-react"
-      ],
+      "dependencies": ["@/constants", "@/hooks", "@/providers", "@/types", "@ui8kit/core", "lucide-react"],
       "devDependencies": [],
       "files": [
         {
@@ -359,23 +243,13 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/partials/Header.tsx",
-      "props": [
-        "title",
-        "subtitle",
-        "navItems",
-        "dataClass",
-        "class",
-        "beforeThemeToggle"
-      ]
+      "props": ["title", "subtitle", "navItems", "dataClass", "class", "beforeThemeToggle"]
     },
     {
       "name": "Sidebar",
       "type": "registry:partial",
       "description": "",
-      "dependencies": [
-        "@ui8kit/core",
-        "react"
-      ],
+      "dependencies": ["@ui8kit/core", "react"],
       "devDependencies": [],
       "files": [
         {
@@ -384,19 +258,13 @@
         }
       ],
       "sourcePath": "/workspace/apps/dsl-crm/src/partials/Sidebar.tsx",
-      "props": [
-        "position"
-      ]
+      "props": ["position"]
     },
     {
       "name": "ThemeToggle",
       "type": "registry:partial",
       "description": "",
-      "dependencies": [
-        "@/providers",
-        "@ui8kit/core",
-        "lucide-react"
-      ],
+      "dependencies": ["@/providers", "@ui8kit/core", "lucide-react"],
       "devDependencies": [],
       "files": [
         {

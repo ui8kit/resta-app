@@ -1,10 +1,5 @@
 import { relative, resolve } from 'node:path';
-import {
-  getAllowedTags,
-  loadComponentTagMap,
-  type ComponentTagMap,
-  validateComponentTag,
-} from '@ui8kit/generator/lib';
+import { getAllowedTags, loadComponentTagMap, type ComponentTagMap, validateComponentTag } from '@ui8kit/generator/lib';
 import type { CheckContext, ComponentTagCheckerConfig, Issue } from '../core/interfaces';
 import { FileScanner, TsxParser } from '../utils';
 import type { CheckerExecutionResult } from './BaseChecker';
@@ -17,11 +12,7 @@ export class ComponentTagChecker extends BaseChecker<ComponentTagCheckerConfig> 
   private readonly parser = new TsxParser();
 
   constructor() {
-    super(
-      'component-tag',
-      'Validate component prop values against allowed HTML tags',
-      'componentTag'
-    );
+    super('component-tag', 'Validate component prop values against allowed HTML tags', 'componentTag');
   }
 
   protected async execute(context: CheckContext): Promise<CheckerExecutionResult> {
@@ -31,9 +22,7 @@ export class ComponentTagChecker extends BaseChecker<ComponentTagCheckerConfig> 
     let tagMap: ComponentTagMap;
     try {
       const customPath =
-        config.tagMapPath && config.tagMapPath.trim()
-          ? resolve(context.root, config.tagMapPath)
-          : undefined;
+        config.tagMapPath && config.tagMapPath.trim() ? resolve(context.root, config.tagMapPath) : undefined;
       tagMap = loadComponentTagMap(customPath);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -42,8 +31,7 @@ export class ComponentTagChecker extends BaseChecker<ComponentTagCheckerConfig> 
         issues: [
           this.createIssue('error', 'COMPONENT_TAG_MAP_LOAD_FAILED', message, {
             hint: 'Provide checkers.componentTag.tagMapPath or ensure component-tag-map.json is available.',
-            suggestion:
-              'Add src/lib/component-tag-map.json or point to a custom map via maintain.config.json.',
+            suggestion: 'Add src/lib/component-tag-map.json or point to a custom map via maintain.config.json.',
           }),
         ],
       };
@@ -83,22 +71,17 @@ export class ComponentTagChecker extends BaseChecker<ComponentTagCheckerConfig> 
         const expected = allowed.length > 0 ? allowed.join(' | ') : 'Known tags from component-tag map';
 
         issues.push(
-          this.createIssue(
-            'error',
-            'COMPONENT_TAG_INVALID',
-            validationError,
-            {
-              file: this.relative(context.root, file.path),
-              line: usage.line,
-              column: usage.column,
-              expected,
-              received: tagValue,
-              hint: `Use a semantic tag supported by ${usage.componentName}.`,
-              suggestion: primarySuggestion
-                ? `Change component="${tagValue}" to component="${primarySuggestion}".`
-                : 'Use one of the allowed tags defined in component-tag-map.json.',
-            }
-          )
+          this.createIssue('error', 'COMPONENT_TAG_INVALID', validationError, {
+            file: this.relative(context.root, file.path),
+            line: usage.line,
+            column: usage.column,
+            expected,
+            received: tagValue,
+            hint: `Use a semantic tag supported by ${usage.componentName}.`,
+            suggestion: primarySuggestion
+              ? `Change component="${tagValue}" to component="${primarySuggestion}".`
+              : 'Use one of the allowed tags defined in component-tag-map.json.',
+          }),
         );
       }
     }

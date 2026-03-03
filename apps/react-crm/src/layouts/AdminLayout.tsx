@@ -42,9 +42,27 @@ export function AdminLayout(props: AdminLayoutProps) {
 
   return (
     <Block flex="col" min-h="screen" data-class="admin-layout">
-      <Header title={"CRM"} subtitle={"Admin"} navItems={[]} dataClass={"admin-layout-header"} beforeThemeToggle={mobileMenu} />
+      <Header
+        title={'CRM'}
+        subtitle={'Admin'}
+        navItems={[]}
+        dataClass={'admin-layout-header'}
+        beforeThemeToggle={mobileMenu}
+      />
       <Block flex="" data-class="admin-layout-body" className="flex-1">
-        {sidebar ? (<><Block component="aside" data-class="admin-sidebar" className="hidden md:flex w-64 shrink-0 border-r border-border"><Box w="full" h="full" data-class="admin-sidebar-content" className="overflow-auto"><Sidebar>{sidebar}</Sidebar></Box></Block></>) : null}
+        {sidebar ? (
+          <>
+            <Block
+              component="aside"
+              data-class="admin-sidebar"
+              className="hidden md:flex w-64 shrink-0 border-r border-border"
+            >
+              <Box w="full" h="full" data-class="admin-sidebar-content" className="overflow-auto">
+                <Sidebar>{sidebar}</Sidebar>
+              </Box>
+            </Block>
+          </>
+        ) : null}
         <Block component="main" flex="col" data-class="admin-main" className="flex-1 overflow-auto">
           {children}
         </Block>

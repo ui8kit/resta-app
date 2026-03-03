@@ -120,11 +120,7 @@ function appendLineIfMissing(source: string, line: string): string {
   return `${source.trimEnd()}\n${line}\n`;
 }
 
-function buildTypeFileContent(
-  itemTypeName: string,
-  fixtureTypeName: string,
-  customFields: ParsedField[]
-): string {
+function buildTypeFileContent(itemTypeName: string, fixtureTypeName: string, customFields: ParsedField[]): string {
   const reserved = new Set(['id', 'slug', 'title', 'description']);
   const lines = customFields
     .filter((field) => !reserved.has(field.name))
@@ -148,15 +144,17 @@ export type ${fixtureTypeName} = {
 }
 
 function buildFixtureContent(entityLabel: string): string {
-  return JSON.stringify(
-    {
-      title: entityLabel,
-      subtitle: `${entityLabel} collection`,
-      items: [],
-    },
-    null,
-    2
-  ) + '\n';
+  return (
+    JSON.stringify(
+      {
+        title: entityLabel,
+        subtitle: `${entityLabel} collection`,
+        items: [],
+      },
+      null,
+      2,
+    ) + '\n'
+  );
 }
 
 function buildListViewContent(
@@ -165,7 +163,7 @@ function buildListViewContent(
   listViewName: string,
   itemTypeName: string,
   fixtureTypeName: string,
-  detailRoute: string
+  detailRoute: string,
 ): string {
   return `import type { ReactNode } from 'react';
 import { ${layoutName} } from '@/layouts';
@@ -263,7 +261,7 @@ function buildDetailViewContent(
   layoutName: string,
   detailViewName: string,
   itemTypeName: string,
-  listRoute: string
+  listRoute: string,
 ): string {
   return `import type { ReactNode } from 'react';
 import { ${layoutName} } from '@/layouts';
@@ -325,11 +323,7 @@ export function ${detailViewName}({
 `;
 }
 
-function buildListRouteContent(
-  listRouteName: string,
-  listViewName: string,
-  entityName: string
-): string {
+function buildListRouteContent(listRouteName: string, listViewName: string, entityName: string): string {
   return `import { SidebarContent, ${listViewName} } from '@/blocks';
 import { context } from '@/data/context';
 
@@ -348,11 +342,7 @@ export function ${listRouteName}() {
 `;
 }
 
-function buildDetailRouteContent(
-  detailRouteName: string,
-  detailViewName: string,
-  entityName: string
-): string {
+function buildDetailRouteContent(detailRouteName: string, detailViewName: string, entityName: string): string {
   return `import { useParams } from 'react-router-dom';
 import { SidebarContent, ${detailViewName} } from '@/blocks';
 import { context } from '@/data/context';
@@ -378,7 +368,7 @@ function updateAdaptersTypes(
   source: string,
   entityName: string,
   itemTypeName: string,
-  fixtureTypeName: string
+  fixtureTypeName: string,
 ): string {
   let output = source;
 
@@ -421,37 +411,26 @@ export type ${fixtureTypeName} = {
 function updateFixturesAdapter(source: string, entityName: string): string {
   let output = source;
   const importLine = `import ${entityName}Data from '../../../fixtures/${entityName}.json';`;
-  output = insertBeforeMarker(
-    output,
-    "import adminData from '../../../fixtures/admin.json';",
-    `${importLine}\n`
-  );
+  output = insertBeforeMarker(output, "import adminData from '../../../fixtures/admin.json';", `${importLine}\n`);
 
   const mappingLine = `      ${entityName}: ${entityName}Data as CanonicalContextInput['fixtures']['${entityName}'],`;
   output = insertBeforeMarker(
     output,
     "      admin: adminData as CanonicalContextInput['fixtures']['admin'],",
-    `${mappingLine}\n`
+    `${mappingLine}\n`,
   );
 
   return output;
 }
 
-function updateContext(
-  source: string,
-  entityName: string,
-  detailRoute: string
-): string {
+function updateContext(source: string, entityName: string, detailRoute: string): string {
   let output = source;
 
-  output = output.replace(
-    /(const baseContext = createContext<\{)([\s\S]*?)(\}\>\(\{)/,
-    (full, start, body, end) => {
-      if (body.includes(`${entityName}: CanonicalContextInput['fixtures']['${entityName}'];`)) return full;
-      const normalizedBody = body.endsWith('\n') ? body : `${body}\n`;
-      return `${start}${normalizedBody}  ${entityName}: CanonicalContextInput['fixtures']['${entityName}'];\n${end}`;
-    }
-  );
+  output = output.replace(/(const baseContext = createContext<\{)([\s\S]*?)(\}\>\(\{)/, (full, start, body, end) => {
+    if (body.includes(`${entityName}: CanonicalContextInput['fixtures']['${entityName}'];`)) return full;
+    const normalizedBody = body.endsWith('\n') ? body : `${body}\n`;
+    return `${start}${normalizedBody}  ${entityName}: CanonicalContextInput['fixtures']['${entityName}'];\n${end}`;
+  });
 
   output = output.replace(/dynamicRoutePatterns:\s*\[([^\]]*)\]/, (_full, inner) => {
     const existing = inner
@@ -464,28 +443,25 @@ function updateContext(
     return `dynamicRoutePatterns: [${list}]`;
   });
 
-  output = output.replace(
-    /(fixtures:\s*\{)([\s\S]*?)(\n\s*\},\n\s*\}\);)/,
-    (full, start, body, end) => {
-      if (body.includes(`${entityName}: input.fixtures.${entityName}`)) return full;
-      const indentMatch = end.match(/\n(\s*)\}/);
-      const closingIndent = indentMatch?.[1] ?? '  ';
-      const entryIndent = `${closingIndent}  `;
-      const normalizedBody = body.endsWith('\n') ? body : `${body}\n`;
-      return `${start}${normalizedBody}${entryIndent}${entityName}: input.fixtures.${entityName},${end}`;
-    }
-  );
+  output = output.replace(/(fixtures:\s*\{)([\s\S]*?)(\n\s*\},\n\s*\}\);)/, (full, start, body, end) => {
+    if (body.includes(`${entityName}: input.fixtures.${entityName}`)) return full;
+    const indentMatch = end.match(/\n(\s*)\}/);
+    const closingIndent = indentMatch?.[1] ?? '  ';
+    const entryIndent = `${closingIndent}  `;
+    const normalizedBody = body.endsWith('\n') ? body : `${body}\n`;
+    return `${start}${normalizedBody}${entryIndent}${entityName}: input.fixtures.${entityName},${end}`;
+  });
 
   output = insertBeforeMarker(
     output,
     '  site: baseContext.site,',
-    `  ${entityName}: baseContext.fixtures.${entityName},\n`
+    `  ${entityName}: baseContext.fixtures.${entityName},\n`,
   );
 
   output = insertBeforeMarker(
     output,
     '  domains: Object.freeze({',
-    `  ${entityName}: baseContext.fixtures.${entityName},\n`
+    `  ${entityName}: baseContext.fixtures.${entityName},\n`,
   );
 
   return output;
@@ -497,7 +473,7 @@ function updateAppFile(
   detailRouteName: string,
   entityName: string,
   listRoute: string,
-  detailRoute: string
+  detailRoute: string,
 ): string {
   let output = source;
   const importListLine = `import { ${listRouteName} } from '@/routes/${entityName}/${listRouteName}';`;
@@ -506,15 +482,11 @@ function updateAppFile(
   output = insertBeforeMarker(
     output,
     "import { LoginPage } from '@/routes/admin/LoginPage';",
-    `${importListLine}\n${importDetailLine}\n`
+    `${importListLine}\n${importDetailLine}\n`,
   );
 
   const routesSnippet = `      <Route path="${listRoute}" element={<${listRouteName} />} />\n      <Route path="${detailRoute}" element={<${detailRouteName} />} />\n`;
-  output = insertBeforeMarker(
-    output,
-    '      <Route path="/admin" element={<LoginPage />} />',
-    routesSnippet
-  );
+  output = insertBeforeMarker(output, '      <Route path="/admin" element={<LoginPage />} />', routesSnippet);
 
   return output;
 }
@@ -533,7 +505,9 @@ function updateTypesIndex(source: string, entityName: string, itemTypeName: stri
 function updateNavigationFixture(path: string, entityName: string, label: string, listRoute: string): void {
   const fixture = readJson<Record<string, unknown>>(path);
   const navItems = (Array.isArray(fixture.navItems) ? fixture.navItems : []) as Array<Record<string, unknown>>;
-  const sidebarLinks = (Array.isArray(fixture.sidebarLinks) ? fixture.sidebarLinks : []) as Array<Record<string, unknown>>;
+  const sidebarLinks = (Array.isArray(fixture.sidebarLinks) ? fixture.sidebarLinks : []) as Array<
+    Record<string, unknown>
+  >;
 
   if (!navItems.some((item) => item.url === listRoute)) {
     navItems.push({
@@ -565,7 +539,7 @@ function updatePageFixture(
   listRouteName: string,
   detailRouteName: string,
   entityLabel: string,
-  singularLabel: string
+  singularLabel: string,
 ): void {
   const fixture = readJson<{ page?: Record<string, unknown[]> }>(path);
   const page = fixture.page ?? {};
@@ -654,41 +628,37 @@ export function scaffoldEntity(options: ScaffoldEntityOptions): ScaffoldEntityRe
   createFile(
     listViewPath,
     buildListViewContent(entityName, layoutName, listViewName, itemTypeName, fixtureTypeName, routes.detail),
-    createdFiles
+    createdFiles,
   );
   createFile(
     detailViewPath,
     buildDetailViewContent(entityName, layoutName, detailViewName, itemTypeName, routes.list),
-    createdFiles
+    createdFiles,
   );
   createFile(listRoutePath, buildListRouteContent(listRouteName, listViewName, entityName), createdFiles);
-  createFile(
-    detailRoutePath,
-    buildDetailRouteContent(detailRouteName, detailViewName, entityName),
-    createdFiles
-  );
+  createFile(detailRoutePath, buildDetailRouteContent(detailRouteName, detailViewName, entityName), createdFiles);
 
   updateFile(
     adaptersTypesPath,
     (source) => updateAdaptersTypes(source, entityName, itemTypeName, fixtureTypeName),
-    updatedFiles
+    updatedFiles,
   );
   updateFile(fixturesAdapterPath, (source) => updateFixturesAdapter(source, entityName), updatedFiles);
   updateFile(contextPath, (source) => updateContext(source, entityName, routes.detail), updatedFiles);
   updateFile(
     appPath,
     (source) => updateAppFile(source, listRouteName, detailRouteName, entityName, routes.list, routes.detail),
-    updatedFiles
+    updatedFiles,
   );
   updateFile(
     blocksIndexPath,
     (source) => updateBlocksIndex(source, entityName, listViewName, detailViewName),
-    updatedFiles
+    updatedFiles,
   );
   updateFile(
     typesIndexPath,
     (source) => updateTypesIndex(source, entityName, itemTypeName, fixtureTypeName),
-    updatedFiles
+    updatedFiles,
   );
 
   updateNavigationFixture(navigationPath, entityName, entityPascal, routes.list);
@@ -701,7 +671,7 @@ export function scaffoldEntity(options: ScaffoldEntityOptions): ScaffoldEntityRe
     listRouteName,
     detailRouteName,
     entityPascal,
-    singularize(singularName)
+    singularize(singularName),
   );
   updatedFiles.push(pagePath);
 

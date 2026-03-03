@@ -1,16 +1,16 @@
 #!/usr/bin/env bun
-import { existsSync } from "fs";
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
+import { existsSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DEFAULT_CONFIG_PATH = join(__dirname, "app-scaffold.config.json");
+const DEFAULT_CONFIG_PATH = join(__dirname, 'app-scaffold.config.json');
 
 export interface ScaffoldConfig {
   appName: string;
   target: string;
   domain?: string;
-  dataMode?: "local" | "shared";
+  dataMode?: 'local' | 'shared';
   packageName: string;
   description: string;
   port?: number;
@@ -32,7 +32,7 @@ function parseArg(name: string): string | undefined {
 }
 
 async function main(): Promise<void> {
-  const field = parseArg("--field");
+  const field = parseArg('--field');
   if (!field) return;
 
   const config = await loadScaffoldConfig();

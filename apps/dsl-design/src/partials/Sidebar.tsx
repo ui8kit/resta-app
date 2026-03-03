@@ -8,10 +8,7 @@ export interface SidebarProps {
 
 export function Sidebar({ children, position = 'left' }: SidebarProps) {
   return (
-    <Block
-      component="aside"
-      data-class={`design-sidebar design-sidebar-${position}`}
-    >
+    <Block component="aside" data-class={`design-sidebar design-sidebar-${position}`}>
       <Stack gap="6" w="full" items="stretch" data-class="design-sidebar-content">
         {children}
       </Stack>

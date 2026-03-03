@@ -22,13 +22,7 @@ export interface TokensPageViewProps {
   section: DesignSectionFixture;
 }
 
-export function TokensPageView({
-  navItems,
-  sidebarLinks,
-  headerTitle,
-  headerSubtitle,
-  section,
-}: TokensPageViewProps) {
+export function TokensPageView({ navItems, sidebarLinks, headerTitle, headerSubtitle, section }: TokensPageViewProps) {
   const items = section.items ?? [];
 
   return (

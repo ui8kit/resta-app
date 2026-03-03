@@ -21,23 +21,35 @@ export function MenuDetailPreview({ item, promotionBadge, onOrderClick }: MenuDe
     <Block p="6" data-class="menu-detail-preview">
       <Stack gap="4">
         <If test="promotionBadge" value={!!promotionBadge}>
-          <Text component="span" fontSize="sm"><Var name="promotionBadge" value={promotionBadge} /></Text>
+          <Text component="span" fontSize="sm">
+            <Var name="promotionBadge" value={promotionBadge} />
+          </Text>
         </If>
         <If test="item.category.title" value={!!item.category?.title}>
-          <Text fontSize="xs" textColor="muted-foreground"><Var name="item.category.title" value={item.category?.title} /></Text>
+          <Text fontSize="xs" textColor="muted-foreground">
+            <Var name="item.category.title" value={item.category?.title} />
+          </Text>
         </If>
         <If test="item.title" value={!!item.title}>
-          <Title order={2}><Var name="item.title" value={item.title} /></Title>
+          <Title order={2}>
+            <Var name="item.title" value={item.title} />
+          </Title>
         </If>
         <If test="item.description" value={!!item.description}>
-          <Text fontSize="sm" textColor="muted-foreground"><Var name="item.description" value={item.description} /></Text>
+          <Text fontSize="sm" textColor="muted-foreground">
+            <Var name="item.description" value={item.description} />
+          </Text>
         </If>
         <Group items="baseline" gap="2">
           <If test="item.price.display" value={!!item.price?.display}>
-            <Text fontSize="lg" fontWeight="semibold" textColor="primary"><Var name="item.price.display" value={item.price?.display} /></Text>
+            <Text fontSize="lg" fontWeight="semibold" textColor="primary">
+              <Var name="item.price.display" value={item.price?.display} />
+            </Text>
           </If>
           <If test="item.compareAtPrice.display" value={!!item.compareAtPrice?.display}>
-            <Text fontSize="sm" textColor="muted-foreground"><Var name="item.compareAtPrice.display" value={item.compareAtPrice?.display} /></Text>
+            <Text fontSize="sm" textColor="muted-foreground">
+              <Var name="item.compareAtPrice.display" value={item.compareAtPrice?.display} />
+            </Text>
           </If>
         </Group>
         <Group gap="2" flex="wrap">
@@ -45,17 +57,23 @@ export function MenuDetailPreview({ item, promotionBadge, onOrderClick }: MenuDe
             {(v) => (
               <Button key={v.id} variant="outline" size="sm">
                 <If test="v.title" value={!!v.title}>
-                  <Text component="span"><Var name="v.title" value={v.title} /></Text>
+                  <Text component="span">
+                    <Var name="v.title" value={v.title} />
+                  </Text>
                 </If>
                 <If test="v.priceModifier.display" value={!!v.priceModifier?.display}>
-                  <Text component="span" fontSize="sm"><Var name="v.priceModifier.display" value={v.priceModifier?.display} /></Text>
+                  <Text component="span" fontSize="sm">
+                    <Var name="v.priceModifier.display" value={v.priceModifier?.display} />
+                  </Text>
                 </If>
               </Button>
             )}
           </Loop>
         </Group>
         <If test="onOrderClick" value={!!onOrderClick}>
-          <Button size="sm" onClick={onOrderClick}>Order</Button>
+          <Button size="sm" onClick={onOrderClick}>
+            Order
+          </Button>
         </If>
       </Stack>
     </Block>

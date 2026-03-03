@@ -9,13 +9,7 @@ export type DomainNavButtonProps = Omit<AnchorButtonProps, 'children' | 'data-cl
   'data-class'?: string;
 };
 
-export function DomainNavButton({
-  href,
-  children,
-  'data-class': dataClass,
-  ...rest
-}: DomainNavButtonProps) {
-
+export function DomainNavButton({ href, children, 'data-class': dataClass, ...rest }: DomainNavButtonProps) {
   return (
     <Button href={href} data-class={dataClass} {...rest}>
       {children}

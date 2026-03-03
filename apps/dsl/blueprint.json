@@ -20,18 +20,9 @@
       "itemsKey": "posts",
       "slugField": "slug",
       "types": "src/types/blog.ts",
-      "routes": [
-        "/blog",
-        "/blog/:slug"
-      ],
-      "views": [
-        "src/blocks/blog/BlogPageView.tsx",
-        "src/blocks/blog/DetailPageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/blog/BlogPage.tsx",
-        "src/routes/blog/DetailPage.tsx"
-      ]
+      "routes": ["/blog", "/blog/:slug"],
+      "views": ["src/blocks/blog/BlogPageView.tsx", "src/blocks/blog/DetailPageView.tsx"],
+      "routeFiles": ["src/routes/blog/BlogPage.tsx", "src/routes/blog/DetailPage.tsx"]
     },
     {
       "name": "menu",
@@ -41,18 +32,9 @@
       "itemsKey": "items",
       "slugField": "slug",
       "types": "src/types/menu.ts",
-      "routes": [
-        "/menu",
-        "/menu/:slug"
-      ],
-      "views": [
-        "src/blocks/menu/DetailPageView.tsx",
-        "src/blocks/menu/MenuPageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/menu/DetailPage.tsx",
-        "src/routes/menu/MenuPage.tsx"
-      ]
+      "routes": ["/menu", "/menu/:slug"],
+      "views": ["src/blocks/menu/DetailPageView.tsx", "src/blocks/menu/MenuPageView.tsx"],
+      "routeFiles": ["src/routes/menu/DetailPage.tsx", "src/routes/menu/MenuPage.tsx"]
     },
     {
       "name": "promotions",
@@ -62,18 +44,9 @@
       "itemsKey": "items",
       "slugField": "slug",
       "types": "src/types/promotions.ts",
-      "routes": [
-        "/promotions",
-        "/promotions/:slug"
-      ],
-      "views": [
-        "src/blocks/promotions/DetailPageView.tsx",
-        "src/blocks/promotions/PromotionsPageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/promotions/DetailPage.tsx",
-        "src/routes/promotions/PromotionsPage.tsx"
-      ]
+      "routes": ["/promotions", "/promotions/:slug"],
+      "views": ["src/blocks/promotions/DetailPageView.tsx", "src/blocks/promotions/PromotionsPageView.tsx"],
+      "routeFiles": ["src/routes/promotions/DetailPage.tsx", "src/routes/promotions/PromotionsPage.tsx"]
     },
     {
       "name": "recipes",
@@ -83,18 +56,9 @@
       "itemsKey": "items",
       "slugField": "slug",
       "types": "src/types/recipes.ts",
-      "routes": [
-        "/recipes",
-        "/recipes/:slug"
-      ],
-      "views": [
-        "src/blocks/recipes/DetailPageView.tsx",
-        "src/blocks/recipes/RecipesPageView.tsx"
-      ],
-      "routeFiles": [
-        "src/routes/recipes/DetailPage.tsx",
-        "src/routes/recipes/RecipesPage.tsx"
-      ]
+      "routes": ["/recipes", "/recipes/:slug"],
+      "views": ["src/blocks/recipes/DetailPageView.tsx", "src/blocks/recipes/RecipesPageView.tsx"],
+      "routeFiles": ["src/routes/recipes/DetailPage.tsx", "src/routes/recipes/RecipesPage.tsx"]
     }
   ],
   "layouts": [
@@ -142,8 +106,5 @@
     "file": "src/data/context.ts",
     "adapter": "src/data/adapters/fixtures.adapter.ts"
   },
-  "domains": [
-    "admin",
-    "website"
-  ]
+  "domains": ["admin", "website"]
 }

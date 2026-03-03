@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { cn } from '../lib/utils';
 
-export const UI_DESIGN_TOAST_MESSAGE =
-  'UI/UX design example — logic to be implemented separately.';
+export const UI_DESIGN_TOAST_MESSAGE = 'UI/UX design example — logic to be implemented separately.';
 
 export type ToastProps = {
   message?: string;
@@ -12,13 +11,7 @@ export type ToastProps = {
   className?: string;
 };
 
-export function Toast({
-  message = UI_DESIGN_TOAST_MESSAGE,
-  visible,
-  onClose,
-  duration = 9000,
-  className,
-}: ToastProps) {
+export function Toast({ message = UI_DESIGN_TOAST_MESSAGE, visible, onClose, duration = 9000, className }: ToastProps) {
   useEffect(() => {
     if (!visible) return;
     const t = setTimeout(onClose, duration);
@@ -34,7 +27,7 @@ export function Toast({
       data-class="toast"
       className={cn(
         'fixed bottom-4 left-4 z-50 flex items-start justify-between gap-3 max-w-sm rounded-lg border border-border bg-card px-4 py-3 text-sm text-muted-foreground shadow-md',
-        className
+        className,
       )}
     >
       <span className="flex-1 min-w-0">{message}</span>

@@ -44,9 +44,7 @@ export class FileScanner {
     }
 
     const matcher = this.patternToRegex(normalizedPattern);
-    const ignoreMatchers = (options.ignore ?? []).map((entry) =>
-      this.patternToRegex(this.normalizePattern(entry))
-    );
+    const ignoreMatchers = (options.ignore ?? []).map((entry) => this.patternToRegex(this.normalizePattern(entry)));
     const files: ScannedFile[] = [];
 
     this.walk(scanRoot, (absolutePath, relPath) => {
@@ -92,7 +90,7 @@ export class FileScanner {
   private walk(
     dirPath: string,
     onFile: (absolutePath: string, relativePath: string) => void,
-    basePath = dirPath
+    basePath = dirPath,
   ): void {
     for (const entry of readdirSync(dirPath, { withFileTypes: true })) {
       if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === '.turbo') {
@@ -161,8 +159,6 @@ export class FileScanner {
   }
 
   private hasDotSegment(pathValue: string): boolean {
-    return pathValue
-      .split('/')
-      .some((segment) => segment.length > 1 && segment.startsWith('.'));
+    return pathValue.split('/').some((segment) => segment.length > 1 && segment.startsWith('.'));
   }
 }

@@ -121,12 +121,14 @@ export const GenDoctypeSchema = z.object({
 /**
  * Element properties schema (partial, allows any HTML attributes)
  */
-export const GenPropertiesSchema = z.object({
-  className: z.array(z.string()).optional(),
-  id: z.string().optional(),
-  style: z.union([z.string(), z.record(z.string())]).optional(),
-  _gen: GenAnnotationsSchema.optional(),
-}).passthrough(); // Allow any additional properties
+export const GenPropertiesSchema = z
+  .object({
+    className: z.array(z.string()).optional(),
+    id: z.string().optional(),
+    style: z.union([z.string(), z.record(z.string())]).optional(),
+    _gen: GenAnnotationsSchema.optional(),
+  })
+  .passthrough(); // Allow any additional properties
 
 /**
  * Element node schema (recursive via lazy)
@@ -146,15 +148,13 @@ export const GenElementSchema: z.ZodType<{
     tagName: z.string().min(1, 'Tag name is required'),
     properties: GenPropertiesSchema,
     children: z.array(GenChildSchema),
-  })
+  }),
 );
 
 /**
  * Child node schema (union of possible children)
  */
-export const GenChildSchema = z.lazy(() =>
-  z.union([GenElementSchema, GenTextSchema, GenCommentSchema])
-);
+export const GenChildSchema = z.lazy(() => z.union([GenElementSchema, GenTextSchema, GenCommentSchema]));
 
 /**
  * Prop definition schema
@@ -227,14 +227,18 @@ export function validateElement(data: unknown): z.SafeParseReturnType<unknown, z
 /**
  * Validate annotations
  */
-export function validateAnnotations(data: unknown): z.SafeParseReturnType<unknown, z.infer<typeof GenAnnotationsSchema>> {
+export function validateAnnotations(
+  data: unknown,
+): z.SafeParseReturnType<unknown, z.infer<typeof GenAnnotationsSchema>> {
   return GenAnnotationsSchema.safeParse(data);
 }
 
 /**
  * Validate template output
  */
-export function validateTemplateOutput(data: unknown): z.SafeParseReturnType<unknown, z.infer<typeof TemplateOutputSchema>> {
+export function validateTemplateOutput(
+  data: unknown,
+): z.SafeParseReturnType<unknown, z.infer<typeof TemplateOutputSchema>> {
   return TemplateOutputSchema.safeParse(data);
 }
 

@@ -46,7 +46,7 @@ function createMockFs() {
 
 function createMockContext(
   config: Partial<GeneratorConfig> = {},
-  converter: ReturnType<typeof createMockHtmlConverter> = createMockHtmlConverter()
+  converter: ReturnType<typeof createMockHtmlConverter> = createMockHtmlConverter(),
 ): IServiceContext {
   const fullConfig: GeneratorConfig = {
     app: { name: 'Test', lang: 'en' },
@@ -201,14 +201,9 @@ describe('CssService', () => {
 
       await service.execute(input);
 
-      const writeCalls = mockFs.writeFile.mock.calls.map(call =>
-        [(call[0] as string).replace(/\\/g, '/'), call[1]]
-      );
+      const writeCalls = mockFs.writeFile.mock.calls.map((call) => [(call[0] as string).replace(/\\/g, '/'), call[1]]);
 
-      expect(writeCalls).toContainEqual([
-        expect.stringContaining('tailwind.apply.css'),
-        expect.any(String)
-      ]);
+      expect(writeCalls).toContainEqual([expect.stringContaining('tailwind.apply.css'), expect.any(String)]);
     });
 
     it('should generate ui8kit.local.css when pureCss is true', async () => {
@@ -221,14 +216,9 @@ describe('CssService', () => {
 
       await service.execute(input);
 
-      const writeCalls = mockFs.writeFile.mock.calls.map(call =>
-        [(call[0] as string).replace(/\\/g, '/'), call[1]]
-      );
+      const writeCalls = mockFs.writeFile.mock.calls.map((call) => [(call[0] as string).replace(/\\/g, '/'), call[1]]);
 
-      expect(writeCalls).toContainEqual([
-        expect.stringContaining('ui8kit.local.css'),
-        expect.any(String)
-      ]);
+      expect(writeCalls).toContainEqual([expect.stringContaining('ui8kit.local.css'), expect.any(String)]);
     });
 
     it('should emit css:generated event', async () => {
@@ -249,7 +239,7 @@ describe('CssService', () => {
         expect.objectContaining({
           path: expect.any(String),
           size: expect.any(Number),
-        })
+        }),
       );
     });
 
@@ -267,7 +257,7 @@ describe('CssService', () => {
         expect.objectContaining({
           path: expect.stringContaining('tailwind.apply.css'),
           size: expect.any(Number),
-        })
+        }),
       );
     });
   });

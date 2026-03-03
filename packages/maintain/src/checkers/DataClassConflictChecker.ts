@@ -20,7 +20,7 @@ export class DataClassConflictChecker extends BaseChecker<DataClassConflictCheck
     super(
       'data-class-conflicts',
       'Detect conflicting utility sets for identical data-class selectors',
-      'dataClassConflicts'
+      'dataClassConflicts',
     );
   }
 
@@ -89,7 +89,7 @@ export class DataClassConflictChecker extends BaseChecker<DataClassConflictCheck
       }
 
       const conflicts = ClassMatcher.detectConflicts(
-        Array.from(classSets.values()).flatMap((set) => set.map((entry) => entry.classes))
+        Array.from(classSets.values()).flatMap((set) => set.map((entry) => entry.classes)),
       );
       const distinctSets = Array.from(classSets.keys()).sort();
 
@@ -117,8 +117,8 @@ export class DataClassConflictChecker extends BaseChecker<DataClassConflictCheck
               })),
               utilityConflicts: conflicts,
             },
-          }
-        )
+          },
+        ),
       );
     }
 
@@ -147,12 +147,7 @@ export class DataClassConflictChecker extends BaseChecker<DataClassConflictCheck
     entries.push(...rawClassTokens);
 
     for (const [key, value] of Object.entries(props)) {
-      if (
-        key === 'data-class' ||
-        key === 'className' ||
-        key === 'class' ||
-        key === 'children'
-      ) {
+      if (key === 'data-class' || key === 'className' || key === 'class' || key === 'children') {
         continue;
       }
       if (value === null) {

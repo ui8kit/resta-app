@@ -18,12 +18,7 @@ export function Sidebar({
 }: SidebarProps) {
   const dataClass = dataClassProp ?? `sidebar sidebar-${position}`;
   return (
-    <Block
-      component="aside"
-      data-class={dataClass}
-      className={className}
-      {...layoutProps}
-    >
+    <Block component="aside" data-class={dataClass} className={className} {...layoutProps}>
       <Stack gap="6" w="full" items="stretch" data-class="sidebar-content">
         {children}
       </Stack>

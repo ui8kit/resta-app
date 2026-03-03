@@ -33,10 +33,7 @@ export class NodeFileSystem implements IFileSystem {
 
   async readdir(dirPath: string, options?: { withFileTypes?: false }): Promise<string[]>;
   async readdir(dirPath: string, options: { withFileTypes: true }): Promise<Dirent[]>;
-  async readdir(
-    dirPath: string,
-    options?: { withFileTypes?: boolean }
-  ): Promise<string[] | Dirent[]> {
+  async readdir(dirPath: string, options?: { withFileTypes?: boolean }): Promise<string[] | Dirent[]> {
     if (options?.withFileTypes) {
       return fsReaddir(dirPath, { withFileTypes: true }) as Promise<Dirent[]>;
     }

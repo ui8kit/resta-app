@@ -48,13 +48,12 @@ export function registerCleanCommand(program: Command): void {
           verbose: options.verbose,
           mutateConfig: (config) => {
             const currentConfig: CleanCheckerConfig | undefined = config.checkers.clean;
-            const configPaths =
-              currentConfig?.pathsByMode?.[mode] ?? currentConfig?.paths ?? [];
+            const configPaths = currentConfig?.pathsByMode?.[mode] ?? currentConfig?.paths ?? [];
             const resolvedPaths = overridePaths ?? configPaths;
 
             if (resolvedPaths.length === 0) {
               throw new Error(
-                'No paths to clean. Add checkers.clean.paths (or pathsByMode) in maintain.config.json, or use --paths.'
+                'No paths to clean. Add checkers.clean.paths (or pathsByMode) in maintain.config.json, or use --paths.',
               );
             }
 
@@ -69,6 +68,6 @@ export function registerCleanCommand(program: Command): void {
         if (!report.success) {
           process.exit(1);
         }
-      }
+      },
     );
 }

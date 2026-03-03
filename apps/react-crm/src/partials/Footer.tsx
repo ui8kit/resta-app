@@ -14,7 +14,13 @@ export function Footer(props: FooterProps) {
   return (
     <Block component="footer" py="8" border="t" bg="card" data-class={dataClass ?? dataClassAttr ?? 'footer'}>
       <Container flex="" justify="center" items="center" gap="8" data-class="footer-container">
-        {copyright ? (<><Text fontSize="sm" textColor="muted-foreground" data-class="footer-copyright">{copyright}</Text></>) : null}
+        {copyright ? (
+          <>
+            <Text fontSize="sm" textColor="muted-foreground" data-class="footer-copyright">
+              {copyright}
+            </Text>
+          </>
+        ) : null}
       </Container>
     </Block>
   );

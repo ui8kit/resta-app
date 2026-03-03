@@ -17,11 +17,7 @@
  */
 
 import { BasePlugin } from '../BasePlugin';
-import type {
-  TemplatePluginFeatures,
-  FilterDefinition,
-  StandardFilter,
-} from '../ITemplatePlugin';
+import type { TemplatePluginFeatures, FilterDefinition, StandardFilter } from '../ITemplatePlugin';
 import type {
   GenLoop,
   GenCondition,
@@ -120,7 +116,7 @@ export class ReactPlugin extends BasePlugin {
         importsWithFragment.flatMap((imp) => [
           ...(imp.namedImports ?? []),
           ...(imp.defaultImport ? [imp.defaultImport] : []),
-        ])
+        ]),
       );
       const propNames = this.getEmittedPropNames(tree);
       const restPropName = this.getRestPropName(tree);
@@ -148,15 +144,15 @@ export class ReactPlugin extends BasePlugin {
         spreadType && (allImportedNames.has(spreadType) || /[<{|&]/.test(spreadType))
           ? spreadType
           : spreadType
-          ? 'any'
-          : null;
+            ? 'any'
+            : null;
 
       const destructureParts = [...propNames, ...(restPropName ? [`...${restPropName}`] : [])];
       const sig = isSpreadProps
         ? `(props: ${resolvedSpreadType ?? 'any'}) {\n${preambleBlock}`
         : hasObjectDestructure
-        ? `(props: ${componentName}Props) {\n  const { ${destructureParts.join(', ')} } = props;\n\n${preambleBlock}`
-        : `() {\n${preambleBlock}`;
+          ? `(props: ${componentName}Props) {\n  const { ${destructureParts.join(', ')} } = props;\n\n${preambleBlock}`
+          : `() {\n${preambleBlock}`;
 
       const fullContent =
         importBlock +
@@ -232,9 +228,28 @@ export class ReactPlugin extends BasePlugin {
 
   /** TS primitives and well-known types that don't need imports. */
   private static readonly SAFE_TYPES = new Set([
-    'string', 'number', 'boolean', 'any', 'unknown', 'void', 'never', 'null', 'undefined',
-    'ReactNode', 'ReactElement', 'JSX.Element', 'React.ReactNode', 'React.ReactElement',
-    'Record', 'Array', 'Promise', 'Partial', 'Required', 'Readonly', 'Pick', 'Omit',
+    'string',
+    'number',
+    'boolean',
+    'any',
+    'unknown',
+    'void',
+    'never',
+    'null',
+    'undefined',
+    'ReactNode',
+    'ReactElement',
+    'JSX.Element',
+    'React.ReactNode',
+    'React.ReactElement',
+    'Record',
+    'Array',
+    'Promise',
+    'Partial',
+    'Required',
+    'Readonly',
+    'Pick',
+    'Omit',
   ]);
 
   /**
@@ -310,9 +325,7 @@ export class ReactPlugin extends BasePlugin {
       } else if (imp.defaultImport && imp.namedImports.length === 0) {
         lines.push(`import ${imp.defaultImport} from '${imp.source}';`);
       } else if (imp.defaultImport && imp.namedImports.length > 0) {
-        lines.push(
-          `import ${imp.defaultImport}, { ${imp.namedImports.join(', ')} } from '${imp.source}';`
-        );
+        lines.push(`import ${imp.defaultImport}, { ${imp.namedImports.join(', ')} } from '${imp.source}';`);
       } else if (imp.namedImports.length > 0) {
         lines.push(`import { ${imp.namedImports.join(', ')} } from '${imp.source}';`);
       }
@@ -538,7 +551,12 @@ export class ReactPlugin extends BasePlugin {
       if (key === 'className' && Array.isArray(value)) {
         // React uses className, not class
         attributes['className'] = value.join(' ');
-      } else if (key === 'style' && typeof value === 'object' && value !== null && !('__expression' in (value as object))) {
+      } else if (
+        key === 'style' &&
+        typeof value === 'object' &&
+        value !== null &&
+        !('__expression' in (value as object))
+      ) {
         // React uses style as object (skip expression markers)
         attributes['style'] = value;
       } else if (key === 'for') {
@@ -673,9 +691,7 @@ export class ReactPlugin extends BasePlugin {
     const elseEndMarker = content.indexOf(MARKERS.END, elseStart);
 
     const ifContent = content.substring(0, elseStart).trim();
-    const elseContent = content
-      .substring(elseStart + MARKERS.ELSE.length, elseEndMarker)
-      .trim();
+    const elseContent = content.substring(elseStart + MARKERS.ELSE.length, elseEndMarker).trim();
 
     return `{${expression} ? (<>${ifContent}</>) : (<>${elseContent}</>)}`;
   }
@@ -803,9 +819,7 @@ export class ReactPlugin extends BasePlugin {
 
     // Unknown filter — warn and pass as method call
     this.addWarning(`Unknown filter "${filter}" — passing as method call`);
-    return args?.length
-      ? `${expression}.${filter}(${args.join(', ')})`
-      : `${expression}.${filter}()`;
+    return args?.length ? `${expression}.${filter}(${args.join(', ')})` : `${expression}.${filter}()`;
   }
 
   /**
@@ -826,11 +840,7 @@ export class ReactPlugin extends BasePlugin {
    * Escape attribute value for JSX string props
    */
   private escapeJsxAttributeValue(value: string): string {
-    return value
-      .replace(/&/g, '&amp;')
-      .replace(/"/g, '&quot;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+    return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
   // ===========================================================================

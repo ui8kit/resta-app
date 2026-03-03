@@ -8,19 +8,8 @@
  */
 
 import { BasePlugin } from '../BasePlugin';
-import type {
-  TemplatePluginFeatures,
-  FilterDefinition,
-  StandardFilter,
-} from '../ITemplatePlugin';
-import type {
-  GenLoop,
-  GenCondition,
-  GenVariable,
-  GenSlot,
-  GenInclude,
-  GenBlock,
-} from '../../../hast';
+import type { TemplatePluginFeatures, FilterDefinition, StandardFilter } from '../ITemplatePlugin';
+import type { GenLoop, GenCondition, GenVariable, GenSlot, GenInclude, GenBlock } from '../../../hast';
 
 // =============================================================================
 // LattePlugin Implementation
@@ -236,9 +225,7 @@ export class LattePlugin extends BasePlugin {
     const filterName = mapping?.name || filter;
 
     if (args && args.length > 0) {
-      const formattedArgs = mapping?.formatArgs
-        ? mapping.formatArgs(args)
-        : args.join(', ');
+      const formattedArgs = mapping?.formatArgs ? mapping.formatArgs(args) : args.join(', ');
       return `${expression}|${filterName}:${formattedArgs}`;
     }
 

@@ -27,15 +27,33 @@ export function AdminLoginPageView(props: AdminLoginPageViewProps) {
                 <Text fontSize="sm" fontWeight="medium" data-class="admin-login-label">
                   Username
                 </Text>
-                <Field type={"text"} value={username} onChange={(e) => setUsername((e.target as HTMLInputElement).value)} placeholder={"admin"} data-class={"admin-login-input-username"} />
+                <Field
+                  type={'text'}
+                  value={username}
+                  onChange={(e) => setUsername((e.target as HTMLInputElement).value)}
+                  placeholder={'admin'}
+                  data-class={'admin-login-input-username'}
+                />
               </Stack>
               <Stack gap="2" data-class="admin-login-field">
                 <Text fontSize="sm" fontWeight="medium" data-class="admin-login-label">
                   Password
                 </Text>
-                <Field type={"password"} value={password} onChange={(e) => setPassword((e.target as HTMLInputElement).value)} placeholder={"••••••••"} data-class={"admin-login-input-password"} />
+                <Field
+                  type={'password'}
+                  value={password}
+                  onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
+                  placeholder={'••••••••'}
+                  data-class={'admin-login-input-password'}
+                />
               </Stack>
-              {error ? (<><Text fontSize="sm" textColor="destructive" data-class="admin-login-error">{error}</Text></>) : null}
+              {error ? (
+                <>
+                  <Text fontSize="sm" textColor="destructive" data-class="admin-login-error">
+                    {error}
+                  </Text>
+                </>
+              ) : null}
               <Button type="submit" size="lg" data-class="admin-login-submit">
                 Sign In
               </Button>

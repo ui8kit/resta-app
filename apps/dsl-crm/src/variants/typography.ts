@@ -1,4 +1,4 @@
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva, type VariantProps } from 'class-variance-authority';
 
 /**
  * Typography Variants
@@ -13,190 +13,190 @@ import { cva, type VariantProps } from "class-variance-authority";
  */
 
 // Font size variants
-export const fontSizeVariants = cva("", {
+export const fontSizeVariants = cva('', {
   variants: {
     fontSize: {
-      xs: "text-xs",
-      sm: "text-sm",
-      base: "text-base",
-      lg: "text-lg",
-      xl: "text-xl",
-      "2xl": "text-2xl",
-      "3xl": "text-3xl",
-      "4xl": "text-4xl",
-      "5xl": "text-5xl",
+      xs: 'text-xs',
+      sm: 'text-sm',
+      base: 'text-base',
+      lg: 'text-lg',
+      xl: 'text-xl',
+      '2xl': 'text-2xl',
+      '3xl': 'text-3xl',
+      '4xl': 'text-4xl',
+      '5xl': 'text-5xl',
     },
   },
   defaultVariants: {
-    fontSize: "base",
+    fontSize: 'base',
   },
 });
 
 // Text color variants (semantic colors from design system)
-export const textColorVariants = cva("", {
+export const textColorVariants = cva('', {
   variants: {
     textColor: {
-      foreground: "text-foreground",
-      "muted-foreground": "text-muted-foreground",
-      primary: "text-primary",
-      "primary-foreground": "text-primary-foreground",
-      secondary: "text-secondary",
-      "secondary-foreground": "text-secondary-foreground",
-      destructive: "text-destructive",
-      "destructive-foreground": "text-destructive-foreground",
-      "accent-foreground": "text-accent-foreground",
+      foreground: 'text-foreground',
+      'muted-foreground': 'text-muted-foreground',
+      primary: 'text-primary',
+      'primary-foreground': 'text-primary-foreground',
+      secondary: 'text-secondary',
+      'secondary-foreground': 'text-secondary-foreground',
+      destructive: 'text-destructive',
+      'destructive-foreground': 'text-destructive-foreground',
+      'accent-foreground': 'text-accent-foreground',
     },
   },
 });
 
 // Text alignment variants
-export const textAlignVariants = cva("", {
+export const textAlignVariants = cva('', {
   variants: {
     textAlign: {
-      left: "text-left",
-      center: "text-center",
-      right: "text-right",
-      justify: "text-justify",
+      left: 'text-left',
+      center: 'text-center',
+      right: 'text-right',
+      justify: 'text-justify',
     },
   },
 });
 
 // Font weight variants
-export const fontWeightVariants = cva("", {
+export const fontWeightVariants = cva('', {
   variants: {
     fontWeight: {
-      normal: "font-normal",
-      medium: "font-medium",
-      semibold: "font-semibold",
-      bold: "font-bold",
+      normal: 'font-normal',
+      medium: 'font-medium',
+      semibold: 'font-semibold',
+      bold: 'font-bold',
     },
   },
   defaultVariants: {
-    fontWeight: "normal",
+    fontWeight: 'normal',
   },
 });
 
 // Line height variants
-export const lineHeightVariants = cva("", {
+export const lineHeightVariants = cva('', {
   variants: {
     lineHeight: {
-      tight: "leading-tight",
-      normal: "leading-normal",
-      relaxed: "leading-relaxed",
+      tight: 'leading-tight',
+      normal: 'leading-normal',
+      relaxed: 'leading-relaxed',
     },
   },
   defaultVariants: {
-    lineHeight: "normal",
+    lineHeight: 'normal',
   },
 });
 
 // Letter spacing variants
-export const letterSpacingVariants = cva("", {
+export const letterSpacingVariants = cva('', {
   variants: {
     letterSpacing: {
-      tighter: "tracking-tighter",
-      tight: "tracking-tight",
-      normal: "tracking-normal",
-      wide: "tracking-wide",
-      wider: "tracking-wider",
-      widest: "tracking-widest",
+      tighter: 'tracking-tighter',
+      tight: 'tracking-tight',
+      normal: 'tracking-normal',
+      wide: 'tracking-wide',
+      wider: 'tracking-wider',
+      widest: 'tracking-widest',
     },
   },
 });
 
 // Text decoration variants
-export const textDecorationVariants = cva("", {
+export const textDecorationVariants = cva('', {
   variants: {
     textDecoration: {
-      underline: "underline",
-      none: "",
+      underline: 'underline',
+      none: '',
     },
   },
 });
 
 // Text transform variants
-export const textTransformVariants = cva("", {
+export const textTransformVariants = cva('', {
   variants: {
     textTransform: {
-      uppercase: "uppercase",
-      lowercase: "lowercase",
-      capitalize: "capitalize",
-      normal: "normal-case",
+      uppercase: 'uppercase',
+      lowercase: 'lowercase',
+      capitalize: 'capitalize',
+      normal: 'normal-case',
     },
   },
 });
 
 // Truncate variant
-export const truncateVariants = cva("", {
+export const truncateVariants = cva('', {
   variants: {
     truncate: {
-      true: "truncate",
-      "truncate": "truncate",
-      false: "",
+      true: 'truncate',
+      truncate: 'truncate',
+      false: '',
     },
   },
 });
 
 // Combined typography variants for convenience
-export const typographyVariants = cva("", {
+export const typographyVariants = cva('', {
   variants: {
     fontSize: {
-      xs: "text-xs",
-      sm: "text-sm",
-      base: "text-base",
-      lg: "text-lg",
-      xl: "text-xl",
-      "2xl": "text-2xl",
-      "3xl": "text-3xl",
-      "4xl": "text-4xl",
-      "5xl": "text-5xl",
+      xs: 'text-xs',
+      sm: 'text-sm',
+      base: 'text-base',
+      lg: 'text-lg',
+      xl: 'text-xl',
+      '2xl': 'text-2xl',
+      '3xl': 'text-3xl',
+      '4xl': 'text-4xl',
+      '5xl': 'text-5xl',
     },
     textColor: {
-      foreground: "text-foreground",
-      "muted-foreground": "text-muted-foreground",
-      primary: "text-primary",
-      "primary-foreground": "text-primary-foreground",
-      secondary: "text-secondary",
-      "secondary-foreground": "text-secondary-foreground",
-      destructive: "text-destructive",
-      "destructive-foreground": "text-destructive-foreground",
-      "accent-foreground": "text-accent-foreground",
+      foreground: 'text-foreground',
+      'muted-foreground': 'text-muted-foreground',
+      primary: 'text-primary',
+      'primary-foreground': 'text-primary-foreground',
+      secondary: 'text-secondary',
+      'secondary-foreground': 'text-secondary-foreground',
+      destructive: 'text-destructive',
+      'destructive-foreground': 'text-destructive-foreground',
+      'accent-foreground': 'text-accent-foreground',
     },
     textAlign: {
-      left: "text-left",
-      center: "text-center",
-      right: "text-right",
-      justify: "text-justify",
+      left: 'text-left',
+      center: 'text-center',
+      right: 'text-right',
+      justify: 'text-justify',
     },
     fontWeight: {
-      normal: "font-normal",
-      medium: "font-medium",
-      semibold: "font-semibold",
-      bold: "font-bold",
+      normal: 'font-normal',
+      medium: 'font-medium',
+      semibold: 'font-semibold',
+      bold: 'font-bold',
     },
     lineHeight: {
-      tight: "leading-tight",
-      normal: "leading-normal",
-      relaxed: "leading-relaxed",
+      tight: 'leading-tight',
+      normal: 'leading-normal',
+      relaxed: 'leading-relaxed',
     },
     letterSpacing: {
-      tighter: "tracking-tighter",
-      tight: "tracking-tight",
-      normal: "tracking-normal",
-      wide: "tracking-wide",
-      wider: "tracking-wider",
-      widest: "tracking-widest",
+      tighter: 'tracking-tighter',
+      tight: 'tracking-tight',
+      normal: 'tracking-normal',
+      wide: 'tracking-wide',
+      wider: 'tracking-wider',
+      widest: 'tracking-widest',
     },
     truncate: {
-      true: "truncate",
-      "truncate": "truncate",
-      false: "",
+      true: 'truncate',
+      truncate: 'truncate',
+      false: '',
     },
   },
   defaultVariants: {
-    fontSize: "base",
-    fontWeight: "normal",
-    lineHeight: "normal",
+    fontSize: 'base',
+    fontWeight: 'normal',
+    lineHeight: 'normal',
   },
 });
 

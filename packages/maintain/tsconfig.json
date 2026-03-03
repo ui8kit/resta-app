@@ -10,21 +10,9 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
-    "types": [
-      "node",
-      "bun"
-    ],
-    "lib": [
-      "ES2022",
-      "DOM"
-    ]
+    "types": ["node", "bun"],
+    "lib": ["ES2022", "DOM"]
   },
-  "include": [
-    "src/**/*",
-    "bin/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src/**/*", "bin/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

@@ -1,13 +1,5 @@
 #!/usr/bin/env bun
-import {
-  copyFileSync,
-  existsSync,
-  mkdirSync,
-  readdirSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, extname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -114,9 +106,7 @@ async function main(): Promise<void> {
     devDependencies: Record<string, string>;
   };
 
-  const dependencies = Object.fromEntries(
-    Object.entries(pkg.dependencies).filter(([name]) => name !== '@ui8kit/dsl')
-  );
+  const dependencies = Object.fromEntries(Object.entries(pkg.dependencies).filter(([name]) => name !== '@ui8kit/dsl'));
 
   writeFile(
     join(DIST_REACT, 'package.json'),
@@ -146,8 +136,8 @@ async function main(): Promise<void> {
         },
       },
       null,
-      2
-    ) + '\n'
+      2,
+    ) + '\n',
   );
 
   writeFile(
@@ -168,7 +158,7 @@ export default defineConfig({
     },
   },
 });
-`
+`,
   );
 
   writeFile(
@@ -193,7 +183,7 @@ export default defineConfig({
   },
   "include": ["src"]
 }
-`
+`,
   );
 
   writeFile(
@@ -203,7 +193,7 @@ export default defineConfig({
     "@tailwindcss/postcss": {},
   },
 };
-`
+`,
   );
 
   copyFile(join(ROOT, 'index.html'), join(DIST_REACT, 'index.html'));

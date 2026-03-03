@@ -32,7 +32,7 @@ async function collectTsxFiles(dirPath: string): Promise<string[]> {
       if (entry.isDirectory()) return collectTsxFiles(fullPath);
       if (entry.isFile() && isTsxFile(entry.name)) return [fullPath];
       return [] as string[];
-    })
+    }),
   );
   return nested.flat().sort();
 }
@@ -86,19 +86,16 @@ export type PageFixture = {
 }
 
 function stripDslIfElse(source: string): string {
-  const withoutDslImport = source.replace(
-    /import\s+\{\s*If\s*,\s*Else\s*\}\s+from\s+['"]@ui8kit\/dsl['"];\n?/g,
-    ''
-  );
+  const withoutDslImport = source.replace(/import\s+\{\s*If\s*,\s*Else\s*\}\s+from\s+['"]@ui8kit\/dsl['"];\n?/g, '');
 
   const withElseReplaced = withoutDslImport.replace(
     /<If[^>]*value=\{([^}]+)\}[^>]*>([\s\S]*?)<Else>([\s\S]*?)<\/Else>\s*<\/If>/g,
-    (_full, condition, truthy, falsy) => `{(${condition.trim()}) ? (${truthy.trim()}) : (${falsy.trim()})}`
+    (_full, condition, truthy, falsy) => `{(${condition.trim()}) ? (${truthy.trim()}) : (${falsy.trim()})}`,
   );
 
   return withElseReplaced.replace(
     /<If[^>]*value=\{([^}]+)\}[^>]*>([\s\S]*?)<\/If>/g,
-    (_full, condition, truthy) => `{(${condition.trim()}) ? (${truthy.trim()}) : null}`
+    (_full, condition, truthy) => `{(${condition.trim()}) ? (${truthy.trim()}) : null}`,
   );
 }
 
@@ -106,11 +103,11 @@ function transformSheetDslSource(source: string): string {
   let output = source.replace(/import\s+\{\s*If\s*,\s*Else\s*\}\s+from\s+["']@ui8kit\/dsl["'];\n?/, '');
   output = output.replace(
     /<If\s+test="showTrigger"\s+value=\{showTrigger\}>\s*([\s\S]*?)\s*<\/If>/m,
-    `{showTrigger ? (\n$1\n        ) : null}`
+    `{showTrigger ? (\n$1\n        ) : null}`,
   );
   output = output.replace(
     /<If\s+test="title"\s+value=\{!!title\}>\s*([\s\S]*?)\s*<Else>\s*([\s\S]*?)\s*<\/Else>\s*<\/If>/m,
-    `{title ? (\n$1\n              ) : (\n$2\n              )}`
+    `{title ? (\n$1\n              ) : (\n$2\n              )}`,
   );
   return output;
 }
@@ -119,7 +116,7 @@ function transformIconDslSource(source: string): string {
   let output = source.replace(/import\s+\{\s*If\s*,\s*Else\s*\}\s+from\s+["']@ui8kit\/dsl["'];\n?/, '');
   output = output.replace(
     /<If\s+test="LucideIcon"\s+value=\{!!LucideIcon\}>\s*([\s\S]*?)\s*<Else>\s*([\s\S]*?)\s*<\/Else>\s*<\/If>/m,
-    `{LucideIcon ? (\n$1\n        ) : (\n$2\n        )}`
+    `{LucideIcon ? (\n$1\n        ) : (\n$2\n        )}`,
   );
   return output;
 }
@@ -141,7 +138,9 @@ async function collectExportableFiles(dirPath: string, baseDir = dirPath): Promi
     if (!entry.isFile()) continue;
     if (!(entry.name.endsWith('.tsx') || entry.name.endsWith('.ts'))) continue;
     if (entry.name === 'index.ts' || entry.name.endsWith('.test.ts') || entry.name.endsWith('.spec.ts')) continue;
-    const rel = relative(baseDir, fullPath).replace(/\\/g, '/').replace(/\.(tsx|ts)$/, '');
+    const rel = relative(baseDir, fullPath)
+      .replace(/\\/g, '/')
+      .replace(/\.(tsx|ts)$/, '');
     collected.push(rel);
   }
   return collected;
@@ -150,7 +149,7 @@ async function collectExportableFiles(dirPath: string, baseDir = dirPath): Promi
 function transformDataTypesSource(source: string): string {
   const withoutSdkImport = source.replace(
     /import type\s+\{[^}]+\}\s+from\s+['"]@ui8kit\/sdk\/source\/data['"];\n?/m,
-    ''
+    '',
   );
   return `${localSdkTypes()}\n${withoutSdkImport}`.replace(/\n{3,}/g, '\n\n');
 }
@@ -158,18 +157,18 @@ function transformDataTypesSource(source: string): string {
 function transformFixturesAdapterSource(source: string): string {
   return source.replace(
     /import type \{ PageFixture, SiteInfo \} from ['"]@ui8kit\/sdk\/source\/data['"];/,
-    "import type { PageFixture, SiteInfo } from './types';"
+    "import type { PageFixture, SiteInfo } from './types';",
   );
 }
 
 function transformContextSource(source: string): string {
   const withoutSdkRuntimeImport = source.replace(
     /import\s+\{\s*createContext,\s*EMPTY_ARRAY\s*\}\s+from\s+['"]@ui8kit\/sdk\/source\/data['"];\n?/m,
-    ''
+    '',
   );
   const withoutSdkTypeImport = withoutSdkRuntimeImport.replace(
     /import type\s+\{[\s\S]*?\}\s+from\s+['"]@ui8kit\/sdk\/source\/data['"];\n?/m,
-    "import type { DashboardSidebarLink, NavItem, SidebarLink } from '../types/navigation';\n"
+    "import type { DashboardSidebarLink, NavItem, SidebarLink } from '../types/navigation';\n",
   );
   const renamedFactory = withoutSdkTypeImport
     .replace(/createContext</g, 'createAppContext<')
@@ -197,7 +196,7 @@ function transformContextSource(source: string): string {
 `;
   return renamedFactory.replace(
     /import type \{ CanonicalContextInput \} from '\.\/adapters\/types';\n\n/,
-    "import type { CanonicalContextInput } from './adapters/types';\n\n" + factory
+    "import type { CanonicalContextInput } from './adapters/types';\n\n" + factory,
   );
 }
 
@@ -253,9 +252,7 @@ export async function buildProject(rawConfig: AppConfig, cwd = process.cwd()): P
     try {
       await readdir(resolvedComponentsDir, { withFileTypes: true });
     } catch {
-      warnings.push(
-        `componentsDir not found: ${relative(cwd, resolvedComponentsDir).replace(/\\/g, '/')}`
-      );
+      warnings.push(`componentsDir not found: ${relative(cwd, resolvedComponentsDir).replace(/\\/g, '/')}`);
     }
 
     await mkdir(outputDir, { recursive: true });
@@ -285,7 +282,7 @@ export async function buildProject(rawConfig: AppConfig, cwd = process.cwd()): P
         files = await collectTsxFiles(sourceDef.sourceDir);
       } catch {
         warnings.push(
-          `Source directory not found for ${sourceDef.kind}: ${relative(cwd, sourceDef.sourceDir).replace(/\\/g, '/')}`
+          `Source directory not found for ${sourceDef.kind}: ${relative(cwd, sourceDef.sourceDir).replace(/\\/g, '/')}`,
         );
         continue;
       }
@@ -318,14 +315,14 @@ export async function buildProject(rawConfig: AppConfig, cwd = process.cwd()): P
 
         if (transformResult.errors.length > 0 || transformResult.tree.children.length === 0) {
           warnings.push(
-            `Skipped ${relative(cwd, filePath).replace(/\\/g, '/')} (${transformResult.errors.join('; ') || 'empty tree'})`
+            `Skipped ${relative(cwd, filePath).replace(/\\/g, '/')} (${transformResult.errors.join('; ') || 'empty tree'})`,
           );
           continue;
         }
 
         if (transformResult.tree.meta?.imports) {
           transformResult.tree.meta.imports = transformResult.tree.meta.imports.filter(
-            (imp) => imp.source !== '@ui8kit/dsl'
+            (imp) => imp.source !== '@ui8kit/dsl',
           );
         }
 
@@ -340,7 +337,11 @@ export async function buildProject(rawConfig: AppConfig, cwd = process.cwd()): P
       }
     }
 
-    for (const indexTarget of [join(outputDir, 'src', 'blocks'), join(outputDir, 'src', 'layouts'), join(outputDir, 'src', 'partials')]) {
+    for (const indexTarget of [
+      join(outputDir, 'src', 'blocks'),
+      join(outputDir, 'src', 'layouts'),
+      join(outputDir, 'src', 'partials'),
+    ]) {
       if (!(await pathExists(indexTarget))) continue;
       const exports = await collectExportableFiles(indexTarget);
       await writeFile(join(indexTarget, 'index.ts'), generateExportsIndex(exports), 'utf-8');
@@ -384,11 +385,13 @@ export async function buildProject(rawConfig: AppConfig, cwd = process.cwd()): P
     }
 
     await generateRegistry({
-      sourceDirs: sourceDefs.filter((def) => Boolean(def.registryType)).map((def) => ({
-        path: def.sourceDir,
-        type: def.registryType!,
-        target: def.srcOutTarget.replace(/\\/g, '/'),
-      })),
+      sourceDirs: sourceDefs
+        .filter((def) => Boolean(def.registryType))
+        .map((def) => ({
+          path: def.sourceDir,
+          type: def.registryType!,
+          target: def.srcOutTarget.replace(/\\/g, '/'),
+        })),
       outputPath: join(outputDir, '_temp', 'registry.json'),
       registryName: rawConfig.registry ?? 'ui8kit',
       version: '1.0.0',

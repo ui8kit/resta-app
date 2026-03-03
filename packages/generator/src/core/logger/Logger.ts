@@ -13,7 +13,7 @@ const LOG_LEVELS: Record<LogLevel, number> = {
 
 /**
  * Console Logger implementation.
- * 
+ *
  * Features:
  * - Log level filtering
  * - Prefix support for context
@@ -23,40 +23,40 @@ const LOG_LEVELS: Record<LogLevel, number> = {
 export class Logger implements ILogger {
   private readonly level: LogLevel;
   private readonly prefix: string;
-  
+
   constructor(options: LoggerOptions = {}) {
     this.level = options.level ?? 'info';
     this.prefix = options.prefix ?? '';
   }
-  
+
   /**
    * Log debug information
    */
   debug(message: string, ...args: unknown[]): void {
     this.log('debug', '🔍', message, args);
   }
-  
+
   /**
    * Log informational messages
    */
   info(message: string, ...args: unknown[]): void {
     this.log('info', 'ℹ️', message, args);
   }
-  
+
   /**
    * Log warning messages
    */
   warn(message: string, ...args: unknown[]): void {
     this.log('warn', '⚠️', message, args);
   }
-  
+
   /**
    * Log error messages
    */
   error(message: string, ...args: unknown[]): void {
     this.log('error', '❌', message, args);
   }
-  
+
   /**
    * Create a child logger with a prefix
    */
@@ -67,7 +67,7 @@ export class Logger implements ILogger {
       prefix: newPrefix,
     });
   }
-  
+
   /**
    * Internal log method
    */
@@ -75,10 +75,10 @@ export class Logger implements ILogger {
     if (!this.shouldLog(level)) {
       return;
     }
-    
+
     const prefixPart = this.prefix ? `[${this.prefix}]` : '';
     const formattedMessage = `${emoji} ${prefixPart} ${message}`.trim();
-    
+
     switch (level) {
       case 'debug':
         console.debug(formattedMessage, ...args);
@@ -94,7 +94,7 @@ export class Logger implements ILogger {
         break;
     }
   }
-  
+
   /**
    * Check if a message at the given level should be logged
    */

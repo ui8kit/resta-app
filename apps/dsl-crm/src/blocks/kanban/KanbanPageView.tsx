@@ -60,7 +60,12 @@ export function KanbanPageView({ title, subtitle }: KanbanPageViewProps) {
                           <CardContent data-class="kanban-card-content">
                             <Group justify="between" data-class="kanban-card-meta">
                               <If test="card.value" value={!!card.value}>
-                                <Text fontSize="sm" fontWeight="semibold" textColor="primary" data-class="kanban-card-value">
+                                <Text
+                                  fontSize="sm"
+                                  fontWeight="semibold"
+                                  textColor="primary"
+                                  data-class="kanban-card-value"
+                                >
                                   <Var name="card.value" value={card.value ?? ''} />
                                 </Text>
                               </If>

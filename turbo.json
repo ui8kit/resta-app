@@ -9,7 +9,14 @@
       "cache": false,
       "persistent": true
     },
+    "lint:biome": {
+      "cache": true
+    },
+    "lint:oxlint": {
+      "cache": true
+    },
     "lint": {},
+    "test": {},
     "typecheck": {
       "dependsOn": ["^build"]
     },

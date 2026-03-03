@@ -7,10 +7,7 @@
   "checkers": {
     "refactorAudit": {
       "mapping": "scripts/schemas/brand-mapping.json",
-      "scope": [
-        "src",
-        "fixtures"
-      ],
+      "scope": ["src", "fixtures"],
       "maxMatchesPerEntry": 10
     },
     "invariants": {
@@ -32,10 +29,7 @@
       },
       "fixtures": {
         "pageFile": "fixtures/shared/page.json",
-        "requiredPageDomains": [
-          "website",
-          "admin"
-        ]
+        "requiredPageDomains": ["website", "admin"]
       },
       "blocks": {
         "dir": "src/blocks",
@@ -44,9 +38,7 @@
       },
       "context": {
         "file": "src/data/adapters/fixtures.adapter.ts",
-        "requiredSymbols": [
-          "loadFixturesContextInput"
-        ]
+        "requiredSymbols": ["loadFixturesContextInput"]
       }
     },
     "fixtures": {

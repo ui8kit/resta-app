@@ -2,14 +2,7 @@ import { useState } from 'react';
 import { MainLayout } from '@/layouts';
 import { Block, Container, Title, Text, Group, Badge, Button, Field, Toast } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
-import type {
-  CatalogItemModifier,
-  CatalogItemVariant,
-  MenuCategory,
-  MenuPrice,
-  NavItem,
-  PromotionItem,
-} from '@/types';
+import type { CatalogItemModifier, CatalogItemVariant, MenuCategory, MenuPrice, NavItem, PromotionItem } from '@/types';
 
 export interface MenuDetailPageViewProps {
   navItems?: NavItem[];
@@ -153,12 +146,7 @@ export function MenuDetailPageView({
                   </Text>
                 </Block>
               </If>
-              <Button
-                size="lg"
-                data-class="menu-detail-cta"
-                mt="4"
-                onClick={() => setShowToast(true)}
-              >
+              <Button size="lg" data-class="menu-detail-cta" mt="4" onClick={() => setShowToast(true)}>
                 Add to order
               </Button>
               <Toast {...{ visible: showToast }} onClose={() => setShowToast(false)} duration={9000} />

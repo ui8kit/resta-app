@@ -36,9 +36,8 @@ export class ColorTokenChecker extends BaseChecker<ColorTokenCheckerConfig> {
             `Token source not found: ${this.relative(context.root, tokenMapPath)}`,
             {
               hint: 'Provide a valid utility props map path in checkers.colorTokens.utilityPropsMapPath.',
-              suggestion:
-                'Point utilityPropsMapPath to src/lib/utility-props.map.ts (or your project equivalent).',
-            }
+              suggestion: 'Point utilityPropsMapPath to src/lib/utility-props.map.ts (or your project equivalent).',
+            },
           ),
         ],
       };
@@ -78,23 +77,18 @@ export class ColorTokenChecker extends BaseChecker<ColorTokenCheckerConfig> {
 
           const expectedValues = Array.from(allowed).sort();
           issues.push(
-            this.createIssue(
-              'error',
-              'COLOR_TOKEN_INVALID',
-              `Invalid token for prop "${propName}": "${value}".`,
-              {
-                file: this.relative(context.root, file.path),
-                line: usage.line,
-                column: usage.column,
-                expected: expectedValues.join(' | ') || 'Token values from utility-props.map',
-                received: value,
-                hint: `Use semantic tokens from utilityPropsMap.${tokenKey}.`,
-                suggestion:
-                  expectedValues[0] !== undefined
-                    ? `Replace "${value}" with "${expectedValues[0]}" (or another allowed semantic token).`
-                    : 'Use a token defined in utility-props.map.ts.',
-              }
-            )
+            this.createIssue('error', 'COLOR_TOKEN_INVALID', `Invalid token for prop "${propName}": "${value}".`, {
+              file: this.relative(context.root, file.path),
+              line: usage.line,
+              column: usage.column,
+              expected: expectedValues.join(' | ') || 'Token values from utility-props.map',
+              received: value,
+              hint: `Use semantic tokens from utilityPropsMap.${tokenKey}.`,
+              suggestion:
+                expectedValues[0] !== undefined
+                  ? `Replace "${value}" with "${expectedValues[0]}" (or another allowed semantic token).`
+                  : 'Use a token defined in utility-props.map.ts.',
+            }),
           );
         }
       }
@@ -114,13 +108,7 @@ export class ColorTokenChecker extends BaseChecker<ColorTokenCheckerConfig> {
 
   private loadUtilityPropsMap(filePath: string): Map<string, Set<string>> {
     const source = readFileSync(filePath, 'utf-8');
-    const sourceFile = ts.createSourceFile(
-      filePath,
-      source,
-      ts.ScriptTarget.Latest,
-      true,
-      ts.ScriptKind.TS
-    );
+    const sourceFile = ts.createSourceFile(filePath, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
 
     const result = new Map<string, Set<string>>();
     for (const statement of sourceFile.statements) {
@@ -146,7 +134,7 @@ export class ColorTokenChecker extends BaseChecker<ColorTokenCheckerConfig> {
           const values = property.initializer.elements
             .filter(
               (element): element is ts.StringLiteral | ts.NoSubstitutionTemplateLiteral =>
-                ts.isStringLiteral(element) || ts.isNoSubstitutionTemplateLiteral(element)
+                ts.isStringLiteral(element) || ts.isNoSubstitutionTemplateLiteral(element),
             )
             .map((element) => element.text)
             .filter(Boolean);

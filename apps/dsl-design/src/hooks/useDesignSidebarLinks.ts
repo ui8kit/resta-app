@@ -12,6 +12,6 @@ export function useDesignSidebarLinks(sidebarLinks: SidebarLink[]): DashboardSid
         ...link,
         active: pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href)),
       })),
-    [sidebarLinks, pathname]
+    [sidebarLinks, pathname],
   );
 }

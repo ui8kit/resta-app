@@ -21,13 +21,7 @@ export class ViewHooksChecker extends BaseChecker<ViewHooksCheckerConfig> {
 
     for (const file of files) {
       const source = file.read();
-      const sourceFile = ts.createSourceFile(
-        file.path,
-        source,
-        ts.ScriptTarget.Latest,
-        true,
-        ts.ScriptKind.TSX
-      );
+      const sourceFile = ts.createSourceFile(file.path, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
 
       const visit = (node: ts.Node): void => {
         if (ts.isCallExpression(node)) {
@@ -44,7 +38,7 @@ export class ViewHooksChecker extends BaseChecker<ViewHooksCheckerConfig> {
                 suggestion: config.allowedHooks?.length
                   ? `Use one of the allowed hooks: ${config.allowedHooks.join(', ')}.`
                   : 'Remove the hook call or move logic to a parent component.',
-              })
+              }),
             );
           }
         }

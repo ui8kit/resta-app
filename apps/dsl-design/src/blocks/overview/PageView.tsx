@@ -71,12 +71,7 @@ export function OverviewPageView({
                     </If>
                   </CardHeader>
                   <CardContent data-class="design-overview-card-actions">
-                    <DomainNavButton
-                      href={s.href}
-                      size="sm"
-                      variant="outline"
-                      data-class="design-overview-card-link"
-                    >
+                    <DomainNavButton href={s.href} size="sm" variant="outline" data-class="design-overview-card-link">
                       View
                     </DomainNavButton>
                   </CardContent>

@@ -22,13 +22,7 @@ export function registerRunCommand(program: Command): void {
     .option('--max-parallel <number>', 'Override max parallel checker count')
     .option('--verbose', 'Print every issue with full details', false)
     .action(
-      async (options: {
-        cwd: string;
-        config: string;
-        check?: string;
-        maxParallel?: string;
-        verbose?: boolean;
-      }) => {
+      async (options: { cwd: string; config: string; check?: string; maxParallel?: string; verbose?: boolean }) => {
         const maxParallel = options.maxParallel ? Number(options.maxParallel) : undefined;
         const checkerNames = parseCheckerList(options.check);
 
@@ -48,6 +42,6 @@ export function registerRunCommand(program: Command): void {
         if (!report.success) {
           process.exit(1);
         }
-      }
+      },
     );
 }

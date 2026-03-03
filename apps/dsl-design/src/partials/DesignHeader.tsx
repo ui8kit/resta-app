@@ -11,23 +11,11 @@ export interface DesignHeaderProps {
   'data-class'?: string;
 }
 
-export function DesignHeader({
-  title,
-  subtitle,
-  navItems,
-  'data-class': dataClass,
-}: DesignHeaderProps) {
+export function DesignHeader({ title, subtitle, navItems, 'data-class': dataClass }: DesignHeaderProps) {
   const topNav = navItems ?? [];
 
   return (
-    <Block
-      component="header"
-      py="2"
-      bg="background"
-      border="b"
-      shadow="sm"
-      data-class={dataClass ?? 'design-header'}
-    >
+    <Block component="header" py="2" bg="background" border="b" shadow="sm" data-class={dataClass ?? 'design-header'}>
       <Container
         max="w-6xl"
         mx="auto"
@@ -42,12 +30,7 @@ export function DesignHeader({
           <Group component="span" gap="1" items="center" data-class="design-header-brand-content">
             <Stack component="span" gap="0" items="start" data-class="design-header-brand-text">
               <If test="title" value={!!(title ?? '')}>
-                <Text
-                  fontSize="base"
-                  fontWeight="bold"
-                  textColor="primary"
-                  data-class="design-header-brand-title"
-                >
+                <Text fontSize="base" fontWeight="bold" textColor="primary" data-class="design-header-brand-title">
                   <Var name="title" value={title ?? 'RestA Design'} />
                 </Text>
               </If>
@@ -70,12 +53,7 @@ export function DesignHeader({
             <Block component="nav" flex="" gap="2" items="center" data-class="design-header-nav">
               <Loop each="navItems" as="item" data={topNav}>
                 {(item: NavItem) => (
-                  <DomainNavButton
-                    variant="link"
-                    size="xs"
-                    href={item.url}
-                    data-class="design-header-nav-item"
-                  >
+                  <DomainNavButton variant="link" size="xs" href={item.url} data-class="design-header-nav-item">
                     <Text fontWeight="bold" fontSize="sm" component="span">
                       <Var name="item.title" value={item.title} />
                     </Text>

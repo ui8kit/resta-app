@@ -37,10 +37,7 @@ export interface ResolveDomainOptions {
 }
 
 /** Built-in import specifiers that always reference registry items */
-const BUILTIN_REGISTRY_SPECIFIERS = [
-  '@ui8kit/blocks',
-  '@ui8kit/core',
-];
+const BUILTIN_REGISTRY_SPECIFIERS = ['@ui8kit/blocks', '@ui8kit/core'];
 
 /**
  * Extract imported identifiers from a source file.
@@ -50,8 +47,7 @@ function extractImportedNames(source: string, extraPrefixes: string[]): string[]
   const names = new Set<string>();
 
   // import { A, B, type C } from '...'
-  const namedImportRegex =
-    /import\s+\{([^}]+)\}\s+from\s+['"]([^'"]+)['"]/g;
+  const namedImportRegex = /import\s+\{([^}]+)\}\s+from\s+['"]([^'"]+)['"]/g;
   // import A from '...'
   const defaultImportRegex = /import\s+(\w+)\s+from\s+['"]([^'"]+)['"]/g;
 
@@ -112,7 +108,7 @@ function isRegistryRelevantImport(specifier: string, extraPrefixes: string[]): b
 function resolveToRegistryName(
   importedName: string,
   nameToItem: Map<string, RegistryItem>,
-  layoutContainerMap: Record<string, string>
+  layoutContainerMap: Record<string, string>,
 ): string | null {
   const viewName = layoutContainerMap[importedName];
   if (viewName && nameToItem.has(viewName)) return viewName;
@@ -131,7 +127,7 @@ function resolveToRegistryName(
 export async function resolveDomainItems(
   registry: Registry,
   domain: string,
-  options?: ResolveDomainOptions
+  options?: ResolveDomainOptions,
 ): Promise<RegistryItem[]> {
   const layoutContainerMap = options?.layoutContainerMap ?? {};
   const extraPrefixes = options?.registryImportPrefixes ?? [];
@@ -152,9 +148,7 @@ export async function resolveDomainItems(
   }
 
   // 2. Seeds: PageViews (registry:route) with domain === D
-  const seeds = items.filter(
-    (i) => i.type === 'registry:route' && i.domain === domain
-  );
+  const seeds = items.filter((i) => i.type === 'registry:route' && i.domain === domain);
   for (const item of seeds) {
     result.set(item.name, item);
   }

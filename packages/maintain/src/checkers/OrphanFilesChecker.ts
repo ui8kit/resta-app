@@ -30,9 +30,7 @@ export class OrphanFilesChecker extends BaseChecker<OrphanFilesCheckerConfig> {
       }
     }
 
-    const ignoreSet = new Set(
-      (config.ignore ?? []).map((p: string) => resolve(context.root, p))
-    );
+    const ignoreSet = new Set((config.ignore ?? []).map((p: string) => resolve(context.root, p)));
 
     const allFilePaths = new Set(uniqueFiles.keys());
     const importedPaths = new Set<string>();
@@ -59,7 +57,7 @@ export class OrphanFilesChecker extends BaseChecker<OrphanFilesCheckerConfig> {
           file: rel,
           hint: 'This file may be unused. Verify and remove if not needed.',
           suggestion: 'Import it from another file or add it to orphanFiles.ignore if it is an entry point.',
-        })
+        }),
       );
     }
 
@@ -77,7 +75,7 @@ export class OrphanFilesChecker extends BaseChecker<OrphanFilesCheckerConfig> {
     source: string,
     fromFile: string,
     root: string,
-    aliases: Record<string, string>
+    aliases: Record<string, string>,
   ): string | null {
     if (source.startsWith('.')) {
       return this.resolveRelative(dirname(fromFile), source);

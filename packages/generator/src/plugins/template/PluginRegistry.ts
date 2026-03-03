@@ -125,7 +125,7 @@ export class PluginRegistry {
    * Get all registered plugin metadata
    */
   getAllMetadata(): TemplatePluginMetadata[] {
-    return Array.from(this.plugins.values()).map(entry => entry.metadata);
+    return Array.from(this.plugins.values()).map((entry) => entry.metadata);
   }
 
   /**
@@ -134,7 +134,7 @@ export class PluginRegistry {
    * @param runtime - Target runtime ('js' or 'php')
    */
   getByRuntime(runtime: 'js' | 'php'): TemplatePluginMetadata[] {
-    return this.getAllMetadata().filter(m => m.runtime === runtime);
+    return this.getAllMetadata().filter((m) => m.runtime === runtime);
   }
 
   /**
@@ -143,7 +143,7 @@ export class PluginRegistry {
    * @param extension - File extension (e.g., '.liquid')
    */
   getByExtension(extension: string): TemplatePluginMetadata | undefined {
-    return this.getAllMetadata().find(m => m.fileExtension === extension);
+    return this.getAllMetadata().find((m) => m.fileExtension === extension);
   }
 
   // ===========================================================================
@@ -258,19 +258,13 @@ export const defaultRegistry = new PluginRegistry();
 /**
  * Register a plugin in the default registry
  */
-export function registerTemplatePlugin(
-  metadata: TemplatePluginMetadata,
-  factory: TemplatePluginFactory
-): void {
+export function registerTemplatePlugin(metadata: TemplatePluginMetadata, factory: TemplatePluginFactory): void {
   defaultRegistry.register(metadata, factory);
 }
 
 /**
  * Get a plugin from the default registry
  */
-export function getTemplatePlugin(
-  name: string,
-  config?: Partial<TemplatePluginConfig>
-): ITemplatePlugin {
+export function getTemplatePlugin(name: string, config?: Partial<TemplatePluginConfig>): ITemplatePlugin {
   return defaultRegistry.get(name, config);
 }

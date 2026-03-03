@@ -24,29 +24,21 @@
  *      postcss.config.js, index.html; when static:true also dist.config.json
  */
 
-import {
-  copyFileSync,
-  existsSync,
-  mkdirSync,
-  readdirSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from "fs";
-import { dirname, extname, join, relative } from "path";
-import { fileURLToPath } from "url";
-import { transformJsxFile } from "../../../packages/generator/src/transformer/transform";
-import { ReactPlugin } from "../../../packages/generator/src/plugins/template/built-in/ReactPlugin";
-import { getFallbackCoreComponents } from "../../../packages/generator/src/core/scanner/core-component-scanner";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
+import { dirname, extname, join, relative } from 'path';
+import { fileURLToPath } from 'url';
+import { transformJsxFile } from '../../../packages/generator/src/transformer/transform';
+import { ReactPlugin } from '../../../packages/generator/src/plugins/template/built-in/ReactPlugin';
+import { getFallbackCoreComponents } from '../../../packages/generator/src/core/scanner/core-component-scanner';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, "..");
-const _ui8kitCfg = existsSync(join(ROOT, "ui8kit.config.json"))
-  ? (JSON.parse(readFileSync(join(ROOT, "ui8kit.config.json"), "utf-8")) as { outDir?: string })
+const ROOT = join(__dirname, '..');
+const _ui8kitCfg = existsSync(join(ROOT, 'ui8kit.config.json'))
+  ? (JSON.parse(readFileSync(join(ROOT, 'ui8kit.config.json'), 'utf-8')) as { outDir?: string })
   : {};
-const DIST_REACT = join(ROOT, _ui8kitCfg.outDir ?? "../react");
-const SRC = join(ROOT, "src");
-const FIXTURES = join(ROOT, "fixtures");
+const DIST_REACT = join(ROOT, _ui8kitCfg.outDir ?? '../react');
+const SRC = join(ROOT, 'src');
+const FIXTURES = join(ROOT, 'fixtures');
 
 function log(msg: string): void {
   console.log(`  ${msg}`);
@@ -54,14 +46,14 @@ function log(msg: string): void {
 
 function writeFile(targetPath: string, content: string): void {
   mkdirSync(dirname(targetPath), { recursive: true });
-  writeFileSync(targetPath, content, "utf-8");
-  log(`+ ${relative(ROOT, targetPath).replace(/\\/g, "/")}`);
+  writeFileSync(targetPath, content, 'utf-8');
+  log(`+ ${relative(ROOT, targetPath).replace(/\\/g, '/')}`);
 }
 
 function copyFile(src: string, dest: string): void {
   mkdirSync(dirname(dest), { recursive: true });
   copyFileSync(src, dest);
-  log(`+ ${relative(ROOT, dest).replace(/\\/g, "/")}`);
+  log(`+ ${relative(ROOT, dest).replace(/\\/g, '/')}`);
 }
 
 function copyDir(srcDir: string, destDir: string, skip?: (name: string) => boolean): void {
@@ -84,7 +76,7 @@ function hasImportInDir(dir: string, pkg: string): boolean {
       continue;
     }
     if (!/\.[tj]sx?$/.test(entry.name)) continue;
-    const content = readFileSync(fullPath, "utf-8");
+    const content = readFileSync(fullPath, 'utf-8');
     if (
       content.includes(`from '${pkg}'`) ||
       content.includes(`from "${pkg}"`) ||
@@ -97,7 +89,6 @@ function hasImportInDir(dir: string, pkg: string): boolean {
   return false;
 }
 
-
 function moveDir(srcDir: string, destDir: string): void {
   copyDir(srcDir, destDir);
   rmSync(srcDir, { recursive: true, force: true });
@@ -109,21 +100,18 @@ function listExportableFiles(dir: string, baseDir = dir): string[] {
   const results: string[] = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const fullPath = join(dir, entry.name);
-    const relPath = relative(baseDir, fullPath).replace(/\\/g, "/");
+    const relPath = relative(baseDir, fullPath).replace(/\\/g, '/');
     if (entry.isDirectory()) {
       results.push(...listExportableFiles(fullPath, baseDir));
-    } else if (
-      (extname(entry.name) === ".tsx" || extname(entry.name) === ".ts") &&
-      entry.name !== "index.ts"
-    ) {
-      results.push(relPath.replace(/\.(tsx|ts)$/, ""));
+    } else if ((extname(entry.name) === '.tsx' || extname(entry.name) === '.ts') && entry.name !== 'index.ts') {
+      results.push(relPath.replace(/\.(tsx|ts)$/, ''));
     }
   }
   return results.sort();
 }
 
 function generateExportsIndex(names: string[]): string {
-  return names.map((n) => `export * from './${n}';`).join("\n") + "\n";
+  return names.map((n) => `export * from './${n}';`).join('\n') + '\n';
 }
 
 interface Ui8KitDistConfig {
@@ -135,92 +123,92 @@ interface Ui8KitDistConfig {
 }
 
 function loadUi8KitConfig(): { dist?: Ui8KitDistConfig; brand?: string } {
-  const configPath = join(ROOT, "ui8kit.config.json");
+  const configPath = join(ROOT, 'ui8kit.config.json');
   if (!existsSync(configPath)) return {};
   try {
-    return JSON.parse(readFileSync(configPath, "utf-8"));
+    return JSON.parse(readFileSync(configPath, 'utf-8'));
   } catch {
     return {};
   }
 }
 
 function discoverFixtureCollections(): string[] {
-  if (!existsSync(FIXTURES)) return ["menu", "recipes", "blog", "promotions"];
+  if (!existsSync(FIXTURES)) return ['menu', 'recipes', 'blog', 'promotions'];
   const names: string[] = [];
   for (const entry of readdirSync(FIXTURES, { withFileTypes: true })) {
-    if (entry.isFile() && entry.name.endsWith(".json")) {
-      names.push(entry.name.replace(/\.json$/, ""));
+    if (entry.isFile() && entry.name.endsWith('.json')) {
+      names.push(entry.name.replace(/\.json$/, ''));
     }
   }
-  return names.length > 0 ? names.sort() : ["menu", "recipes", "blog", "promotions"];
+  return names.length > 0 ? names.sort() : ['menu', 'recipes', 'blog', 'promotions'];
 }
 
 function buildDistConfig(ui8kit: { dist?: Ui8KitDistConfig; brand?: string }): object {
   const dist = ui8kit.dist ?? {};
   const collections = dist.fixtures?.collections ?? discoverFixtureCollections();
   const baseRoutes: Record<string, { title: string }> = {
-    "/": { title: "Home" },
-    "/menu": { title: "Menu" },
-    "/recipes": { title: "Recipes" },
-    "/blog": { title: "Blog" },
-    "/promotions": { title: "Promotions" },
-    "/admin": { title: "Admin Login" },
-    "/admin/dashboard": { title: "Admin Dashboard" },
+    '/': { title: 'Home' },
+    '/menu': { title: 'Menu' },
+    '/recipes': { title: 'Recipes' },
+    '/blog': { title: 'Blog' },
+    '/promotions': { title: 'Promotions' },
+    '/admin': { title: 'Admin Login' },
+    '/admin/dashboard': { title: 'Admin Dashboard' },
   };
   return {
-    app: { name: "Resta App", lang: "en" },
+    app: { name: 'Resta App', lang: 'en' },
     render: {
-      appEntry: dist.render?.appEntry ?? "src/App.tsx",
-      skipRoutes: dist.render?.skipRoutes ?? ["/admin/dashboard"],
+      appEntry: dist.render?.appEntry ?? 'src/App.tsx',
+      skipRoutes: dist.render?.skipRoutes ?? ['/admin/dashboard'],
     },
-    css: { outputDir: "dist/css", pureCss: true },
+    css: { outputDir: 'dist/css', pureCss: true },
     html: {
       routes: baseRoutes,
-      outputDir: "dist/html",
-      mode: dist.html?.mode ?? "tailwind",
+      outputDir: 'dist/html',
+      mode: dist.html?.mode ?? 'tailwind',
     },
     postcss: {
       enabled: dist.postcss?.enabled ?? true,
-      entryImports: ["src/assets/css/shadcn.css"],
-      sourceDir: "dist/html",
-      outputDir: "dist/html/css",
+      entryImports: ['src/assets/css/shadcn.css'],
+      sourceDir: 'dist/html',
+      outputDir: 'dist/html/css',
       uncss: dist.postcss?.uncss ?? { enabled: true },
     },
-    mappings: { ui8kitMap: "src/ui8kit.map.json" },
-    fixtures: { dir: "fixtures", collections },
+    mappings: { ui8kitMap: 'src/ui8kit.map.json' },
+    fixtures: { dir: 'fixtures', collections },
   };
 }
 
 async function main(): Promise<void> {
-  console.log("\n  UI8Kit — Finalize apps/react\n");
-  console.log("  ─────────────────────────────\n");
+  console.log('\n  UI8Kit — Finalize apps/react\n');
+  console.log('  ─────────────────────────────\n');
 
   const ui8kit = loadUi8KitConfig();
   const staticMode = ui8kit.dist?.static ?? true;
-  log(`Mode: ${staticMode ? "static (generate:html/styles/static)" : "SPA only"}\n`);
+  log(`Mode: ${staticMode ? 'static (generate:html/styles/static)' : 'SPA only'}\n`);
 
   if (!existsSync(DIST_REACT)) {
-    console.error("  apps/react/ not found. Run: bun run generate");
+    console.error('  apps/react/ not found. Run: bun run generate');
     process.exit(1);
   }
 
-  const distSrc = join(DIST_REACT, "src");
-  const hasRootBlocks = existsSync(join(DIST_REACT, "blocks"));
-  const hasRootLayouts = existsSync(join(DIST_REACT, "layouts"));
-  const hasSrcBlocks = existsSync(join(distSrc, "blocks"));
-  const hasSrcLayouts = existsSync(join(distSrc, "layouts"));
+  const distSrc = join(DIST_REACT, 'src');
+  const hasRootBlocks = existsSync(join(DIST_REACT, 'blocks'));
+  const hasRootLayouts = existsSync(join(DIST_REACT, 'layouts'));
+  const hasSrcBlocks = existsSync(join(distSrc, 'blocks'));
+  const hasSrcLayouts = existsSync(join(distSrc, 'layouts'));
 
   const hasLegacyRootLayout = hasRootBlocks && hasRootLayouts;
   const hasModernSrcLayout = hasSrcBlocks && hasSrcLayouts;
   if (!hasLegacyRootLayout && !hasModernSrcLayout) {
-    console.error("  Generated blocks/layouts not found in apps/react or apps/react/src. Run: bun run generate");
+    console.error('  Generated blocks/layouts not found in apps/react or apps/react/src. Run: bun run generate');
     process.exit(1);
   }
 
   // Step 1: Move generated dirs into src/
-  console.log("  [1/7] Reorganizing generated files into src/...\n");
+  console.log('  [1/7] Reorganizing generated files into src/...\n');
 
-  for (const dir of ["blocks", "layouts", "partials"]) {
+  for (const dir of ['blocks', 'layouts', 'partials']) {
     const from = join(DIST_REACT, dir);
     const to = join(distSrc, dir);
     if (existsSync(from)) {
@@ -232,95 +220,98 @@ async function main(): Promise<void> {
     }
   }
   // Step 2: Normalize generated layout typing (legacy fallback)
-  console.log("\n  [2/7] Fixing generated layouts...\n");
+  console.log('\n  [2/7] Fixing generated layouts...\n');
 
-  const mainLayoutPath = join(distSrc, "layouts", "MainLayout.tsx");
+  const mainLayoutPath = join(distSrc, 'layouts', 'MainLayout.tsx');
   if (existsSync(mainLayoutPath)) {
-    const content = readFileSync(mainLayoutPath, "utf-8");
-    if (content.includes("export function MainLayout(props: any)")) {
+    const content = readFileSync(mainLayoutPath, 'utf-8');
+    if (content.includes('export function MainLayout(props: any)')) {
       let fixed = content.replace(
-        "export function MainLayout(props: any)",
-        "export function MainLayout(props: ComponentProps<typeof MainLayoutView>)"
+        'export function MainLayout(props: any)',
+        'export function MainLayout(props: ComponentProps<typeof MainLayoutView>)',
       );
       if (!fixed.includes("import type { ComponentProps } from 'react';")) {
         fixed = fixed.replace(
           "import { MainLayoutView } from './views/MainLayoutView';",
-          "import type { ComponentProps } from 'react';\nimport { MainLayoutView } from './views/MainLayoutView';"
+          "import type { ComponentProps } from 'react';\nimport { MainLayoutView } from './views/MainLayoutView';",
         );
       }
       writeFile(mainLayoutPath, fixed);
-      log("fixed: layouts/MainLayout.tsx (props any → ComponentProps<typeof MainLayoutView>)");
+      log('fixed: layouts/MainLayout.tsx (props any → ComponentProps<typeof MainLayoutView>)');
     }
   }
 
   // Step 3: Generate index.ts for blocks, layouts, partials
-  console.log("\n  [3/7] Generating index files...\n");
+  console.log('\n  [3/7] Generating index files...\n');
 
-  const blockNames = listExportableFiles(join(distSrc, "blocks"));
-  writeFile(join(distSrc, "blocks", "index.ts"), generateExportsIndex(blockNames));
+  const blockNames = listExportableFiles(join(distSrc, 'blocks'));
+  writeFile(join(distSrc, 'blocks', 'index.ts'), generateExportsIndex(blockNames));
 
-  const layoutNames = listExportableFiles(join(distSrc, "layouts"));
-  writeFile(join(distSrc, "layouts", "index.ts"), generateExportsIndex(layoutNames));
+  const layoutNames = listExportableFiles(join(distSrc, 'layouts'));
+  writeFile(join(distSrc, 'layouts', 'index.ts'), generateExportsIndex(layoutNames));
 
   // Use src/partials/index.ts as the source of truth (re-exports with types)
-  const partialsIndexSrc = join(SRC, "partials", "index.ts");
+  const partialsIndexSrc = join(SRC, 'partials', 'index.ts');
   if (existsSync(partialsIndexSrc)) {
-    writeFile(join(distSrc, "partials", "index.ts"), readFileSync(partialsIndexSrc, "utf-8"));
+    writeFile(join(distSrc, 'partials', 'index.ts'), readFileSync(partialsIndexSrc, 'utf-8'));
   } else {
-    const partialNames = listExportableFiles(join(distSrc, "partials"));
-    writeFile(join(distSrc, "partials", "index.ts"), generateExportsIndex(partialNames));
+    const partialNames = listExportableFiles(join(distSrc, 'partials'));
+    writeFile(join(distSrc, 'partials', 'index.ts'), generateExportsIndex(partialNames));
   }
 
   // Step 4: Copy app shell from src/
-  console.log("\n  [4/7] Copying app shell...\n");
+  console.log('\n  [4/7] Copying app shell...\n');
 
-  for (const dir of ["components", "variants", "lib", "routes", "providers", "hooks", "constants", "types"]) {
+  for (const dir of ['components', 'variants', 'lib', 'routes', 'providers', 'hooks', 'constants', 'types']) {
     copyDir(join(SRC, dir), join(distSrc, dir));
   }
 
   // Some copied app-shell components still use DSL. Re-generate them to keep dist DSL-free.
   const shellDslCandidates = [
-    { src: join(SRC, "components", "Sheet.tsx"), dest: join(distSrc, "components", "Sheet.tsx") },
-    { src: join(SRC, "components", "ui", "Icon.tsx"), dest: join(distSrc, "components", "ui", "Icon.tsx") },
+    { src: join(SRC, 'components', 'Sheet.tsx'), dest: join(distSrc, 'components', 'Sheet.tsx') },
+    { src: join(SRC, 'components', 'ui', 'Icon.tsx'), dest: join(distSrc, 'components', 'ui', 'Icon.tsx') },
   ];
   const shellPassthrough = getFallbackCoreComponents();
   const shellPlugin = new ReactPlugin();
   for (const file of shellDslCandidates) {
     if (!existsSync(file.src)) continue;
-    const componentName = file.src.split(/[/\\]/).pop()!.replace(/\.tsx$/, "");
+    const componentName = file.src
+      .split(/[/\\]/)
+      .pop()!
+      .replace(/\.tsx$/, '');
     const transformed = await transformJsxFile(file.src, { passthroughComponents: shellPassthrough, componentName });
     if (transformed.errors.length > 0 || transformed.tree.children.length === 0) continue;
     if (transformed.tree.meta?.imports) {
-      transformed.tree.meta.imports = transformed.tree.meta.imports.filter((imp) => imp.source !== "@ui8kit/dsl");
+      transformed.tree.meta.imports = transformed.tree.meta.imports.filter((imp) => imp.source !== '@ui8kit/dsl');
     }
     const output = await shellPlugin.transform(transformed.tree);
     writeFile(file.dest, output.content);
-    log(`transformed: ${relative(distSrc, file.dest).replace(/\\/g, "/")} (removed DSL)`);
+    log(`transformed: ${relative(distSrc, file.dest).replace(/\\/g, '/')} (removed DSL)`);
   }
   // Keep DSL imports in shell files when transform fallback copies source as-is.
   // These files are transformed above when possible; otherwise runtime DSL imports are required.
 
   // Assets (CSS, fonts) — @/assets/css/index.css etc.
-  copyDir(join(SRC, "assets"), join(distSrc, "assets"));
+  copyDir(join(SRC, 'assets'), join(distSrc, 'assets'));
 
   // App shell root files
-  for (const file of ["App.tsx", "main.tsx", "ui8kit.map.json"]) {
+  for (const file of ['App.tsx', 'main.tsx', 'ui8kit.map.json']) {
     const src = join(SRC, file);
     if (existsSync(src)) copyFile(src, join(distSrc, file));
   }
 
   // data/context.ts — relative fixture paths (../../fixtures/) are identical
-  const dataSrc = join(SRC, "data");
-  const dataDest = join(distSrc, "data");
+  const dataSrc = join(SRC, 'data');
+  const dataDest = join(distSrc, 'data');
   copyDir(dataSrc, dataDest);
 
   // Step 5: Generate design support files (previews, fixtures) — they use DSL so we transform them
-  console.log("\n  [5/7] Generating design support files...\n");
+  console.log('\n  [5/7] Generating design support files...\n');
   const passthroughComponents = getFallbackCoreComponents();
   const plugin = new ReactPlugin();
   // Design sub-directories that contain DSL helpers (not in main registry)
   const designSupportDirs = [
-    { src: join(SRC, "blocks", "design", "previews"), dest: join(distSrc, "blocks", "design", "previews") },
+    { src: join(SRC, 'blocks', 'design', 'previews'), dest: join(distSrc, 'blocks', 'design', 'previews') },
   ];
   for (const { src: supportSrc, dest: supportDest } of designSupportDirs) {
     if (!existsSync(supportSrc)) continue;
@@ -329,24 +320,24 @@ async function main(): Promise<void> {
       const srcFile = join(supportSrc, entry.name);
       const destFile = join(supportDest, entry.name);
       if (entry.isDirectory()) continue;
-      if (extname(entry.name) === ".ts" && entry.name !== "index.ts") {
+      if (extname(entry.name) === '.ts' && entry.name !== 'index.ts') {
         // Non-JSX TypeScript helper — copy as-is (no DSL)
         copyFile(srcFile, destFile);
         continue;
       }
-      if (extname(entry.name) === ".ts" && entry.name === "index.ts") {
+      if (extname(entry.name) === '.ts' && entry.name === 'index.ts') {
         // index.ts barrel — copy as-is
         copyFile(srcFile, destFile);
         continue;
       }
-      if (extname(entry.name) === ".tsx") {
-        const componentName = entry.name.replace(/\.tsx$/, "");
+      if (extname(entry.name) === '.tsx') {
+        const componentName = entry.name.replace(/\.tsx$/, '');
         const transformResult = await transformJsxFile(srcFile, { passthroughComponents, componentName });
         if (transformResult.errors.length === 0 && transformResult.tree.children.length > 0) {
           // Exclude DSL imports before generating output (same as TemplateService excludeDependencies)
           if (transformResult.tree.meta?.imports) {
             transformResult.tree.meta.imports = transformResult.tree.meta.imports.filter(
-              (imp) => !["@ui8kit/dsl"].includes(imp.source)
+              (imp) => !['@ui8kit/dsl'].includes(imp.source),
             );
           }
           const output = await plugin.transform(transformResult.tree);
@@ -354,25 +345,25 @@ async function main(): Promise<void> {
         } else {
           // Fallback: copy as-is (may contain DSL — acceptable for design-only files)
           copyFile(srcFile, destFile);
-          log(`warn: could not transform ${entry.name} (${transformResult.errors.join("; ")}), copied as-is`);
+          log(`warn: could not transform ${entry.name} (${transformResult.errors.join('; ')}), copied as-is`);
         }
       }
     }
   }
 
   // Design fixtures (plain TS data, no DSL)
-  const designFixturesSrc = join(SRC, "blocks", "design", "fixtures");
-  const designFixturesDest = join(distSrc, "blocks", "design", "fixtures");
+  const designFixturesSrc = join(SRC, 'blocks', 'design', 'fixtures');
+  const designFixturesDest = join(distSrc, 'blocks', 'design', 'fixtures');
   if (existsSync(designFixturesSrc)) copyDir(designFixturesSrc, designFixturesDest);
 
   // Step 6: Copy fixtures/
-  console.log("\n  [6/7] Copying fixtures...\n");
-  copyDir(FIXTURES, join(DIST_REACT, "fixtures"));
+  console.log('\n  [6/7] Copying fixtures...\n');
+  copyDir(FIXTURES, join(DIST_REACT, 'fixtures'));
 
   // Step 7: Generate project config files
-  console.log("\n  [7/7] Generating project config files...\n");
+  console.log('\n  [7/7] Generating project config files...\n');
 
-  const rootPkg = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf-8")) as {
+  const rootPkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf-8')) as {
     name: string;
     version: string;
     dependencies: Record<string, string>;
@@ -381,62 +372,59 @@ async function main(): Promise<void> {
 
   // package.json — conditional on static mode
   const baseScripts: Record<string, string> = {
-    dev: "vite",
-    build: "vite build",
-    typecheck: "tsc --noEmit",
-    preview: "vite preview",
+    dev: 'vite',
+    build: 'vite build',
+    typecheck: 'tsc --noEmit',
+    preview: 'vite preview',
   };
   if (staticMode) {
-    baseScripts["generate:html"] = "ui8kit-generate html --cwd . --config dist.config.json";
-    baseScripts["generate:styles"] = "ui8kit-generate styles --cwd . --config dist.config.json";
-    baseScripts["generate:static"] = "ui8kit-generate static --cwd . --config dist.config.json";
+    baseScripts['generate:html'] = 'ui8kit-generate html --cwd . --config dist.config.json';
+    baseScripts['generate:styles'] = 'ui8kit-generate styles --cwd . --config dist.config.json';
+    baseScripts['generate:static'] = 'ui8kit-generate static --cwd . --config dist.config.json';
   }
 
   const baseDevDeps: Record<string, string> = {
-    "@tailwindcss/postcss": rootPkg.devDependencies["@tailwindcss/postcss"],
-    "@types/react": rootPkg.devDependencies["@types/react"],
-    "@types/react-dom": rootPkg.devDependencies["@types/react-dom"],
-    "@types/node": rootPkg.devDependencies["@types/node"],
-    "@vitejs/plugin-react-swc": rootPkg.devDependencies["@vitejs/plugin-react-swc"],
-    postcss: rootPkg.devDependencies["postcss"],
-    tailwindcss: rootPkg.devDependencies["tailwindcss"],
-    typescript: rootPkg.devDependencies["typescript"],
-    vite: rootPkg.devDependencies["vite"],
+    '@tailwindcss/postcss': rootPkg.devDependencies['@tailwindcss/postcss'],
+    '@types/react': rootPkg.devDependencies['@types/react'],
+    '@types/react-dom': rootPkg.devDependencies['@types/react-dom'],
+    '@types/node': rootPkg.devDependencies['@types/node'],
+    '@vitejs/plugin-react-swc': rootPkg.devDependencies['@vitejs/plugin-react-swc'],
+    postcss: rootPkg.devDependencies['postcss'],
+    tailwindcss: rootPkg.devDependencies['tailwindcss'],
+    typescript: rootPkg.devDependencies['typescript'],
+    vite: rootPkg.devDependencies['vite'],
   };
   if (staticMode) {
-    baseDevDeps["@ui8kit/generator"] = "workspace:*";
+    baseDevDeps['@ui8kit/generator'] = 'workspace:*';
   }
-  const alwaysExcludeDeps = ["@ui8kit/generator", "@ui8kit/lint", "@ui8kit/contracts"];
-  const conditionalExcludeDeps = ["@ui8kit/dsl", "@ui8kit/sdk"].filter(
-    (pkg) => !hasImportInDir(join(DIST_REACT, "src"), pkg)
+  const alwaysExcludeDeps = ['@ui8kit/generator', '@ui8kit/lint', '@ui8kit/contracts'];
+  const conditionalExcludeDeps = ['@ui8kit/dsl', '@ui8kit/sdk'].filter(
+    (pkg) => !hasImportInDir(join(DIST_REACT, 'src'), pkg),
   );
   const excludedDeps = new Set([...alwaysExcludeDeps, ...conditionalExcludeDeps]);
 
   writeFile(
-    join(DIST_REACT, "package.json"),
+    join(DIST_REACT, 'package.json'),
     JSON.stringify(
       {
         name: `${rootPkg.name}-dist`,
         version: rootPkg.version,
         private: true,
-        type: "module",
+        type: 'module',
         scripts: baseScripts,
         dependencies: Object.fromEntries(
-          Object.entries(rootPkg.dependencies).filter(([pkg]) =>
-            !excludedDeps.has(pkg) &&
-            !pkg.startsWith('file:')
-          )
+          Object.entries(rootPkg.dependencies).filter(([pkg]) => !excludedDeps.has(pkg) && !pkg.startsWith('file:')),
         ),
         devDependencies: baseDevDeps,
       },
       null,
-      2
-    ) + "\n"
+      2,
+    ) + '\n',
   );
 
   // vite.config.ts
   writeFile(
-    join(DIST_REACT, "vite.config.ts"),
+    join(DIST_REACT, 'vite.config.ts'),
     `import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'node:path';
@@ -453,12 +441,12 @@ export default defineConfig({
     },
   },
 });
-`
+`,
   );
 
   // tsconfig.json
   writeFile(
-    join(DIST_REACT, "tsconfig.json"),
+    join(DIST_REACT, 'tsconfig.json'),
     `{
   "compilerOptions": {
     "target": "ES2020",
@@ -479,35 +467,32 @@ export default defineConfig({
   },
   "include": ["src"]
 }
-`
+`,
   );
 
   // postcss.config.js
   writeFile(
-    join(DIST_REACT, "postcss.config.js"),
+    join(DIST_REACT, 'postcss.config.js'),
     `export default {
   plugins: {
     "@tailwindcss/postcss": {},
   },
 };
-`
+`,
   );
 
   // index.html (copy from project root)
-  copyFile(join(ROOT, "index.html"), join(DIST_REACT, "index.html"));
+  copyFile(join(ROOT, 'index.html'), join(DIST_REACT, 'index.html'));
 
   if (staticMode) {
-    writeFile(
-      join(DIST_REACT, "dist.config.json"),
-      JSON.stringify(buildDistConfig(ui8kit), null, 2) + "\n"
-    );
-    log("dist.config.json (from ui8kit.config.json dist)");
+    writeFile(join(DIST_REACT, 'dist.config.json'), JSON.stringify(buildDistConfig(ui8kit), null, 2) + '\n');
+    log('dist.config.json (from ui8kit.config.json dist)');
     // _temp/registry.json is kept — required by generate:html/generate:static
   } else {
-    const tempDir = join(DIST_REACT, "_temp");
+    const tempDir = join(DIST_REACT, '_temp');
     if (existsSync(tempDir)) {
       rmSync(tempDir, { recursive: true, force: true });
-      log("removed: apps/react/_temp/ (SPA-only mode)");
+      log('removed: apps/react/_temp/ (SPA-only mode)');
     }
   }
 
@@ -519,12 +504,16 @@ export default defineConfig({
     cd apps/react
     bun install
     bun run dev       → http://localhost:3021
-${staticMode ? `
+${
+  staticMode
+    ? `
   Static generation:
     bun run generate:html   → React to HTML
     bun run generate:styles → CSS + PostCSS
     bun run generate:static → full pipeline
-` : ""}
+`
+    : ''
+}
 
   Structure:
     apps/react/
@@ -542,8 +531,11 @@ ${staticMode ? `
     ├── package.json
     ├── vite.config.ts
     ├── tsconfig.json
-    ${staticMode ? "├── index.html\n    ├── dist.config.json  ← for generate:html/styles/static\n    └── _temp/registry.json" : "└── index.html"}
+    ${staticMode ? '├── index.html\n    ├── dist.config.json  ← for generate:html/styles/static\n    └── _temp/registry.json' : '└── index.html'}
 `);
 }
 
-main().catch((err) => { console.error(err); process.exit(1); });
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

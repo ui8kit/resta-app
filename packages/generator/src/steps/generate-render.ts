@@ -4,7 +4,7 @@ import { RenderService, type RenderServiceOutput } from '../services/render';
 
 export async function runGenerateRender(
   context: IPipelineContext,
-  service: RenderService
+  service: RenderService,
 ): Promise<RenderServiceOutput> {
   const cfg = context.config;
   const appEntry = resolve(process.cwd(), cfg.render?.appEntry ?? 'src/App.tsx');

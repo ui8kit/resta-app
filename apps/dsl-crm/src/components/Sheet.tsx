@@ -1,26 +1,26 @@
-import { If, Else } from "@ui8kit/dsl";
-import type { ReactNode, HTMLAttributes } from "react";
-import { forwardRef } from "react";
-import { cn } from "../lib/utils";
-import { resolveUtilityClassName, type UtilityPropBag, type UtilityPropPrefix } from "../lib/utility-props";
-import { buttonSizeVariants, buttonStyleVariants } from "../variants";
-import type { ButtonProps } from "./ui/Button";
-import { Icon } from "./ui/Icon";
-import { Menu } from "lucide-react";
+import { If, Else } from '@ui8kit/dsl';
+import type { ReactNode, HTMLAttributes } from 'react';
+import { forwardRef } from 'react';
+import { cn } from '../lib/utils';
+import { resolveUtilityClassName, type UtilityPropBag, type UtilityPropPrefix } from '../lib/utility-props';
+import { buttonSizeVariants, buttonStyleVariants } from '../variants';
+import type { ButtonProps } from './ui/Button';
+import { Icon } from './ui/Icon';
+import { Menu } from 'lucide-react';
 
 type SheetDomProps = Omit<HTMLAttributes<HTMLDivElement>, UtilityPropPrefix>;
 
 export interface SheetProps extends SheetDomProps, UtilityPropBag {
   id?: string;
-  side?: "left" | "right";
+  side?: 'left' | 'right';
   openLabel?: string;
   closeLabel?: string;
-  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "full";
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
   title?: string;
   showTrigger?: boolean;
   triggerIcon?: any;
-  triggerVariant?: ButtonProps["variant"];
-  triggerSize?: ButtonProps["size"];
+  triggerVariant?: ButtonProps['variant'];
+  triggerSize?: ButtonProps['size'];
   children?: ReactNode;
 }
 
@@ -31,17 +31,7 @@ export interface SheetTriggerProps extends SheetTriggerDomProps, UtilityPropBag 
 }
 
 export const SheetTrigger = forwardRef<HTMLButtonElement, SheetTriggerProps>(
-
-  (
-    {
-      htmlFor,
-      className,
-      size = "sm",
-      variant = "ghost",
-      ...props
-    },
-    ref
-  ) => {
+  ({ htmlFor, className, size = 'sm', variant = 'ghost', ...props }, ref) => {
     const { utilityClassName, rest } = resolveUtilityClassName(props);
 
     return (
@@ -51,59 +41,59 @@ export const SheetTrigger = forwardRef<HTMLButtonElement, SheetTriggerProps>(
         data-class="sheet-trigger"
         className={cn(
           // Base button-like styles
-          "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer",
+          'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer',
           // Apply CVA variants
           buttonSizeVariants({ size }),
           buttonStyleVariants({ variant }),
           utilityClassName,
-          className
+          className,
         )}
-        aria-label={rest["aria-label"]}
+        aria-label={rest['aria-label']}
       >
         {props.children}
       </label>
     );
-  }
+  },
 );
 
 export const Sheet = forwardRef<HTMLDivElement, SheetProps>(
   (
     {
-      id = "sheet",
-      side = "right",
-      openLabel = "Open",
-      closeLabel = "Close",
-      size = "md",
+      id = 'sheet',
+      side = 'right',
+      openLabel = 'Open',
+      closeLabel = 'Close',
+      size = 'md',
       title,
       showTrigger = true,
       triggerIcon,
-      triggerVariant = "ghost",
-      triggerSize = "sm",
+      triggerVariant = 'ghost',
+      triggerSize = 'sm',
       className,
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
-    const sidePosition = side === "left" ? "left-0" : "right-0";
-    const sideBorder = side === "left" ? "border-r" : "border-l";
+    const sidePosition = side === 'left' ? 'left-0' : 'right-0';
+    const sideBorder = side === 'left' ? 'border-r' : 'border-l';
     const sizeClass =
-      size === "sm"
-        ? "w-64"
-        : size === "md"
-        ? "w-80"
-        : size === "lg"
-        ? "w-96"
-        : size === "xl"
-        ? "w-[28rem]"
-        : size === "2xl"
-        ? "w-[32rem]"
-        : "w-full";
+      size === 'sm'
+        ? 'w-64'
+        : size === 'md'
+          ? 'w-80'
+          : size === 'lg'
+            ? 'w-96'
+            : size === 'xl'
+              ? 'w-[28rem]'
+              : size === '2xl'
+                ? 'w-[32rem]'
+                : 'w-full';
 
     const { utilityClassName, rest } = resolveUtilityClassName(props);
 
     return (
-      <div ref={ref} className={cn("relative", utilityClassName, className)} data-class="sheet" {...rest}>
+      <div ref={ref} className={cn('relative', utilityClassName, className)} data-class="sheet" {...rest}>
         <input id={id} type="checkbox" className="peer hidden" />
 
         <If test="showTrigger" value={showTrigger}>
@@ -125,11 +115,11 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(
             aria-modal="true"
             data-class="sheet-panel"
             className={cn(
-              "absolute top-0 h-full max-w-full p-4 bg-card",
+              'absolute top-0 h-full max-w-full p-4 bg-card',
               sidePosition,
               sideBorder,
-              "border-border",
-              sizeClass
+              'border-border',
+              sizeClass,
             )}
           >
             <div className="flex items-center justify-between" data-class="sheet-header">
@@ -157,7 +147,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
-Sheet.displayName = "Sheet";
+Sheet.displayName = 'Sheet';

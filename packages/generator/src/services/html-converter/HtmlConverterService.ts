@@ -68,7 +68,7 @@ export interface HtmlConverterServiceOptions {
 
 /**
  * HtmlConverterService - Converts HTML to CSS using class mappings.
- * 
+ *
  * Responsibilities:
  * - Load and cache class mappings (ui8kit, shadcn)
  * - Extract elements with classes from HTML
@@ -80,55 +80,55 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
   readonly name = 'html-converter';
   readonly version = '1.0.0';
   readonly dependencies: readonly string[] = [];
-  
+
   private context!: IServiceContext;
   private fs: HtmlConverterFileSystem;
-  
+
   // Cached maps (loaded once in initialize)
   private ui8kitMap: Map<string, string> = new Map();
   private shadcnMap: Map<string, string> = new Map();
-  
+
   constructor(options: HtmlConverterServiceOptions = {}) {
     this.fs = options.fileSystem ?? createNodeFileSystem();
   }
-  
+
   async initialize(context: IServiceContext): Promise<void> {
     this.context = context;
-    
+
     // Load maps from config
     const mappings = context.config.mappings;
-    
+
     if (mappings?.ui8kitMap) {
       await this.loadUi8kitMap(mappings.ui8kitMap);
     } else {
       // Try default location
       await this.loadUi8kitMap();
     }
-    
+
     if (mappings?.shadcnMap) {
       await this.loadShadcnMap(mappings.shadcnMap);
     } else {
       // Try built-in map
       await this.loadShadcnMap();
     }
-    
+
     this.context.logger.debug(`Loaded ${this.ui8kitMap.size} ui8kit classes, ${this.shadcnMap.size} shadcn classes`);
   }
-  
+
   async execute(input: HtmlConverterInput): Promise<HtmlConverterOutput> {
     const { htmlPath, ignoreSelectors = [], verbose = false } = input;
     const warnings: HtmlConverterWarning[] = [];
-    
+
     if (verbose) {
       this.context.logger.info(`Converting HTML to CSS: ${htmlPath}`);
     }
-    
+
     // Read HTML file
     const html = await this.fs.readFile(htmlPath);
-    
+
     // Extract elements
     const elements = this.extractElementsFromHtml(html, htmlPath, ignoreSelectors);
-    
+
     // Validate component+tag when data-class maps to known component
     for (const el of elements) {
       if (el.tag) {
@@ -147,28 +147,28 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
         }
       }
     }
-    
+
     if (verbose) {
       this.context.logger.info(`Found ${elements.length} elements with classes`);
     }
-    
+
     // Group by selectors
     const groupedElements = this.groupBySelectors(elements, warnings);
-    
+
     // Merge duplicate class sets
     const mergedSelectors = this.mergeDuplicateClassSets(groupedElements);
-    
+
     // Generate CSS
     const applyCss = this.generateApplyCss(mergedSelectors);
     const pureCss = this.generatePureCss(mergedSelectors);
-    
+
     // Emit event
     this.context.eventBus.emit('html-converter:complete', {
       htmlPath,
       elementsCount: elements.length,
       selectorsCount: mergedSelectors.size,
     });
-    
+
     return {
       applyCss,
       pureCss,
@@ -177,19 +177,19 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
       warnings,
     };
   }
-  
+
   async dispose(): Promise<void> {
     this.ui8kitMap.clear();
     this.shadcnMap.clear();
   }
-  
+
   /**
    * Get total size of cached maps (for testing)
    */
   getMapsSize(): number {
     return this.ui8kitMap.size + this.shadcnMap.size;
   }
-  
+
   /**
    * Check if class is valid for Tailwind @apply
    */
@@ -198,11 +198,11 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
     if (className === 'lucide' || className.startsWith('lucide-')) {
       return false;
     }
-    
+
     // Check maps
     return this.ui8kitMap.has(className) || this.shadcnMap.has(className);
   }
-  
+
   /**
    * Extract class attribute values (not data-class)
    */
@@ -210,10 +210,10 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
     const classRegex = /\s+class\s*=\s*["']([^"']*)["']/;
     const classMatch = tagContent.match(classRegex);
     if (!classMatch) return [];
-    
-    return classMatch[1].split(/\s+/).filter(cls => cls.trim());
+
+    return classMatch[1].split(/\s+/).filter((cls) => cls.trim());
   }
-  
+
   /**
    * Extract data-class attribute value
    */
@@ -221,58 +221,54 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
     const dataClassMatch = tagContent.match(/data-class\s*=\s*["']([^"']*)["']/);
     return dataClassMatch ? dataClassMatch[1].trim() : '';
   }
-  
+
   // ===========================================================================
   // Private Methods
   // ===========================================================================
-  
+
   /**
    * Load ui8kit map from path or default location
    */
   private async loadUi8kitMap(configuredPath?: string): Promise<void> {
     const projectRoot = process.cwd();
-    
+
     const possiblePaths: string[] = [];
-    
+
     if (configuredPath) {
-      const absolutePath = this.isAbsolutePath(configuredPath)
-        ? configuredPath
-        : join(projectRoot, configuredPath);
+      const absolutePath = this.isAbsolutePath(configuredPath) ? configuredPath : join(projectRoot, configuredPath);
       possiblePaths.push(absolutePath);
     }
-    
+
     // Default location
     possiblePaths.push(join(projectRoot, 'src', 'lib', 'ui8kit.map.json'));
-    
+
     for (const mapPath of possiblePaths) {
       try {
         const jsonContent = await this.fs.readFile(mapPath);
         const mapObject = JSON.parse(jsonContent);
-        
+
         this.ui8kitMap = new Map(Object.entries(mapObject));
         return;
       } catch {
         // Try next path
       }
     }
-    
+
     this.context.logger.warn(
       `Could not find ui8kit.map.json. Tried: ${possiblePaths.join(', ')}. ` +
-      `Set config.mappings.ui8kitMap in your generator.config.ts`
+        `Set config.mappings.ui8kitMap in your generator.config.ts`,
     );
   }
-  
+
   /**
    * Load shadcn map from path or built-in
    */
   private async loadShadcnMap(configuredPath?: string): Promise<void> {
     let mapPath: string;
-    
+
     if (configuredPath) {
       const projectRoot = process.cwd();
-      mapPath = this.isAbsolutePath(configuredPath)
-        ? configuredPath
-        : join(projectRoot, configuredPath);
+      mapPath = this.isAbsolutePath(configuredPath) ? configuredPath : join(projectRoot, configuredPath);
     } else {
       // Use built-in map from generator package
       try {
@@ -283,35 +279,35 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
         mapPath = join(process.cwd(), 'src', 'lib', 'shadcn.map.json');
       }
     }
-    
+
     try {
       const jsonContent = await this.fs.readFile(mapPath);
       const mapObject = JSON.parse(jsonContent);
-      
+
       this.shadcnMap = new Map(Object.entries(mapObject));
     } catch {
       this.context.logger.debug(`shadcn.map.json not found at ${mapPath}, using empty map`);
       this.shadcnMap = new Map();
     }
   }
-  
+
   /**
    * Check if path is absolute
    */
   private isAbsolutePath(path: string): boolean {
     return path.startsWith('/') || /^[a-zA-Z]:/.test(path);
   }
-  
+
   /**
    * Extract elements with classes from HTML
    */
   private extractElementsFromHtml(
     html: string,
     sourceFile: string,
-    ignoreSelectors: Array<string | RegExp>
+    ignoreSelectors: Array<string | RegExp>,
   ): ElementData[] {
     const elements: ElementData[] = [];
-    
+
     const isIgnored = (selector: string): boolean => {
       if (!selector) return false;
       for (const pattern of ignoreSelectors) {
@@ -328,40 +324,40 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
       }
       return false;
     };
-    
+
     // Find all HTML tags
     const tagRegex = /<[^>]+>/g;
     let match;
-    
+
     while ((match = tagRegex.exec(html)) !== null) {
       const tagContent = match[0];
       const tagIndex = elements.length;
-      
+
       const classes = this.extractClassAttribute(tagContent);
       const dataClass = this.extractDataClassAttribute(tagContent);
-      
+
       if (classes.length > 0 || dataClass) {
         const selector = dataClass || this.generateSelector(tagContent, sourceFile, tagIndex);
-        
+
         if (dataClass && isIgnored(selector)) {
           continue;
         }
-        
+
         const tagMatch = tagContent.match(/^<([a-zA-Z][a-zA-Z0-9]*)/);
         const tag = tagMatch ? tagMatch[1] : undefined;
-        
+
         elements.push({
           selector,
-          classes: classes.filter(cls => !cls.includes('data-class')),
+          classes: classes.filter((cls) => !cls.includes('data-class')),
           sourceFile,
           tag,
         });
       }
     }
-    
+
     return elements;
   }
-  
+
   /**
    * Generate selector for elements without data-class
    */
@@ -373,25 +369,19 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
     const suffix = createHash('sha1').update(seed).digest('hex').slice(0, 8);
     return `${tagName}-${suffix}`;
   }
-  
+
   /**
    * Group elements by selectors
    */
-  private groupBySelectors(
-    elements: ElementData[],
-    warnings: HtmlConverterWarning[]
-  ): Map<string, string[]> {
+  private groupBySelectors(elements: ElementData[], warnings: HtmlConverterWarning[]): Map<string, string[]> {
     const selectorMap = new Map<string, string[]>();
     const reportedConflicts = new Set<string>();
-    
+
     for (const element of elements) {
       if (element.classes.length === 0) continue;
-      
+
       const existingClasses = selectorMap.get(element.selector) || [];
-      if (
-        existingClasses.length > 0 &&
-        !this.sameClassSet(existingClasses, element.classes)
-      ) {
+      if (existingClasses.length > 0 && !this.sameClassSet(existingClasses, element.classes)) {
         const conflictKey = `${element.sourceFile}:${element.selector}`;
         if (!reportedConflicts.has(conflictKey)) {
           reportedConflicts.add(conflictKey);
@@ -405,10 +395,10 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
       }
       const allClasses = [...existingClasses, ...element.classes];
       const uniqueClasses = [...new Set(allClasses)];
-      
+
       selectorMap.set(element.selector, uniqueClasses);
     }
-    
+
     return selectorMap;
   }
 
@@ -420,26 +410,26 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
     }
     return leftSet.every((value, index) => value === rightSet[index]);
   }
-  
+
   /**
    * Merge selectors with identical class sets
    */
   private mergeDuplicateClassSets(selectorMap: Map<string, string[]>): Map<string, string[]> {
     const classSetToSelectors = new Map<string, string[]>();
-    
+
     for (const [selector, classes] of selectorMap.entries()) {
       const classSetKey = [...classes].sort().join(' ');
-      
+
       const existingSelectors = classSetToSelectors.get(classSetKey) || [];
       existingSelectors.push(selector);
       classSetToSelectors.set(classSetKey, existingSelectors);
     }
-    
+
     const mergedMap = new Map<string, string[]>();
-    
+
     for (const [classSetKey, selectors] of classSetToSelectors.entries()) {
       const classes = classSetKey.split(' ');
-      
+
       if (selectors.length > 1) {
         const combinedSelector = selectors.sort().join(', ');
         mergedMap.set(combinedSelector, classes);
@@ -447,108 +437,114 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
         mergedMap.set(selectors[0], classes);
       }
     }
-    
+
     return mergedMap;
   }
-  
+
   /**
    * Generate @apply CSS
    */
   private generateApplyCss(selectorMap: Map<string, string[]>): string {
     const cssRules: string[] = [];
     const sortedSelectors = Array.from(selectorMap.keys()).sort();
-    
+
     for (const selector of sortedSelectors) {
       const classes = selectorMap.get(selector) || [];
-      const validClasses = classes.filter(cls => this.isValidTailwindClass(cls));
-      
+      const validClasses = classes.filter((cls) => this.isValidTailwindClass(cls));
+
       if (validClasses.length > 0) {
         if (selector.includes(', ')) {
-          const selectors = selector.split(', ').map(s => `.${s.trim()}`).join(', ');
+          const selectors = selector
+            .split(', ')
+            .map((s) => `.${s.trim()}`)
+            .join(', ');
           cssRules.push(`${selectors} {\n  @apply ${validClasses.join(' ')};\n}`);
         } else {
           cssRules.push(`.${selector} {\n  @apply ${validClasses.join(' ')};\n}`);
         }
       }
     }
-    
+
     const deduplicatedRules = this.deduplicateCssRules(cssRules);
-    
+
     const header = `/*
  * Generated CSS - @apply directives
  * Do not edit manually - this file is auto-generated
  * Generated on: ${new Date().toISOString()}
  */\n\n`;
-    
+
     return header + deduplicatedRules.join('\n\n') + '\n';
   }
-  
+
   /**
    * Generate pure CSS3
    */
   private generatePureCss(selectorMap: Map<string, string[]>): string {
     const cssRules: string[] = [];
     const sortedSelectors = Array.from(selectorMap.keys()).sort();
-    
+
     for (const selector of sortedSelectors) {
       const classes = selectorMap.get(selector) || [];
       const cssProperties: string[] = [];
-      
+
       for (const className of classes) {
         let cssProperty = this.ui8kitMap.get(className) ?? this.shadcnMap.get(className);
-        
+
         if (cssProperty) {
           cssProperties.push(`  ${cssProperty}`);
         } else if (className !== 'lucide' && !className.startsWith('lucide-')) {
           cssProperties.push(`  /* Unknown class: ${className} */`);
         }
       }
-      
+
       if (cssProperties.length > 0) {
         if (selector.includes(', ')) {
-          const selectors = selector.split(', ').map(s => `.${s.trim()}`).join(', ');
+          const selectors = selector
+            .split(', ')
+            .map((s) => `.${s.trim()}`)
+            .join(', ');
           cssRules.push(`${selectors} {\n${cssProperties.join('\n')}\n}`);
         } else {
           cssRules.push(`.${selector} {\n${cssProperties.join('\n')}\n}`);
         }
       }
     }
-    
+
     const deduplicatedRules = this.deduplicateCssRules(cssRules);
-    
+
     const header = `/*
  * Generated CSS - Pure CSS3 properties
  * Do not edit manually - this file is auto-generated
  * Generated on: ${new Date().toISOString()}
  */\n\n`;
-    
+
     return header + deduplicatedRules.join('\n\n') + '\n';
   }
-  
+
   /**
    * Deduplicate CSS rules with identical content
    */
   private deduplicateCssRules(cssRules: string[]): string[] {
     const contentToSelectors = new Map<string, string[]>();
-    
+
     for (const rule of cssRules) {
       const match = rule.match(/^(.+?)\s*\{\s*(.+?)\s*\}\s*$/s);
       if (!match) continue;
-      
+
       const [, selector, content] = match;
       const trimmedContent = content.trim();
-      
+
       if (trimmedContent.includes('/* Unknown class:')) {
         continue;
       }
-      
+
       const existingSelectors = contentToSelectors.get(trimmedContent) || [];
       existingSelectors.push(selector);
       contentToSelectors.set(trimmedContent, existingSelectors);
     }
-    
+
     const deduplicatedRules: string[] = [];
-    
+
     for (const [content, selectors] of contentToSelectors.entries()) {
       if (selectors.length > 1) {
         const combinedSelector = selectors.sort().join(', ');
@@ -557,8 +553,7 @@ export class HtmlConverterService implements IService<HtmlConverterInput, HtmlCo
         deduplicatedRules.push(`${selectors[0]} {\n${content}\n}`);
       }
     }
-    
+
     return deduplicatedRules.sort();
   }
-  
 }

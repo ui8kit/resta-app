@@ -56,7 +56,7 @@ export class BlockNestingChecker extends BaseChecker<BlockNestingCheckerConfig> 
             column: loc.character + 1,
             hint: 'Block is a top-level container. Use Stack, Group, Grid, or Box for inner layout.',
             suggestion: 'Replace the inner <Block> with <Stack>, <Group>, <Grid>, or <Box>.',
-          })
+          }),
         );
       }
 
@@ -66,10 +66,7 @@ export class BlockNestingChecker extends BaseChecker<BlockNestingCheckerConfig> 
 
     const returnStatements: ts.ReturnStatement[] = [];
     const collectReturns = (node: ts.Node, inExportedFn: boolean): void => {
-      if (
-        (ts.isFunctionDeclaration(node) || ts.isVariableStatement(node)) &&
-        this.isExported(node)
-      ) {
+      if ((ts.isFunctionDeclaration(node) || ts.isVariableStatement(node)) && this.isExported(node)) {
         ts.forEachChild(node, (child) => collectReturns(child, true));
         return;
       }
@@ -101,13 +98,18 @@ export class BlockNestingChecker extends BaseChecker<BlockNestingCheckerConfig> 
       if (topLevelBlocks > 1) {
         const loc = sourceFile.getLineAndCharacterOfPosition(ret.getStart(sourceFile));
         issues.push(
-          this.createIssue('error', 'BLOCK_MULTIPLE_ROOTS', `Multiple root <Block> elements found (${topLevelBlocks})`, {
-            file: fileRel,
-            line: loc.line + 1,
-            column: loc.character + 1,
-            hint: 'View files should have at most one root Block.',
-            suggestion: 'Wrap content in a single <Block> or use a layout component.',
-          })
+          this.createIssue(
+            'error',
+            'BLOCK_MULTIPLE_ROOTS',
+            `Multiple root <Block> elements found (${topLevelBlocks})`,
+            {
+              file: fileRel,
+              line: loc.line + 1,
+              column: loc.character + 1,
+              hint: 'View files should have at most one root Block.',
+              suggestion: 'Wrap content in a single <Block> or use a layout component.',
+            },
+          ),
         );
       }
     }

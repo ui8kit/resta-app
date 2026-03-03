@@ -83,15 +83,7 @@ export interface ColorTokenCheckerConfig {
   utilityPropsMapPath: string;
 }
 
-export type GenLintRuleCode =
-  | 'GEN001'
-  | 'GEN002'
-  | 'GEN003'
-  | 'GEN004'
-  | 'GEN005'
-  | 'GEN006'
-  | 'GEN007'
-  | 'GEN008';
+export type GenLintRuleCode = 'GEN001' | 'GEN002' | 'GEN003' | 'GEN004' | 'GEN005' | 'GEN006' | 'GEN007' | 'GEN008';
 
 export type GenLintRulesConfig = Partial<Record<GenLintRuleCode, Severity>>;
 

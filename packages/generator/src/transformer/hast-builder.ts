@@ -37,11 +37,7 @@ import type { TransformOptions, AnalyzedComponent, DEFAULT_COMPONENT_PATTERNS } 
 /**
  * Build GenHAST tree from Babel AST
  */
-export function buildHast(
-  ast: File,
-  source: string,
-  options: TransformOptions = {}
-): GenRoot {
+export function buildHast(ast: File, source: string, options: TransformOptions = {}): GenRoot {
   const builder = new HastBuilder(ast, source, options);
   return builder.build();
 }
@@ -59,57 +55,57 @@ class HastBuilder {
   private warnings: string[] = [];
   private componentInfo: AnalyzedComponent | null = null;
   private dslRegistry: DslRegistry;
-  
+
   constructor(ast: File, source: string, options: TransformOptions) {
     this.ast = ast;
     this.source = source;
     this.options = options;
-    
+
     // Initialize DSL registry
     this.dslRegistry = new DslRegistry();
     for (const handler of BUILT_IN_DSL_HANDLERS) {
       this.dslRegistry.register(handler);
     }
   }
-  
+
   build(): GenRoot {
     // Find the component to transform
     const componentNode = this.findMainComponent();
-    
+
     if (!componentNode) {
       return root([], this.createMeta());
     }
-    
+
     // Extract preamble (statements before return) and vars declared there
     const { preamble, preambleVars } = this.findPreamble(componentNode);
-    
+
     // Get the JSX return
     const jsxRoot = this.findJsxReturn(componentNode);
-    
+
     if (!jsxRoot) {
       return root([], this.createMeta(preamble, preambleVars));
     }
-    
+
     // Transform JSX to HAST
     const children = this.transformJsxNode(jsxRoot);
-    
+
     return root(
-      Array.isArray(children) ? children : [children].filter(Boolean) as GenChild[],
-      this.createMeta(preamble, preambleVars)
+      Array.isArray(children) ? children : ([children].filter(Boolean) as GenChild[]),
+      this.createMeta(preamble, preambleVars),
     );
   }
-  
+
   // ===========================================================================
   // Component Discovery
   // ===========================================================================
-  
+
   /**
    * Find the main component to transform
    */
   private findMainComponent(): t.Node | null {
     let foundComponent: t.Node | null = null;
     const targetName = this.options.componentName;
-    
+
     traverse(this.ast, {
       // Function declaration: function MyComponent() {}
       FunctionDeclaration: (path) => {
@@ -119,7 +115,7 @@ class HastBuilder {
           path.stop();
         }
       },
-      
+
       // Variable declaration: const MyComponent = () => {} or ({ a, b }) => {}
       VariableDeclarator: (path) => {
         if (path.node.id.type === 'Identifier') {
@@ -143,7 +139,7 @@ class HastBuilder {
           }
         }
       },
-      
+
       // Export default: export default function MyComponent() {}
       ExportDefaultDeclaration: (path) => {
         const decl = path.node.declaration;
@@ -167,37 +163,37 @@ class HastBuilder {
         }
       },
     });
-    
+
     return foundComponent;
   }
-  
+
   /**
    * Check if a function is a valid React component
    */
   private isValidComponent(node: t.FunctionDeclaration, targetName?: string): boolean {
     if (!node.id) return false;
     const name = node.id.name;
-    
+
     if (targetName) {
       return name === targetName;
     }
-    
+
     return this.looksLikeComponent(name);
   }
-  
+
   /**
    * Check if name looks like a component (PascalCase)
    */
   private looksLikeComponent(name: string): boolean {
     return /^[A-Z][a-zA-Z0-9]*$/.test(name);
   }
-  
+
   /**
    * Analyze component info
    */
   private analyzeComponent(node: t.FunctionDeclaration): AnalyzedComponent {
     const name = node.id?.name || 'Component';
-    
+
     return {
       name,
       type: this.detectComponentType(name),
@@ -208,7 +204,7 @@ class HastBuilder {
       sourceFile: this.options.sourceFile,
     };
   }
-  
+
   /**
    * Detect component type from name
    */
@@ -219,7 +215,7 @@ class HastBuilder {
       pages: [/Page$/i],
       blocks: [/Block$/i, /Section$/i],
     };
-    
+
     for (const pattern of patterns.layouts || []) {
       if (pattern.test(name)) return 'layout';
     }
@@ -232,10 +228,10 @@ class HastBuilder {
     for (const pattern of patterns.blocks || []) {
       if (pattern.test(name)) return 'block';
     }
-    
+
     return 'component';
   }
-  
+
   /**
    * Extract props from function parameters.
    * Resolves TypeScript types when a type annotation references an interface/type in the same file.
@@ -286,25 +282,29 @@ class HastBuilder {
         name = prop.key.name;
       } else if (prop.key.type === 'StringLiteral' && prop.value.type === 'Identifier') {
         name = prop.value.name;
-      } else if (prop.key.type === 'StringLiteral' && prop.value.type === 'AssignmentPattern' && prop.value.left.type === 'Identifier') {
+      } else if (
+        prop.key.type === 'StringLiteral' &&
+        prop.value.type === 'AssignmentPattern' &&
+        prop.value.left.type === 'Identifier'
+      ) {
         name = prop.value.left.name;
       }
       if (!name) continue;
       const hasDefault = prop.value.type === 'AssignmentPattern';
 
       // Look up TS type from interface (use original key name for lookup)
-      const keyName = prop.key.type === 'Identifier' ? prop.key.name
-        : prop.key.type === 'StringLiteral' ? prop.key.value
-        : name;
+      const keyName =
+        prop.key.type === 'Identifier' ? prop.key.name : prop.key.type === 'StringLiteral' ? prop.key.value : name;
       const tsType = typeMap.get(keyName) ?? 'unknown';
 
       props.push({
         name,
         type: tsType,
         required: !hasDefault && !typeMap.get(`__optional_${keyName}`),
-        defaultValue: hasDefault && prop.value.type === 'AssignmentPattern'
-          ? getNodeSource(this.source, prop.value.right)
-          : undefined,
+        defaultValue:
+          hasDefault && prop.value.type === 'AssignmentPattern'
+            ? getNodeSource(this.source, prop.value.right)
+            : undefined,
       });
     }
 
@@ -332,11 +332,17 @@ class HastBuilder {
         if (path.node.id.name !== typeName) return;
         for (const member of path.node.body.body) {
           if (member.type !== 'TSPropertySignature') continue;
-          const key = member.key.type === 'Identifier' ? member.key.name
-            : member.key.type === 'StringLiteral' ? member.key.value
-            : null;
+          const key =
+            member.key.type === 'Identifier'
+              ? member.key.name
+              : member.key.type === 'StringLiteral'
+                ? member.key.value
+                : null;
           if (!key) continue;
-          map.set(key, member.typeAnnotation ? getNodeSource(this.source, member.typeAnnotation.typeAnnotation) : 'unknown');
+          map.set(
+            key,
+            member.typeAnnotation ? getNodeSource(this.source, member.typeAnnotation.typeAnnotation) : 'unknown',
+          );
           if (member.optional) map.set(`__optional_${key}`, 'true');
         }
       },
@@ -346,11 +352,17 @@ class HastBuilder {
         if (node.type !== 'TSTypeLiteral') return;
         for (const member of node.members) {
           if (member.type !== 'TSPropertySignature') continue;
-          const key = member.key.type === 'Identifier' ? member.key.name
-            : member.key.type === 'StringLiteral' ? member.key.value
-            : null;
+          const key =
+            member.key.type === 'Identifier'
+              ? member.key.name
+              : member.key.type === 'StringLiteral'
+                ? member.key.value
+                : null;
           if (!key) continue;
-          map.set(key, member.typeAnnotation ? getNodeSource(this.source, member.typeAnnotation.typeAnnotation) : 'unknown');
+          map.set(
+            key,
+            member.typeAnnotation ? getNodeSource(this.source, member.typeAnnotation.typeAnnotation) : 'unknown',
+          );
           if (member.optional) map.set(`__optional_${key}`, 'true');
         }
       },
@@ -380,11 +392,11 @@ class HastBuilder {
     });
     return resolved;
   }
-  
+
   // ===========================================================================
   // JSX Return Discovery
   // ===========================================================================
-  
+
   /**
    * Extract statements before the return (preamble) and variable names declared there.
    * Preserves const/let/var declarations and expression statements (e.g. hook calls).
@@ -409,10 +421,11 @@ class HastBuilder {
       if (stmt.type === 'VariableDeclaration') {
         const hasUnsafeInit = stmt.declarations.some((decl) => {
           const init = decl.init;
-          return !!init && (
-            init.type === 'ArrowFunctionExpression' ||
-            init.type === 'FunctionExpression' ||
-            init.type === 'ClassExpression'
+          return (
+            !!init &&
+            (init.type === 'ArrowFunctionExpression' ||
+              init.type === 'FunctionExpression' ||
+              init.type === 'ClassExpression')
           );
         });
         if (hasUnsafeInit) continue;
@@ -446,13 +459,13 @@ class HastBuilder {
         }
       }
     }
-    
+
     // Search for return statement
     let jsxReturn: t.JSXElement | t.JSXFragment | null = null;
-    
+
     const searchNode = (node: t.Node): void => {
       if (jsxReturn) return;
-      
+
       if (node.type === 'ReturnStatement') {
         const arg = node.argument;
         if (arg && (arg.type === 'JSXElement' || arg.type === 'JSXFragment')) {
@@ -466,7 +479,7 @@ class HastBuilder {
           }
         }
       }
-      
+
       // Recurse into child nodes
       for (const key of Object.keys(node)) {
         if (key === 'loc' || key === 'start' || key === 'end') continue;
@@ -486,38 +499,40 @@ class HastBuilder {
         }
       }
     };
-    
+
     searchNode(componentNode);
     return jsxReturn;
   }
-  
+
   // ===========================================================================
   // JSX Transformation
   // ===========================================================================
-  
+
   /**
    * Transform JSX node to HAST
    */
-  private transformJsxNode(node: t.JSXElement | t.JSXFragment | t.JSXText | t.JSXExpressionContainer): GenChild | GenChild[] | null {
+  private transformJsxNode(
+    node: t.JSXElement | t.JSXFragment | t.JSXText | t.JSXExpressionContainer,
+  ): GenChild | GenChild[] | null {
     if (node.type === 'JSXElement') {
       return this.transformJsxElement(node);
     }
-    
+
     if (node.type === 'JSXFragment') {
       return this.transformJsxFragment(node);
     }
-    
+
     if (node.type === 'JSXText') {
       return this.transformJsxText(node);
     }
-    
+
     if (node.type === 'JSXExpressionContainer') {
       return this.transformJsxExpression(node);
     }
-    
+
     return null;
   }
-  
+
   /**
    * Transform JSX element to HAST element
    */
@@ -525,13 +540,13 @@ class HastBuilder {
     const tagName = this.getTagName(node);
     const properties = this.transformAttributes(node.openingElement.attributes);
     const children = this.transformChildren(node.children);
-    
+
     // Check for DSL components first
     const dslResult = this.handleDslComponent(tagName, node, children);
     if (dslResult) {
       return dslResult;
     }
-    
+
     // Check if this is a component reference
     if (this.isComponentTag(tagName)) {
       // Passthrough components: keep as elements with children
@@ -547,30 +562,26 @@ class HastBuilder {
           originalName: tagName,
         },
       };
-      
+
       this.dependencies.add(tagName);
-      
+
       return element('div', { ...properties, _gen: annotations }, children);
     }
-    
+
     return element(tagName, properties, children);
   }
 
   /**
    * Handle DSL components using registry
    */
-  private handleDslComponent(
-    tagName: string,
-    node: t.JSXElement,
-    children: GenChild[]
-  ): GenElement | null {
+  private handleDslComponent(tagName: string, node: t.JSXElement, children: GenChild[]): GenElement | null {
     // Check if handler exists for this DSL component
     if (!this.dslRegistry.has(tagName)) {
       return null; // Not a DSL component, handled elsewhere
     }
-    
+
     const handler = this.dslRegistry.get(tagName)!;
-    
+
     // For Loop: extract render-function body as children
     // Handles {(item) => (<JSX/>)} pattern that transformChildren can't parse
     let effectiveChildren = children;
@@ -580,7 +591,7 @@ class HastBuilder {
         effectiveChildren = loopBody;
       }
     }
-    
+
     const context: DslHandlerContext = {
       source: this.source,
       warnings: this.warnings,
@@ -588,49 +599,49 @@ class HastBuilder {
       dependencies: this.dependencies,
       options: this.options,
     };
-    
+
     return handler.handle(node, effectiveChildren, context);
   }
-  
+
   /**
    * Get tag name from JSX element
    */
   private getTagName(node: t.JSXElement): string {
     const name = node.openingElement.name;
-    
+
     if (name.type === 'JSXIdentifier') {
       return name.name;
     }
-    
+
     if (name.type === 'JSXMemberExpression') {
       // e.g., Header.Nav
       return this.getJsxMemberName(name);
     }
-    
+
     return 'div';
   }
-  
+
   /**
    * Get member expression name
    */
   private getJsxMemberName(node: t.JSXMemberExpression): string {
     const parts: string[] = [];
     let current: t.JSXMemberExpression | t.JSXIdentifier = node;
-    
+
     while (current.type === 'JSXMemberExpression') {
       if (current.property.type === 'JSXIdentifier') {
         parts.unshift(current.property.name);
       }
       current = current.object;
     }
-    
+
     if (current.type === 'JSXIdentifier') {
       parts.unshift(current.name);
     }
-    
+
     return parts.join('.');
   }
-  
+
   /**
    * Check if tag is a component (PascalCase)
    */
@@ -648,7 +659,7 @@ class HastBuilder {
     if (!passthrough || passthrough.length === 0) return false;
     return passthrough.includes(tagName);
   }
-  
+
   /**
    * Convert component name to partial path
    */
@@ -656,35 +667,34 @@ class HastBuilder {
     // Convert PascalCase/acronyms to kebab-case:
     //   CTABlock → cta-block, SidebarContent → sidebar-content, DashSidebar → dash-sidebar
     const kebab = componentName
-      .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')  // split acronym from next word (CTABlock → CTA-Block)
-      .replace(/([a-z])([A-Z])/g, '$1-$2')          // split camel (sideBar → side-Bar)
+      .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2') // split acronym from next word (CTABlock → CTA-Block)
+      .replace(/([a-z])([A-Z])/g, '$1-$2') // split camel (sideBar → side-Bar)
       .toLowerCase();
 
     return `partials/${kebab}`;
   }
-  
+
   /**
    * Transform JSX attributes to HAST properties
    */
   private transformAttributes(attributes: (t.JSXAttribute | t.JSXSpreadAttribute)[]): GenElement['properties'] {
     const properties: GenElement['properties'] = {};
-    
+
     for (const attr of attributes) {
       if (attr.type === 'JSXSpreadAttribute') {
         // Can't handle spread in static templates
         this.warnings.push(`Spread attribute not supported in templates: ${getNodeSource(this.source, attr)}`);
         continue;
       }
-      
-      const name = attr.name.type === 'JSXIdentifier' 
-        ? attr.name.name 
-        : `${attr.name.namespace.name}:${attr.name.name.name}`;
-      
+
+      const name =
+        attr.name.type === 'JSXIdentifier' ? attr.name.name : `${attr.name.namespace.name}:${attr.name.name.name}`;
+
       // Skip key prop (used for React reconciliation only)
       if (name === 'key') continue;
-      
+
       const value = this.getAttributeValue(attr);
-      
+
       // Convert className
       if (name === 'className') {
         if (typeof value === 'string') {
@@ -692,56 +702,56 @@ class HastBuilder {
         }
         continue;
       }
-      
+
       properties[name] = value;
     }
-    
+
     return properties;
   }
-  
+
   /**
    * Get attribute value
    */
   private getAttributeValue(attr: t.JSXAttribute): unknown {
     const value = attr.value;
-    
+
     if (!value) {
       // Boolean true
       return true;
     }
-    
+
     if (value.type === 'StringLiteral') {
       return value.value;
     }
-    
+
     if (value.type === 'JSXExpressionContainer') {
       const expr = value.expression;
-      
+
       if (expr.type === 'StringLiteral') {
         return expr.value;
       }
-      
+
       if (expr.type === 'NumericLiteral') {
         return expr.value;
       }
-      
+
       if (expr.type === 'BooleanLiteral') {
         return expr.value;
       }
-      
+
       // Dynamic value - mark as expression for template rendering
       return { __expression: getNodeSource(this.source, expr) };
     }
-    
+
     return undefined;
   }
-  
+
   /**
    * Extract props passed to component
    */
   private extractComponentProps(attributes: (t.JSXAttribute | t.JSXSpreadAttribute)[]): Record<string, string> {
     const props: Record<string, string> = {};
-    
+
     for (const attr of attributes) {
       if (attr.type === 'JSXSpreadAttribute') {
         // Preserve spread as a special key so React plugin can emit {...expr}
@@ -750,12 +760,12 @@ class HastBuilder {
         continue;
       }
       if (attr.name.type !== 'JSXIdentifier') continue;
-      
+
       const name = attr.name.name;
       if (name === 'key') continue;
-      
+
       const value = attr.value;
-      
+
       if (!value) {
         props[name] = 'true';
       } else if (value.type === 'StringLiteral') {
@@ -764,38 +774,38 @@ class HastBuilder {
         props[name] = getNodeSource(this.source, value.expression);
       }
     }
-    
+
     return props;
   }
-  
+
   /**
    * Transform JSX children
    */
   private transformChildren(children: t.JSXElement['children']): GenChild[] {
     const result: GenChild[] = [];
-    
+
     for (const child of children) {
       const transformed = this.transformJsxNode(child as any);
-      
+
       if (transformed === null) continue;
-      
+
       if (Array.isArray(transformed)) {
         result.push(...transformed);
       } else {
         result.push(transformed);
       }
     }
-    
+
     return result;
   }
-  
+
   /**
    * Transform JSX fragment
    */
   private transformJsxFragment(node: t.JSXFragment): GenChild[] {
     return this.transformChildren(node.children);
   }
-  
+
   /**
    * Transform JSX text
    */
@@ -815,66 +825,63 @@ class HastBuilder {
 
     return text(normalized);
   }
-  
+
   /**
    * Transform JSX expression container
    */
   private transformJsxExpression(node: t.JSXExpressionContainer): GenChild | GenChild[] | null {
     const expr = node.expression;
-    
+
     if (expr.type === 'JSXEmptyExpression') {
       return null;
     }
-    
+
     // Analyze the expression
     const analyzed = analyzeExpression(expr, this.source);
-    
+
     // Track variables
     const vars = extractVariables(expr);
     for (const v of vars) {
       this.variables.add(v);
     }
-    
+
     switch (analyzed.type) {
       case 'variable':
       case 'member':
         return this.createVariableElement(analyzed.path || analyzed.raw);
-      
+
       case 'loop':
         return this.createLoopElement(expr as t.CallExpression, analyzed);
-      
+
       case 'conditional':
         return this.createConditionalElement(expr, analyzed);
-      
+
       case 'children':
         return this.createSlotElement('default');
-      
+
       case 'literal':
         return text(analyzed.raw);
-      
+
       case 'template':
         // Template literals need special handling
         return this.createTemplateElement(expr as t.TemplateLiteral);
-      
+
       default:
         this.warnings.push(`Unknown expression type: ${analyzed.raw}`);
         return null;
     }
   }
-  
+
   /**
    * Create variable element with annotation
    */
   private createVariableElement(path: string): GenElement {
-    return annotate(
-      element('span', {}, []),
-      {
-        variable: { name: path },
-        unwrap: true,
-      }
-    );
+    return annotate(element('span', {}, []), {
+      variable: { name: path },
+      unwrap: true,
+    });
   }
-  
+
   /**
    * Create loop element with annotation
    */
@@ -882,10 +889,10 @@ class HastBuilder {
     // Get the callback and transform its body
     const callback = expr.arguments[0];
     let loopContent: GenChild[] = [];
-    
+
     if (callback && (callback.type === 'ArrowFunctionExpression' || callback.type === 'FunctionExpression')) {
       const body = callback.body;
-      
+
       if (body.type === 'JSXElement') {
         const transformed = this.transformJsxElement(body);
         loopContent = [transformed];
@@ -902,68 +909,59 @@ class HastBuilder {
         }
       }
     }
-    
-    return annotate(
-      element('div', {}, loopContent),
-      {
-        loop: {
-          item: analyzed.loopItem!,
-          collection: analyzed.loopCollection!,
-          key: analyzed.loopKey,
-        },
-        unwrap: true,
-      }
-    );
+
+    return annotate(element('div', {}, loopContent), {
+      loop: {
+        item: analyzed.loopItem!,
+        collection: analyzed.loopCollection!,
+        key: analyzed.loopKey,
+      },
+      unwrap: true,
+    });
   }
-  
+
   /**
    * Create conditional element with annotation
    */
-  private createConditionalElement(expr: t.Expression, analyzed: ReturnType<typeof analyzeExpression>): GenElement | GenChild[] {
+  private createConditionalElement(
+    expr: t.Expression,
+    analyzed: ReturnType<typeof analyzeExpression>,
+  ): GenElement | GenChild[] {
     if (analyzed.isTernary && expr.type === 'ConditionalExpression') {
       // Ternary: condition ? consequent : alternate
       const consequent = expr.consequent;
       const alternate = expr.alternate;
-      
+
       const ifContent = this.transformJsxChild(consequent);
       const elseContent = this.transformJsxChild(alternate);
-      
+
       // Else element nested inside if — so the plugin can detect
       // branch markers within the if element's content
-      const elseElement = annotate(
-        element('div', {}, elseContent),
-        {
-          condition: { expression: '', isElse: true },
-          unwrap: true,
-        }
-      );
-      
+      const elseElement = annotate(element('div', {}, elseContent), {
+        condition: { expression: '', isElse: true },
+        unwrap: true,
+      });
+
       // Single if element containing both branches
-      return annotate(
-        element('div', {}, [...ifContent, elseElement]),
-        {
-          condition: { expression: analyzed.condition! },
-          unwrap: true,
-        }
-      );
+      return annotate(element('div', {}, [...ifContent, elseElement]), {
+        condition: { expression: analyzed.condition! },
+        unwrap: true,
+      });
     }
-    
+
     // Logical AND: condition && content
     if (expr.type === 'LogicalExpression' && expr.operator === '&&') {
       const content = this.transformJsxChild(expr.right);
-      
-      return annotate(
-        element('div', {}, content),
-        {
-          condition: { expression: analyzed.condition! },
-          unwrap: true,
-        }
-      );
+
+      return annotate(element('div', {}, content), {
+        condition: { expression: analyzed.condition! },
+        unwrap: true,
+      });
     }
-    
+
     return element('div', {}, []);
   }
-  
+
   /**
    * Extract JSX body from Loop's render-function children.
    * Handles: {(item) => (<Button>...</Button>)}
@@ -974,9 +972,9 @@ class HastBuilder {
       if (child.type !== 'JSXExpressionContainer') continue;
       const expr = child.expression;
       if (expr.type !== 'ArrowFunctionExpression' && expr.type !== 'FunctionExpression') continue;
-      
+
       const body = expr.body;
-      
+
       // Implicit return: (item) => (<JSX/>)
       if (body.type === 'JSXElement') {
         return [this.transformJsxElement(body)];
@@ -989,7 +987,7 @@ class HastBuilder {
         if (inner.type === 'JSXElement') return [this.transformJsxElement(inner)];
         if (inner.type === 'JSXFragment') return this.transformJsxFragment(inner);
       }
-      
+
       // Block body: (item) => { return (<JSX/>) }
       if (body.type === 'BlockStatement') {
         for (const stmt of body.body) {
@@ -1027,34 +1025,31 @@ class HastBuilder {
     }
     return [];
   }
-  
+
   /**
    * Create slot element with annotation
    */
   private createSlotElement(name: string): GenElement {
-    return annotate(
-      element('div', {}, []),
-      {
-        slot: { name },
-        unwrap: true,
-      }
-    );
+    return annotate(element('div', {}, []), {
+      slot: { name },
+      unwrap: true,
+    });
   }
-  
+
   /**
    * Create template literal element
    */
   private createTemplateElement(node: t.TemplateLiteral): GenChild[] {
     const result: GenChild[] = [];
-    
+
     for (let i = 0; i < node.quasis.length; i++) {
       const quasi = node.quasis[i];
-      
+
       // Add text part
       if (quasi.value.cooked) {
         result.push(text(quasi.value.cooked));
       }
-      
+
       // Add expression part
       if (i < node.expressions.length) {
         const expr = node.expressions[i];
@@ -1062,14 +1057,14 @@ class HastBuilder {
         result.push(this.createVariableElement(path));
       }
     }
-    
+
     return result;
   }
-  
+
   // ===========================================================================
   // Metadata
   // ===========================================================================
-  
+
   /**
    * Create component metadata
    */
@@ -1080,7 +1075,7 @@ class HastBuilder {
       exports: this.componentInfo ? [this.componentInfo.name] : [],
       dependencies: Array.from(this.dependencies),
       componentType: this.componentInfo?.type,
-      props: this.componentInfo?.props.map(p => ({
+      props: this.componentInfo?.props.map((p) => ({
         name: p.name,
         type: p.type,
         required: p.required,

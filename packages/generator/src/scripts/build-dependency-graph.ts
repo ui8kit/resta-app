@@ -32,7 +32,7 @@ function addNode(
   type: DependencyGraphNode['type'],
   label: string,
   file?: string,
-  entity?: string
+  entity?: string,
 ): string {
   const key = nodeKey(type, file ?? label);
   if (!nodes.has(key)) {
@@ -65,9 +65,7 @@ function toMermaid(graph: DependencyGraphDocument): string {
     const from = nodeById.get(edge.from);
     const to = nodeById.get(edge.to);
     if (!from || !to) continue;
-    lines.push(
-      `  ${toMermaidId(from.id)}["${from.label}"] --> ${toMermaidId(to.id)}["${to.label}"]`
-    );
+    lines.push(`  ${toMermaidId(from.id)}["${from.label}"] --> ${toMermaidId(to.id)}["${to.label}"]`);
   }
   return lines.join('\n');
 }
@@ -94,7 +92,7 @@ function parseNamedImportsBySpecifier(source: string, expectedSpecifier: string)
 function inferViewsForRoute(
   routeFilePath: string,
   entityViews: string[],
-  exportedViewNameToPath: Map<string, string>
+  exportedViewNameToPath: Map<string, string>,
 ): string[] {
   if (!existsSync(routeFilePath)) return entityViews;
   const source = readText(routeFilePath);
@@ -116,7 +114,7 @@ function inferViewsForRoute(
   const filtered = entityViews.filter((view) =>
     isDetailRouteFile
       ? basename(view).toLowerCase().includes('detail')
-      : !basename(view).toLowerCase().includes('detail')
+      : !basename(view).toLowerCase().includes('detail'),
   );
   if (filtered.length > 0) return filtered;
   return entityViews;
@@ -158,13 +156,7 @@ export function buildDependencyGraph(options: BuildDependencyGraphOptions): Buil
   const navigationNode = addNode(nodes, 'navigation', 'navigation.json', blueprint.navigation.source);
 
   for (const entity of blueprint.entities) {
-    const fixtureNode = addNode(
-      nodes,
-      'fixture',
-      `${entity.name}.json`,
-      entity.fixture,
-      entity.name
-    );
+    const fixtureNode = addNode(nodes, 'fixture', `${entity.name}.json`, entity.fixture, entity.name);
     const typeNode = addNode(nodes, 'type', basename(entity.types), entity.types, entity.name);
 
     addEdge(edges, {

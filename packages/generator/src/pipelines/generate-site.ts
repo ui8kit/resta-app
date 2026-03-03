@@ -15,7 +15,7 @@ export type GenerateStageName = 'render' | 'css' | 'html' | 'postcss';
 export async function runGenerateSitePipeline(
   config: GeneratorConfig,
   logger: ILogger,
-  stages?: readonly GenerateStageName[]
+  stages?: readonly GenerateStageName[],
 ): Promise<GeneratorResult> {
   const requestedStages = new Set<GenerateStageName>(stages ?? ['render', 'css', 'html', 'postcss']);
   const orchestrator = new Orchestrator({ logger });
