@@ -37,7 +37,7 @@ const fixturesSchema = z.object({
       z.object({
         file: z.string().min(1),
         schema: z.string().min(1),
-      })
+      }),
     )
     .min(1),
 });
@@ -196,9 +196,7 @@ export function loadMaintainConfig(options: LoadMaintainConfigOptions = {}): IMa
     parsed = maintainConfigSchema.parse(parsedJson);
   } catch (error) {
     if (error instanceof ZodError) {
-      const details = error.issues
-        .map((issue) => `${issue.path.join('.') || '<root>'}: ${issue.message}`)
-        .join('; ');
+      const details = error.issues.map((issue) => `${issue.path.join('.') || '<root>'}: ${issue.message}`).join('; ');
       throw new Error(`Invalid maintain config: ${details}`);
     }
     throw error;

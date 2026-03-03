@@ -15,7 +15,7 @@ export interface UncssStepConfig {
 
 export async function runUncssPostprocess(
   config: UncssStepConfig | undefined,
-  logger: ILogger
+  logger: ILogger,
 ): Promise<string | null> {
   if (!config?.enabled) return null;
   if (!config.htmlFiles?.length || !config.cssFile) {
@@ -40,7 +40,7 @@ export async function runUncssPostprocess(
         (error: Error | null, css: string) => {
           if (error) reject(error);
           else resolve(css);
-        }
+        },
       );
     });
 
@@ -55,4 +55,3 @@ export async function runUncssPostprocess(
     return null;
   }
 }
-

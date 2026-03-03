@@ -1,7 +1,7 @@
-import type { 
-  IPlugin, 
-  IPluginContext, 
-  IPipelineStage, 
+import type {
+  IPlugin,
+  IPluginContext,
+  IPipelineStage,
   IService,
   ITypedEventBus,
   GeneratorConfig,
@@ -33,7 +33,7 @@ export interface PluginDefinition extends IPlugin, PluginHooks {}
 
 /**
  * PluginManager - Manages plugin registration and lifecycle.
- * 
+ *
  * Responsibilities:
  * - Register plugins
  * - Execute lifecycle hooks
@@ -42,7 +42,7 @@ export interface PluginDefinition extends IPlugin, PluginHooks {}
 export class PluginManager {
   private plugins: Map<string, PluginDefinition> = new Map();
   private context: IPluginContext | null = null;
-  
+
   /**
    * Register a plugin
    */
@@ -50,44 +50,44 @@ export class PluginManager {
     if (this.plugins.has(plugin.name)) {
       throw new Error(`Plugin "${plugin.name}" is already registered`);
     }
-    
+
     this.plugins.set(plugin.name, plugin);
   }
-  
+
   /**
    * Unregister a plugin
    */
   unregister(name: string): boolean {
     return this.plugins.delete(name);
   }
-  
+
   /**
    * Check if a plugin is registered
    */
   has(name: string): boolean {
     return this.plugins.has(name);
   }
-  
+
   /**
    * Get all registered plugins
    */
   getAll(): PluginDefinition[] {
     return Array.from(this.plugins.values());
   }
-  
+
   /**
    * Initialize all plugins with context
    */
   async initialize(context: IPluginContext): Promise<void> {
     this.context = context;
-    
+
     for (const plugin of this.plugins.values()) {
       if (plugin.setup) {
         await plugin.setup(context);
       }
     }
   }
-  
+
   /**
    * Execute beforeGenerate hooks
    */
@@ -95,14 +95,14 @@ export class PluginManager {
     if (!this.context) {
       throw new Error('PluginManager not initialized');
     }
-    
+
     for (const plugin of this.plugins.values()) {
       if (plugin.beforeGenerate) {
         await plugin.beforeGenerate(this.context);
       }
     }
   }
-  
+
   /**
    * Execute afterGenerate hooks
    */
@@ -110,20 +110,20 @@ export class PluginManager {
     if (!this.context) {
       throw new Error('PluginManager not initialized');
     }
-    
+
     for (const plugin of this.plugins.values()) {
       if (plugin.afterGenerate) {
         await plugin.afterGenerate(this.context);
       }
     }
   }
-  
+
   /**
    * Execute onError hooks
    */
   async onError(error: Error): Promise<void> {
     if (!this.context) return;
-    
+
     for (const plugin of this.plugins.values()) {
       if (plugin.onError) {
         try {
@@ -135,7 +135,7 @@ export class PluginManager {
       }
     }
   }
-  
+
   /**
    * Dispose all plugins
    */
@@ -145,7 +145,7 @@ export class PluginManager {
         await plugin.teardown();
       }
     }
-    
+
     this.plugins.clear();
     this.context = null;
   }
@@ -162,27 +162,27 @@ export function createPlugin(options: {
   hooks?: PluginHooks;
 }): PluginDefinition {
   const { name, version = '1.0.0', stages = [], services = [], hooks = {} } = options;
-  
+
   return {
     name,
     version,
-    
+
     setup: async (context: IPluginContext) => {
       // Register stages
       for (const stage of stages) {
         context.addStage(stage);
       }
-      
+
       // Register services
       for (const service of services) {
         context.registerService(service);
       }
     },
-    
+
     teardown: async () => {
       // Cleanup if needed
     },
-    
+
     ...hooks,
   };
 }

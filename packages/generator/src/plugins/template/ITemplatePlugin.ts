@@ -6,7 +6,17 @@
  */
 
 import type { z } from 'zod';
-import type { GenRoot, GenElement, TemplateOutput, GenLoop, GenCondition, GenVariable, GenSlot, GenInclude, GenBlock } from '../../hast';
+import type {
+  GenRoot,
+  GenElement,
+  TemplateOutput,
+  GenLoop,
+  GenCondition,
+  GenVariable,
+  GenSlot,
+  GenInclude,
+  GenBlock,
+} from '../../hast';
 import type { ILogger } from '../../core/interfaces';
 
 // =============================================================================

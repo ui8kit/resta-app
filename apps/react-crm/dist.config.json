@@ -5,9 +5,7 @@
   },
   "render": {
     "appEntry": "src/App.tsx",
-    "skipRoutes": [
-      "/admin/dashboard"
-    ]
+    "skipRoutes": ["/admin/dashboard"]
   },
   "css": {
     "outputDir": "dist/css",
@@ -42,9 +40,7 @@
   },
   "postcss": {
     "enabled": true,
-    "entryImports": [
-      "src/assets/css/shadcn.css"
-    ],
+    "entryImports": ["src/assets/css/shadcn.css"],
     "sourceDir": "dist/html",
     "outputDir": "dist/html/css",
     "uncss": {
@@ -56,12 +52,6 @@
   },
   "fixtures": {
     "dir": "fixtures",
-    "collections": [
-      "admin",
-      "dashboard",
-      "kanban",
-      "reports",
-      "tasks"
-    ]
+    "collections": ["admin", "dashboard", "kanban", "reports", "tasks"]
   }
 }

@@ -52,13 +52,21 @@ export function CrmLayout(props: CrmLayoutProps) {
 
   return (
     <Block flex="col" min-h="screen" data-class="crm-layout">
-      <Header title={"CRM"} subtitle={"Customer Relationship Manager"} navItems={[]} dataClass={"crm-layout-header"} beforeThemeToggle={mobileMenu} />
+      <Header
+        title={'CRM'}
+        subtitle={'Customer Relationship Manager'}
+        navItems={[]}
+        dataClass={'crm-layout-header'}
+        beforeThemeToggle={mobileMenu}
+      />
       <Block flex="" data-class="crm-layout-body" className="flex-1">
-        <Block component="aside" data-class="crm-sidebar" className="hidden md:flex w-64 shrink-0 border-r border-border">
+        <Block
+          component="aside"
+          data-class="crm-sidebar"
+          className="hidden md:flex w-64 shrink-0 border-r border-border"
+        >
           <Box w="full" h="full" data-class="crm-sidebar-content" className="overflow-auto">
-            <Sidebar>
-              {resolvedSidebar}
-            </Sidebar>
+            <Sidebar>{resolvedSidebar}</Sidebar>
           </Box>
         </Block>
         <Block component="main" flex="col" data-class="crm-main" className="flex-1 overflow-auto">

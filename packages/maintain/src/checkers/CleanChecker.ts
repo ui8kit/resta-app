@@ -22,14 +22,9 @@ export class CleanChecker extends BaseChecker<CleanCheckerConfig> {
       }
       if (absolutePath === '/' || absolutePath === '') {
         issues.push(
-          this.createIssue(
-            'error',
-            'CLEAN_PATH_INVALID',
-            `Refusing to remove unsafe path: ${pathEntry}`,
-            {
-              hint: 'Use relative project paths and avoid root-level targets.',
-            }
-          )
+          this.createIssue('error', 'CLEAN_PATH_INVALID', `Refusing to remove unsafe path: ${pathEntry}`, {
+            hint: 'Use relative project paths and avoid root-level targets.',
+          }),
         );
         continue;
       }
@@ -45,7 +40,7 @@ export class CleanChecker extends BaseChecker<CleanCheckerConfig> {
           this.createIssue('error', 'CLEAN_REMOVE_FAILED', message, {
             file: this.relative(context.root, absolutePath),
             hint: 'Check file permissions and path accessibility.',
-          })
+          }),
         );
       }
     }
@@ -64,7 +59,7 @@ export class CleanChecker extends BaseChecker<CleanCheckerConfig> {
             this.createIssue('warn', 'CLEAN_TSBUILDINFO_FAILED', message, {
               file: this.relative(context.root, tsBuildInfoFile),
               hint: 'You can remove this file manually if cleanup keeps failing.',
-            })
+            }),
           );
         }
       }

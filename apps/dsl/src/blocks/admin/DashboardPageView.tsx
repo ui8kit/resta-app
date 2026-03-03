@@ -23,13 +23,10 @@ export interface AdminDashboardPageViewProps {
 }
 
 export function AdminDashboardPageView({ onExport, onImport }: AdminDashboardPageViewProps) {
-  const {
-    fileInputRef,
-    handleLogout,
-    handleExport,
-    handleImportClick,
-    handleFileChange,
-  } = useAdminActions(onExport, onImport);
+  const { fileInputRef, handleLogout, handleExport, handleImportClick, handleFileChange } = useAdminActions(
+    onExport,
+    onImport,
+  );
 
   const sidebar = (
     <DashSidebar label={context.adminSidebarLabel} links={context.getAdminSidebarLinks('/admin/dashboard')} />
@@ -83,7 +80,13 @@ export function AdminDashboardPageView({ onExport, onImport }: AdminDashboardPag
                   onChange={handleFileChange}
                   style={{ display: 'none' }}
                 />
-                <Button variant="ghost" onClick={handleImportClick} rounded="sm" size="sm" data-class="admin-import-button">
+                <Button
+                  variant="ghost"
+                  onClick={handleImportClick}
+                  rounded="sm"
+                  size="sm"
+                  data-class="admin-import-button"
+                >
                   Import JSON
                 </Button>
               </CardContent>

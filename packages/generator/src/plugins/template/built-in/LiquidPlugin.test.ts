@@ -4,13 +4,7 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import { LiquidPlugin } from './LiquidPlugin';
-import {
-  root,
-  element,
-  text,
-  annotate,
-  type GenRoot,
-} from '../../../hast';
+import { root, element, text, annotate, type GenRoot } from '../../../hast';
 import type { TemplatePluginContext } from '../ITemplatePlugin';
 
 // =============================================================================
@@ -74,10 +68,7 @@ describe('LiquidPlugin', () => {
 
   describe('renderLoop', () => {
     it('renders simple for loop', () => {
-      const result = plugin.renderLoop(
-        { item: 'product', collection: 'products' },
-        '<div>{{ product.name }}</div>'
-      );
+      const result = plugin.renderLoop({ item: 'product', collection: 'products' }, '<div>{{ product.name }}</div>');
 
       expect(result).toContain('{% for product in products %}');
       expect(result).toContain('{% endfor %}');
@@ -85,70 +76,47 @@ describe('LiquidPlugin', () => {
     });
 
     it('renders loop with nested content', () => {
-      const result = plugin.renderLoop(
-        { item: 'item', collection: 'items' },
-        '  <li>{{ item.title }}</li>'
-      );
+      const result = plugin.renderLoop({ item: 'item', collection: 'items' }, '  <li>{{ item.title }}</li>');
 
-      expect(result).toBe(
-        '{% for item in items %}\n  <li>{{ item.title }}</li>\n{% endfor %}'
-      );
+      expect(result).toBe('{% for item in items %}\n  <li>{{ item.title }}</li>\n{% endfor %}');
     });
   });
 
   describe('renderCondition', () => {
     it('renders simple if condition', () => {
-      const result = plugin.renderCondition(
-        { expression: 'isActive' },
-        '<span>Active</span>'
-      );
+      const result = plugin.renderCondition({ expression: 'isActive' }, '<span>Active</span>');
 
       expect(result).toContain('{% if isActive %}');
       expect(result).toContain('{% endif %}');
     });
 
     it('converts && to and', () => {
-      const result = plugin.renderCondition(
-        { expression: 'isAdmin && isLoggedIn' },
-        'Content'
-      );
+      const result = plugin.renderCondition({ expression: 'isAdmin && isLoggedIn' }, 'Content');
 
       expect(result).toContain('{% if isAdmin and isLoggedIn %}');
     });
 
     it('converts || to or', () => {
-      const result = plugin.renderCondition(
-        { expression: 'isError || isEmpty' },
-        'Content'
-      );
+      const result = plugin.renderCondition({ expression: 'isError || isEmpty' }, 'Content');
 
       expect(result).toContain('{% if isError or isEmpty %}');
     });
 
     it('converts ! to not', () => {
-      const result = plugin.renderCondition(
-        { expression: '!isHidden' },
-        'Content'
-      );
+      const result = plugin.renderCondition({ expression: '!isHidden' }, 'Content');
 
       expect(result).toContain('{% if not isHidden %}');
     });
 
     it('renders else branch', () => {
-      const result = plugin.renderCondition(
-        { expression: '', isElse: true },
-        '<span>Fallback</span>'
-      );
+      const result = plugin.renderCondition({ expression: '', isElse: true }, '<span>Fallback</span>');
 
       expect(result).toContain('{% else %}');
       expect(result).toContain('<span>Fallback</span>');
     });
 
     it('renders elsif branch', () => {
-      const result = plugin.renderCondition(
-        { expression: 'isPending', isElseIf: true },
-        '<span>Pending</span>'
-      );
+      const result = plugin.renderCondition({ expression: 'isPending', isElseIf: true }, '<span>Pending</span>');
 
       expect(result).toContain('{% elsif isPending %}');
     });
@@ -193,10 +161,7 @@ describe('LiquidPlugin', () => {
 
   describe('renderSlot', () => {
     it('renders slot with default content', () => {
-      const result = plugin.renderSlot(
-        { name: 'header' },
-        '<header>Default Header</header>'
-      );
+      const result = plugin.renderSlot({ name: 'header' }, '<header>Default Header</header>');
 
       expect(result).toContain('header_content');
       expect(result).toContain('{% if');
@@ -283,11 +248,7 @@ describe('LiquidPlugin', () => {
 
   describe('transform', () => {
     it('transforms simple tree', async () => {
-      const tree: GenRoot = root([
-        element('div', { className: ['container'] }, [
-          element('h1', {}, [text('Hello')]),
-        ]),
-      ], {
+      const tree: GenRoot = root([element('div', { className: ['container'] }, [element('h1', {}, [text('Hello')])])], {
         sourceFile: 'test.tsx',
         componentName: 'TestComponent',
         exports: ['TestComponent'],
@@ -302,19 +263,19 @@ describe('LiquidPlugin', () => {
     });
 
     it('transforms tree with loop annotation', async () => {
-      const tree: GenRoot = root([
-        annotate(
-          element('ul', {}, [
-            element('li', {}, [text('Item')]),
-          ]),
-          { loop: { item: 'item', collection: 'items' } }
-        ),
-      ], {
-        sourceFile: 'list.tsx',
-        componentName: 'List',
-        exports: ['List'],
-        dependencies: [],
-      });
+      const tree: GenRoot = root(
+        [
+          annotate(element('ul', {}, [element('li', {}, [text('Item')])]), {
+            loop: { item: 'item', collection: 'items' },
+          }),
+        ],
+        {
+          sourceFile: 'list.tsx',
+          componentName: 'List',
+          exports: ['List'],
+          dependencies: [],
+        },
+      );
 
       const output = await plugin.transform(tree);
 
@@ -324,17 +285,15 @@ describe('LiquidPlugin', () => {
     });
 
     it('transforms tree with variable annotation', async () => {
-      const tree: GenRoot = root([
-        annotate(
-          element('span', {}, []),
-          { variable: { name: 'userName', default: 'Guest' } }
-        ),
-      ], {
-        sourceFile: 'user.tsx',
-        componentName: 'User',
-        exports: ['User'],
-        dependencies: [],
-      });
+      const tree: GenRoot = root(
+        [annotate(element('span', {}, []), { variable: { name: 'userName', default: 'Guest' } })],
+        {
+          sourceFile: 'user.tsx',
+          componentName: 'User',
+          exports: ['User'],
+          dependencies: [],
+        },
+      );
 
       const output = await plugin.transform(tree);
 
@@ -343,12 +302,7 @@ describe('LiquidPlugin', () => {
     });
 
     it('collects dependencies from includes', async () => {
-      const tree: GenRoot = root([
-        annotate(
-          element('div', {}, []),
-          { include: { partial: 'partials/header' } }
-        ),
-      ], {
+      const tree: GenRoot = root([annotate(element('div', {}, []), { include: { partial: 'partials/header' } })], {
         sourceFile: 'layout.tsx',
         componentName: 'Layout',
         exports: ['Layout'],

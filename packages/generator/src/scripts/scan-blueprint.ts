@@ -131,9 +131,7 @@ function parseContext(contextPath: string): ContextScanResult {
 
   const source = readText(contextPath);
   const dynamicRoutePatternsMatch = source.match(/dynamicRoutePatterns:\s*\[([\s\S]*?)\]/);
-  const dynamicRoutePatterns = dynamicRoutePatternsMatch
-    ? extractQuotedStrings(dynamicRoutePatternsMatch[1]!)
-    : [];
+  const dynamicRoutePatterns = dynamicRoutePatternsMatch ? extractQuotedStrings(dynamicRoutePatternsMatch[1]!) : [];
 
   const fixtureKeys = new Set<string>();
   const fixturesBlockMatch = source.match(/fixtures:\s*\{([\s\S]*?)\}\s*,\s*\}\);/);
@@ -319,7 +317,7 @@ function buildEntity(
   fixturePathByKey: Map<string, string>,
   fixtureTypeByKey: Map<string, string>,
   entityViews: Map<string, string[]>,
-  routeScan: AppRouteScanResult
+  routeScan: AppRouteScanResult,
 ): BlueprintEntity | undefined {
   const fixturePath = fixturePathByKey.get(entityName);
   if (!fixturePath || !existsSync(fixturePath)) return undefined;
@@ -426,14 +424,7 @@ export function scanBlueprint(options: ScanBlueprintOptions): ScanBlueprintResul
   const entities: BlueprintEntity[] = Array.from(candidateKeys)
     .sort((a, b) => a.localeCompare(b))
     .map((key) =>
-      buildEntity(
-        cwd,
-        key,
-        fixtureAdapter.fixturePathByKey,
-        canonicalTypes.fixtureTypeByKey,
-        entityViews,
-        routeScan
-      )
+      buildEntity(cwd, key, fixtureAdapter.fixturePathByKey, canonicalTypes.fixtureTypeByKey, entityViews, routeScan),
     )
     .filter((entity): entity is BlueprintEntity => Boolean(entity));
 
@@ -466,9 +457,7 @@ export function scanBlueprint(options: ScanBlueprintOptions): ScanBlueprintResul
     },
     navigation: {
       source: extractNavigationSource(cwd, fixturesDir),
-      type: existsSync(resolve(cwd, 'src/types/navigation.ts'))
-        ? 'src/types/navigation.ts'
-        : 'src/types/navigation.ts',
+      type: existsSync(resolve(cwd, 'src/types/navigation.ts')) ? 'src/types/navigation.ts' : 'src/types/navigation.ts',
     },
     context: {
       file: relPath(cwd, contextPath),

@@ -19,23 +19,23 @@ import type { TransformOptions } from './types';
 export interface DslHandlerContext {
   /** Source code being transformed */
   readonly source: string;
-  
+
   /** Accumulate warnings during transformation */
   warnings: string[];
-  
+
   /** Track variables found in this handler */
   variables: Set<string>;
-  
+
   /** Track dependencies found in this handler */
   dependencies: Set<string>;
-  
+
   /** Transform options from user */
   readonly options: TransformOptions;
 }
 
 /**
  * Handles transformation of a single DSL component type.
- * 
+ *
  * Example: LoopHandler handles <Loop each="items" as="item">
  */
 export interface IDslComponentHandler {
@@ -44,17 +44,13 @@ export interface IDslComponentHandler {
 
   /**
    * Transform a DSL component element to HAST.
-   * 
+   *
    * @param node The JSX element being transformed
    * @param children Pre-transformed child elements
    * @param context Handler context with source, warnings, variables, etc.
    * @returns GenElement or null if handler can't process this node
    */
-  handle(
-    node: JSXElement,
-    children: GenChild[],
-    context: DslHandlerContext
-  ): GenElement | null;
+  handle(node: JSXElement, children: GenChild[], context: DslHandlerContext): GenElement | null;
 }
 
 // =============================================================================

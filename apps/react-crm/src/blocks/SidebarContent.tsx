@@ -17,12 +17,32 @@ export function SidebarContent(props: SidebarContentProps) {
   return (
     <Stack gap="4" data-class={dataClass ?? 'sidebar-widgets'}>
       <Block component="nav" data-class="sidebar-widget">
-        {title ? (<><Text component="h3" fontSize="sm" fontWeight="semibold" data-class="sidebar-widget-title">{title}</Text></>) : null}
-        {links ? (<><Stack gap="1" data-class="sidebar-links">{links.map((link, index) => (
-        <Fragment key={link.id ?? index}>
-        <DomainNavButton href={link.href} variant={"link"} size={"sm"} justify={"start"} data-class={"sidebar-link"}>{link.label}</DomainNavButton>
-        </Fragment>
-        ))}</Stack></>) : null}
+        {title ? (
+          <>
+            <Text component="h3" fontSize="sm" fontWeight="semibold" data-class="sidebar-widget-title">
+              {title}
+            </Text>
+          </>
+        ) : null}
+        {links ? (
+          <>
+            <Stack gap="1" data-class="sidebar-links">
+              {links.map((link, index) => (
+                <Fragment key={link.id ?? index}>
+                  <DomainNavButton
+                    href={link.href}
+                    variant={'link'}
+                    size={'sm'}
+                    justify={'start'}
+                    data-class={'sidebar-link'}
+                  >
+                    {link.label}
+                  </DomainNavButton>
+                </Fragment>
+              ))}
+            </Stack>
+          </>
+        ) : null}
       </Block>
     </Stack>
   );

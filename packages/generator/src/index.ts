@@ -46,7 +46,12 @@ export {
   Logger,
 } from './core';
 
-export { getCoreComponentNames, getFallbackCoreComponents, isKnownCoreComponent, findUnknownComponents } from './core/scanner/core-component-scanner';
+export {
+  getCoreComponentNames,
+  getFallbackCoreComponents,
+  isKnownCoreComponent,
+  findUnknownComponents,
+} from './core/scanner/core-component-scanner';
 
 export type {
   IOrchestrator,

@@ -94,10 +94,7 @@ function loadDistConfig(configPath: string): DistConfig {
   return JSON.parse(raw) as DistConfig;
 }
 
-function mergeFixtureRoutes(
-  config: DistConfig,
-  cwd: string
-): Record<string, RouteConfig> {
+function mergeFixtureRoutes(config: DistConfig, cwd: string): Record<string, RouteConfig> {
   const routes: Record<string, RouteConfig> = { ...config.html.routes };
 
   if (config.fixtures?.dir) {
@@ -125,7 +122,7 @@ function mergeFixtureRoutes(
 function buildGenerateConfig(
   distConfig: DistConfig,
   allRoutes: Record<string, RouteConfig>,
-  cwd: string
+  cwd: string,
 ): GenerateConfig {
   const config: GenerateConfig = {
     app: distConfig.app,
@@ -150,21 +147,15 @@ function buildGenerateConfig(
 
   if (distConfig.mappings) {
     config.mappings = {
-      ui8kitMap: distConfig.mappings.ui8kitMap
-        ? resolve(cwd, distConfig.mappings.ui8kitMap)
-        : undefined,
-      shadcnMap: distConfig.mappings.shadcnMap
-        ? resolve(cwd, distConfig.mappings.shadcnMap)
-        : undefined,
+      ui8kitMap: distConfig.mappings.ui8kitMap ? resolve(cwd, distConfig.mappings.ui8kitMap) : undefined,
+      shadcnMap: distConfig.mappings.shadcnMap ? resolve(cwd, distConfig.mappings.shadcnMap) : undefined,
     };
   }
 
   if (distConfig.postcss) {
     config.postcss = {
       ...distConfig.postcss,
-      outputDir: distConfig.postcss.outputDir
-        ? resolve(cwd, distConfig.postcss.outputDir)
-        : undefined,
+      outputDir: distConfig.postcss.outputDir ? resolve(cwd, distConfig.postcss.outputDir) : undefined,
     };
   }
 
@@ -185,10 +176,7 @@ function routeToHtmlFileName(routePath: string): string {
 
 const program = new Command();
 
-program
-  .name('ui8kit-generate')
-  .description('Static site generator for UI8Kit')
-  .version('0.2.0');
+program.name('ui8kit-generate').description('Static site generator for UI8Kit').version('0.2.0');
 
 program
   .command('react')
@@ -320,9 +308,7 @@ program
     }
   });
 
-const scaffoldCommand = program
-  .command('scaffold')
-  .description('Scaffold helpers for DSL applications');
+const scaffoldCommand = program.command('scaffold').description('Scaffold helpers for DSL applications');
 
 scaffoldCommand
   .command('entity')
@@ -331,7 +317,7 @@ scaffoldCommand
   .requiredOption('--singular <name>', 'Singular entity name, e.g. Contact')
   .requiredOption(
     '--fields <fields>',
-    'Comma-separated field definitions, e.g. "name:string,email:string,status:active|archived"'
+    'Comma-separated field definitions, e.g. "name:string,email:string,status:active|archived"',
   )
   .option('--routes <routes>', 'List and detail routes, e.g. "/contacts,/contacts/:slug"')
   .option('--layout <layout>', 'Layout component to use (default: MainLayout)', 'MainLayout')
@@ -417,7 +403,7 @@ async function runReactBuild(opts: { cwd: string; outDir?: string }): Promise<vo
 
 async function runPipeline(
   opts: { cwd: string; config: string; fixtures?: string },
-  mode: 'static' | 'html' | 'styles' | 'render'
+  mode: 'static' | 'html' | 'styles' | 'render',
 ): Promise<void> {
   const cwd = resolve(opts.cwd);
   const configPath = resolve(cwd, opts.config);
@@ -453,8 +439,8 @@ async function runPipeline(
       if (missingInput) {
         throw new Error(
           `No prepared HTML input found in "${htmlInputDir}". ` +
-          'HTML/static commands without render stage do not render React components. ' +
-          'Run SPA flow (`bun run generate` + `bun run finalize`) or provide ready HTML fragments first.'
+            'HTML/static commands without render stage do not render React components. ' +
+            'Run SPA flow (`bun run generate` + `bun run finalize`) or provide ready HTML fragments first.',
         );
       }
     }
@@ -510,9 +496,7 @@ async function runUiKitMap(opts: UiKitMapCliOptions): Promise<void> {
     const shadcnMapPath = opts.shadcnMap
       ? resolve(cwd, opts.shadcnMap)
       : resolve(generatorSrcRoot, 'lib/shadcn.map.json');
-    const gridMapPath = opts.gridMap
-      ? resolve(cwd, opts.gridMap)
-      : resolve(generatorSrcRoot, 'lib/grid.map.json');
+    const gridMapPath = opts.gridMap ? resolve(cwd, opts.gridMap) : resolve(generatorSrcRoot, 'lib/grid.map.json');
 
     const requiredInputs = [
       { label: 'props map', path: propsMapPath },

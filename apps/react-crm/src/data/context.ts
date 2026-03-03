@@ -1,9 +1,5 @@
 import { createContext, EMPTY_ARRAY } from '@ui8kit/sdk/source/data';
-import type {
-  DashboardSidebarLink,
-  NavItem,
-  SidebarLink,
-} from '@ui8kit/sdk/source/data';
+import type { DashboardSidebarLink, NavItem, SidebarLink } from '@ui8kit/sdk/source/data';
 import { loadFixturesContextInput } from './adapters/fixtures.adapter';
 import type { CanonicalContextInput } from './adapters/types';
 

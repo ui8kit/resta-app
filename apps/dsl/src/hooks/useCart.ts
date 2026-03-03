@@ -16,9 +16,7 @@ export function useCart() {
     setCart((prev) => {
       const existing = prev.find((entry) => entry.itemId === item.id);
       if (existing) {
-        return prev.map((entry) =>
-          entry.itemId === item.id ? { ...entry, quantity: entry.quantity + 1 } : entry
-        );
+        return prev.map((entry) => (entry.itemId === item.id ? { ...entry, quantity: entry.quantity + 1 } : entry));
       }
       return [...prev, { itemId: item.id, title: item.title, price: item.price, quantity: 1 }];
     });
@@ -31,10 +29,8 @@ export function useCart() {
   function updateCartQuantity(itemId: string, delta: number) {
     setCart((prev) =>
       prev
-        .map((entry) =>
-          entry.itemId === itemId ? { ...entry, quantity: entry.quantity + delta } : entry
-        )
-        .filter((entry) => entry.quantity > 0)
+        .map((entry) => (entry.itemId === itemId ? { ...entry, quantity: entry.quantity + delta } : entry))
+        .filter((entry) => entry.quantity > 0),
     );
   }
 

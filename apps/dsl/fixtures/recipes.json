@@ -24,11 +24,25 @@
         { "id": "salmon-6", "amount": 0, "unit": "", "name": "Salt and black pepper" }
       ],
       "steps": [
-        { "id": "salmon-step-1", "step": 1, "title": "Season", "body": "Pat salmon dry and season both sides with salt and pepper." },
-        { "id": "salmon-step-2", "step": 2, "body": "Preheat grill or cast-iron skillet over medium-high heat and lightly oil the surface." },
+        {
+          "id": "salmon-step-1",
+          "step": 1,
+          "title": "Season",
+          "body": "Pat salmon dry and season both sides with salt and pepper."
+        },
+        {
+          "id": "salmon-step-2",
+          "step": 2,
+          "body": "Preheat grill or cast-iron skillet over medium-high heat and lightly oil the surface."
+        },
         { "id": "salmon-step-3", "step": 3, "body": "Cook salmon 4-5 minutes on first side without moving." },
         { "id": "salmon-step-4", "step": 4, "body": "Flip and cook 3-4 more minutes until center is just opaque." },
-        { "id": "salmon-step-5", "step": 5, "title": "Herb butter", "body": "Mix butter with dill, parsley, lemon zest and a pinch of salt, then serve over hot salmon." }
+        {
+          "id": "salmon-step-5",
+          "step": 5,
+          "title": "Herb butter",
+          "body": "Mix butter with dill, parsley, lemon zest and a pinch of salt, then serve over hot salmon."
+        }
       ],
       "tags": ["charcoal", "grill", "salmon", "gluten-free"],
       "nutrition": { "calories": 420, "protein": 38, "fat": 28, "carbs": 2 }
@@ -150,7 +164,11 @@
         { "id": "rice-step-2", "step": 2, "body": "Bring water to a boil, add rice and a pinch of salt." },
         { "id": "rice-step-3", "step": 3, "body": "Cover and simmer on low heat for 15 minutes." },
         { "id": "rice-step-4", "step": 4, "body": "Turn off heat and rest for 5 minutes." },
-        { "id": "rice-step-5", "step": 5, "body": "Split into portions and finish plain, with herbs, or with sauteed mushrooms." }
+        {
+          "id": "rice-step-5",
+          "step": 5,
+          "body": "Split into portions and finish plain, with herbs, or with sauteed mushrooms."
+        }
       ],
       "tags": ["side", "rice", "three-ways", "budget-friendly"],
       "nutrition": { "calories": 230, "protein": 4, "fat": 4, "carbs": 44 }

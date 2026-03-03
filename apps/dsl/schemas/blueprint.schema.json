@@ -47,17 +47,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": [
-          "name",
-          "singular",
-          "fixture",
-          "itemsKey",
-          "slugField",
-          "types",
-          "routes",
-          "views",
-          "routeFiles"
-        ],
+        "required": ["name", "singular", "fixture", "itemsKey", "slugField", "types", "routes", "views", "routeFiles"],
         "properties": {
           "name": { "type": "string", "minLength": 1 },
           "singular": { "type": "string", "minLength": 1 },

@@ -29,14 +29,8 @@ export interface IFileSystem {
   /**
    * List directory entries
    */
-  readdir(
-    path: string,
-    options?: { withFileTypes?: false }
-  ): Promise<string[]>;
-  readdir(
-    path: string,
-    options?: { withFileTypes?: true }
-  ): Promise<Dirent[]>;
+  readdir(path: string, options?: { withFileTypes?: false }): Promise<string[]>;
+  readdir(path: string, options?: { withFileTypes?: true }): Promise<Dirent[]>;
 
   /**
    * Get file/directory stats

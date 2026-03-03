@@ -39,28 +39,25 @@ import { collectVariables, collectDependencies } from '../hast';
  * // GenRoot with loop annotation
  * ```
  */
-export function transformJsx(
-  source: string,
-  options: TransformOptions = {}
-): TransformResult {
+export function transformJsx(source: string, options: TransformOptions = {}): TransformResult {
   const warnings: string[] = [];
   const errors: string[] = [];
-  
+
   try {
     // Parse source
     const { ast, imports, hasJsx } = parseJsxFile(source, options.sourceFile);
-    
+
     if (!hasJsx) {
       warnings.push('No JSX found in source');
     }
-    
+
     // Build HAST
     const tree = buildHast(ast, source, options);
-    
+
     // Collect variables and dependencies
     const variables = collectVariables(tree);
     const dependencies = collectDependencies(tree);
-    
+
     // Add imports as dependencies
     for (const imp of imports) {
       if (!imp.isTypeOnly && imp.source.startsWith('.')) {
@@ -77,17 +74,15 @@ export function transformJsx(
 
     // Attach imports to tree.meta for React plugin (full-file emission)
     if (imports.length > 0 && tree.meta) {
-      tree.meta.imports = imports.map(
-        (imp): import('../hast').GenSourceImport => ({
-          source: imp.source,
-          defaultImport: imp.defaultImport,
-          namedImports: imp.namedImports,
-          namespaceImport: imp.namespaceImport,
-          isTypeOnly: imp.isTypeOnly,
-        })
-      );
+      tree.meta.imports = imports.map((imp): import('../hast').GenSourceImport => ({
+        source: imp.source,
+        defaultImport: imp.defaultImport,
+        namedImports: imp.namedImports,
+        namespaceImport: imp.namespaceImport,
+        isTypeOnly: imp.isTypeOnly,
+      }));
     }
-    
+
     return {
       tree,
       variables: [...new Set(variables)],
@@ -98,7 +93,7 @@ export function transformJsx(
     };
   } catch (error) {
     errors.push(error instanceof Error ? error.message : String(error));
-    
+
     return {
       tree: { type: 'root', children: [] },
       variables: [],
@@ -117,16 +112,13 @@ export function transformJsx(
  * @param options - Transform options
  * @returns Transform result with HAST tree
  */
-export async function transformJsxFile(
-  filePath: string,
-  options: TransformOptions = {}
-): Promise<TransformResult> {
+export async function transformJsxFile(filePath: string, options: TransformOptions = {}): Promise<TransformResult> {
   const source = await readFile(filePath, 'utf-8');
-  
+
   // Auto-detect component name from filename
   const ext = extname(filePath);
   const componentName = options.componentName || pascalCase(basename(filePath, ext));
-  
+
   return transformJsx(source, {
     ...options,
     sourceFile: filePath,
@@ -143,17 +135,17 @@ export async function transformJsxFile(
  */
 export async function transformJsxFiles(
   filePaths: string[],
-  options: TransformOptions = {}
+  options: TransformOptions = {},
 ): Promise<Map<string, TransformResult>> {
   const results = new Map<string, TransformResult>();
-  
+
   await Promise.all(
     filePaths.map(async (filePath) => {
       const result = await transformJsxFile(filePath, options);
       results.set(filePath, result);
-    })
+    }),
   );
-  
+
   return results;
 }
 
@@ -165,9 +157,7 @@ export async function transformJsxFiles(
  * Convert string to PascalCase
  */
 function pascalCase(str: string): string {
-  return str
-    .replace(/[-_\s]+(.)?/g, (_, c) => (c ? c.toUpperCase() : ''))
-    .replace(/^(.)/, (c) => c.toUpperCase());
+  return str.replace(/[-_\s]+(.)?/g, (_, c) => (c ? c.toUpperCase() : '')).replace(/^(.)/, (c) => c.toUpperCase());
 }
 
 // =============================================================================

@@ -8,21 +8,11 @@
     "invariants": {
       "routes": {
         "appFile": "src/App.tsx",
-        "required": [
-          "/",
-          "/tasks",
-          "/kanban",
-          "/reports",
-          "/admin",
-          "/admin/dashboard"
-        ]
+        "required": ["/", "/tasks", "/kanban", "/reports", "/admin", "/admin/dashboard"]
       },
       "fixtures": {
         "pageFile": "fixtures/shared/page.json",
-        "requiredPageDomains": [
-          "crm",
-          "admin"
-        ]
+        "requiredPageDomains": ["crm", "admin"]
       },
       "blocks": {
         "dir": "src/blocks",
@@ -31,9 +21,7 @@
       },
       "context": {
         "file": "src/data/adapters/fixtures.adapter.ts",
-        "requiredSymbols": [
-          "loadFixturesContextInput"
-        ]
+        "requiredSymbols": ["loadFixturesContextInput"]
       }
     },
     "fixtures": {
@@ -101,10 +89,7 @@
     },
     "viewHooks": {
       "pattern": "src/**/*View.tsx",
-      "allowedHooks": [
-        "useAdminActions",
-        "useLoginForm"
-      ]
+      "allowedHooks": ["useAdminActions", "useLoginForm"]
     },
     "utilityPropLiterals": {
       "scope": ["src/blocks", "src/layouts", "src/partials"],

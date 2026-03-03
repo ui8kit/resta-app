@@ -22,40 +22,64 @@ export function RecipeDetailPreview({ recipe, onOrderClick }: RecipeDetailPrevie
     <Block p="6" data-class="recipe-detail-preview">
       <Stack gap="4">
         <If test="recipe.category.title" value={!!recipe.category?.title}>
-          <Text fontSize="xs" textColor="muted-foreground"><Var name="recipe.category.title" value={recipe.category?.title} /></Text>
+          <Text fontSize="xs" textColor="muted-foreground">
+            <Var name="recipe.category.title" value={recipe.category?.title} />
+          </Text>
         </If>
         <If test="recipe.title" value={!!recipe.title}>
-          <Title order={2}><Var name="recipe.title" value={recipe.title} /></Title>
+          <Title order={2}>
+            <Var name="recipe.title" value={recipe.title} />
+          </Title>
         </If>
         <If test="recipe.description" value={!!recipe.description}>
-          <Text fontSize="sm" textColor="muted-foreground"><Var name="recipe.description" value={recipe.description} /></Text>
+          <Text fontSize="sm" textColor="muted-foreground">
+            <Var name="recipe.description" value={recipe.description} />
+          </Text>
         </If>
         <Group gap="2" items="center">
           <If test="recipe.time" value={!!recipe.time}>
-            <Text fontSize="sm"><Var name="recipe.time" value={recipe.time} /></Text>
+            <Text fontSize="sm">
+              <Var name="recipe.time" value={recipe.time} />
+            </Text>
           </If>
           <If test="recipe.servings" value={!!recipe.servings}>
-            <Text fontSize="sm"><Var name="recipe.servings" value={recipe.servings} /></Text>
+            <Text fontSize="sm">
+              <Var name="recipe.servings" value={recipe.servings} />
+            </Text>
           </If>
         </Group>
         <If test="ingredients.length" value={ingredients.length > 0}>
           <Stack gap="2">
-            <Text fontSize="sm" fontWeight="semibold">Ingredients</Text>
+            <Text fontSize="sm" fontWeight="semibold">
+              Ingredients
+            </Text>
             <Loop each="ingredients" as="ing" data={ingredients}>
-              {(ing) => <Text key={ing} fontSize="sm"><Var name="ing" value={ing} /></Text>}
+              {(ing) => (
+                <Text key={ing} fontSize="sm">
+                  <Var name="ing" value={ing} />
+                </Text>
+              )}
             </Loop>
           </Stack>
         </If>
         <If test="steps.length" value={steps.length > 0}>
           <Stack gap="2">
-            <Text fontSize="sm" fontWeight="semibold">Steps</Text>
+            <Text fontSize="sm" fontWeight="semibold">
+              Steps
+            </Text>
             <Loop each="steps" as="step" data={steps}>
-              {(step) => <Text key={step} fontSize="sm"><Var name="step" value={step} /></Text>}
+              {(step) => (
+                <Text key={step} fontSize="sm">
+                  <Var name="step" value={step} />
+                </Text>
+              )}
             </Loop>
           </Stack>
         </If>
         <If test="onOrderClick" value={!!onOrderClick}>
-          <Button size="sm" onClick={onOrderClick}>View Recipe</Button>
+          <Button size="sm" onClick={onOrderClick}>
+            View Recipe
+          </Button>
         </If>
       </Stack>
     </Block>

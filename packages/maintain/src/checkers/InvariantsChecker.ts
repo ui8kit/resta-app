@@ -9,11 +9,7 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
   private readonly scanner = new FileScanner();
 
   constructor() {
-    super(
-      'invariants',
-      'Validate route, fixture, block, and context invariants',
-      'invariants'
-    );
+    super('invariants', 'Validate route, fixture, block, and context invariants', 'invariants');
   }
 
   protected async execute(context: CheckContext): Promise<CheckerExecutionResult> {
@@ -41,16 +37,11 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
     const fixturePath = resolve(root, config.fixtures.pageFile);
     if (!existsSync(fixturePath)) {
       issues.push(
-        this.createIssue(
-          'error',
-          'PAGE_FIXTURE_MISSING',
-          `Fixture not found: ${this.relative(root, fixturePath)}`,
-          {
-            file: this.relative(root, fixturePath),
-            hint: 'Add the missing fixture file or update checkers.invariants.fixtures.pageFile.',
-            suggestion: 'Create fixtures/shared/page.json with required page domains.',
-          }
-        )
+        this.createIssue('error', 'PAGE_FIXTURE_MISSING', `Fixture not found: ${this.relative(root, fixturePath)}`, {
+          file: this.relative(root, fixturePath),
+          hint: 'Add the missing fixture file or update checkers.invariants.fixtures.pageFile.',
+          suggestion: 'Create fixtures/shared/page.json with required page domains.',
+        }),
       );
       return issues;
     }
@@ -65,7 +56,7 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
           file: this.relative(root, fixturePath),
           hint: 'Fix JSON syntax in the fixture file.',
           suggestion: 'Run a JSON formatter/linter and ensure commas/quotes are valid.',
-        })
+        }),
       );
       return issues;
     }
@@ -81,8 +72,8 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
             expected: 'Object with key "page"',
             received: 'Missing or non-object "page"',
             hint: 'Ensure fixture root has a "page" object with required domain arrays.',
-          }
-        )
+          },
+        ),
       );
       return issues;
     }
@@ -99,8 +90,8 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
               expected: `page.${key} to be an array`,
               received: 'Missing or non-array value',
               hint: `Add "page.${key}": [] to ${this.relative(root, fixturePath)}.`,
-            }
-          )
+            },
+          ),
         );
       }
     }
@@ -116,7 +107,7 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
         this.createIssue('error', 'APP_FILE_MISSING', `App file not found: ${this.relative(root, appPath)}`, {
           file: this.relative(root, appPath),
           hint: 'Ensure routes entry point exists or update checkers.invariants.routes.appFile.',
-        })
+        }),
       );
       return issues;
     }
@@ -131,7 +122,7 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
             expected: route,
             received: 'Route not registered',
             hint: `Add <Route path="${route}" element={...} /> to App.tsx.`,
-          })
+          }),
         );
       }
     }
@@ -144,16 +135,11 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
       }
       if (!this.moduleFileExists(resolvedImport)) {
         issues.push(
-          this.createIssue(
-            'error',
-            'ROUTE_FILE_MISSING',
-            `Route import does not resolve to a file: ${importPath}`,
-            {
-              file: this.relative(root, appPath),
-              hint: 'Fix route import path or create the missing route module.',
-              suggestion: `Ensure import "${importPath}" resolves to an existing file.`,
-            }
-          )
+          this.createIssue('error', 'ROUTE_FILE_MISSING', `Route import does not resolve to a file: ${importPath}`, {
+            file: this.relative(root, appPath),
+            hint: 'Fix route import path or create the missing route module.',
+            suggestion: `Ensure import "${importPath}" resolves to an existing file.`,
+          }),
         );
       }
     }
@@ -175,18 +161,23 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
           {
             file: this.relative(root, indexPath),
             hint: 'Create index.ts and export all block components from it.',
-          }
-        )
+          },
+        ),
       );
       return issues;
     }
 
     if (!existsSync(blocksDir)) {
       issues.push(
-        this.createIssue('error', 'BLOCKS_DIR_MISSING', `Blocks directory not found: ${this.relative(root, blocksDir)}`, {
-          file: this.relative(root, blocksDir),
-          hint: 'Create the blocks directory or adjust checkers.invariants.blocks.dir.',
-        })
+        this.createIssue(
+          'error',
+          'BLOCKS_DIR_MISSING',
+          `Blocks directory not found: ${this.relative(root, blocksDir)}`,
+          {
+            file: this.relative(root, blocksDir),
+            hint: 'Create the blocks directory or adjust checkers.invariants.blocks.dir.',
+          },
+        ),
       );
       return issues;
     }
@@ -204,8 +195,8 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
               file: this.relative(root, indexPath),
               hint: `Add export for "${block}" in ${this.relative(root, indexPath)}.`,
               suggestion: `Add: export { ${block} } from './${block}';`,
-            }
-          )
+            },
+          ),
         );
       }
     }
@@ -225,8 +216,8 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
           {
             file: this.relative(root, contextFile),
             hint: 'Create the context adapter file or update checkers.invariants.context.file.',
-          }
-        )
+          },
+        ),
       );
       return issues;
     }
@@ -245,30 +236,25 @@ export class InvariantsChecker extends BaseChecker<InvariantsCheckerConfig> {
               expected: symbol,
               received: 'Symbol not found',
               hint: `Export "${symbol}" from ${this.relative(root, contextFile)}.`,
-            }
-          )
+            },
+          ),
         );
       }
     }
 
     const importPattern = new RegExp(
-      config.context.fixtureImportPattern ?? "from ['\"]([^'\"]*fixtures[^'\"]*\\.json)['\"]",
-      'g'
+      config.context.fixtureImportPattern ?? 'from [\'"]([^\'"]*fixtures[^\'"]*\\.json)[\'"]',
+      'g',
     );
     const imports = Array.from(contextContent.matchAll(importPattern)).map((match) => match[1] ?? '');
     for (const importPath of imports) {
       const resolvedImport = this.resolveImportPath(importPath, contextFile, root);
       if (!resolvedImport || !this.moduleFileExists(resolvedImport, ['.json'])) {
         issues.push(
-          this.createIssue(
-            'error',
-            'FIXTURE_IMPORT_MISSING',
-            `Fixture import not found: ${importPath}`,
-            {
-              file: this.relative(root, contextFile),
-              hint: 'Fix the fixture import path or create the missing JSON fixture file.',
-            }
-          )
+          this.createIssue('error', 'FIXTURE_IMPORT_MISSING', `Fixture import not found: ${importPath}`, {
+            file: this.relative(root, contextFile),
+            hint: 'Fix the fixture import path or create the missing JSON fixture file.',
+          }),
         );
       }
     }

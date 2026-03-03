@@ -19,11 +19,7 @@ export class ViewExportsChecker extends BaseChecker<ViewExportsCheckerConfig> {
   private readonly parser = new TsxParser();
 
   constructor() {
-    super(
-      'view-exports',
-      'Validate that View files export one interface and one function',
-      'viewExports'
-    );
+    super('view-exports', 'Validate that View files export one interface and one function', 'viewExports');
   }
 
   protected async execute(context: CheckContext): Promise<CheckerExecutionResult> {
@@ -35,20 +31,15 @@ export class ViewExportsChecker extends BaseChecker<ViewExportsCheckerConfig> {
       const exportIssues = this.validateFile(file.path, file.read(), config.exportShape);
       for (const exportIssue of exportIssues) {
         issues.push(
-          this.createIssue(
-            'error',
-            'VIEW_EXPORT_SHAPE_INVALID',
-            exportIssue.message,
-            {
-              file: this.relative(context.root, file.path),
-              line: exportIssue.line,
-              column: exportIssue.column,
-              expected: exportIssue.expected,
-              received: exportIssue.received,
-              hint: exportIssue.hint,
-              suggestion: exportIssue.suggestion,
-            }
-          )
+          this.createIssue('error', 'VIEW_EXPORT_SHAPE_INVALID', exportIssue.message, {
+            file: this.relative(context.root, file.path),
+            line: exportIssue.line,
+            column: exportIssue.column,
+            expected: exportIssue.expected,
+            received: exportIssue.received,
+            hint: exportIssue.hint,
+            suggestion: exportIssue.suggestion,
+          }),
         );
       }
     }
@@ -67,7 +58,7 @@ export class ViewExportsChecker extends BaseChecker<ViewExportsCheckerConfig> {
   private validateFile(
     filePath: string,
     source: string,
-    exportShape: ViewExportsCheckerConfig['exportShape']
+    exportShape: ViewExportsCheckerConfig['exportShape'],
   ): ExportIssue[] {
     if (exportShape !== 'interface+function') {
       return [
@@ -107,8 +98,7 @@ export class ViewExportsChecker extends BaseChecker<ViewExportsCheckerConfig> {
         issues.push({
           line: symbol.line,
           column: symbol.column,
-          message:
-            'Found `export type`. Move it to shared types or replace it with `export interface` when possible.',
+          message: 'Found `export type`. Move it to shared types or replace it with `export interface` when possible.',
           suggestion: 'Replace `export type` with `export interface` when the shape is object-like.',
           hint: 'View files should expose one interface and one function only.',
         });
@@ -118,8 +108,7 @@ export class ViewExportsChecker extends BaseChecker<ViewExportsCheckerConfig> {
       issues.push({
         line: symbol.line,
         column: symbol.column,
-        message:
-          'Unexpected exported declaration. View files must export only one interface and one function.',
+        message: 'Unexpected exported declaration. View files must export only one interface and one function.',
         hint: 'Keep only `export interface XProps` and `export function XView` in the file.',
       });
     }

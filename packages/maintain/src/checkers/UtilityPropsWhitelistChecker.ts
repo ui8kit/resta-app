@@ -17,7 +17,7 @@ export class UtilityPropsWhitelistChecker extends BaseChecker<UtilityPropsWhitel
     super(
       'utility-props-whitelist',
       'Validate utility-props.map.ts values against Tailwind whitelist',
-      'utilityPropsWhitelist'
+      'utilityPropsWhitelist',
     );
   }
 
@@ -38,7 +38,7 @@ export class UtilityPropsWhitelistChecker extends BaseChecker<UtilityPropsWhitel
             `Utility props map not found: ${this.rel(context.root, utilityMapPath)}`,
             {
               hint: 'Provide a valid checkers.utilityPropsWhitelist.utilityPropsMapPath.',
-            }
+            },
           ),
         ],
       };
@@ -54,7 +54,7 @@ export class UtilityPropsWhitelistChecker extends BaseChecker<UtilityPropsWhitel
             `Tailwind class map not found: ${this.rel(context.root, tailwindMapPath)}`,
             {
               hint: 'Provide a valid checkers.utilityPropsWhitelist.tailwindMapPath.',
-            }
+            },
           ),
         ],
       };
@@ -71,7 +71,7 @@ export class UtilityPropsWhitelistChecker extends BaseChecker<UtilityPropsWhitel
               `Additional class map not found: ${this.rel(context.root, mapPath)}`,
               {
                 hint: 'Fix checkers.utilityPropsWhitelist.additionalMapPaths or remove invalid path.',
-              }
+              },
             ),
           ],
         };
@@ -114,7 +114,7 @@ export class UtilityPropsWhitelistChecker extends BaseChecker<UtilityPropsWhitel
             received: className,
             expected: expected || undefined,
             hint,
-          }
+          },
         );
       })
       .filter((issue): issue is NonNullable<typeof issue> => issue !== undefined);
@@ -176,7 +176,7 @@ export class UtilityPropsWhitelistChecker extends BaseChecker<UtilityPropsWhitel
     rawValue: string,
     className: string,
     allowedClasses: Set<string>,
-    maxSuggestions: number
+    maxSuggestions: number,
   ): string[] {
     const propPrefix = `${prop}-`;
     const propCandidates = Array.from(allowedClasses).filter((key) => key.startsWith(propPrefix));
@@ -252,11 +252,7 @@ export class UtilityPropsWhitelistChecker extends BaseChecker<UtilityPropsWhitel
     for (let i = 1; i < rows; i++) {
       for (let j = 1; j < cols; j++) {
         const substitution = source[i - 1] === target[j - 1] ? 0 : 1;
-        dp[i][j] = Math.min(
-          dp[i - 1][j] + 1,
-          dp[i][j - 1] + 1,
-          dp[i - 1][j - 1] + substitution
-        );
+        dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + substitution);
       }
     }
 

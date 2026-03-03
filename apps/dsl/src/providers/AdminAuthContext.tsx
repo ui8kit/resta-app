@@ -37,11 +37,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
   const value: AdminAuthContextValue = { isAuthenticated, login, logout };
 
-  return (
-    <AdminAuthContext.Provider value={value}>
-      {children}
-    </AdminAuthContext.Provider>
-  );
+  return <AdminAuthContext.Provider value={value}>{children}</AdminAuthContext.Provider>;
 }
 
 export function useAdminAuth(): AdminAuthContextValue {

@@ -81,12 +81,12 @@ export class RenderService implements IService<RenderServiceInput, RenderService
     },
     App: AppComponent,
     routePath: string,
-    providers: ProviderComponent[]
+    providers: ProviderComponent[],
   ): unknown {
     let tree: unknown = runtime.createElement(
       runtime.MemoryRouter as never,
       { initialEntries: [routePath], initialIndex: 0 },
-      runtime.createElement(App as never, {})
+      runtime.createElement(App as never, {}),
     );
     for (const Provider of providers) {
       tree = runtime.createElement(Provider as never, { children: tree });

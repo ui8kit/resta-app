@@ -59,34 +59,62 @@ function createSimpleTree(): GenRoot {
 
 function createAnnotatedTree(): GenRoot {
   return root([
-    element('div', {
-      _gen: { component: 'Layout' },
-    }, [
-      element('header', {
-        _gen: { slot: { name: 'header' } },
-      }, [
-        element('nav', {
-          _gen: { include: { partial: 'partials/nav', props: { brand: 'siteName' } } },
-        }, []),
-      ]),
-      element('main', {}, [
-        element('ul', {
-          _gen: { loop: { item: 'item', collection: 'items' } },
-        }, [
-          element('li', {}, [
-            element('span', {
-              _gen: { variable: { name: 'item.name' } },
-            }, [text('Item Name')]),
-          ]),
+    element(
+      'div',
+      {
+        _gen: { component: 'Layout' },
+      },
+      [
+        element(
+          'header',
+          {
+            _gen: { slot: { name: 'header' } },
+          },
+          [
+            element(
+              'nav',
+              {
+                _gen: { include: { partial: 'partials/nav', props: { brand: 'siteName' } } },
+              },
+              [],
+            ),
+          ],
+        ),
+        element('main', {}, [
+          element(
+            'ul',
+            {
+              _gen: { loop: { item: 'item', collection: 'items' } },
+            },
+            [
+              element('li', {}, [
+                element(
+                  'span',
+                  {
+                    _gen: { variable: { name: 'item.name' } },
+                  },
+                  [text('Item Name')],
+                ),
+              ]),
+            ],
+          ),
+          element(
+            'div',
+            {
+              _gen: { condition: { expression: 'isActive' } },
+            },
+            [text('Active content')],
+          ),
         ]),
-        element('div', {
-          _gen: { condition: { expression: 'isActive' } },
-        }, [text('Active content')]),
-      ]),
-      element('footer', {
-        _gen: { slot: { name: 'footer' } },
-      }, []),
-    ]),
+        element(
+          'footer',
+          {
+            _gen: { slot: { name: 'footer' } },
+          },
+          [],
+        ),
+      ],
+    ),
   ]);
 }
 
@@ -158,14 +186,7 @@ describe('Tree Traversal', () => {
         }
       });
 
-      expect(visited).toEqual([
-        'root',
-        'div',
-        'h1',
-        'text:Title',
-        'p',
-        'text:Introduction',
-      ]);
+      expect(visited).toEqual(['root', 'div', 'h1', 'text:Title', 'p', 'text:Introduction']);
     });
 
     it('stops traversal when returning false', () => {
@@ -298,9 +319,7 @@ describe('Tree Transformation', () => {
     it('removes matching nodes', () => {
       const tree = createSimpleTree();
 
-      const result = remove(tree, (node) =>
-        isElement(node) && node.tagName === 'h1'
-      );
+      const result = remove(tree, (node) => isElement(node) && node.tagName === 'h1');
 
       const h1Elements = findAllByTag(result, 'h1');
       expect(h1Elements).toHaveLength(0);
@@ -317,9 +336,7 @@ describe('Tree Querying', () => {
     it('finds first matching node', () => {
       const tree = createSimpleTree();
 
-      const found = find(tree, (node) =>
-        isElement(node) && node.tagName === 'p'
-      );
+      const found = find(tree, (node) => isElement(node) && node.tagName === 'p');
 
       expect(found).toBeDefined();
       expect((found as GenElement).tagName).toBe('p');
@@ -328,9 +345,7 @@ describe('Tree Querying', () => {
     it('returns undefined when not found', () => {
       const tree = createSimpleTree();
 
-      const found = find(tree, (node) =>
-        isElement(node) && node.tagName === 'article'
-      );
+      const found = find(tree, (node) => isElement(node) && node.tagName === 'article');
 
       expect(found).toBeUndefined();
     });
@@ -340,9 +355,7 @@ describe('Tree Querying', () => {
     it('finds all matching nodes', () => {
       const tree = createAnnotatedTree();
 
-      const elements = findAll(tree, (node) =>
-        isElement(node) && node.tagName === 'div'
-      );
+      const elements = findAll(tree, (node) => isElement(node) && node.tagName === 'div');
 
       expect(elements.length).toBeGreaterThan(0);
     });

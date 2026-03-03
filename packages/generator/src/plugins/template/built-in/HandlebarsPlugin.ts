@@ -8,19 +8,8 @@
  */
 
 import { BasePlugin } from '../BasePlugin';
-import type {
-  TemplatePluginFeatures,
-  FilterDefinition,
-  StandardFilter,
-} from '../ITemplatePlugin';
-import type {
-  GenLoop,
-  GenCondition,
-  GenVariable,
-  GenSlot,
-  GenInclude,
-  GenBlock,
-} from '../../../hast';
+import type { TemplatePluginFeatures, FilterDefinition, StandardFilter } from '../ITemplatePlugin';
+import type { GenLoop, GenCondition, GenVariable, GenSlot, GenInclude, GenBlock } from '../../../hast';
 
 // =============================================================================
 // HandlebarsPlugin Implementation
@@ -254,9 +243,7 @@ export class HandlebarsPlugin extends BasePlugin {
     const helperName = mapping?.name || filter;
 
     if (args && args.length > 0) {
-      const formattedArgs = mapping?.formatArgs
-        ? mapping.formatArgs(args)
-        : args.join(' ');
+      const formattedArgs = mapping?.formatArgs ? mapping.formatArgs(args) : args.join(' ');
       return `(${helperName} ${expression} ${formattedArgs})`;
     }
 

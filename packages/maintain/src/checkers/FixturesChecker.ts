@@ -20,7 +20,7 @@ export class FixturesChecker extends BaseChecker<FixturesCheckerConfig> {
     addFormats(ajv);
 
     const schemaFiles = this.collectSchemaFiles(
-      Array.from(new Set(config.targets.map((target) => dirname(resolve(context.root, target.schema)))))
+      Array.from(new Set(config.targets.map((target) => dirname(resolve(context.root, target.schema))))),
     );
     for (const schemaFile of schemaFiles) {
       try {
@@ -33,7 +33,7 @@ export class FixturesChecker extends BaseChecker<FixturesCheckerConfig> {
             this.createIssue('warn', 'SCHEMA_LOAD_WARNING', message, {
               file: this.relative(context.root, schemaFile),
               hint: 'Check schema references and duplicate $id values.',
-            })
+            }),
           );
         }
       }
@@ -48,7 +48,7 @@ export class FixturesChecker extends BaseChecker<FixturesCheckerConfig> {
           this.createIssue('error', 'FIXTURE_FILE_MISSING', `Fixture file not found: ${target.file}`, {
             file: target.file,
             hint: 'Create the fixture file or remove it from checkers.fixtures.targets.',
-          })
+          }),
         );
         continue;
       }
@@ -58,7 +58,7 @@ export class FixturesChecker extends BaseChecker<FixturesCheckerConfig> {
           this.createIssue('error', 'SCHEMA_FILE_MISSING', `Schema file not found: ${target.schema}`, {
             file: target.schema,
             hint: 'Create the schema file or fix the schema path in maintain.config.json.',
-          })
+          }),
         );
         continue;
       }
@@ -81,7 +81,7 @@ export class FixturesChecker extends BaseChecker<FixturesCheckerConfig> {
           this.createIssue('error', 'FIXTURE_VALIDATION_ERROR', message, {
             file: target.file,
             hint: 'Inspect schema references and fixture JSON structure.',
-          })
+          }),
         );
       }
     }
@@ -101,17 +101,12 @@ export class FixturesChecker extends BaseChecker<FixturesCheckerConfig> {
   private toIssue(targetFile: string, error: ErrorObject): Issue {
     const instancePath = error.instancePath || '/';
     const message = error.message ?? 'validation error';
-    return this.createIssue(
-      'error',
-      'FIXTURE_SCHEMA_INVALID',
-      `${targetFile} ${instancePath}: ${message}`,
-      {
-        file: targetFile,
-        expected: error.schemaPath,
-        received: `${error.keyword} violation`,
-        hint: 'Update fixture data to satisfy the referenced schema constraints.',
-      }
-    );
+    return this.createIssue('error', 'FIXTURE_SCHEMA_INVALID', `${targetFile} ${instancePath}: ${message}`, {
+      file: targetFile,
+      expected: error.schemaPath,
+      received: `${error.keyword} violation`,
+      hint: 'Update fixture data to satisfy the referenced schema constraints.',
+    });
   }
 
   private collectSchemaFiles(baseDirectories: string[]): string[] {

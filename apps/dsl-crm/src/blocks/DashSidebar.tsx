@@ -9,20 +9,11 @@ export interface DashSidebarProps {
   'data-class'?: string;
 }
 
-export function DashSidebar({
-  label,
-  links,
-  'data-class': dataClass,
-}: DashSidebarProps) {
+export function DashSidebar({ label, links, 'data-class': dataClass }: DashSidebarProps) {
   return (
     <Stack gap="2" p="4" w="full" items="stretch" data-class={dataClass ?? 'dash-sidebar-nav'}>
       <If test="label" value={!!(label ?? '')}>
-        <Text
-          fontSize="xs"
-          fontWeight="semibold"
-          textColor="muted-foreground"
-          data-class="dash-sidebar-label"
-        >
+        <Text fontSize="xs" fontWeight="semibold" textColor="muted-foreground" data-class="dash-sidebar-label">
           <Var name="label" value={label ?? ''} />
         </Text>
       </If>
@@ -31,22 +22,12 @@ export function DashSidebar({
           {(link: DashboardSidebarLink) => (
             <>
               <If test="!!link.active" value={!!link.active}>
-                <DomainNavButton
-                  href={link.href}
-                  size="sm"
-                  variant="secondary"
-                  data-class="dash-sidebar-link-active"
-                >
+                <DomainNavButton href={link.href} size="sm" variant="secondary" data-class="dash-sidebar-link-active">
                   <Var name="link.label" value={link.label} />
                 </DomainNavButton>
               </If>
               <If test="!link.active" value={!link.active}>
-                <DomainNavButton
-                  href={link.href}
-                  size="sm"
-                  variant="ghost"
-                  data-class="dash-sidebar-link-inactive"
-                >
+                <DomainNavButton href={link.href} size="sm" variant="ghost" data-class="dash-sidebar-link-inactive">
                   <Var name="link.label" value={link.label} />
                 </DomainNavButton>
               </If>

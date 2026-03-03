@@ -11,13 +11,7 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import { ReactPlugin } from './ReactPlugin';
-import {
-  root,
-  element,
-  text,
-  annotate,
-  type GenRoot,
-} from '../../../hast';
+import { root, element, text, annotate, type GenRoot } from '../../../hast';
 import type { TemplatePluginContext } from '../ITemplatePlugin';
 
 // =============================================================================
@@ -164,26 +158,17 @@ describe('ReactPlugin', () => {
 
   describe('renderCondition', () => {
     it('renders simple if → ternary with null', () => {
-      const result = plugin.renderCondition(
-        { expression: 'isActive' },
-        '<span>Active</span>',
-      );
+      const result = plugin.renderCondition({ expression: 'isActive' }, '<span>Active</span>');
 
       expect(result).toBe('{isActive ? (<><span>Active</span></>) : null}');
     });
 
     it('renders if/else → ternary', () => {
       // First, render the else branch (as child of the if content)
-      const elseBranch = plugin.renderCondition(
-        { expression: '', isElse: true },
-        '<span>Inactive</span>',
-      );
+      const elseBranch = plugin.renderCondition({ expression: '', isElse: true }, '<span>Inactive</span>');
 
       // Then render the main if with else branch in content
-      const result = plugin.renderCondition(
-        { expression: 'isActive' },
-        `<span>Active</span>${elseBranch}`,
-      );
+      const result = plugin.renderCondition({ expression: 'isActive' }, `<span>Active</span>${elseBranch}`);
 
       expect(result).toContain('isActive ?');
       expect(result).toContain('<span>Active</span>');
@@ -193,16 +178,10 @@ describe('ReactPlugin', () => {
 
     it('renders if/elseif/else → IIFE', () => {
       // Render elseif branch
-      const elseIfBranch = plugin.renderCondition(
-        { expression: 'isPending', isElseIf: true },
-        '<span>Pending</span>',
-      );
+      const elseIfBranch = plugin.renderCondition({ expression: 'isPending', isElseIf: true }, '<span>Pending</span>');
 
       // Render else branch
-      const elseBranch = plugin.renderCondition(
-        { expression: '', isElse: true },
-        '<span>Unknown</span>',
-      );
+      const elseBranch = plugin.renderCondition({ expression: '', isElse: true }, '<span>Unknown</span>');
 
       // Render main if with branches
       const result = plugin.renderCondition(
@@ -220,15 +199,9 @@ describe('ReactPlugin', () => {
     });
 
     it('renders if/elseif without else → IIFE with null fallback', () => {
-      const elseIfBranch = plugin.renderCondition(
-        { expression: 'isPending', isElseIf: true },
-        '<span>Pending</span>',
-      );
+      const elseIfBranch = plugin.renderCondition({ expression: 'isPending', isElseIf: true }, '<span>Pending</span>');
 
-      const result = plugin.renderCondition(
-        { expression: 'isActive' },
-        `<span>Active</span>${elseIfBranch}`,
-      );
+      const result = plugin.renderCondition({ expression: 'isActive' }, `<span>Active</span>${elseIfBranch}`);
 
       expect(result).toContain('{(() => {');
       expect(result).toContain('return null;');
@@ -246,10 +219,7 @@ describe('ReactPlugin', () => {
         '<span>Error</span>',
       );
 
-      const elseBranch = plugin.renderCondition(
-        { expression: '', isElse: true },
-        '<span>Unknown</span>',
-      );
+      const elseBranch = plugin.renderCondition({ expression: '', isElse: true }, '<span>Unknown</span>');
 
       const result = plugin.renderCondition(
         { expression: 'status === "active"' },
@@ -286,10 +256,7 @@ describe('ReactPlugin', () => {
 
   describe('renderLoop', () => {
     it('renders .map() with auto key (id fallback index)', () => {
-      const result = plugin.renderLoop(
-        { item: 'product', collection: 'products' },
-        '<div>{product.name}</div>',
-      );
+      const result = plugin.renderLoop({ item: 'product', collection: 'products' }, '<div>{product.name}</div>');
 
       expect(result).toContain('{products.map((product, index) => (');
       expect(result).toContain('<Fragment key={product.id ?? index}>');
@@ -299,19 +266,13 @@ describe('ReactPlugin', () => {
     });
 
     it('renders loop with explicit key field', () => {
-      const result = plugin.renderLoop(
-        { item: 'item', collection: 'items', key: 'slug' },
-        '<li>{item.title}</li>',
-      );
+      const result = plugin.renderLoop({ item: 'item', collection: 'items', key: 'slug' }, '<li>{item.title}</li>');
 
       expect(result).toContain('key={item.slug}');
     });
 
     it('renders loop with custom index variable', () => {
-      const result = plugin.renderLoop(
-        { item: 'item', collection: 'items', index: 'i' },
-        '<li>{item.title}</li>',
-      );
+      const result = plugin.renderLoop({ item: 'item', collection: 'items', index: 'i' }, '<li>{item.title}</li>');
 
       expect(result).toContain('(item, i)');
       expect(result).toContain('item.id ?? i');
@@ -334,10 +295,7 @@ describe('ReactPlugin', () => {
     });
 
     it('renders default slot with fallback', () => {
-      const result = plugin.renderSlot(
-        { name: 'default' },
-        '<p>No content</p>',
-      );
+      const result = plugin.renderSlot({ name: 'default' }, '<p>No content</p>');
       expect(result).toBe('{children ?? (<><p>No content</p></>)}');
     });
 
@@ -347,10 +305,7 @@ describe('ReactPlugin', () => {
     });
 
     it('renders named slot with default content', () => {
-      const result = plugin.renderSlot(
-        { name: 'header' },
-        '<header>Default Header</header>',
-      );
+      const result = plugin.renderSlot({ name: 'header' }, '<header>Default Header</header>');
       expect(result).toBe('{header ?? (<><header>Default Header</header></>)}');
     });
   });
@@ -398,10 +353,7 @@ describe('ReactPlugin', () => {
 
   describe('renderBlock', () => {
     it('renders block with comment markers', () => {
-      const result = plugin.renderBlock(
-        { name: 'content' },
-        '<main>Page Content</main>',
-      );
+      const result = plugin.renderBlock({ name: 'content' }, '<main>Page Content</main>');
 
       expect(result).toContain('{/* block: content */}');
       expect(result).toContain('<main>Page Content</main>');
@@ -475,19 +427,12 @@ describe('ReactPlugin', () => {
 
   describe('transform', () => {
     it('transforms simple tree', async () => {
-      const tree: GenRoot = root(
-        [
-          element('div', { className: ['container'] }, [
-            element('h1', {}, [text('Hello')]),
-          ]),
-        ],
-        {
-          sourceFile: 'test.tsx',
-          componentName: 'TestComponent',
-          exports: ['TestComponent'],
-          dependencies: [],
-        },
-      );
+      const tree: GenRoot = root([element('div', { className: ['container'] }, [element('h1', {}, [text('Hello')])])], {
+        sourceFile: 'test.tsx',
+        componentName: 'TestComponent',
+        exports: ['TestComponent'],
+        dependencies: [],
+      });
 
       const output = await plugin.transform(tree);
 
@@ -500,10 +445,9 @@ describe('ReactPlugin', () => {
     it('transforms tree with loop annotation', async () => {
       const tree: GenRoot = root(
         [
-          annotate(
-            element('ul', {}, [element('li', {}, [text('Item')])]),
-            { loop: { item: 'item', collection: 'items' } },
-          ),
+          annotate(element('ul', {}, [element('li', {}, [text('Item')])]), {
+            loop: { item: 'item', collection: 'items' },
+          }),
         ],
         {
           sourceFile: 'list.tsx',
@@ -542,15 +486,12 @@ describe('ReactPlugin', () => {
     });
 
     it('uses PascalCase filename', async () => {
-      const tree: GenRoot = root(
-        [element('div', {}, [text('Hello')])],
-        {
-          sourceFile: 'hero-block.tsx',
-          componentName: 'HeroBlock',
-          exports: ['HeroBlock'],
-          dependencies: [],
-        },
-      );
+      const tree: GenRoot = root([element('div', {}, [text('Hello')])], {
+        sourceFile: 'hero-block.tsx',
+        componentName: 'HeroBlock',
+        exports: ['HeroBlock'],
+        dependencies: [],
+      });
 
       const output = await plugin.transform(tree);
 
@@ -578,29 +519,26 @@ describe('ReactPlugin', () => {
     });
 
     it('emits full file with imports and export function when meta.imports is set', async () => {
-      const tree: GenRoot = root(
-        [element('div', { className: ['container'] }, [element('h1', {}, [text('Hello')])])],
-        {
-          sourceFile: 'page.tsx',
-          componentName: 'HomePage',
-          exports: ['HomePage'],
-          dependencies: [],
-          imports: [
-            {
-              source: 'react',
-              defaultImport: 'React',
-              namedImports: [],
-              isTypeOnly: false,
-            },
-            {
-              source: '@ui8kit/core',
-              defaultImport: undefined,
-              namedImports: ['Block', 'Text'],
-              isTypeOnly: false,
-            },
-          ],
-        },
-      );
+      const tree: GenRoot = root([element('div', { className: ['container'] }, [element('h1', {}, [text('Hello')])])], {
+        sourceFile: 'page.tsx',
+        componentName: 'HomePage',
+        exports: ['HomePage'],
+        dependencies: [],
+        imports: [
+          {
+            source: 'react',
+            defaultImport: 'React',
+            namedImports: [],
+            isTypeOnly: false,
+          },
+          {
+            source: '@ui8kit/core',
+            defaultImport: undefined,
+            namedImports: ['Block', 'Text'],
+            isTypeOnly: false,
+          },
+        ],
+      });
 
       const output = await plugin.transform(tree);
 
@@ -616,29 +554,26 @@ describe('ReactPlugin', () => {
     });
 
     it('emits type-only imports for TS compilation (e.g. ReactNode)', async () => {
-      const tree: GenRoot = root(
-        [element('div', {}, [text('x')])],
-        {
-          sourceFile: 'comp.tsx',
-          componentName: 'Comp',
-          exports: ['Comp'],
-          dependencies: [],
-          imports: [
-            {
-              source: './types',
-              defaultImport: undefined,
-              namedImports: ['Props'],
-              isTypeOnly: true,
-            },
-            {
-              source: 'react',
-              defaultImport: undefined,
-              namedImports: ['useState'],
-              isTypeOnly: false,
-            },
-          ],
-        },
-      );
+      const tree: GenRoot = root([element('div', {}, [text('x')])], {
+        sourceFile: 'comp.tsx',
+        componentName: 'Comp',
+        exports: ['Comp'],
+        dependencies: [],
+        imports: [
+          {
+            source: './types',
+            defaultImport: undefined,
+            namedImports: ['Props'],
+            isTypeOnly: true,
+          },
+          {
+            source: 'react',
+            defaultImport: undefined,
+            namedImports: ['useState'],
+            isTypeOnly: false,
+          },
+        ],
+      });
 
       const output = await plugin.transform(tree);
 

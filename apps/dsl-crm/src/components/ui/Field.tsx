@@ -1,11 +1,7 @@
-import type { ComponentPropsWithoutRef, Ref } from "react";
-import { forwardRef } from "react";
-import { cn } from "../../lib/utils";
-import {
-  resolveUtilityClassName,
-  type UtilityPropBag,
-  type UtilityPropPrefix,
-} from "../../lib/utility-props";
+import type { ComponentPropsWithoutRef, Ref } from 'react';
+import { forwardRef } from 'react';
+import { cn } from '../../lib/utils';
+import { resolveUtilityClassName, type UtilityPropBag, type UtilityPropPrefix } from '../../lib/utility-props';
 import {
   fieldVariantVariants,
   fieldControlVariants,
@@ -14,9 +10,9 @@ import {
   fieldControlSizeVariants,
   fieldTextareaBase,
   type FieldVariantProps,
-} from "../../variants/field";
+} from '../../variants/field';
 
-type FieldComponent = "input" | "textarea" | "select" | "button";
+type FieldComponent = 'input' | 'textarea' | 'select' | 'button';
 
 /**
  * Base field props — variant (style) + component (element) + utility props.
@@ -28,42 +24,33 @@ type FieldBaseProps = UtilityPropBag &
   };
 
 type FieldInputProps = FieldBaseProps &
-  Omit<ComponentPropsWithoutRef<"input">, keyof FieldBaseProps | UtilityPropPrefix>;
+  Omit<ComponentPropsWithoutRef<'input'>, keyof FieldBaseProps | UtilityPropPrefix>;
 
 type FieldTextareaProps = FieldBaseProps &
-  Omit<
-    ComponentPropsWithoutRef<"textarea">,
-    keyof FieldBaseProps | UtilityPropPrefix
-  >;
+  Omit<ComponentPropsWithoutRef<'textarea'>, keyof FieldBaseProps | UtilityPropPrefix>;
 
 type FieldSelectProps = FieldBaseProps &
-  Omit<
-    ComponentPropsWithoutRef<"select">,
-    keyof FieldBaseProps | UtilityPropPrefix
-  >;
+  Omit<ComponentPropsWithoutRef<'select'>, keyof FieldBaseProps | UtilityPropPrefix>;
 
 type FieldButtonProps = FieldBaseProps &
-  Omit<
-    ComponentPropsWithoutRef<"button">,
-    keyof FieldBaseProps | UtilityPropPrefix
-  >;
+  Omit<ComponentPropsWithoutRef<'button'>, keyof FieldBaseProps | UtilityPropPrefix>;
 
 export type FieldProps =
-  | (FieldInputProps & { component?: "input" })
-  | (FieldTextareaProps & { component: "textarea" })
-  | (FieldSelectProps & { component: "select" })
-  | (FieldButtonProps & { component: "button" });
+  | (FieldInputProps & { component?: 'input' })
+  | (FieldTextareaProps & { component: 'textarea' })
+  | (FieldSelectProps & { component: 'select' })
+  | (FieldButtonProps & { component: 'button' });
 
-function isTextareaProps(props: FieldProps): props is FieldTextareaProps & { component: "textarea" } {
-  return props.component === "textarea";
+function isTextareaProps(props: FieldProps): props is FieldTextareaProps & { component: 'textarea' } {
+  return props.component === 'textarea';
 }
 
-function isSelectProps(props: FieldProps): props is FieldSelectProps & { component: "select" } {
-  return props.component === "select";
+function isSelectProps(props: FieldProps): props is FieldSelectProps & { component: 'select' } {
+  return props.component === 'select';
 }
 
-function isButtonProps(props: FieldProps): props is FieldButtonProps & { component: "button" } {
-  return props.component === "button";
+function isButtonProps(props: FieldProps): props is FieldButtonProps & { component: 'button' } {
+  return props.component === 'button';
 }
 
 /**
@@ -86,21 +73,15 @@ export const Field = forwardRef<
   HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | HTMLButtonElement,
   FieldProps
 >(function Field(props, ref) {
-  const {
-    component = "input",
-    variant = "default",
-    size = "default",
-    className,
-    ...rest
-  } = props;
+  const { component = 'input', variant = 'default', size = 'default', className, ...rest } = props;
 
   const { utilityClassName, rest: elementProps } = resolveUtilityClassName(rest);
 
   const inputType = (elementProps as Record<string, unknown>).type as string | undefined;
-  const isCheckbox = component === "input" && inputType === "checkbox";
-  const isRadio = component === "input" && inputType === "radio";
+  const isCheckbox = component === 'input' && inputType === 'checkbox';
+  const isRadio = component === 'input' && inputType === 'radio';
   const isControl = isCheckbox || isRadio;
-  const isButton = component === "button";
+  const isButton = component === 'button';
 
   const styleClasses = isButton
     ? fieldButtonVariants({ variant })
@@ -110,23 +91,23 @@ export const Field = forwardRef<
   const sizeClasses = isControl
     ? fieldControlSizeVariants({ size })
     : isButton
-      ? "" // button has its own padding
+      ? '' // button has its own padding
       : fieldSizeVariants({ size });
 
   const combinedClassName = cn(
     styleClasses,
     sizeClasses,
-    component === "textarea" && fieldTextareaBase,
-    isCheckbox && "rounded",
-    isRadio && "rounded-full",
+    component === 'textarea' && fieldTextareaBase,
+    isCheckbox && 'rounded',
+    isRadio && 'rounded-full',
     utilityClassName,
-    className
+    className,
   );
 
-  const dataClass = (elementProps as Record<string, unknown>)["data-class"] ?? "field";
+  const dataClass = (elementProps as Record<string, unknown>)['data-class'] ?? 'field';
 
   if (isTextareaProps(props)) {
-    const textareaProps = elementProps as ComponentPropsWithoutRef<"textarea">;
+    const textareaProps = elementProps as ComponentPropsWithoutRef<'textarea'>;
     return (
       <textarea
         ref={ref as Ref<HTMLTextAreaElement>}
@@ -138,7 +119,7 @@ export const Field = forwardRef<
   }
 
   if (isSelectProps(props)) {
-    const selectProps = elementProps as ComponentPropsWithoutRef<"select">;
+    const selectProps = elementProps as ComponentPropsWithoutRef<'select'>;
     return (
       <select
         ref={ref as Ref<HTMLSelectElement>}
@@ -150,8 +131,8 @@ export const Field = forwardRef<
   }
 
   if (isButtonProps(props)) {
-    const buttonProps = elementProps as ComponentPropsWithoutRef<"button">;
-    const btnType = (buttonProps.type ?? "button") as "button" | "reset" | "submit";
+    const buttonProps = elementProps as ComponentPropsWithoutRef<'button'>;
+    const btnType = (buttonProps.type ?? 'button') as 'button' | 'reset' | 'submit';
     return (
       <button
         ref={ref as Ref<HTMLButtonElement>}
@@ -166,17 +147,12 @@ export const Field = forwardRef<
   // input: text, email, password, checkbox, radio, etc.
   const inputProps = { ...elementProps } as Record<string, unknown>;
   if (!inputProps.type) {
-    inputProps.type = "text";
+    inputProps.type = 'text';
   }
 
   return (
-    <input
-      ref={ref as Ref<HTMLInputElement>}
-      data-class={dataClass}
-      className={combinedClassName}
-      {...inputProps}
-    />
+    <input ref={ref as Ref<HTMLInputElement>} data-class={dataClass} className={combinedClassName} {...inputProps} />
   );
 });
 
-Field.displayName = "Field";
+Field.displayName = 'Field';

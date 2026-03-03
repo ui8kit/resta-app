@@ -41,10 +41,7 @@ export function loadFixtureRoutes(options: LoadFixtureRoutesOptions): Record<str
 
     try {
       const raw = JSON.parse(readFileSync(filePath, 'utf-8'));
-      const items: unknown[] =
-        raw[collection.itemsKey ?? 'items'] ??
-        raw['posts'] ??
-        [];
+      const items: unknown[] = raw[collection.itemsKey ?? 'items'] ?? raw['posts'] ?? [];
 
       for (const item of items) {
         if (!item || typeof item !== 'object') continue;
@@ -56,8 +53,7 @@ export function loadFixtureRoutes(options: LoadFixtureRoutesOptions): Record<str
 
         if (!id) continue;
 
-        const title =
-          (collection.titleField ? (record[collection.titleField] as string) : undefined) ?? id;
+        const title = (collection.titleField ? (record[collection.titleField] as string) : undefined) ?? id;
 
         routes[`${collection.routePrefix}/${id}`] = { title };
       }

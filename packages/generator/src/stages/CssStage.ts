@@ -5,7 +5,7 @@ import { formatSize } from '../core/utils/format';
 
 /**
  * CssStage - Pipeline stage for CSS generation
- * 
+ *
  * Extracts and generates CSS from prepared views.
  */
 export class CssStage implements IPipelineStage<unknown, CssServiceOutput> {
@@ -14,28 +14,28 @@ export class CssStage implements IPipelineStage<unknown, CssServiceOutput> {
   readonly enabled = true;
   readonly dependencies: string[] = [];
   readonly description = 'Generate CSS from prepared HTML views';
-  
+
   canExecute(_context: IPipelineContext): boolean {
     return true;
   }
-  
+
   async execute(_input: unknown, context: IPipelineContext): Promise<CssServiceOutput> {
     const { config, logger, eventBus } = context;
     const service = context.registry.resolve<CssService>('css');
-    
+
     // Initialize service
     await service.initialize({ config, logger, eventBus, registry: context.registry });
     const result = await runGenerateCss(context, service);
-    
+
     // Store result in context
     const totalSize = result.files.reduce((sum, f) => sum + f.size, 0);
     logger.info(`Generated ${result.files.length} CSS file(s) (${formatSize(totalSize)})`);
-    
+
     eventBus.emit('stage:complete', {
       name: this.name,
       result,
     });
-    
+
     return result;
   }
 }

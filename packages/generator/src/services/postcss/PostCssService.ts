@@ -78,11 +78,7 @@ export class PostCssService implements IService<PostCssServiceInput, PostCssServ
       if (err.code !== 'EEXIST') throw error;
     }
 
-    const entryLines = [
-      '/* Auto-generated entry for PostCSS. Do not edit. */',
-      '@import "tailwindcss";',
-      '',
-    ];
+    const entryLines = ['/* Auto-generated entry for PostCSS. Do not edit. */', '@import "tailwindcss";', ''];
     for (const imp of entryImports) {
       entryLines.push(`@import "${imp}";`);
     }
@@ -124,9 +120,7 @@ export class PostCssService implements IService<PostCssServiceInput, PostCssServ
           const uncss = require('uncss');
 
           const cwd = process.cwd();
-          const htmlPaths = htmlFiles.map((f) =>
-            f.slice(cwd.length).replace(/\\/g, '/').replace(/^\//, '')
-          );
+          const htmlPaths = htmlFiles.map((f) => f.slice(cwd.length).replace(/\\/g, '/').replace(/^\//, ''));
 
           const normalized = stylesPath.replace(/\\/g, '/');
           const fileUrl = normalized.startsWith('/') ? `file://${normalized}` : `file:///${normalized}`;
@@ -139,7 +133,7 @@ export class PostCssService implements IService<PostCssServiceInput, PostCssServ
                 media: true,
                 timeout: input.uncss?.timeout ?? 15000,
               },
-              (err: Error | null, out: string) => (err ? rej(err) : res(out))
+              (err: Error | null, out: string) => (err ? rej(err) : res(out)),
             );
           });
 

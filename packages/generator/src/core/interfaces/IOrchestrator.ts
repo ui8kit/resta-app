@@ -6,7 +6,7 @@ import type { GeneratorConfig } from './IConfig';
 
 /**
  * Orchestrator interface - the main entry point for the generator.
- * 
+ *
  * The orchestrator coordinates:
  * - Service registration and lifecycle
  * - Plugin management
@@ -19,18 +19,18 @@ export interface IOrchestrator extends IPluginContext {
    * @returns this for fluent API
    */
   use(plugin: IPlugin): this;
-  
+
   /**
    * Run the generation process
    * @param config Generator configuration
    */
   generate(config: GeneratorConfig): Promise<GeneratorResult>;
-  
+
   /**
    * Subscribe to an event
    */
   on<T = unknown>(event: string, handler: EventHandler<T>): () => void;
-  
+
   /**
    * Get the event bus for advanced event handling
    */
@@ -45,12 +45,12 @@ export interface GeneratorResult extends PipelineResult {
    * Configuration used for generation
    */
   config: GeneratorConfig;
-  
+
   /**
    * Generated files
    */
   files?: GeneratedFile[];
-  
+
   /**
    * Warnings during generation
    */
@@ -65,12 +65,12 @@ export interface GeneratedFile {
    * File path (relative to output directory)
    */
   path: string;
-  
+
   /**
    * File type
    */
   type: 'html' | 'css' | 'js' | 'json' | 'liquid' | 'other';
-  
+
   /**
    * File size in bytes
    */
@@ -85,12 +85,12 @@ export interface OrchestratorOptions {
    * Custom logger
    */
   logger?: import('./ILogger').ILogger;
-  
+
   /**
    * Log level
    */
   logLevel?: import('./ILogger').LogLevel;
-  
+
   /**
    * Continue on stage failure
    */

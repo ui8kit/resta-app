@@ -12,13 +12,7 @@ export interface BlogPageViewProps {
   blog: { title?: string; subtitle?: string; posts?: BlogPost[] };
 }
 
-export function BlogPageView({
-  navItems,
-  sidebar,
-  headerTitle,
-  headerSubtitle,
-  blog,
-}: BlogPageViewProps) {
+export function BlogPageView({ navItems, sidebar, headerTitle, headerSubtitle, blog }: BlogPageViewProps) {
   const posts = blog.posts ?? [];
   return (
     <MainLayout

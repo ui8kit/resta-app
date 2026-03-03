@@ -55,9 +55,7 @@ function extractTypeBody(source: string, typeName: string): string | undefined {
   const typeMatch = source.match(new RegExp(`export\\s+type\\s+${typeName}\\s*=\\s*\\{([\\s\\S]*?)\\n\\};`));
   if (typeMatch) return typeMatch[1];
 
-  const interfaceMatch = source.match(
-    new RegExp(`export\\s+interface\\s+${typeName}\\s*\\{([\\s\\S]*?)\\n\\}`)
-  );
+  const interfaceMatch = source.match(new RegExp(`export\\s+interface\\s+${typeName}\\s*\\{([\\s\\S]*?)\\n\\}`));
   if (interfaceMatch) return interfaceMatch[1];
 
   return undefined;
@@ -205,9 +203,9 @@ function run(): void {
         warnings,
       },
       null,
-      2
+      2,
     ) + '\n',
-    'utf-8'
+    'utf-8',
   );
 
   console.log(`Contract report: ${relative(ROOT, reportPath).replace(/\\/g, '/')}`);

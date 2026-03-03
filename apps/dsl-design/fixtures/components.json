@@ -23,7 +23,19 @@
     { "type": "password", "label": "password", "placeholder": "••••••••" },
     { "type": "textarea", "label": "textarea", "placeholder": "Message", "rows": 3 },
     { "type": "checkbox", "label": "checkbox", "optionLabel": "Label" },
-    { "type": "radio", "label": "radio", "options": [{ "value": "a", "label": "Option A" }, { "value": "b", "label": "Option B" }] },
-    { "type": "select", "label": "select", "options": [{ "value": "", "label": "Select..." }, { "value": "1", "label": "Option 1" }, { "value": "2", "label": "Option 2" }] }
+    {
+      "type": "radio",
+      "label": "radio",
+      "options": [{ "value": "a", "label": "Option A" }, { "value": "b", "label": "Option B" }]
+    },
+    {
+      "type": "select",
+      "label": "select",
+      "options": [
+        { "value": "", "label": "Select..." },
+        { "value": "1", "label": "Option 1" },
+        { "value": "2", "label": "Option 2" }
+      ]
+    }
   ]
 }

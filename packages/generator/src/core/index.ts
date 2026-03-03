@@ -1,6 +1,6 @@
 /**
  * Core module for the generator orchestrator.
- * 
+ *
  * Exports all core components:
  * - Interfaces (contracts)
  * - Orchestrator (main coordinator)

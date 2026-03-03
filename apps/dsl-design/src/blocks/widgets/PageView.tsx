@@ -88,10 +88,14 @@ export function WidgetsPageView({
                         </Text>
                       </If>
                       <If test="item.title" value={!!item.title}>
-                        <CardTitle order={4}><Var name="item.title" value={item.title} /></CardTitle>
+                        <CardTitle order={4}>
+                          <Var name="item.title" value={item.title} />
+                        </CardTitle>
                       </If>
                       <If test="item.description" value={!!item.description}>
-                        <CardDescription><Var name="item.description" value={item.description} /></CardDescription>
+                        <CardDescription>
+                          <Var name="item.description" value={item.description} />
+                        </CardDescription>
                       </If>
                       <Group items="baseline" gap="2" mt="2">
                         <If test="item.price.display" value={!!item.price?.display}>
@@ -112,10 +116,14 @@ export function WidgetsPageView({
                           {(v) => (
                             <Button variant="outline" size="sm">
                               <If test="v.title" value={!!v.title}>
-                                <Text component="span"><Var name="v.title" value={v.title} /></Text>
+                                <Text component="span">
+                                  <Var name="v.title" value={v.title} />
+                                </Text>
                               </If>
                               <If test="v.priceModifier.display" value={!!v.priceModifier?.display}>
-                                <Text component="span" fontSize="sm"><Var name="v.priceModifier.display" value={v.priceModifier?.display} /></Text>
+                                <Text component="span" fontSize="sm">
+                                  <Var name="v.priceModifier.display" value={v.priceModifier?.display} />
+                                </Text>
                               </If>
                             </Button>
                           )}
@@ -141,19 +149,29 @@ export function WidgetsPageView({
               <CardHeader>
                 <Group items="center" gap="2" mb="1">
                   <Badge variant="outline">-15%</Badge>
-                  <Text fontSize="xs" textColor="muted-foreground">Grill</Text>
+                  <Text fontSize="xs" textColor="muted-foreground">
+                    Grill
+                  </Text>
                 </Group>
                 <CardTitle order={4}>Salmon Steak on the Grill</CardTitle>
                 <CardDescription>Atlantic salmon, herb butter, lemon.</CardDescription>
                 <Group items="baseline" gap="2" mt="2">
-                  <Text fontSize="lg" fontWeight="semibold" textColor="primary">890 ₽</Text>
-                  <Text fontSize="sm" textColor="muted-foreground">990 ₽</Text>
+                  <Text fontSize="lg" fontWeight="semibold" textColor="primary">
+                    890 ₽
+                  </Text>
+                  <Text fontSize="sm" textColor="muted-foreground">
+                    990 ₽
+                  </Text>
                 </Group>
               </CardHeader>
               <CardContent>
                 <Group gap="2" flex="wrap">
-                  <Button variant="outline" size="sm">200g</Button>
-                  <Button variant="outline" size="sm">300g +200 ₽</Button>
+                  <Button variant="outline" size="sm">
+                    200g
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    300g +200 ₽
+                  </Button>
                 </Group>
                 <Stack mt="2">
                   <DomainNavButton href="#" size="sm">
@@ -172,7 +190,9 @@ export function WidgetsPageView({
               <CardHeader>
                 <Group items="center" gap="2" mb="1">
                   <Badge variant="outline">medium</Badge>
-                  <Text fontSize="xs" textColor="muted-foreground">Grill</Text>
+                  <Text fontSize="xs" textColor="muted-foreground">
+                    Grill
+                  </Text>
                 </Group>
                 <CardTitle order={4}>Salmon Steak on the Grill at Home</CardTitle>
                 <CardDescription>Replicate our grill salmon method in 25 minutes.</CardDescription>
@@ -194,7 +214,9 @@ export function WidgetsPageView({
             </Text>
             <Card max="w-sm" data-class="design-widget-promo-card">
               <CardHeader>
-                <Badge variant="outline" mb="2">-15%</Badge>
+                <Badge variant="outline" mb="2">
+                  -15%
+                </Badge>
                 <CardTitle order={4}>Happy Hour Grill</CardTitle>
                 <CardDescription>15% off grill items, Mon–Fri 11:00–13:00.</CardDescription>
                 <Text fontSize="xs" textColor="muted-foreground" mt="1">
@@ -236,20 +258,22 @@ export function WidgetsPageView({
             <Accordion type="single" collapsible defaultValue="faq-1" max="w-md">
               <Loop each="accordionItems" as="item" data={accordionItems}>
                 {(item) => (
-                    <AccordionItem key={item.id} value={item.id}>
-                      <AccordionTrigger>
-                        <If test="item.trigger" value={!!item.trigger}>
-                          <Text component="span"><Var name="item.trigger" value={item.trigger} /></Text>
-                        </If>
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <If test="item.content" value={!!item.content}>
-                          <Text fontSize="sm" textColor="muted-foreground">
-                            <Var name="item.content" value={item.content} />
-                          </Text>
-                        </If>
-                      </AccordionContent>
-                    </AccordionItem>
+                  <AccordionItem key={item.id} value={item.id}>
+                    <AccordionTrigger>
+                      <If test="item.trigger" value={!!item.trigger}>
+                        <Text component="span">
+                          <Var name="item.trigger" value={item.trigger} />
+                        </Text>
+                      </If>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <If test="item.content" value={!!item.content}>
+                        <Text fontSize="sm" textColor="muted-foreground">
+                          <Var name="item.content" value={item.content} />
+                        </Text>
+                      </If>
+                    </AccordionContent>
+                  </AccordionItem>
                 )}
               </Loop>
             </Accordion>

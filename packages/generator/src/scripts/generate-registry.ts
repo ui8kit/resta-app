@@ -135,7 +135,7 @@ function parseJsDoc(source: string): JsDocMeta {
   const comment = match[1];
   const lines = comment
     .split('\n')
-    .map(l => l.replace(/^\s*\*\s?/, '').trim())
+    .map((l) => l.replace(/^\s*\*\s?/, '').trim())
     .filter(Boolean);
 
   const descLines: string[] = [];
@@ -150,7 +150,7 @@ function parseJsDoc(source: string): JsDocMeta {
         .replace('@tags', '')
         .trim()
         .split(',')
-        .map(t => t.trim())
+        .map((t) => t.trim())
         .filter(Boolean);
     } else if (!line.startsWith('@')) {
       descLines.push(line);
@@ -186,9 +186,7 @@ function analyzeComponent(source: string, filePath: string): ComponentInfo | nul
   const jsdoc = parseJsDoc(source);
 
   // Find component name from export
-  const exportMatch = source.match(
-    /export\s+(?:default\s+)?function\s+(\w+)/
-  );
+  const exportMatch = source.match(/export\s+(?:default\s+)?function\s+(\w+)/);
   const name = exportMatch?.[1] || fileName;
 
   // Extract Props interface fields
@@ -215,10 +213,7 @@ function analyzeComponent(source: string, filePath: string): ComponentInfo | nul
  */
 function extractProps(source: string, componentName: string): string[] {
   const propsName = `${componentName}Props`;
-  const regex = new RegExp(
-    `(?:interface|type)\\s+${propsName}[^{]*\\{([^}]*)\\}`,
-    's'
-  );
+  const regex = new RegExp(`(?:interface|type)\\s+${propsName}[^{]*\\{([^}]*)\\}`, 's');
   const match = source.match(regex);
   if (!match) return [];
 
@@ -274,11 +269,7 @@ function extractDependencies(source: string): string[] {
 /**
  * Recursively find .tsx files in a directory.
  */
-async function findFiles(
-  dir: string,
-  include: string[],
-  exclude: string[]
-): Promise<string[]> {
+async function findFiles(dir: string, include: string[], exclude: string[]): Promise<string[]> {
   const results: string[] = [];
 
   async function walk(currentDir: string): Promise<void> {
@@ -351,10 +342,7 @@ function extractDomainFromPath(filePath: string): string | undefined {
  * Resolve the registry type for a component.
  * Priority: JSDoc @ui8kit override → directory-based default.
  */
-function resolveType(
-  typeOverride: string | undefined,
-  defaultType: RegistryItemType
-): RegistryItemType {
+function resolveType(typeOverride: string | undefined, defaultType: RegistryItemType): RegistryItemType {
   if (!typeOverride) return defaultType;
 
   const typeMap: Record<string, RegistryItemType> = {
@@ -381,12 +369,7 @@ function resolveType(
  */
 export async function generateRegistry(config: RegistryConfig): Promise<Registry> {
   const include = config.include || ['**/*.tsx'];
-  const exclude = config.exclude || [
-    '**/*.test.tsx',
-    '**/*.test.ts',
-    '**/*.meta.ts',
-    '**/index.ts',
-  ];
+  const exclude = config.exclude || ['**/*.test.tsx', '**/*.test.ts', '**/*.meta.ts', '**/index.ts'];
 
   const items: RegistryItem[] = [];
 
@@ -408,9 +391,7 @@ export async function generateRegistry(config: RegistryConfig): Promise<Registry
 
       const deps =
         config.excludeDependencies && config.excludeDependencies.length > 0
-          ? info.dependencies.filter(
-              (dep) => !config.excludeDependencies!.includes(dep)
-            )
+          ? info.dependencies.filter((dep) => !config.excludeDependencies!.includes(dep))
           : info.dependencies;
 
       const filePathResolved = resolve(filePath);

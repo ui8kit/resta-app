@@ -14,13 +14,7 @@ export interface DesignLayoutProps {
   headerSubtitle?: string;
 }
 
-export function DesignLayout({
-  children,
-  navItems,
-  sidebarLinks,
-  headerTitle,
-  headerSubtitle,
-}: DesignLayoutProps) {
+export function DesignLayout({ children, navItems, sidebarLinks, headerTitle, headerSubtitle }: DesignLayoutProps) {
   const links = useDesignSidebarLinks(sidebarLinks ?? []);
   const topNav = navItems ?? [];
 
@@ -35,21 +29,9 @@ export function DesignLayout({
 
       <Block flex="row" gap="6" data-class="design-layout-body">
         <If test="links.length > 0" value={links.length > 0}>
-          <Block
-            component="aside"
-            data-class="design-layout-sidebar"
-            border="r"
-            bg="card"
-            w="64"
-            shrink="0"
-            py="4"
-          >
+          <Block component="aside" data-class="design-layout-sidebar" border="r" bg="card" w="64" shrink="0" py="4">
             <Box w="full" h="full" data-class="design-sidebar-content">
-              <DashSidebar
-                label="Design System"
-                links={links}
-                data-class="design-layout-sidebar-nav"
-              />
+              <DashSidebar label="Design System" links={links} data-class="design-layout-sidebar-nav" />
             </Box>
           </Block>
         </If>

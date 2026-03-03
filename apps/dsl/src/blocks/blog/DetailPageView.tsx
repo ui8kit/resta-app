@@ -19,13 +19,7 @@ export interface BlogDetailPageViewProps {
   };
 }
 
-export function BlogDetailPageView({
-  navItems,
-  sidebar,
-  headerTitle,
-  headerSubtitle,
-  post,
-}: BlogDetailPageViewProps) {
+export function BlogDetailPageView({ navItems, sidebar, headerTitle, headerSubtitle, post }: BlogDetailPageViewProps) {
   return (
     <MainLayout
       mode="full"

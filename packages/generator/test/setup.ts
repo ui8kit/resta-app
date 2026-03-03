@@ -1,6 +1,6 @@
 /**
  * Vitest Setup File
- * 
+ *
  * This file runs before each test file.
  * Use it for global test configuration and utilities.
  */
@@ -66,7 +66,7 @@ function normalizePath(path: string): string {
  */
 export function createMockFileSystem() {
   const files = new Map<string, string>();
-  
+
   return {
     files,
     readFile: vi.fn(async (path: string) => {
@@ -109,7 +109,7 @@ export function createMockFileSystem() {
  * Wait for a specified time (useful for async tests)
  */
 export function wait(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
@@ -118,11 +118,11 @@ export function wait(ms: number): Promise<void> {
 export function createDeferred<T>() {
   let resolve!: (value: T) => void;
   let reject!: (reason?: unknown) => void;
-  
+
   const promise = new Promise<T>((res, rej) => {
     resolve = res;
     reject = rej;
   });
-  
+
   return { promise, resolve, reject };
 }

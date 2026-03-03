@@ -1,8 +1,8 @@
-import type { ElementType, ReactNode } from "react";
-import { forwardRef } from "react";
-import { cn } from "../../lib/utils";
-import { resolveUtilityClassName, type UtilityPropBag, type UtilityPropPrefix } from "../../lib/utility-props";
-import { typographyVariants, type TypographyVariantProps } from "../../variants/typography";
+import type { ElementType, ReactNode } from 'react';
+import { forwardRef } from 'react';
+import { cn } from '../../lib/utils';
+import { resolveUtilityClassName, type UtilityPropBag, type UtilityPropPrefix } from '../../lib/utility-props';
+import { typographyVariants, type TypographyVariantProps } from '../../variants/typography';
 
 type TitleDomProps = Omit<React.HTMLAttributes<HTMLHeadingElement>, UtilityPropPrefix>;
 
@@ -20,16 +20,16 @@ export const Title = forwardRef<HTMLHeadingElement, TitleProps>(
       className,
       order = 1,
       // Typography variants with Title-specific defaults
-      fontSize = "xl",
+      fontSize = 'xl',
       textColor,
       textAlign,
-      fontWeight = "bold",
-      lineHeight = "normal",
+      fontWeight = 'bold',
+      lineHeight = 'normal',
       letterSpacing,
       truncate,
       ...props
     },
-    ref
+    ref,
   ) => {
     const { utilityClassName, rest } = resolveUtilityClassName(props);
     const Heading = `h${order}` as ElementType;
@@ -49,14 +49,14 @@ export const Title = forwardRef<HTMLHeadingElement, TitleProps>(
             truncate,
           }),
           utilityClassName,
-          className
+          className,
         )}
         {...rest}
       >
         {children}
       </Heading>
     );
-  }
+  },
 );
 
-Title.displayName = "Title";
+Title.displayName = 'Title';

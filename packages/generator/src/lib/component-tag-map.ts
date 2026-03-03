@@ -39,10 +39,7 @@ export function loadComponentTagMap(customPath?: string): ComponentTagMap {
 
   const paths = customPath
     ? [customPath]
-    : [
-        join(__dirname, 'component-tag-map.json'),
-        join(process.cwd(), 'src', 'lib', 'component-tag-map.json'),
-      ];
+    : [join(__dirname, 'component-tag-map.json'), join(process.cwd(), 'src', 'lib', 'component-tag-map.json')];
 
   for (const mapPath of paths) {
     try {
@@ -54,19 +51,13 @@ export function loadComponentTagMap(customPath?: string): ComponentTagMap {
     }
   }
 
-  throw new Error(
-    `component-tag-map.json not found. Tried: ${paths.join(', ')}`
-  );
+  throw new Error(`component-tag-map.json not found. Tried: ${paths.join(', ')}`);
 }
 
 /**
  * Check if tag is allowed for component.
  */
-export function isTagAllowedForComponent(
-  component: string,
-  tag: string,
-  map?: ComponentTagMap
-): boolean {
+export function isTagAllowedForComponent(component: string, tag: string, map?: ComponentTagMap): boolean {
   const m = map ?? loadComponentTagMap();
   const config = m.components[component];
   if (!config) return false;
@@ -78,10 +69,7 @@ export function isTagAllowedForComponent(
 /**
  * Get component name by data-class attribute.
  */
-export function getComponentByDataClass(
-  dataClass: string,
-  map?: ComponentTagMap
-): string | null {
+export function getComponentByDataClass(dataClass: string, map?: ComponentTagMap): string | null {
   const m = map ?? loadComponentTagMap();
   for (const [name, config] of Object.entries(m.components)) {
     if (config.dataClass === dataClass) return name;
@@ -92,10 +80,7 @@ export function getComponentByDataClass(
 /**
  * Get allowed tags for component.
  */
-export function getAllowedTags(
-  component: string,
-  map?: ComponentTagMap
-): string[] {
+export function getAllowedTags(component: string, map?: ComponentTagMap): string[] {
   const m = map ?? loadComponentTagMap();
   const config = m.components[component];
   return config?.allowedTags ?? [];
@@ -104,11 +89,7 @@ export function getAllowedTags(
 /**
  * Validate component + tag pair. Returns error message or null if valid.
  */
-export function validateComponentTag(
-  component: string,
-  tag: string,
-  map?: ComponentTagMap
-): string | null {
+export function validateComponentTag(component: string, tag: string, map?: ComponentTagMap): string | null {
   const m = map ?? loadComponentTagMap();
   const config = m.components[component];
   if (!config) return `Unknown component: ${component}`;

@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 const result = spawnSync(
   'maintain',
   ['validate', '--cwd', '.', '--config', 'maintain.config.json', '--check', 'view-exports'],
-  { stdio: 'inherit' }
+  { stdio: 'inherit' },
 );
 
 if (result.error) {

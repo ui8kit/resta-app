@@ -127,152 +127,152 @@ describe('Real Components Integration', () => {
   describe('HeroBlock', () => {
     it('transforms HeroBlock to HAST', () => {
       const result = transformJsx(HERO_BLOCK);
-      
+
       expect(result.errors).toHaveLength(0);
       expect(result.tree.type).toBe('root');
       expect(result.tree.children.length).toBeGreaterThan(0);
-      
+
       // Top-level component is Block, so we get its include
       expect(result.dependencies).toContain('partials/block');
     });
-    
+
     it('detects component metadata', () => {
       const result = transformJsx(HERO_BLOCK);
-      
+
       expect(result.tree.meta?.componentName).toBe('HeroBlock');
       expect(result.tree.meta?.componentType).toBe('block');
     });
   });
-  
+
   describe('FeaturesBlock with loop', () => {
     // Note: FeaturesBlock uses only component references (Block, Grid, etc.)
     // The loop is inside Grid children which is itself a component
     // So we only see the top-level Block include
     it('transforms FeaturesBlock to HAST', () => {
       const result = transformJsx(FEATURES_BLOCK);
-      
+
       expect(result.errors).toHaveLength(0);
       expect(result.tree.type).toBe('root');
-      
+
       // Top-level is Block component
       expect(result.dependencies).toContain('partials/block');
     });
-    
+
     it('detects component metadata', () => {
       const result = transformJsx(FEATURES_BLOCK);
-      
+
       expect(result.tree.meta?.componentName).toBe('FeaturesBlock');
       expect(result.tree.meta?.componentType).toBe('block');
     });
   });
-  
+
   describe('Card with children and conditional', () => {
     it('transforms Card with slot and condition', () => {
       const result = transformJsx(CARD_WITH_CHILDREN);
-      
+
       expect(result.errors).toHaveLength(0);
-      
+
       // Should detect slot
       const slots = findByAnnotation(result.tree, 'slot');
       expect(slots.length).toBeGreaterThan(0);
-      
+
       // Should detect condition
       const conditions = findByAnnotation(result.tree, 'condition');
       expect(conditions.length).toBeGreaterThan(0);
-      
+
       const condAnnotation = getAnnotations(conditions[0]);
       expect(condAnnotation?.condition?.expression).toBe('isActive');
-      
+
       // Should detect variable
       expect(result.variables).toContain('title');
     });
-    
+
     it('extracts props from Card', () => {
       const result = transformJsx(CARD_WITH_CHILDREN);
-      
+
       const props = result.tree.meta?.props || [];
-      const propNames = props.map(p => p.name);
-      
+      const propNames = props.map((p) => p.name);
+
       expect(propNames).toContain('title');
       expect(propNames).toContain('children');
       expect(propNames).toContain('isActive');
     });
   });
-  
+
   describe('Plugin Integration', () => {
     it('generates Liquid template from Card', async () => {
       const result = transformJsx(CARD_WITH_CHILDREN);
-      
+
       const plugin = new LiquidPlugin();
       await plugin.initialize({
         logger: { debug: () => {}, info: () => {}, warn: () => {}, error: () => {} } as any,
         config: { fileExtension: '.liquid', outputDir: './dist' },
         outputDir: './dist',
       });
-      
+
       const output = await plugin.transform(result.tree);
-      
+
       // Should contain Liquid syntax
       expect(output.content).toContain('{{ title }}');
       expect(output.content).toContain('{% if isActive %}');
       // Content slot
       expect(output.content).toMatch(/\{\{[^}]*content[^}]*\}\}/);
-      
+
       await plugin.dispose();
     });
-    
+
     it('generates Handlebars template from Card', async () => {
       const result = transformJsx(CARD_WITH_CHILDREN);
-      
+
       const plugin = new HandlebarsPlugin();
       await plugin.initialize({
         logger: { debug: () => {}, info: () => {}, warn: () => {}, error: () => {} } as any,
         config: { fileExtension: '.hbs', outputDir: './dist' },
         outputDir: './dist',
       });
-      
+
       const output = await plugin.transform(result.tree);
-      
+
       // Should contain Handlebars syntax
       expect(output.content).toContain('{{title}}');
       expect(output.content).toContain('{{#if isActive}}');
-      
+
       await plugin.dispose();
     });
-    
+
     it('generates Twig template from FeaturesBlock', async () => {
       const result = transformJsx(FEATURES_BLOCK);
-      
+
       const plugin = new TwigPlugin();
       await plugin.initialize({
         logger: { debug: () => {}, info: () => {}, warn: () => {}, error: () => {} } as any,
         config: { fileExtension: '.twig', outputDir: './dist' },
         outputDir: './dist',
       });
-      
+
       const output = await plugin.transform(result.tree);
-      
+
       // FeaturesBlock's top level is Block component, so we get include
       expect(output.content).toContain("{% include 'partials/block.twig'");
-      
+
       await plugin.dispose();
     });
-    
+
     it('generates Latte template from FeaturesBlock', async () => {
       const result = transformJsx(FEATURES_BLOCK);
-      
+
       const plugin = new LattePlugin();
       await plugin.initialize({
         logger: { debug: () => {}, info: () => {}, warn: () => {}, error: () => {} } as any,
         config: { fileExtension: '.latte', outputDir: './dist' },
         outputDir: './dist',
       });
-      
+
       const output = await plugin.transform(result.tree);
-      
+
       // FeaturesBlock's top level is Block component, so we get include
       expect(output.content).toContain("{include 'partials/block.latte'");
-      
+
       await plugin.dispose();
     });
   });

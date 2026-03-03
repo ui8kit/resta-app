@@ -1,5 +1,5 @@
-import { cn } from "./utils";
-import { utilityPropsMap } from "./utility-props.map";
+import { cn } from './utils';
+import { utilityPropsMap } from './utility-props.map';
 
 export type UtilityPropPrefix = keyof typeof utilityPropsMap;
 
@@ -10,7 +10,7 @@ type UtilityAllowed<P extends UtilityPropPrefix> = UtilityMap[P][number];
 type NumericFromString<S> = S extends `${infer N extends number}` ? N : never;
 type UtilityNumeric<P extends UtilityPropPrefix> = NumericFromString<UtilityAllowed<P>>;
 
-type HasBareToken<P extends UtilityPropPrefix> = "" extends UtilityAllowed<P> ? true : false;
+type HasBareToken<P extends UtilityPropPrefix> = '' extends UtilityAllowed<P> ? true : false;
 
 /**
  * Strict utility-prop value:
@@ -20,18 +20,15 @@ type HasBareToken<P extends UtilityPropPrefix> = "" extends UtilityAllowed<P> ? 
  * - allows false/null/undefined to omit the class
  */
 export type UtilityPropInput<P extends UtilityPropPrefix> =
-  | Exclude<UtilityAllowed<P>, "">
+  | Exclude<UtilityAllowed<P>, ''>
   | UtilityNumeric<P>
-  | (HasBareToken<P> extends true ? "" | true : never);
+  | (HasBareToken<P> extends true ? '' | true : never);
 
 export type UtilityPropBag = {
   [P in UtilityPropPrefix]?: UtilityPropInput<P> | false | null | undefined;
 };
 
-export type UtilityPropValue<P extends UtilityPropPrefix> =
-  | UtilityPropInput<P>
-  | null
-  | undefined;
+export type UtilityPropValue<P extends UtilityPropPrefix> = UtilityPropInput<P> | null | undefined;
 
 /**
  * Fast utility props -> className resolver (NO runtime validation).
@@ -42,11 +39,11 @@ export type UtilityPropValue<P extends UtilityPropPrefix> =
 const FLEX_DIR_VALUES = ['col', 'row', 'col-reverse', 'row-reverse'] as const;
 
 const GAP_SEMANTIC: Record<string, string> = {
-  xs: "1",
-  sm: "2",
-  md: "4",
-  lg: "6",
-  xl: "8",
+  xs: '1',
+  sm: '2',
+  md: '4',
+  lg: '6',
+  xl: '8',
 };
 
 export function ux(props: UtilityPropBag): string {
@@ -68,7 +65,7 @@ export function ux(props: UtilityPropBag): string {
 
     // Bare-token alias: italic="italic" → "italic" (when map allows "")
     const allowed = (utilityPropsMap as unknown as Record<string, string[] | undefined>)[k];
-    if (allowed?.includes("") && value === k) {
+    if (allowed?.includes('') && value === k) {
       tokens.push(k);
       continue;
     }
@@ -88,7 +85,7 @@ export function ux(props: UtilityPropBag): string {
     tokens.push(`${k}-${value}`);
   }
 
-  return tokens.join(" ");
+  return tokens.join(' ');
 }
 
 export function uxcn(props: UtilityPropBag, ...rest: Parameters<typeof cn>) {
@@ -106,7 +103,9 @@ export function uxcn(props: UtilityPropBag, ...rest: Parameters<typeof cn>) {
  * Note: this function does NOT validate values at runtime. Whitelist validation
  * is expected to be enforced by scripts/guards in the workflow.
  */
-export function splitUtilityProps<T extends Record<string, any>>(props: T): {
+export function splitUtilityProps<T extends Record<string, any>>(
+  props: T,
+): {
   utility: UtilityPropBag;
   rest: Omit<T, UtilityPropPrefix>;
 } {
@@ -124,7 +123,9 @@ export function splitUtilityProps<T extends Record<string, any>>(props: T): {
   return { utility, rest: rest as any };
 }
 
-export function resolveUtilityClassName<T extends Record<string, any>>(props: T): {
+export function resolveUtilityClassName<T extends Record<string, any>>(
+  props: T,
+): {
   utilityClassName: string;
   rest: Omit<T, UtilityPropPrefix>;
 } {

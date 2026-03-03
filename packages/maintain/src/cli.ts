@@ -14,10 +14,7 @@ Command options quick reference:
   clean    --cwd, --config, --mode, --paths, --execute, --verbose
 `;
 
-program
-  .name('maintain')
-  .description('Project maintenance CLI for UI8Kit workspaces')
-  .version('0.1.0');
+program.name('maintain').description('Project maintenance CLI for UI8Kit workspaces').version('0.1.0');
 
 registerRunCommand(program);
 registerValidateCommand(program);

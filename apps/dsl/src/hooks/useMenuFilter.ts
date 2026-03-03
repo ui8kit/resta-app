@@ -37,8 +37,7 @@ export function useMenuFilter(menu: MenuInput, promotions?: PromotionsInput) {
     : withComputed;
 
   const allTabVariant: CategoryTabVariant = selectedCategory === null ? 'secondary' : 'ghost';
-  const getCategoryTabVariant = (id: string): CategoryTabVariant =>
-    selectedCategory === id ? 'secondary' : 'ghost';
+  const getCategoryTabVariant = (id: string): CategoryTabVariant => (selectedCategory === id ? 'secondary' : 'ghost');
 
   return {
     selectedCategory,

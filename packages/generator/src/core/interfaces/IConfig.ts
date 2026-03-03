@@ -2,7 +2,7 @@ import type { UncssStepConfig } from '../../steps/postprocess-uncss';
 
 /**
  * Generator configuration interface.
- * 
+ *
  * This is the main configuration object passed to the generator.
  */
 export interface GeneratorConfig {
@@ -13,7 +13,7 @@ export interface GeneratorConfig {
     name: string;
     lang?: string;
   };
-  
+
   /**
    * CSS class mapping paths
    */
@@ -21,7 +21,7 @@ export interface GeneratorConfig {
     ui8kitMap?: string;
     shadcnMap?: string;
   };
-  
+
   /**
    * CSS generation configuration
    */
@@ -43,7 +43,7 @@ export interface GeneratorConfig {
       shadcnCss?: string;
     };
   };
-  
+
   /**
    * HTML generation configuration
    */
@@ -67,12 +67,12 @@ export interface GeneratorConfig {
     appEntry: string;
     skipRoutes?: string[];
   };
-  
+
   /**
    * UnCSS configuration
    */
   uncss?: UncssStepConfig;
-  
+
   /**
    * MDX documentation configuration
    */
@@ -90,7 +90,7 @@ export interface GeneratorConfig {
       maxLevel?: number;
     };
   };
-  
+
   /**
    * PostCSS + Tailwind processing
    */

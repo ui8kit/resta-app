@@ -1,6 +1,6 @@
 /**
  * Core interfaces for the generator orchestrator.
- * 
+ *
  * These interfaces define the contracts for:
  * - Services: Individual units of functionality
  * - Pipeline: Orchestration of generation stages

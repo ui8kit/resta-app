@@ -30,22 +30,12 @@ export interface MenuPageViewProps {
   promotions?: { items?: PromotionItem[] };
 }
 
-export function MenuPageView({
-  navItems,
-  sidebar,
-  headerTitle,
-  headerSubtitle,
-  menu,
-  promotions,
-}: MenuPageViewProps) {
+export function MenuPageView({ navItems, sidebar, headerTitle, headerSubtitle, menu, promotions }: MenuPageViewProps) {
   const { cart, cartCount, addToCart, removeFromCart, updateCartQuantity } = useCart();
-  const {
-    setSelectedCategory,
-    categories,
-    filteredItems,
-    allTabVariant,
-    getCategoryTabVariant,
-  } = useMenuFilter(menu, promotions);
+  const { setSelectedCategory, categories, filteredItems, allTabVariant, getCategoryTabVariant } = useMenuFilter(
+    menu,
+    promotions,
+  );
 
   return (
     <MainLayout
@@ -89,7 +79,14 @@ export function MenuPageView({
               <Else>
                 <Loop each="cart" as="entry" data={cart}>
                   {(entry: CartEntry) => (
-                    <Group key={entry.itemId} w="full" justify="between" items="center" gap="2" data-class="menu-cart-item">
+                    <Group
+                      key={entry.itemId}
+                      w="full"
+                      justify="between"
+                      items="center"
+                      gap="2"
+                      data-class="menu-cart-item"
+                    >
                       <Stack gap="0" min="w-0" data-class="menu-cart-item-info">
                         <Text fontSize="sm" fontWeight="medium" data-class="menu-cart-item-title">
                           {entry.title}

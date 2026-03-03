@@ -36,13 +36,7 @@ export interface ParsedJsxUsage {
 
 export class TsxParser {
   parseExports(content: string, filePath = 'inline.tsx'): ParsedExportSymbol[] {
-    const sourceFile = ts.createSourceFile(
-      filePath,
-      content,
-      ts.ScriptTarget.Latest,
-      true,
-      ts.ScriptKind.TSX
-    );
+    const sourceFile = ts.createSourceFile(filePath, content, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
     const symbols: ParsedExportSymbol[] = [];
 
     for (const statement of sourceFile.statements) {
@@ -88,9 +82,7 @@ export class TsxParser {
 
       if (ts.isVariableStatement(statement)) {
         for (const declaration of statement.declarationList.declarations) {
-          const name = ts.isIdentifier(declaration.name)
-            ? declaration.name.text
-            : declaration.name.getText(sourceFile);
+          const name = ts.isIdentifier(declaration.name) ? declaration.name.text : declaration.name.getText(sourceFile);
           symbols.push(this.exportRecord(sourceFile, declaration, 'variable', name));
         }
         continue;
@@ -103,13 +95,7 @@ export class TsxParser {
   }
 
   parseImports(content: string, filePath = 'inline.tsx'): ParsedImport[] {
-    const sourceFile = ts.createSourceFile(
-      filePath,
-      content,
-      ts.ScriptTarget.Latest,
-      true,
-      ts.ScriptKind.TSX
-    );
+    const sourceFile = ts.createSourceFile(filePath, content, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
     const imports: ParsedImport[] = [];
 
     for (const statement of sourceFile.statements) {
@@ -127,7 +113,7 @@ export class TsxParser {
         Boolean(
           clause?.namedBindings &&
             ts.isNamedImports(clause.namedBindings) &&
-            clause.namedBindings.elements.every((entry) => entry.isTypeOnly)
+            clause.namedBindings.elements.every((entry) => entry.isTypeOnly),
         );
 
       if (clause?.name) {
@@ -155,22 +141,11 @@ export class TsxParser {
     return imports;
   }
 
-  parseJsxProps(
-    content: string,
-    componentName: string = '*',
-    filePath = 'inline.tsx'
-  ): ParsedJsxUsage[] {
-    const sourceFile = ts.createSourceFile(
-      filePath,
-      content,
-      ts.ScriptTarget.Latest,
-      true,
-      ts.ScriptKind.TSX
-    );
+  parseJsxProps(content: string, componentName: string = '*', filePath = 'inline.tsx'): ParsedJsxUsage[] {
+    const sourceFile = ts.createSourceFile(filePath, content, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
     const usages: ParsedJsxUsage[] = [];
 
-    const shouldInclude = (name: string): boolean =>
-      componentName === '*' || componentName === name;
+    const shouldInclude = (name: string): boolean => componentName === '*' || componentName === name;
 
     const handleOpening = (opening: ts.JsxOpeningLikeElement): void => {
       const name = this.getTagName(opening.tagName);
@@ -224,7 +199,7 @@ export class TsxParser {
     sourceFile: ts.SourceFile,
     node: ts.Node,
     kind: ExportSymbolKind,
-    name?: string
+    name?: string,
   ): ParsedExportSymbol {
     const location = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile));
     return {
@@ -252,9 +227,7 @@ export class TsxParser {
     return `${name.namespace.text}:${name.name.text}`;
   }
 
-  private readJsxAttributeValue(
-    initializer: ts.JsxAttributeValue | undefined
-  ): JsxPropValue | undefined {
+  private readJsxAttributeValue(initializer: ts.JsxAttributeValue | undefined): JsxPropValue | undefined {
     if (!initializer) {
       return true;
     }

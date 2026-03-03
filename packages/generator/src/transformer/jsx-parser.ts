@@ -39,15 +39,12 @@ export const DEFAULT_PARSER_OPTIONS: ParserOptions = {
 /**
  * Parse JSX/TSX source code to Babel AST
  */
-export function parseJsx(
-  source: string,
-  options: Partial<ParserOptions> = {}
-): File {
+export function parseJsx(source: string, options: Partial<ParserOptions> = {}): File {
   const mergedOptions: ParserOptions = {
     ...DEFAULT_PARSER_OPTIONS,
     ...options,
   };
-  
+
   return parse(source, mergedOptions);
 }
 
@@ -56,7 +53,7 @@ export function parseJsx(
  */
 export function parseJsxFile(
   source: string,
-  filename?: string
+  filename?: string,
 ): {
   ast: File;
   imports: AnalyzedImport[];
@@ -67,23 +64,23 @@ export function parseJsxFile(
   const ast = parseJsx(source, {
     sourceFilename: filename,
   });
-  
+
   const imports: AnalyzedImport[] = [];
   const namedExports: string[] = [];
   let hasJsx = false;
   let hasDefaultExport = false;
-  
+
   for (const node of ast.program.body) {
     // Collect imports
     if (node.type === 'ImportDeclaration') {
       imports.push(analyzeImport(node));
     }
-    
+
     // Check for default export
     if (node.type === 'ExportDefaultDeclaration') {
       hasDefaultExport = true;
     }
-    
+
     // Collect named exports
     if (node.type === 'ExportNamedDeclaration') {
       if (node.declaration) {
@@ -93,23 +90,17 @@ export function parseJsxFile(
       if (node.specifiers) {
         for (const spec of node.specifiers) {
           if (spec.type === 'ExportSpecifier') {
-            const name = spec.exported.type === 'Identifier' 
-              ? spec.exported.name 
-              : spec.exported.value;
+            const name = spec.exported.type === 'Identifier' ? spec.exported.name : spec.exported.value;
             namedExports.push(name);
           }
         }
       }
     }
   }
-  
+
   // Check for JSX (simple heuristic)
-  hasJsx = source.includes('<') && (
-    source.includes('/>') || 
-    source.includes('</') ||
-    /<[A-Z]/.test(source)
-  );
-  
+  hasJsx = source.includes('<') && (source.includes('/>') || source.includes('</') || /<[A-Z]/.test(source));
+
   return {
     ast,
     imports,
@@ -132,7 +123,7 @@ function analyzeImport(node: any): AnalyzedImport {
     namedImports: [],
     isTypeOnly: node.importKind === 'type',
   };
-  
+
   for (const spec of node.specifiers || []) {
     if (spec.type === 'ImportDefaultSpecifier') {
       result.defaultImport = spec.local.name;
@@ -142,7 +133,7 @@ function analyzeImport(node: any): AnalyzedImport {
       result.namespaceImport = spec.local.name;
     }
   }
-  
+
   return result;
 }
 
@@ -151,7 +142,7 @@ function analyzeImport(node: any): AnalyzedImport {
  */
 function extractDeclarationNames(decl: Statement): string[] {
   const names: string[] = [];
-  
+
   if (decl.type === 'FunctionDeclaration' && decl.id) {
     names.push(decl.id.name);
   } else if (decl.type === 'ClassDeclaration' && decl.id) {
@@ -173,7 +164,7 @@ function extractDeclarationNames(decl: Statement): string[] {
   } else if (decl.type === 'TSInterfaceDeclaration') {
     names.push(decl.id.name);
   }
-  
+
   return names;
 }
 

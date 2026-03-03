@@ -4,12 +4,11 @@ export interface ClassConflict {
 }
 
 export class ClassMatcher {
-  private static readonly COLOR_CLASS_PATTERN =
-    /^(bg|text|border|ring|accent|caret|fill|stroke|from|to|via)-/;
+  private static readonly COLOR_CLASS_PATTERN = /^(bg|text|border|ring|accent|caret|fill|stroke|from|to|via)-/;
 
   static extractColorClasses(classes: string[]): string[] {
     return classes.filter((className) =>
-      ClassMatcher.COLOR_CLASS_PATTERN.test(ClassMatcher.normalizeUtility(className))
+      ClassMatcher.COLOR_CLASS_PATTERN.test(ClassMatcher.normalizeUtility(className)),
     );
   }
 
@@ -60,9 +59,7 @@ export class ClassMatcher {
     return conflicts.sort((left, right) => left.utility.localeCompare(right.utility));
   }
 
-  private static parseUtilityClass(
-    className: string
-  ): { utility: string; value: string } | undefined {
+  private static parseUtilityClass(className: string): { utility: string; value: string } | undefined {
     const normalized = ClassMatcher.normalizeUtility(className);
     const parts = normalized.split('-').filter(Boolean);
     if (parts.length < 2) {
@@ -70,8 +67,7 @@ export class ClassMatcher {
     }
 
     const directional = new Set(['x', 'y', 't', 'r', 'b', 'l']);
-    const utility =
-      parts.length >= 3 && directional.has(parts[1] ?? '') ? `${parts[0]}-${parts[1]}` : parts[0];
+    const utility = parts.length >= 3 && directional.has(parts[1] ?? '') ? `${parts[0]}-${parts[1]}` : parts[0];
     const valueStart = utility === parts[0] ? 1 : 2;
     const value = parts.slice(valueStart).join('-');
 

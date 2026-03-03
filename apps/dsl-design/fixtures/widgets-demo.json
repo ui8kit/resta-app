@@ -24,7 +24,15 @@
   ],
   "accordionItems": [
     { "id": "faq-1", "trigger": "What are your delivery hours?", "content": "We deliver Mon–Sun from 11:00 to 23:00." },
-    { "id": "faq-2", "trigger": "Do you offer vegetarian options?", "content": "Yes, we have salads, sides, and several main courses." },
-    { "id": "faq-3", "trigger": "How can I apply a promo code?", "content": "Enter the code at checkout. Some promos apply automatically." }
+    {
+      "id": "faq-2",
+      "trigger": "Do you offer vegetarian options?",
+      "content": "Yes, we have salads, sides, and several main courses."
+    },
+    {
+      "id": "faq-3",
+      "trigger": "How can I apply a promo code?",
+      "content": "Enter the code at checkout. Some promos apply automatically."
+    }
   ]
 }

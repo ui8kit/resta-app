@@ -8,10 +8,7 @@ export type SidebarProps = {
 
 export function Sidebar({ children, position = 'right' }: SidebarProps) {
   return (
-    <Block
-      component="aside"
-      data-class={`sidebar sidebar-${position}`}
-    >
+    <Block component="aside" data-class={`sidebar sidebar-${position}`}>
       <Stack gap="6" w="full" items="stretch" data-class="sidebar-content">
         {children}
       </Stack>

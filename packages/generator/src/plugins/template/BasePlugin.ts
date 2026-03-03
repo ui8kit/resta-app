@@ -28,22 +28,27 @@ import type {
   GenBlock,
 } from '../../hast';
 
-import {
-  isElement,
-  isText,
-  isComment,
-  getAnnotations,
-  collectVariables,
-  collectDependencies,
-} from '../../hast';
+import { isElement, isText, isComment, getAnnotations, collectVariables, collectDependencies } from '../../hast';
 
 // =============================================================================
 // Self-Closing Tags
 // =============================================================================
 
 const SELF_CLOSING_TAGS = new Set([
-  'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
-  'link', 'meta', 'param', 'source', 'track', 'wbr',
+  'area',
+  'base',
+  'br',
+  'col',
+  'embed',
+  'hr',
+  'img',
+  'input',
+  'link',
+  'meta',
+  'param',
+  'source',
+  'track',
+  'wbr',
 ]);
 
 // =============================================================================
@@ -356,7 +361,12 @@ export abstract class BasePlugin implements ITemplatePlugin {
 
       if (key === 'className' && Array.isArray(value)) {
         attributes['class'] = value.join(' ');
-      } else if (key === 'style' && typeof value === 'object' && value !== null && !('__expression' in (value as object))) {
+      } else if (
+        key === 'style' &&
+        typeof value === 'object' &&
+        value !== null &&
+        !('__expression' in (value as object))
+      ) {
         attributes['style'] = this.formatStyleObject(value as Record<string, string>);
       } else {
         attributes[key] = value;
@@ -403,11 +413,7 @@ export abstract class BasePlugin implements ITemplatePlugin {
    * Escape attribute value
    */
   protected escapeAttributeValue(value: string): string {
-    return value
-      .replace(/&/g, '&amp;')
-      .replace(/"/g, '&quot;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+    return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
   /**

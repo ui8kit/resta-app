@@ -16,20 +16,8 @@ export function Footer({
   'data-class': dataClassAttr,
 }: FooterProps) {
   return (
-    <Block
-      component="footer"
-      py="8"
-      border="t"
-      bg="card"
-      data-class={dataClass ?? dataClassAttr ?? 'footer'}
-    >
-      <Container
-        flex=""
-        justify="center"
-        items="center"
-        gap="8"
-        data-class="footer-container"
-      >
+    <Block component="footer" py="8" border="t" bg="card" data-class={dataClass ?? dataClassAttr ?? 'footer'}>
+      <Container flex="" justify="center" items="center" gap="8" data-class="footer-container">
         <If test="copyright" value={!!(copyright ?? '')}>
           <Text fontSize="sm" textColor="muted-foreground" data-class="footer-copyright">
             <Var name="copyright" value={copyright ?? ''} />

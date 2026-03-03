@@ -87,7 +87,7 @@ function formatIssue(issue: BlueprintValidationIssue): string {
 function toMarkdown(
   blueprintPath: string,
   errors: BlueprintValidationIssue[],
-  warnings: BlueprintValidationIssue[]
+  warnings: BlueprintValidationIssue[],
 ): string {
   const status = errors.length > 0 ? 'FAIL' : 'PASS';
   const lines: string[] = [
@@ -134,7 +134,7 @@ function validatePerEntity(
   adapterTypesSource: string,
   canonicalFixturesBlock: string,
   navigationLinks: Set<string>,
-  issues: BlueprintValidationIssue[]
+  issues: BlueprintValidationIssue[],
 ): void {
   for (const entity of blueprint.entities) {
     const fixturePath = resolve(cwd, entity.fixture);
@@ -317,7 +317,7 @@ function validateCrossEntity(
   cwd: string,
   appRoutes: Set<string>,
   contextSource: string,
-  issues: BlueprintValidationIssue[]
+  issues: BlueprintValidationIssue[],
 ): void {
   const entityFixtureSet = new Set(blueprint.entities.map((entity) => entity.fixture));
   const entityRouteSet = new Set(blueprint.entities.flatMap((entity) => entity.routes));
@@ -326,7 +326,7 @@ function validateCrossEntity(
 
   const fixturesDir = resolve(cwd, 'fixtures');
   const fixtureFiles = listFilesRecursive(fixturesDir, ['.json']).filter(
-    (file) => !toRelativeFixture(file, cwd).startsWith('fixtures/shared/')
+    (file) => !toRelativeFixture(file, cwd).startsWith('fixtures/shared/'),
   );
 
   for (const fixtureFile of fixtureFiles) {
@@ -441,7 +441,7 @@ export function validateBlueprint(options: ValidateBlueprintOptions): ValidateBl
     adapterTypesSource,
     canonicalFixturesBlock,
     navigationLinks,
-    issues
+    issues,
   );
   validateCrossEntity(blueprint, cwd, appRoutes, contextSource, issues);
 

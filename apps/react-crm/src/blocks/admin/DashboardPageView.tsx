@@ -1,6 +1,19 @@
 import { AdminLayout } from '@/layouts';
 import { DashSidebar } from '@/blocks';
-import { Block, Stack, Group, Grid, Title, Text, Button, Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components';
+import {
+  Block,
+  Stack,
+  Group,
+  Grid,
+  Title,
+  Text,
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from '@/components';
 import { context } from '@/data/context';
 import { useAdminActions } from '@/hooks';
 
@@ -12,13 +25,10 @@ interface AdminDashboardPageViewProps {
 export function AdminDashboardPageView(props: AdminDashboardPageViewProps) {
   const { onExport, onImport } = props;
 
-  const {
-    fileInputRef,
-    handleLogout,
-    handleExport,
-    handleImportClick,
-    handleFileChange,
-  } = useAdminActions(onExport, onImport);
+  const { fileInputRef, handleLogout, handleExport, handleImportClick, handleFileChange } = useAdminActions(
+    onExport,
+    onImport,
+  );
   const sidebar = (
     <DashSidebar label={context.adminSidebarLabel} links={context.getAdminSidebarLinks('/admin/dashboard')} />
   );
@@ -64,8 +74,20 @@ export function AdminDashboardPageView(props: AdminDashboardPageViewProps) {
                 </CardDescription>
               </CardHeader>
               <CardContent data-class="admin-import-actions">
-                <input ref={fileInputRef} type="file" accept=".json" onChange={handleFileChange} style={{ display: 'none' }} />
-                <Button variant="ghost" onClick={handleImportClick} rounded="sm" size="sm" data-class="admin-import-button">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".json"
+                  onChange={handleFileChange}
+                  style={{ display: 'none' }}
+                />
+                <Button
+                  variant="ghost"
+                  onClick={handleImportClick}
+                  rounded="sm"
+                  size="sm"
+                  data-class="admin-import-button"
+                >
                   Import JSON
                 </Button>
               </CardContent>

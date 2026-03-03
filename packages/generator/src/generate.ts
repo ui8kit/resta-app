@@ -140,10 +140,7 @@ export interface GenerateResult {
   };
 }
 
-export async function generate(
-  config: GenerateConfig,
-  stages?: readonly GenerateStageName[]
-): Promise<GenerateResult> {
+export async function generate(config: GenerateConfig, stages?: readonly GenerateStageName[]): Promise<GenerateResult> {
   const startTime = performance.now();
   const logger = new Logger({ level: 'info' });
   const errors: Array<{ stage: string; error: Error }> = [];

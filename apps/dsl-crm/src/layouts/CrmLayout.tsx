@@ -74,9 +74,7 @@ export function CrmLayout({ children, sidebar }: CrmLayoutProps) {
           {resolvedSidebar}
         </Sidebar>
         <Group component="main" flex="col" grow overflow="auto" data-class="crm-main">
-          <Container>
-            {children}
-          </Container>
+          <Container>{children}</Container>
         </Group>
       </Group>
     </Block>

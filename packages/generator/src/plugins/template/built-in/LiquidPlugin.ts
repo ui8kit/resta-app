@@ -9,19 +9,8 @@
  */
 
 import { BasePlugin } from '../BasePlugin';
-import type {
-  TemplatePluginFeatures,
-  FilterDefinition,
-  StandardFilter,
-} from '../ITemplatePlugin';
-import type {
-  GenLoop,
-  GenCondition,
-  GenVariable,
-  GenSlot,
-  GenInclude,
-  GenBlock,
-} from '../../../hast';
+import type { TemplatePluginFeatures, FilterDefinition, StandardFilter } from '../ITemplatePlugin';
+import type { GenLoop, GenCondition, GenVariable, GenSlot, GenInclude, GenBlock } from '../../../hast';
 
 // =============================================================================
 // LiquidPlugin Implementation
@@ -304,19 +293,21 @@ export class LiquidPlugin extends BasePlugin {
    * Format expression for Liquid (convert JS-style to Liquid-style)
    */
   protected override formatExpression(expr: string): string {
-    return expr
-      // Convert && to and
-      .replace(/\s*&&\s*/g, ' and ')
-      // Convert || to or
-      .replace(/\s*\|\|\s*/g, ' or ')
-      // Convert ! to not (at word boundaries)
-      .replace(/!\s*(?=\w)/g, 'not ')
-      // Convert === to ==
-      .replace(/===/g, '==')
-      // Convert !== to !=
-      .replace(/!==/g, '!=')
-      // Keep other expressions as-is
-      .trim();
+    return (
+      expr
+        // Convert && to and
+        .replace(/\s*&&\s*/g, ' and ')
+        // Convert || to or
+        .replace(/\s*\|\|\s*/g, ' or ')
+        // Convert ! to not (at word boundaries)
+        .replace(/!\s*(?=\w)/g, 'not ')
+        // Convert === to ==
+        .replace(/===/g, '==')
+        // Convert !== to !=
+        .replace(/!==/g, '!=')
+        // Keep other expressions as-is
+        .trim()
+    );
   }
 
   /**

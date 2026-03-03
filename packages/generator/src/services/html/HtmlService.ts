@@ -124,7 +124,7 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
     route: RouteConfig,
     appConfig: { name: string; lang?: string },
     content: string,
-    cssHref?: string
+    cssHref?: string,
   ): string {
     const meta = this.buildMetaTags(route, appConfig);
     const lang = appConfig.lang ?? 'en';
@@ -137,7 +137,9 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
       meta.description ? `<meta name="description" content="${this.escapeHtml(meta.description)}">` : '',
       meta.keywords ? `<meta name="keywords" content="${this.escapeHtml(meta.keywords)}">` : '',
       `<meta property="og:title" content="${this.escapeHtml(title)}">`,
-      meta['og:description'] ? `<meta property="og:description" content="${this.escapeHtml(meta['og:description'])}">` : '',
+      meta['og:description']
+        ? `<meta property="og:description" content="${this.escapeHtml(meta['og:description'])}">`
+        : '',
       meta['og:image'] ? `<meta property="og:image" content="${this.escapeHtml(meta['og:image'])}">` : '',
       `<link rel="stylesheet" href="${this.escapeHtml(cssHref ?? '/css/styles.css')}">`,
     ]
@@ -181,7 +183,7 @@ export class HtmlService implements IService<HtmlServiceInput, HtmlServiceOutput
     html: string,
     mode: 'tailwind' | 'semantic' | 'inline',
     cssContent?: string,
-    stripDataClass?: boolean
+    stripDataClass?: boolean,
   ): string {
     if (mode === 'tailwind') {
       if (stripDataClass) {

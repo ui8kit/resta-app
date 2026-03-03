@@ -12,7 +12,7 @@ type MockFileSystem = UiKitMapFileSystem & { getWrittenFiles: () => Record<strin
  */
 function createMockFileSystem(files: Record<string, string> = {}): MockFileSystem {
   const writtenFiles: Record<string, string> = {};
-  
+
   return {
     readFile: vi.fn(async (path: string) => {
       if (files[path]) {
@@ -85,7 +85,7 @@ export const utilityPropsMap = {
 
 // Sample tw-css-extended.json content
 const SAMPLE_TAILWIND_MAP = JSON.stringify({
-  'absolute': 'position: absolute;',
+  absolute: 'position: absolute;',
   'gap-0': 'gap: 0px;',
   'gap-1': 'gap: 0.25rem;',
   'gap-2': 'gap: 0.5rem;',
@@ -112,7 +112,7 @@ describe('UiKitMapService', () => {
   let service: UiKitMapService;
   let mockContext: IServiceContext;
   let mockFs: UiKitMapFileSystem & { getWrittenFiles: () => Record<string, string> };
-  
+
   const defaultInput: UiKitMapServiceInput = {
     propsMapPath: '/path/to/utility-props.map.ts',
     tailwindMapPath: '/path/to/tw-css-extended.json',
@@ -120,7 +120,7 @@ describe('UiKitMapService', () => {
     gridMapPath: '/path/to/grid.map.json',
     outputPath: '/path/to/ui8kit.map.json',
   };
-  
+
   beforeEach(() => {
     mockFs = createMockFileSystem({
       '/path/to/utility-props.map.ts': SAMPLE_PROPS_MAP,
@@ -128,159 +128,156 @@ describe('UiKitMapService', () => {
       '/path/to/shadcn.map.json': SAMPLE_SHADCN_MAP,
       '/path/to/grid.map.json': SAMPLE_GRID_MAP,
     });
-    
+
     service = new UiKitMapService({ fileSystem: mockFs });
     mockContext = createMockContext();
   });
-  
+
   describe('service metadata', () => {
     it('should have correct name', () => {
       expect(service.name).toBe('uikit-map');
     });
-    
+
     it('should have correct version', () => {
       expect(service.version).toBe('1.0.0');
     });
-    
+
     it('should have no dependencies', () => {
       expect(service.dependencies).toEqual([]);
     });
   });
-  
+
   describe('initialize', () => {
     it('should initialize without errors', async () => {
       await expect(service.initialize(mockContext)).resolves.not.toThrow();
     });
   });
-  
+
   describe('execute', () => {
     beforeEach(async () => {
       await service.initialize(mockContext);
     });
-    
+
     it('should generate ui8kit.map.json', async () => {
       const result = await service.execute(defaultInput);
-      
+
       expect(result.outputPath).toBe('/path/to/ui8kit.map.json');
       expect(result.totalClasses).toBeGreaterThan(0);
     });
-    
+
     it('should include Tailwind classes', async () => {
       const result = await service.execute(defaultInput);
-      
+
       expect(result.tailwindClasses).toBeGreaterThan(0);
-      
+
       const writtenContent = mockFs.getWrittenFiles()['/path/to/ui8kit.map.json'];
       const map = JSON.parse(writtenContent);
-      
+
       expect(map['absolute']).toBe('position: absolute;');
       expect(map['gap-4']).toBe('gap: 1rem;');
     });
-    
+
     it('should include Shadcn design tokens', async () => {
       const result = await service.execute(defaultInput);
-      
+
       expect(result.shadcnClasses).toBeGreaterThan(0);
-      
+
       const writtenContent = mockFs.getWrittenFiles()['/path/to/ui8kit.map.json'];
       const map = JSON.parse(writtenContent);
-      
+
       expect(map['bg-primary']).toBe('background-color: var(--primary);');
       expect(map['text-foreground']).toBe('color: var(--foreground);');
     });
-    
+
     it('should include grid classes', async () => {
       const result = await service.execute(defaultInput);
-      
+
       expect(result.gridClasses).toBe(2);
-      
+
       const writtenContent = mockFs.getWrittenFiles()['/path/to/ui8kit.map.json'];
       const map = JSON.parse(writtenContent);
-      
+
       expect(map['md:grid-cols-2']).toContain('@media');
       expect(map['lg:grid-cols-3']).toContain('@media');
     });
-    
+
     it('should prioritize Shadcn over Tailwind for same class', async () => {
       // If both have bg-primary, Shadcn should win
       const writtenContent = mockFs.getWrittenFiles()['/path/to/ui8kit.map.json'];
-      
+
       // Re-run with overlapping classes
       await service.execute(defaultInput);
       const map = JSON.parse(mockFs.getWrittenFiles()['/path/to/ui8kit.map.json']);
-      
+
       // bg-primary comes from Shadcn, not Tailwind
       expect(map['bg-primary']).toContain('var(--primary)');
     });
-    
+
     it('should report missing classes', async () => {
       // Add a class that doesn't exist in any source
-      const propsWithMissing = SAMPLE_PROPS_MAP.replace(
-        '"gap": [',
-        '"custom": ["nonexistent"],\n  "gap": ['
-      );
-      
+      const propsWithMissing = SAMPLE_PROPS_MAP.replace('"gap": [', '"custom": ["nonexistent"],\n  "gap": [');
+
       const testFs = createMockFileSystem({
         '/path/to/utility-props.map.ts': propsWithMissing,
         '/path/to/tw-css-extended.json': SAMPLE_TAILWIND_MAP,
         '/path/to/shadcn.map.json': SAMPLE_SHADCN_MAP,
         '/path/to/grid.map.json': SAMPLE_GRID_MAP,
       });
-      
+
       const testService = new UiKitMapService({ fileSystem: testFs });
       await testService.initialize(mockContext);
-      
+
       const result = await testService.execute(defaultInput);
-      
+
       expect(result.missingClasses).toContain('custom-nonexistent');
     });
-    
+
     it('should sort output alphabetically', async () => {
       await service.execute(defaultInput);
-      
+
       const writtenContent = mockFs.getWrittenFiles()['/path/to/ui8kit.map.json'];
       const map = JSON.parse(writtenContent);
       const keys = Object.keys(map);
-      
+
       const sortedKeys = [...keys].sort();
       expect(keys).toEqual(sortedKeys);
     });
-    
+
     it('should emit uikit-map:generated event', async () => {
       await service.execute(defaultInput);
-      
+
       expect(mockContext.eventBus.emit).toHaveBeenCalledWith(
         'uikit-map:generated',
         expect.objectContaining({
           totalClasses: expect.any(Number),
           outputPath: '/path/to/ui8kit.map.json',
-        })
+        }),
       );
     });
-    
+
     it('should handle bare tokens (empty value)', async () => {
       await service.execute(defaultInput);
-      
+
       const writtenContent = mockFs.getWrittenFiles()['/path/to/ui8kit.map.json'];
       const map = JSON.parse(writtenContent);
-      
+
       // "absolute": [""] should generate class "absolute"
       expect(map['absolute']).toBe('position: absolute;');
     });
   });
-  
+
   describe('dispose', () => {
     it('should dispose without errors', async () => {
       await service.initialize(mockContext);
       await expect(service.dispose()).resolves.not.toThrow();
     });
   });
-  
+
   describe('error handling', () => {
     beforeEach(async () => {
       await service.initialize(mockContext);
     });
-    
+
     it('should throw if props map file not found', async () => {
       const testFs = createMockFileSystem({
         // Missing props map
@@ -288,13 +285,13 @@ describe('UiKitMapService', () => {
         '/path/to/shadcn.map.json': SAMPLE_SHADCN_MAP,
         '/path/to/grid.map.json': SAMPLE_GRID_MAP,
       });
-      
+
       const testService = new UiKitMapService({ fileSystem: testFs });
       await testService.initialize(mockContext);
-      
+
       await expect(testService.execute(defaultInput)).rejects.toThrow('File not found');
     });
-    
+
     it('should throw if props map has invalid format', async () => {
       const testFs = createMockFileSystem({
         '/path/to/utility-props.map.ts': 'invalid content',
@@ -302,10 +299,10 @@ describe('UiKitMapService', () => {
         '/path/to/shadcn.map.json': SAMPLE_SHADCN_MAP,
         '/path/to/grid.map.json': SAMPLE_GRID_MAP,
       });
-      
+
       const testService = new UiKitMapService({ fileSystem: testFs });
       await testService.initialize(mockContext);
-      
+
       await expect(testService.execute(defaultInput)).rejects.toThrow('Could not parse utilityPropsMap');
     });
   });

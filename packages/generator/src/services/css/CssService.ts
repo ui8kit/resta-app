@@ -163,9 +163,6 @@ export class CssService implements IService<CssServiceInput, CssServiceOutput> {
     if (cssFiles.length === 1) return cssFiles[0];
 
     const merged = cssFiles.join('\n\n/* === Next Source === */\n\n');
-    return merged.replace(
-      /Generated on: .*/,
-      `Generated on: ${new Date().toISOString()}`
-    );
+    return merged.replace(/Generated on: .*/, `Generated on: ${new Date().toISOString()}`);
   }
 }
