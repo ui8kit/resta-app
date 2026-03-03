@@ -47,6 +47,7 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "lint": "tsc --noEmit",
+    "lint:boundaries": "oxlint --import-plugin .",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist coverage"
   },

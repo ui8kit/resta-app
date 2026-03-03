@@ -11,12 +11,18 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "format": "biome format --write .",
+    "format:check": "biome check .",
     "lint": "turbo run lint",
+    "lint:biome": "biome check .",
+    "lint:oxlint": "oxlint --import-plugin apps/ packages/",
+    "lint:all": "bun run lint:biome && bun run lint:oxlint && turbo run lint",
     "typecheck": "turbo run typecheck",
     "generate": "turbo run generate",
     "generate:html": "turbo run generate:html",
     "generate:styles": "turbo run generate:styles",
-    "maintain": "turbo run maintain"
+    "maintain": "turbo run maintain",
+    "prepublish:check": "biome check packages/ && oxlint --import-plugin packages/ && turbo run typecheck --filter='./packages/*' && turbo run test --filter='./packages/*'"
   },
   "dependencies": {
     "@ui8kit/generator": "workspace:*",
@@ -25,7 +31,9 @@
     "@ui8kit/resta-dsl-design": "workspace:*"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.5",
     "@ui8kit/maintain": "workspace:*",
+    "oxlint": "^1.51.0",
     "turbo": "^2.8.10"
   }
 }
