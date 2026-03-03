@@ -27,9 +27,7 @@
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { dirname, extname, join, relative } from 'path';
 import { fileURLToPath } from 'url';
-import { transformJsxFile } from '../../../packages/generator/src/transformer/transform';
-import { ReactPlugin } from '../../../packages/generator/src/plugins/template/built-in/ReactPlugin';
-import { getFallbackCoreComponents } from '../../../packages/generator/src/core/scanner/core-component-scanner';
+import { transformJsxFile, ReactPlugin, getFallbackCoreComponents } from '@ui8kit/generator';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -395,7 +393,7 @@ async function main(): Promise<void> {
     vite: rootPkg.devDependencies['vite'],
   };
   if (staticMode) {
-    baseDevDeps['@ui8kit/generator'] = 'workspace:*';
+    baseDevDeps['@ui8kit/generator'] = '^0.2.2';
   }
   const alwaysExcludeDeps = ['@ui8kit/generator', '@ui8kit/lint', '@ui8kit/contracts'];
   const conditionalExcludeDeps = ['@ui8kit/dsl', '@ui8kit/sdk'].filter(

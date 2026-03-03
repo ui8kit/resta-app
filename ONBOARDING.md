@@ -60,10 +60,6 @@ bun install
 # Run dev server for DSL app
 cd apps/dsl
 bun run dev
-
-# Run design system
-cd apps/dsl-design
-bun run dev
 ```
 
 After `bun run dev`, the app opens (usually http://localhost:3020 or another port from config).
@@ -76,25 +72,16 @@ After `bun run dev`, the app opens (usually http://localhost:3020 or another por
 @ui8kit-resta-app/
 ├── apps/
 │   ├── dsl/              ← Main DSL app (restaurant)
-│   ├── dsl-design/       ← Design system (component/token preview)
-│   ├── react/            ← Generated React (from dsl)
-│   └── react-design/     ← Generated React (from dsl-design)
-├── packages/
-│   ├── maintain/         ← Checkers, clean, audit
-│   ├── generator/        ← React, HTML, CSS generation
-│   ├── dsl/              ← If, Var, Loop, Slot
-│   ├── sdk/              ← createContext, types
-│   └── lint/             ← ui8kit-lint-dsl
+│   └── react/            ← Generated React (from dsl)
 ├── .project/             ← Project docs (including this guide)
 └── .cursor/rules/        ← AI rules (best-practices, architecture)
 ```
 
-**Working apps:**
+**Working app:** `apps/dsl` — main DSL code (blocks, routes, fixtures).
 
-- `apps/dsl` — main DSL code (blocks, routes, fixtures)
-- `apps/dsl-design` — design system (component/token/typography preview)
+**Generated app:** `apps/react` — output of `bun run generate`. Not edited by hand.
 
-**Generated apps** (`react`, `react-design`) — output of `bun run generate`. They are not edited by hand.
+**CLI tools** (from npm): `@ui8kit/generator`, `@ui8kit/maintain`, `@ui8kit/lint`, `@ui8kit/sdk`.
 
 ---
 
@@ -366,7 +353,7 @@ Use `component` for semantic tags. Allowed tags are defined in `component-tag-ma
 
 **Field** — form elements: `input`, `textarea`, `select`, `button`.
 
-Full map: `packages/generator/src/lib/component-tag-map.json`.
+Full map: shipped with `@ui8kit/generator` (in `node_modules/@ui8kit/generator/dist/lib/component-tag-map.json`).
 
 ---
 
@@ -428,11 +415,11 @@ Consumed by `ui8kit-validate`, `ui8kit-generate`, and `ui8kit-lint`. Controls ge
 
 ### 9.2 maintain.config.json — project checkers
 
-Consumed by `maintain run`, `maintain validate`, `maintain clean`. Schema: `packages/maintain/schemas/maintain.config.schema.json`.
+Consumed by `maintain run`, `maintain validate`, `maintain clean`. Schema: `node_modules/@ui8kit/maintain/schemas/maintain.config.schema.json`.
 
 ```json
 {
-  "$schema": "../../packages/maintain/schemas/maintain.config.schema.json",
+  "$schema": "node_modules/@ui8kit/maintain/schemas/maintain.config.schema.json",
   "root": ".",
   "reportsDir": ".cursor/reports",
   "continueOnError": true,
@@ -488,10 +475,10 @@ Consumed by `maintain run`, `maintain validate`, `maintain clean`. Schema: `pack
     },
     "utilityPropsWhitelist": {
       "utilityPropsMapPath": "./src/lib/utility-props.map.ts",
-      "tailwindMapPath": "../../packages/generator/src/assets/tailwind/tw-css-extended.json",
+      "tailwindMapPath": "./assets/maps/tw-css-extended.json",
       "additionalMapPaths": [
-        "../../packages/generator/src/lib/shadcn.map.json",
-        "../../packages/generator/src/lib/grid.map.json"
+        "./assets/maps/shadcn.map.json",
+        "./assets/maps/grid.map.json"
       ],
       "maxSuggestions": 2
     },
@@ -607,7 +594,7 @@ bun run dev
 
 ### 10.3 Maintain (project checkers)
 
-Config: **`maintain.config.json`** in the app root. Schema: `packages/maintain/schemas/maintain.config.schema.json`. See [Section 9.2](#92-maintainconfigjson--project-checkers) for the full config structure.
+Config: **`maintain.config.json`** in the app root. Schema: `node_modules/@ui8kit/maintain/schemas/maintain.config.schema.json`. See [Section 9.2](#92-maintainconfigjson--project-checkers) for the full config structure.
 
 | Script | Purpose |
 |--------|---------|
@@ -697,7 +684,7 @@ Or run the full pipeline at once: `bun run dist:app`. See [WORKFLOW.md](WORKFLOW
 
 ### 11.3 component+tag validation
 
-Allowed tags map: `packages/generator/src/lib/component-tag-map.json`. Used by HtmlConverterService (HTML generation), ui8kit-validate, and Maintain checker **componentTag**.
+Allowed tags map: shipped with `@ui8kit/generator`. Used by HtmlConverterService (HTML generation), ui8kit-validate, and Maintain checker **componentTag**.
 
 ---
 
@@ -923,10 +910,10 @@ bun run blueprint:validate
 - `.cursor/rules/engine-dsl-enforcement.mdc` — DSL rules
 - `.cursor/rules/project-structure.mdc` — project structure
 - `.cursor/rules/ui8kit-architecture.mdc` — UI8Kit architecture
-- `packages/maintain/schemas/maintain.config.schema.json` — maintain.config.json schema
+- `node_modules/@ui8kit/maintain/schemas/maintain.config.schema.json` — maintain.config.json schema
 - `apps/dsl/maintain.config.json` — reference maintain config with all checkers
 - `apps/dsl/blueprint.json` — reference blueprint with full entity/layout/partial shape
-- `packages/generator/src/lib/component-tag-map.json` — component → allowed tag map
+- `@ui8kit/generator` (dist/lib/component-tag-map.json) — component → allowed tag map
 
 ---
 

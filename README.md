@@ -1,6 +1,19 @@
 # RestA — Restaurant & Bar
 
-A restaurant web app built with **UI8Kit**, a design system that combines semantic React components with a **DSL (Domain-Specific Language)** for template-friendly, LLM-generatable markup. This README describes how to create such a project from scratch.
+A restaurant web app built with **UI8Kit**, a design system that combines semantic React components with a **DSL (Domain-Specific Language)** for template-friendly, LLM-generatable markup.
+
+---
+
+## Use this template
+
+This repository is a **GitHub template**. To create a new project:
+
+1. On GitHub, click **"Use this template"** → **"Create a new repository"**
+2. Choose a name (e.g. `my-dsl-blog`, `my-dsl-shop`)
+3. Clone and install: `bun install`
+4. Follow the pipeline in [`.project/PLAYBOOK.md`](.project/PLAYBOOK.md) from Stage 0 to Stage 6
+
+**Structure:** `apps/dsl` is the source app; `apps/react` is generated output. Use `apps/dsl` as your reference.
 
 ---
 

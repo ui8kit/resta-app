@@ -1,5 +1,5 @@
 {
-  "$schema": "../../packages/maintain/schemas/maintain.config.schema.json",
+  "$schema": "node_modules/@ui8kit/maintain/schemas/maintain.config.schema.json",
   "root": ".",
   "reportsDir": ".cursor/reports",
   "continueOnError": true,
@@ -123,11 +123,8 @@
     },
     "utilityPropsWhitelist": {
       "utilityPropsMapPath": "./src/lib/utility-props.map.ts",
-      "tailwindMapPath": "../../packages/generator/src/assets/tailwind/tw-css-extended.json",
-      "additionalMapPaths": [
-        "../../packages/generator/src/lib/shadcn.map.json",
-        "../../packages/generator/src/lib/grid.map.json"
-      ],
+      "tailwindMapPath": "./assets/maps/tw-css-extended.json",
+      "additionalMapPaths": ["./assets/maps/shadcn.map.json", "./assets/maps/grid.map.json"],
       "maxSuggestions": 2
     },
     "orphanFiles": {

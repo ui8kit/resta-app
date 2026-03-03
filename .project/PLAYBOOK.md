@@ -106,13 +106,12 @@ flowchart TD
 |---|---|---|
 | 0.1 | `bun install` from workspace root — exits 0 | [ ] |
 | 0.2 | `bun run dev` in `apps/dsl` — app opens in browser | [ ] |
-| 0.3 | `bun run dev` in `apps/dsl-design` — app opens in browser | [ ] |
-| 0.4 | New app directory created: `apps/{APP_NAME}/` | [ ] |
-| 0.5 | `apps/{APP_NAME}/package.json` with all scripts from reference | [ ] |
-| 0.6 | `apps/{APP_NAME}/vite.config.ts`, `tsconfig.json`, `postcss.config.js` in place | [ ] |
-| 0.7 | `apps/{APP_NAME}/index.html` in place | [ ] |
-| 0.8 | `apps/{APP_NAME}/.env.example` with `VITE_DATA_SOURCE=fixtures` | [ ] |
-| 0.9 | `bun run dev` in `apps/{APP_NAME}` — app starts without errors | [ ] |
+| 0.3 | New app directory created: `apps/{APP_NAME}/` | [ ] |
+| 0.4 | `apps/{APP_NAME}/package.json` with all scripts from reference | [ ] |
+| 0.5 | `apps/{APP_NAME}/vite.config.ts`, `tsconfig.json`, `postcss.config.js` in place | [ ] |
+| 0.6 | `apps/{APP_NAME}/index.html` in place | [ ] |
+| 0.7 | `apps/{APP_NAME}/.env.example` with `VITE_DATA_SOURCE=fixtures` | [ ] |
+| 0.8 | `bun run dev` in `apps/{APP_NAME}` — app starts without errors | [ ] |
 
 ---
 
@@ -165,7 +164,7 @@ flowchart TD
 |---|---|
 | `dev` | `vite` |
 | `build` | `vite build` |
-| `generate` | `bun run ../../packages/generator/src/cli/generate.ts react --cwd .` |
+| `generate` | `bunx ui8kit-generate react --cwd .` |
 | `finalize` | `bun run scripts/finalize-dist.ts` |
 | `dist:app` | full gate chain (lint/validate/maintain/blueprint/generate/finalize/typecheck) |
 | `clean` | `maintain clean --config maintain.config.json --mode full --execute` |
@@ -184,7 +183,7 @@ flowchart TD
 | `lint` | `bunx ui8kit-lint` |
 | `typecheck` | `bunx tsc --noEmit` |
 | `typecheck:react` | `cd ../react-{APP_NAME} && bun run typecheck` |
-| `build:map` | `bun run ../../packages/generator/src/cli/generate.ts uikit-map --cwd .` |
+| `build:map` | `bunx ui8kit-generate uikit-map --cwd .` |
 
 ---
 

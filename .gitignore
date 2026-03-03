@@ -6,6 +6,7 @@ node_modules/
 _packages/generator/dist/
 _packages/generator/node_modules/
 dist/
+apps/react/
 *.log
 .env
 .env.local

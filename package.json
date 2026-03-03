@@ -1,12 +1,17 @@
 {
   "name": "@ui8kit/resta-monorepo",
   "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ui8kit/resta-app"
+  },
+  "author": "UI8Kit",
+  "license": "MIT",
   "private": true,
   "type": "module",
   "packageManager": "bun@1.3.3",
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/*"
   ],
   "scripts": {
     "dev": "turbo run dev",
@@ -15,24 +20,16 @@
     "format:check": "biome check .",
     "lint": "turbo run lint",
     "lint:biome": "biome check .",
-    "lint:oxlint": "oxlint --import-plugin apps/ packages/",
+    "lint:oxlint": "oxlint --import-plugin apps/",
     "lint:all": "bun run lint:biome && bun run lint:oxlint && turbo run lint",
     "typecheck": "turbo run typecheck",
     "generate": "turbo run generate",
     "generate:html": "turbo run generate:html",
     "generate:styles": "turbo run generate:styles",
-    "maintain": "turbo run maintain",
-    "prepublish:check": "biome check packages/ && oxlint --import-plugin packages/ && turbo run typecheck --filter='./packages/*' && turbo run test --filter='./packages/*'"
-  },
-  "dependencies": {
-    "@ui8kit/generator": "workspace:*",
-    "@ui8kit/resta-dsl": "workspace:*",
-    "@ui8kit/resta-dsl-crm": "workspace:*",
-    "@ui8kit/resta-dsl-design": "workspace:*"
+    "maintain": "turbo run maintain"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.5",
-    "@ui8kit/maintain": "workspace:*",
     "oxlint": "^1.51.0",
     "turbo": "^2.8.10"
   }

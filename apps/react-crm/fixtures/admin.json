@@ -1,8 +1,0 @@
-{
-  "exportSchema": {
-    "dashboard": "metrics",
-    "tasks": "items",
-    "kanban": "columns",
-    "reports": "sections"
-  }
-}
