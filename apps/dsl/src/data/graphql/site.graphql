@@ -1,0 +1,14 @@
+query GetSiteMetadata {
+  generalSettings {
+    title
+    description
+  }
+  menuItems(where: { location: PRIMARY }) {
+    nodes {
+      id
+      label
+      path
+      parentId
+    }
+  }
+}
