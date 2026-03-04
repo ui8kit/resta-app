@@ -18,8 +18,7 @@ import {
 import { If, Else, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
 import { ShoppingCart } from 'lucide-react';
-import type { CartEntry, MenuCategory, MenuItem, NavItem, PromotionItem } from '@/types';
-import { useCart, useMenuFilter } from '@/hooks';
+import type { CartEntry, MenuCategory, MenuItem, MenuItemWithComputed, NavItem, PromotionItem } from '@/types';
 
 export interface MenuPageViewProps {
   navItems?: NavItem[];
@@ -28,14 +27,36 @@ export interface MenuPageViewProps {
   headerSubtitle?: string;
   menu: { title?: string; subtitle?: string; categories?: MenuCategory[]; items?: MenuItem[] };
   promotions?: { items?: PromotionItem[] };
+  cart: CartEntry[];
+  cartCount: number;
+  addToCart: (item: MenuItemWithComputed) => void;
+  removeFromCart: (itemId: string) => void;
+  updateCartQuantity: (itemId: string, delta: number) => void;
+  setSelectedCategory: (id: string | null) => void;
+  categories: MenuCategory[];
+  filteredItems: MenuItemWithComputed[];
+  allTabVariant: 'secondary' | 'ghost';
+  getCategoryTabVariant: (id: string) => 'secondary' | 'ghost';
 }
 
-export function MenuPageView({ navItems, sidebar, headerTitle, headerSubtitle, menu, promotions }: MenuPageViewProps) {
-  const { cart, cartCount, addToCart, removeFromCart, updateCartQuantity } = useCart();
-  const { setSelectedCategory, categories, filteredItems, allTabVariant, getCategoryTabVariant } = useMenuFilter(
-    menu,
-    promotions,
-  );
+export function MenuPageView({
+  navItems,
+  sidebar,
+  headerTitle,
+  headerSubtitle,
+  menu,
+  promotions,
+  cart,
+  cartCount,
+  addToCart,
+  removeFromCart,
+  updateCartQuantity,
+  setSelectedCategory,
+  categories,
+  filteredItems,
+  allTabVariant,
+  getCategoryTabVariant,
+}: MenuPageViewProps) {
 
   return (
     <MainLayout
@@ -136,7 +157,7 @@ export function MenuPageView({ navItems, sidebar, headerTitle, headerSubtitle, m
             </If>
           </Stack>
         </Sheet>
-        <Block py="16" data-class="menu-header">
+        <Stack py="16" gap="4" items="center" data-class="menu-header">
           <If test="menu.title" value={!!menu.title}>
             <Text component="h2" fontSize="3xl" fontWeight="bold" textAlign="center" data-class="menu-title">
               <Var name="menu.title" value={menu.title} />
@@ -154,7 +175,7 @@ export function MenuPageView({ navItems, sidebar, headerTitle, headerSubtitle, m
               <Var name="menu.subtitle" value={menu.subtitle} />
             </Text>
           </If>
-        </Block>
+        </Stack>
         <If test="categories.length > 0" value={categories.length > 0}>
           <Group justify="center" gap="4" flex="wrap" data-class="menu-category-tabs" mb="6">
             <Button

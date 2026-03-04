@@ -147,7 +147,7 @@ export function Header({
               onClick={handleLogout}
               title="Logout"
               aria-label="Logout"
-              data-class="header-admin-link"
+              data-class="header-admin-link-logout"
             >
               <Icon lucideIcon={LogOut} size="sm" data-class="header-admin-icon" />
             </Button>
@@ -158,7 +158,7 @@ export function Header({
                 href="/admin"
                 title="Admin / Login"
                 aria-label="Admin / Login"
-                data-class="header-admin-link"
+                data-class="header-admin-link-login"
               >
                 <Icon lucideIcon={LogIn} size="sm" data-class="header-admin-icon" />
               </DomainNavButton>

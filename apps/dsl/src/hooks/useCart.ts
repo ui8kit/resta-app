@@ -1,11 +1,5 @@
 import { useState } from 'react';
-import type { CartEntry, MenuItem } from '@/types';
-
-export type MenuItemWithComputed = MenuItem & {
-  promotionBadge: string;
-  hasPromotion: boolean;
-  hasCompareAt: boolean;
-};
+import type { CartEntry, MenuItemWithComputed } from '@/types';
 
 export function useCart() {
   const [cart, setCart] = useState<CartEntry[]>([]);

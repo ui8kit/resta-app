@@ -1,14 +1,27 @@
 import { AdminLayout } from '@/layouts';
 import { Block, Stack, Title, Text, Button, Field } from '@ui8kit/core';
 import { If } from '@ui8kit/dsl';
-import { useLoginForm } from '@/hooks';
+import type { FormSubmitHandler } from '@/types';
 
 export interface AdminLoginPageViewProps {
   headerTitle?: string;
+  username: string;
+  setUsername: (v: string) => void;
+  password: string;
+  setPassword: (v: string) => void;
+  error: string;
+  handleSubmit: FormSubmitHandler;
 }
 
-export function AdminLoginPageView({ headerTitle: _headerTitle }: AdminLoginPageViewProps) {
-  const { username, setUsername, password, setPassword, error, handleSubmit } = useLoginForm();
+export function AdminLoginPageView({
+  headerTitle: _headerTitle,
+  username,
+  setUsername,
+  password,
+  setPassword,
+  error,
+  handleSubmit,
+}: AdminLoginPageViewProps) {
 
   return (
     <AdminLayout>
@@ -31,7 +44,7 @@ export function AdminLoginPageView({ headerTitle: _headerTitle }: AdminLoginPage
                   value={username}
                   onChange={(e) => setUsername((e.target as HTMLInputElement).value)}
                   placeholder="admin"
-                  data-class="admin-login-input"
+                  data-class="admin-login-input-email"
                 />
               </Stack>
               <Stack gap="2" data-class="admin-login-field">
@@ -43,7 +56,7 @@ export function AdminLoginPageView({ headerTitle: _headerTitle }: AdminLoginPage
                   value={password}
                   onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
                   placeholder="••••••••"
-                  data-class="admin-login-input"
+                  data-class="admin-login-input-password"
                 />
               </Stack>
               <If test="error" value={!!error}>

@@ -1,5 +1,5 @@
 import { MainLayout } from '@/layouts';
-import { Block, Container, Title, Text, Badge } from '@ui8kit/core';
+import { Block, Container, Title, Text, Badge, Stack } from '@ui8kit/core';
 import { If, Var } from '@ui8kit/dsl';
 import type { NavItem, PromotionDiscount } from '@/types';
 
@@ -38,7 +38,7 @@ export function PromotionDetailPageView({
       <Block component="article" data-class="promotion-detail-section">
         <Container max="w-2xl" py="16">
           <If test="item" value={!!item}>
-            <Block data-class="promotion-detail-content">
+            <Stack gap="4" data-class="promotion-detail-content">
               <Title fontSize="4xl" fontWeight="bold" data-class="promotion-detail-title">
                 <Var name="item.title" value={item?.title} />
               </Title>
@@ -68,13 +68,13 @@ export function PromotionDetailPageView({
                 </Text>
               </If>
               <If test="item.details" value={!!item?.details}>
-                <Block py="8" data-class="promotion-detail-body">
+                <Stack py="8" gap="0" data-class="promotion-detail-body">
                   <Text fontSize="base" lineHeight="relaxed" data-class="promotion-detail-text">
                     <Var name="item.details" value={item?.details} />
                   </Text>
-                </Block>
+                </Stack>
               </If>
-            </Block>
+            </Stack>
           </If>
         </Container>
       </Block>

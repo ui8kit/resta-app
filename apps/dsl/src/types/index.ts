@@ -9,8 +9,11 @@ export type {
   CatalogItemModifier,
   MenuItem,
   CartEntry,
+  MenuItemWithComputed,
 } from './menu';
 export type { RecipeIngredient, RecipeStep, RecipeItem } from './recipes';
 export type { BlogPost } from './blog';
 export type { PromotionDiscount, PromotionItem } from './promotions';
 export type { LayoutMode, FooterLink, FooterSection } from './layout';
+export type { AnchorButtonProps, DomainNavButtonProps } from './domain-nav-button';
+export type { FileInputRef, FileChangeHandler, FormSubmitHandler } from './admin';

@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import { MainLayout } from '@/layouts';
-import { Block, Container, Title, Text, Group, Badge, Button, Field, Toast } from '@ui8kit/core';
+import { Block, Container, Title, Text, Group, Badge, Button, Field, Toast, Stack } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import type { CatalogItemModifier, CatalogItemVariant, MenuCategory, MenuPrice, NavItem, PromotionItem } from '@/types';
 
@@ -9,6 +8,9 @@ export interface MenuDetailPageViewProps {
   sidebar: React.ReactNode;
   headerTitle?: string;
   headerSubtitle?: string;
+  showToast?: boolean;
+  onShowToast?: () => void;
+  onHideToast?: () => void;
   item?: {
     id: string;
     slug: string;
@@ -33,8 +35,10 @@ export function MenuDetailPageView({
   headerSubtitle,
   item,
   promotions,
+  showToast = false,
+  onShowToast,
+  onHideToast,
 }: MenuDetailPageViewProps) {
-  const [showToast, setShowToast] = useState(false);
   const variants = item?.variants ?? [];
   const modifiers = item?.modifiers ?? [];
   const promotion = (promotions?.items ?? []).find((entry) => entry.id === item?.promotionIds?.[0]);
@@ -51,7 +55,7 @@ export function MenuDetailPageView({
       <Block component="article" data-class="menu-detail-section">
         <Container max="w-2xl" py="16">
           <If test="item" value={!!item}>
-            <Block data-class="menu-detail-content">
+            <Stack gap="4" data-class="menu-detail-content">
               <Title fontSize="4xl" fontWeight="bold" data-class="menu-detail-title">
                 <Var name="item.title" value={item?.title} />
               </Title>
@@ -95,7 +99,7 @@ export function MenuDetailPageView({
                 </Text>
               </If>
               <If test="variants.length > 0" value={variants.length > 0}>
-                <Block py="4" data-class="menu-detail-variants">
+                <Stack py="4" gap="2" data-class="menu-detail-variants">
                   <Text fontSize="sm" fontWeight="semibold" mb="2" data-class="menu-detail-variants-title">
                     Portion / Option
                   </Text>
@@ -113,14 +117,14 @@ export function MenuDetailPageView({
                       )}
                     </Loop>
                   </Group>
-                </Block>
+                </Stack>
               </If>
               <If test="modifiers.length > 0" value={modifiers.length > 0}>
-                <Block py="2" data-class="menu-detail-modifiers">
+                <Stack py="2" gap="2" data-class="menu-detail-modifiers">
                   <Text fontSize="sm" fontWeight="semibold" mb="2" data-class="menu-detail-modifiers-title">
                     Add-ons
                   </Text>
-                  <Block data-class="menu-detail-modifier-list">
+                  <Stack gap="2" data-class="menu-detail-modifier-list">
                     <Loop each="modifiers" as="modifier" data={modifiers}>
                       {(modifier: CatalogItemModifier) => (
                         <Group items="center" justify="between" gap="4" py="2" data-class="menu-detail-modifier-row">
@@ -136,21 +140,21 @@ export function MenuDetailPageView({
                         </Group>
                       )}
                     </Loop>
-                  </Block>
-                </Block>
+                  </Stack>
+                </Stack>
               </If>
               <If test="item.details" value={!!item?.details}>
-                <Block py="8" data-class="menu-detail-body">
+                <Stack py="8" gap="0" data-class="menu-detail-body">
                   <Text fontSize="base" lineHeight="relaxed" data-class="menu-detail-text">
                     <Var name="item.details" value={item?.details} />
                   </Text>
-                </Block>
+                </Stack>
               </If>
-              <Button size="lg" data-class="menu-detail-cta" mt="4" onClick={() => setShowToast(true)}>
+              <Button size="lg" data-class="menu-detail-cta" mt="4" onClick={onShowToast}>
                 Add to order
               </Button>
-              <Toast {...{ visible: showToast }} onClose={() => setShowToast(false)} duration={9000} />
-            </Block>
+              <Toast {...{ visible: showToast }} onClose={onHideToast} duration={9000} />
+            </Stack>
           </If>
         </Container>
       </Block>

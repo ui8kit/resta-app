@@ -28,7 +28,7 @@ export function DashSidebar({ label, links, 'data-class': dataClass }: DashSideb
                   variant="secondary"
                   justify="start"
                   w="full"
-                  data-class="dash-sidebar-link"
+                  data-class="dash-sidebar-link-active"
                 >
                   <Var name="link.label" value={link.label} />
                 </DomainNavButton>
@@ -40,7 +40,7 @@ export function DashSidebar({ label, links, 'data-class': dataClass }: DashSideb
                   variant="ghost"
                   justify="start"
                   w="full"
-                  data-class="dash-sidebar-link"
+                  data-class="dash-sidebar-link-inactive"
                 >
                   <Var name="link.label" value={link.label} />
                 </DomainNavButton>

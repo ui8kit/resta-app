@@ -1,5 +1,5 @@
 import { MainLayout } from '@/layouts';
-import { Block, Grid, Card, CardHeader, CardTitle, CardDescription, CardContent, Text } from '@ui8kit/core';
+import { Block, Grid, Card, CardHeader, CardTitle, CardDescription, CardContent, Text, Stack } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
 import type { BlogPost, NavItem } from '@/types';
@@ -23,7 +23,7 @@ export function BlogPageView({ navItems, sidebar, headerTitle, headerSubtitle, b
       headerSubtitle={headerSubtitle}
     >
       <Block component="section" data-class="blog-section">
-        <Block py="16" data-class="blog-header">
+        <Stack py="16" gap="4" items="center" data-class="blog-header">
           <If test="blog.title" value={!!blog.title}>
             <Text component="h2" fontSize="3xl" fontWeight="bold" textAlign="center" data-class="blog-title">
               <Var name="blog.title" value={blog.title} />
@@ -41,7 +41,7 @@ export function BlogPageView({ navItems, sidebar, headerTitle, headerSubtitle, b
               <Var name="blog.subtitle" value={blog.subtitle} />
             </Text>
           </If>
-        </Block>
+        </Stack>
         <Grid cols="1-2-3" gap="6" data-class="blog-grid">
           <Loop each="posts" as="post" data={posts}>
             {(post: BlogPost) => (

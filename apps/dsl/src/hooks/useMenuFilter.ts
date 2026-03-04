@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { MenuItem, MenuCategory, PromotionItem } from '@/types';
-import type { MenuItemWithComputed } from './useCart';
+import type { MenuItemWithComputed } from '@/types';
 
 type MenuInput = {
   categories?: MenuCategory[];

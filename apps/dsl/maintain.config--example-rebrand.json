@@ -5,6 +5,11 @@
   "continueOnError": true,
   "maxParallel": 2,
   "checkers": {
+    "refactorAudit": {
+      "mapping": "scripts/schemas/brand-mapping.json",
+      "scope": ["src", "fixtures"],
+      "maxMatchesPerEntry": 10
+    },
     "invariants": {
       "routes": {
         "appFile": "src/App.tsx",

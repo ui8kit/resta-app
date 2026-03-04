@@ -1,5 +1,5 @@
 import { MainLayout } from '@/layouts';
-import { Block, Container, Title, Text } from '@ui8kit/core';
+import { Block, Container, Title, Text, Stack } from '@ui8kit/core';
 import { If, Var } from '@ui8kit/dsl';
 
 export interface BlogDetailPageViewProps {
@@ -31,7 +31,7 @@ export function BlogDetailPageView({ navItems, sidebar, headerTitle, headerSubti
       <Block component="article" data-class="blog-detail-section">
         <Container max="w-2xl" py="16">
           <If test="post" value={!!post}>
-            <Block data-class="blog-detail-content">
+            <Stack gap="4" data-class="blog-detail-content">
               <Title fontSize="4xl" fontWeight="bold" data-class="blog-detail-title">
                 <Var name="post.title" value={post?.title} />
               </Title>
@@ -45,12 +45,12 @@ export function BlogDetailPageView({ navItems, sidebar, headerTitle, headerSubti
                   <Var name="post.author" value={post?.author} />
                 </Text>
               </If>
-              <Block py="8" data-class="blog-detail-body">
+              <Stack py="8" gap="0" data-class="blog-detail-body">
                 <Text fontSize="base" lineHeight="relaxed" data-class="blog-detail-text">
                   <Var name="post.body" value={post?.body} />
                 </Text>
-              </Block>
-            </Block>
+              </Stack>
+            </Stack>
           </If>
         </Container>
       </Block>

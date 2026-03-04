@@ -15,19 +15,23 @@ import {
   CardContent,
 } from '@ui8kit/core';
 import { context } from '@/data/context';
-import { useAdminActions } from '@/hooks';
+import type { FileInputRef, FileChangeHandler } from '@/types';
 
 export interface AdminDashboardPageViewProps {
-  onExport?: () => void;
-  onImport?: (data: unknown) => void;
+  fileInputRef: FileInputRef;
+  handleLogout: () => void;
+  handleExport: () => void;
+  handleImportClick: () => void;
+  handleFileChange: FileChangeHandler;
 }
 
-export function AdminDashboardPageView({ onExport, onImport }: AdminDashboardPageViewProps) {
-  const { fileInputRef, handleLogout, handleExport, handleImportClick, handleFileChange } = useAdminActions(
-    onExport,
-    onImport,
-  );
-
+export function AdminDashboardPageView({
+  fileInputRef,
+  handleLogout,
+  handleExport,
+  handleImportClick,
+  handleFileChange,
+}: AdminDashboardPageViewProps) {
   const sidebar = (
     <DashSidebar label={context.adminSidebarLabel} links={context.getAdminSidebarLinks('/admin/dashboard')} />
   );

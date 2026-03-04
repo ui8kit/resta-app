@@ -15,7 +15,7 @@ export function ThemeToggle() {
           onClick={toggleDarkMode}
           title="Switch to light mode"
           aria-label="Switch to light mode"
-          data-class="theme-toggle"
+          data-class="theme-toggle-to-light"
         >
           <Icon lucideIcon={Sun} size="sm" data-class="theme-toggle-icon" />
         </Button>
@@ -27,7 +27,7 @@ export function ThemeToggle() {
           onClick={toggleDarkMode}
           title="Switch to dark mode"
           aria-label="Switch to dark mode"
-          data-class="theme-toggle"
+          data-class="theme-toggle-to-dark"
         >
           <Icon lucideIcon={Moon} size="sm" data-class="theme-toggle-icon" />
         </Button>

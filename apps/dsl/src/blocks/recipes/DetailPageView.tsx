@@ -1,5 +1,5 @@
 import { MainLayout } from '@/layouts';
-import { Block, Container, Title, Text, Group, Badge, Grid } from '@ui8kit/core';
+import { Block, Container, Title, Text, Group, Badge, Grid, Stack } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
 import type { NavItem, RecipeIngredient, RecipeStep } from '@/types';
@@ -50,7 +50,7 @@ export function RecipeDetailPageView({
       <Block component="article" data-class="recipe-detail-section">
         <Container max="w-2xl" py="16">
           <If test="recipe" value={!!recipe}>
-            <Block data-class="recipe-detail-content">
+            <Stack gap="4" data-class="recipe-detail-content">
               <Group items="center" gap="2" mb="2">
                 <If test="recipe.difficulty" value={!!recipe?.difficulty}>
                   <Badge variant="outline" data-class="recipe-detail-difficulty">
@@ -88,18 +88,18 @@ export function RecipeDetailPageView({
                   <Var name="recipe.excerpt" value={recipe?.excerpt} />
                 </Text>
               </If>
-              <Block py="8" data-class="recipe-detail-body">
+              <Stack py="8" gap="0" data-class="recipe-detail-body">
                 <Text fontSize="base" lineHeight="relaxed" data-class="recipe-detail-text">
                   <Var name="recipe.body" value={recipe?.body} />
                 </Text>
-              </Block>
+              </Stack>
               <Grid cols="1-2" gap="6" data-class="recipe-detail-grid">
-                <Block data-class="recipe-detail-ingredients">
+                <Stack gap="4" data-class="recipe-detail-ingredients">
                   <Title order={3} fontSize="xl" fontWeight="semibold" mb="4">
                     Ingredients
                   </Title>
                   <If test="ingredients.length > 0" value={ingredients.length > 0}>
-                    <Block data-class="recipe-ingredients-list">
+                    <Stack gap="2" data-class="recipe-ingredients-list">
                       <Loop each="recipe.ingredients" as="ingredient" data={ingredients}>
                         {(ingredient: RecipeIngredient) => (
                           <Group items="baseline" gap="2" py="2" data-class="recipe-ingredient-row">
@@ -122,18 +122,18 @@ export function RecipeDetailPageView({
                           </Group>
                         )}
                       </Loop>
-                    </Block>
+                    </Stack>
                   </If>
-                </Block>
-                <Block data-class="recipe-detail-steps">
+                </Stack>
+                <Stack gap="4" data-class="recipe-detail-steps">
                   <Title order={3} fontSize="xl" fontWeight="semibold" mb="4">
                     Steps
                   </Title>
                   <If test="steps.length > 0" value={steps.length > 0}>
-                    <Block data-class="recipe-steps-list">
+                    <Stack gap="2" data-class="recipe-steps-list">
                       <Loop each="recipe.steps" as="recipeStep" data={steps}>
                         {(recipeStep: RecipeStep) => (
-                          <Block py="2" data-class="recipe-step">
+                          <Stack py="2" gap="2" data-class="recipe-step">
                             <Text fontWeight="bold" data-class="recipe-step-number">
                               Step <Var name="recipeStep.step" value={recipeStep.step} />
                             </Text>
@@ -145,15 +145,15 @@ export function RecipeDetailPageView({
                             <Text data-class="recipe-step-body">
                               <Var name="recipeStep.body" value={recipeStep.body} />
                             </Text>
-                          </Block>
+                          </Stack>
                         )}
                       </Loop>
-                    </Block>
+                    </Stack>
                   </If>
-                </Block>
+                </Stack>
               </Grid>
               <If test="recipe.nutrition" value={!!recipe?.nutrition}>
-                <Block py="8" data-class="recipe-detail-nutrition">
+                <Stack py="8" gap="2" data-class="recipe-detail-nutrition">
                   <Title order={4} fontSize="lg" fontWeight="semibold" mb="2">
                     Nutrition (per serving)
                   </Title>
@@ -166,14 +166,14 @@ export function RecipeDetailPageView({
                     {' · '}
                     <Var name="recipe.nutrition.carbs" value={recipe?.nutrition?.carbs} />g carbs
                   </Text>
-                </Block>
+                </Stack>
               </If>
               <If test="recipe.linkedMenuItemId" value={!!recipe?.linkedMenuItemId}>
                 <DomainNavButton href={`/menu/${recipe?.linkedMenuItemId}`} size="lg" data-class="recipe-detail-cta">
                   Order in the restaurant
                 </DomainNavButton>
               </If>
-            </Block>
+            </Stack>
           </If>
         </Container>
       </Block>

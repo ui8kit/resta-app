@@ -52,3 +52,10 @@ export type CartEntry = {
   price: MenuPrice;
   quantity: number;
 };
+
+/** MenuItem with computed fields from useMenuFilter (promotion badge, compare-at price). */
+export type MenuItemWithComputed = MenuItem & {
+  promotionBadge: string;
+  hasPromotion: boolean;
+  hasCompareAt: boolean;
+};

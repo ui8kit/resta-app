@@ -10,6 +10,7 @@ import {
   Text,
   Badge,
   Group,
+  Stack,
 } from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
@@ -34,7 +35,7 @@ export function RecipesPageView({ navItems, sidebar, headerTitle, headerSubtitle
       headerSubtitle={headerSubtitle}
     >
       <Block component="section" data-class="recipes-section">
-        <Block py="16" data-class="recipes-header">
+        <Stack py="16" gap="4" items="center" data-class="recipes-header">
           <If test="recipes.title" value={!!recipes.title}>
             <Text component="h2" fontSize="3xl" fontWeight="bold" textAlign="center" data-class="recipes-title">
               <Var name="recipes.title" value={recipes.title} />
@@ -52,7 +53,7 @@ export function RecipesPageView({ navItems, sidebar, headerTitle, headerSubtitle
               <Var name="recipes.subtitle" value={recipes.subtitle} />
             </Text>
           </If>
-        </Block>
+        </Stack>
         <Grid cols="1-2-3" gap="6" data-class="recipes-grid">
           <Loop each="items" as="item" data={items}>
             {(item: RecipeItem) => {
