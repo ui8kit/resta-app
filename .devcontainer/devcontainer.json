@@ -1,0 +1,14 @@
+{
+  "name": "RestA UI8Kit",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22",
+  "features": {
+    "ghcr.io/rails/devcontainer/features/bun:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "postStartCommand": "bun install",
+  "customizations": {
+    "vscode": {
+      "extensions": ["biomejs.biome"]
+    }
+  }
+}
