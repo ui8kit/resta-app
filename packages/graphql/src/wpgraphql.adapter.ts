@@ -1,23 +1,27 @@
-import { loadFixturesContextInput } from './fixtures.adapter';
-import { requestGraphql } from '../graphql/client';
-import menuQuery from '../graphql/menu.graphql?raw';
-import promotionsQuery from '../graphql/promotions.graphql?raw';
-import siteQuery from '../graphql/site.graphql?raw';
+import { requestGraphql } from './client';
+import { menuQuery, promotionsQuery, siteQuery } from './queries';
 import {
   mapWpGraphqlToCanonicalContextInput,
   type WpGraphqlMenuQueryData,
   type WpGraphqlPromotionsQueryData,
   type WpGraphqlSiteQueryData,
-} from '../graphql/mappers';
+} from './mappers';
 import type { CanonicalContextInput } from './types';
+
+export type LoadWpGraphqlContextInputOptions = {
+  endpoint?: string;
+  getFallback: () => CanonicalContextInput;
+};
 
 /**
  * WPGraphQL adapter.
- * Uses GraphQL endpoint when configured; otherwise falls back to fixtures.
+ * Uses GraphQL endpoint when configured; otherwise returns fallback.
  */
-export async function loadWpGraphqlContextInput(): Promise<CanonicalContextInput> {
-  const fallback = loadFixturesContextInput();
-  const endpoint = import.meta.env.VITE_GRAPHQL_ENDPOINT;
+export async function loadWpGraphqlContextInput(
+  options: LoadWpGraphqlContextInputOptions,
+): Promise<CanonicalContextInput> {
+  const { endpoint, getFallback } = options;
+  const fallback = getFallback();
 
   if (!endpoint) {
     return fallback;

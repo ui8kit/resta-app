@@ -1,5 +1,16 @@
 import { MainLayout } from '@/layouts';
-import { Block, Grid, Card, CardHeader, CardTitle, CardDescription, CardContent, Text, Badge, Stack } from '@ui8kit/core';
+import {
+  Block,
+  Grid,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  Text,
+  Badge,
+  Stack,
+} from '@ui8kit/core';
 import { If, Var, Loop } from '@ui8kit/dsl';
 import { DomainNavButton } from '@/partials';
 import type { NavItem, PromotionItem } from '@/types';

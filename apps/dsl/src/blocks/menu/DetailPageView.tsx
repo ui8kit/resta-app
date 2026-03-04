@@ -150,10 +150,10 @@ export function MenuDetailPageView({
                   </Text>
                 </Stack>
               </If>
-              <Button size="lg" data-class="menu-detail-cta" mt="4" onClick={onShowToast}>
+              <Button size="lg" data-class="menu-detail-cta" mt="4" onClick={onShowToast ?? (() => {})}>
                 Add to order
               </Button>
-              <Toast {...{ visible: showToast }} onClose={onHideToast} duration={9000} />
+              <Toast {...{ visible: showToast }} onClose={onHideToast ?? (() => {})} duration={9000} />
             </Stack>
           </If>
         </Container>

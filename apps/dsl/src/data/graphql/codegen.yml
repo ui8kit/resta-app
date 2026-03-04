@@ -1,8 +1,0 @@
-schema: ${VITE_GRAPHQL_ENDPOINT:-https://example.com/graphql}
-documents:
-  - ./src/data/graphql/*.graphql
-generates:
-  ./src/data/graphql/__generated__/types.ts:
-    plugins:
-      - typescript
-      - typescript-operations

@@ -1,4 +1,4 @@
-import type { CanonicalContextInput } from '../adapters/types';
+import type { CanonicalContextInput } from './types';
 
 type Nullable<T> = T | null | undefined;
 

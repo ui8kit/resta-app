@@ -1,4 +1,4 @@
-query GetSiteMetadata {
+export const siteQuery = `query GetSiteMetadata {
   generalSettings {
     title
     description
@@ -12,3 +12,4 @@ query GetSiteMetadata {
     }
   }
 }
+`;

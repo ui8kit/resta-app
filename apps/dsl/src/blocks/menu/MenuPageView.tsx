@@ -45,7 +45,7 @@ export function MenuPageView({
   headerTitle,
   headerSubtitle,
   menu,
-  promotions,
+  promotions: _promotions,
   cart,
   cartCount,
   addToCart,
@@ -57,7 +57,6 @@ export function MenuPageView({
   allTabVariant,
   getCategoryTabVariant,
 }: MenuPageViewProps) {
-
   return (
     <MainLayout
       mode="full"

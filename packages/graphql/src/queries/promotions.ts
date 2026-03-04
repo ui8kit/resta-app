@@ -1,4 +1,4 @@
-query GetPromotions($first: Int = 100) {
+export const promotionsQuery = `query GetPromotions($first: Int = 100) {
   promotions(first: $first) {
     nodes {
       databaseId
@@ -24,3 +24,4 @@ query GetPromotions($first: Int = 100) {
     }
   }
 }
+`;

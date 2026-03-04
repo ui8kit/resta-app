@@ -1,22 +1,9 @@
 import { createContext, EMPTY_ARRAY } from '@ui8kit/sdk/source/data';
 import type { DashboardSidebarLink, NavItem, SidebarLink } from '@ui8kit/sdk/source/data';
 import { loadFixturesContextInput } from './adapters/fixtures.adapter';
-import { loadWpGraphqlContextInput } from './adapters/wpgraphql.adapter';
-import { loadShopifyContextInput } from './adapters/shopify.adapter';
 import type { CanonicalContextInput } from './adapters/types';
 
-async function resolveContextInput(): Promise<CanonicalContextInput> {
-  const source = (import.meta.env.VITE_DATA_SOURCE ?? 'fixtures') as 'fixtures' | 'wpgraphql' | 'shopify';
-  if (source === 'wpgraphql') {
-    return await loadWpGraphqlContextInput();
-  }
-  if (source === 'shopify') {
-    return loadShopifyContextInput();
-  }
-  return loadFixturesContextInput();
-}
-
-const input = await resolveContextInput();
+const input = loadFixturesContextInput();
 const page = input.page;
 const navItems = input.navigation.navItems as NavItem[];
 const sidebarLinks = (input.navigation.sidebarLinks ?? EMPTY_ARRAY) as SidebarLink[];

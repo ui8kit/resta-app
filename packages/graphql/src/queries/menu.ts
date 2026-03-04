@@ -1,4 +1,4 @@
-query GetMenuItems($first: Int = 100) {
+export const menuQuery = `query GetMenuItems($first: Int = 100) {
   products(first: $first) {
     nodes {
       databaseId
@@ -31,3 +31,4 @@ query GetMenuItems($first: Int = 100) {
     }
   }
 }
+`;

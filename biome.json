@@ -8,6 +8,7 @@
   "files": {
     "includes": [
       "apps/**",
+      "packages/**",
       "package.json",
       "turbo.json",
       "!**/.turbo/",

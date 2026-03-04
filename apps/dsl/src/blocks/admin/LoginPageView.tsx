@@ -22,7 +22,6 @@ export function AdminLoginPageView({
   error,
   handleSubmit,
 }: AdminLoginPageViewProps) {
-
   return (
     <AdminLayout>
       <Block component="main" py="16" data-class="admin-login-section">
