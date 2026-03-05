@@ -5,6 +5,7 @@
  * Usage:
  *   bunx @ui8kit/create-app my-app
  *   bunx @ui8kit/create-app my-app --template react
+ *   bunx @ui8kit/create-app my-app --template react-resta
  *   bunx @ui8kit/create-app my-app -i
  *
  * Options:
@@ -19,7 +20,10 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const TEMPLATE_DIR = join(__dirname, '..', 'template-react');
+const TEMPLATES: Record<string, string> = {
+  react: 'template-react',
+  'react-resta': 'template-react-resta',
+};
 const RENAME: Record<string, string> = { _gitignore: '.gitignore' };
 
 const args = parseArgs(process.argv.slice(2));
@@ -83,6 +87,7 @@ Options:
 Examples:
   bunx @ui8kit/create-app my-app
   bunx @ui8kit/create-app my-app --template react -i
+  bunx @ui8kit/create-app my-app --template react-resta
 `);
     return;
   }
@@ -100,14 +105,16 @@ Examples:
 
   const packageName = toValidPackageName(targetDir);
   const template = args.template ?? 'react';
+  const templateDir = TEMPLATES[template] ?? TEMPLATES.react;
+  const srcDir = join(__dirname, '..', templateDir);
 
-  if (template !== 'react') {
+  if (!existsSync(srcDir)) {
     console.warn(`Template "${template}" not found, using "react".`);
   }
 
   console.log(`\n  Creating UI8Kit app in ${root}...\n`);
 
-  copyDir(TEMPLATE_DIR, root);
+  copyDir(existsSync(srcDir) ? srcDir : join(__dirname, '..', TEMPLATES.react), root);
 
   const pkgPath = join(root, 'package.json');
   const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));

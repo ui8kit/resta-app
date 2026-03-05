@@ -1,0 +1,8 @@
+{
+  "dist": {
+    "static": true,
+    "render": { "appEntry": "src/App.tsx", "skipRoutes": ["/admin/dashboard"] },
+    "html": { "mode": "tailwind" },
+    "postcss": { "enabled": true, "uncss": { "enabled": true } }
+  }
+}
