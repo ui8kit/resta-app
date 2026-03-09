@@ -88,7 +88,7 @@ template-resta/
 Shell-скрипт вызывает `bunx ui8kit init` и `bunx ui8kit add --all` — components, variants, lib не копируются из apps/dsl.
 
 ```
-1. bunx @ui8kit/create-app my-app --template resta
+1. bunx ui8px my-app --template react-resta
 2. cd my-app && bun install
 3. bunx ui8kit init                         # инициализация
 4. bunx ui8kit add --all                    # components, lib, variants (из registry)
